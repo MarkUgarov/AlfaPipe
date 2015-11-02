@@ -1,0 +1,24 @@
+---
+- name: "defaultProdigal"
+  startCommand: "run prodigal"
+  outputEnding: ".fa"
+  onlyOutputDirectorySetable: false
+  enterCommand: "prodigal enter command"
+  exitCommand: "prodigal exit command"
+  parameters:
+  - name: "outputPathCommand"
+    command: "-out something"
+    position: 0
+    optional: false
+  - name: "inputPathCommand"
+    command: "-in something"
+    position: -1
+    optional: false
+  outputPathCommand:
+    name: "outputPathCommand"
+    command: "-out something"
+    position: 0
+    optional: false
+  validInputEndings:
+  - ".fa"
+  - ".fq"

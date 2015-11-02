@@ -1,0 +1,58 @@
+---
+- name: "Newbler"
+  startCommand: "runAssembler"
+  outputEnding: ".fa"
+  onlyOutputDirectorySetable: true
+  enterCommand: "newbler enter command"
+  exitCommand: "newbler exit command"
+  parameters:
+  - name: "outputPathCommand"
+    command: "-o"
+    position: 0
+    optional: false
+  - name: "inputPathCommand"
+    command: "-p"
+    position: -1
+    optional: false
+  outputPathCommand:
+    name: "outputPathCommand"
+    command: "-o"
+    position: 0
+    optional: false
+  validInputEndings:
+  - ".fa"
+  - ".fq"
+- name: "Allpath"
+  startCommand: "apply startCommand"
+  outputEnding: ".fa"
+  onlyOutputDirectorySetable: false
+  parameters:
+  - name: "outputPathCommand"
+    command: "apply outputPathCommand"
+    position: 0
+    optional: false
+  - name: "inputPathCommand"
+    command: "apply inputPathCommand"
+    position: -1
+    optional: false
+  outputPathCommand:
+    name: "outputPathCommand"
+    command: "apply outputPathCommand"
+    position: 0
+    optional: false
+  validInputEndings:
+  - ".fa"
+  - ".fq"
+- name: "Choose non"
+  onlyOutputDirectorySetable: false
+  parameters:
+  - name: "inputPathCommand"
+    position: 0
+    optional: false
+  - name: "outputPathCommand"
+    position: 0
+    optional: false
+  outputPathCommand:
+    name: "outputPathCommand"
+    position: 0
+    optional: false

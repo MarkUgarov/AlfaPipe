@@ -1,0 +1,24 @@
+---
+- name: "defaultProcessing"
+  startCommand: "run processing"
+  outputEnding: ".fa"
+  onlyOutputDirectorySetable: false
+  enterCommand: "processing enter command"
+  exitCommand: "processing exit command"
+  parameters:
+  - name: "outputPathCommand"
+    command: "-outsomething"
+    position: 0
+    optional: false
+  - name: "inputPathCommand"
+    command: "-insomething"
+    position: -1
+    optional: false
+  outputPathCommand:
+    name: "outputPathCommand"
+    command: "-outsomething"
+    position: 0
+    optional: false
+  validInputEndings:
+  - ".fa"
+  - ".fq"
