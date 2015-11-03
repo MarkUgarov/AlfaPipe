@@ -16,6 +16,7 @@ public class DataTabbedPane extends JTabbedPane{
     
     public DataTabbedPane(){
         super(JTabbedPane.TOP,JTabbedPane.SCROLL_TAB_LAYOUT);
+        this.setDoubleBuffered(true);
     }
     
     public Tab newTab(String id, TabListenerBag bag){

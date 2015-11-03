@@ -43,7 +43,7 @@ public class ProgramParameterPanel extends JPanel{
         super();
 //        System.out.println("Added Program "+name);
         this.name = name;
-        
+        this.setDoubleBuffered(true);
         this.setLayout(new BorderLayout());
         this.namePanel = new JPanel();
         this.namePanel.setLayout(new FlowLayout());

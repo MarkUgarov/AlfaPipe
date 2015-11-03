@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.mugarov.alfapipe.model.Pool;
-import com.mugarov.alfapipe.model.programparse.datatypes.Parseable;
+import com.mugarov.alfapipe.model.programparse.datatypes.ParseableProgramParameters;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -23,11 +23,11 @@ import java.util.logging.Logger;
  */
 public class GeneratorCore {
     
-    private ArrayList<Parseable> available;
+    private ArrayList<ParseableProgramParameters> available;
     private File localFile;
     private String path;
      
-    public GeneratorCore(String path, ArrayList<Parseable> defaultList){
+    public GeneratorCore(String path, ArrayList<ParseableProgramParameters> defaultList){
         this.available = new ArrayList<>();
         this.path = path;
        
@@ -52,9 +52,9 @@ public class GeneratorCore {
         return ret;
     }
  
-    public Parseable get(String name){
-        Parseable ret = null;
-        for(Parseable ass: this.available){
+    public ParseableProgramParameters get(String name){
+        ParseableProgramParameters ret = null;
+        for(ParseableProgramParameters ass: this.available){
             if(name.equals(ass.getName())){
                 ret=ass;
             }
@@ -83,8 +83,8 @@ public class GeneratorCore {
      public void parseIn(){ 
         try {
             ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
-            Parseable[] result =   mapper.readValue(this.localFile, Parseable[].class);                             
-            for(Parseable ass:result){
+            ParseableProgramParameters[] result =   mapper.readValue(this.localFile, ParseableProgramParameters[].class);                             
+            for(ParseableProgramParameters ass:result){
                 this.available.add(ass);
             }
         } catch (IOException ex) {

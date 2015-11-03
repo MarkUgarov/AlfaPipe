@@ -6,7 +6,7 @@
 package com.mugarov.alfapipe.model.datatypes;
 
 import com.mugarov.alfapipe.model.Pool;
-import com.mugarov.alfapipe.model.programparse.datatypes.Parseable;
+import com.mugarov.alfapipe.model.programparse.datatypes.ParseableProgramParameters;
 import com.mugarov.alfapipe.model.programparse.datatypes.ParameterField;
 import java.util.ArrayList;
 
@@ -18,11 +18,11 @@ public class ProgramParameterSet {
     
     private final String name;
     
-    private final Parseable program;
+    private final ParseableProgramParameters program;
     private final ArrayList<InputParameter> parameters;
     private boolean isSelected;
     
-    public ProgramParameterSet(Parseable program){
+    public ProgramParameterSet(ParseableProgramParameters program){
         this.program = program;
         this.name = this.program.getName();
         this.isSelected = (program.getStartCommand() != null);
@@ -65,7 +65,7 @@ public class ProgramParameterSet {
         return this.parameters;
     }
     
-    public Parseable getParsedParameters(){
+    public ParseableProgramParameters getParsedParameters(){
         return this.program;
     }
     

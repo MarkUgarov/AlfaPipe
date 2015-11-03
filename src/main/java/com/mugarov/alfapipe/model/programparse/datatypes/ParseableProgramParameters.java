@@ -14,7 +14,7 @@ import java.util.ArrayList;
  *
  * @author Mark
  */
-public class Parseable{
+public class ParseableProgramParameters{
     
     private String name;
     private String startCommand;
@@ -25,13 +25,13 @@ public class Parseable{
     private String exitCommand;
     
     private ArrayList<ParameterField> parameters;
-        private ParameterField inputPathCommand;
-        private ParameterField outputPathCommand;
+    private ParameterField inputPathCommand;
+    private ParameterField outputPathCommand;
    
-    private ParameterSorter sorter;
+    private final ParameterSorter sorter;
     
     
-    public Parseable(){
+    public ParseableProgramParameters(){
         this.parameters = new ArrayList<>();
         this.name = null;
         this.startCommand = null;
@@ -45,7 +45,7 @@ public class Parseable{
         this.sorter = new ParameterSorter(this);
     }
     
-    public Parseable( String name, 
+    public ParseableProgramParameters( String name, 
                                 String startCommand, 
                                 String inputPathCommand,
                                 int inputPathPosition,
@@ -57,7 +57,7 @@ public class Parseable{
         this.parameters = new ArrayList<>();
         this.name = name;
         this.startCommand = startCommand;
-        this.setInputPathCommand(inputPathCommand, inputPathPosition );
+        this.setInputPathCommand(inputPathCommand, inputPathPosition);
         this.setOuputPathCommand(outputPathCommand, outputPathPosition);
         this.validEndings = validEndings;
         this.outputEnding = outputEnding;

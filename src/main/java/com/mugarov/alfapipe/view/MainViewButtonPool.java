@@ -5,17 +5,15 @@
  */
 package com.mugarov.alfapipe.view;
 
-import com.mugarov.alfapipe.control.listeners.MainViewButtonListener;
 import com.mugarov.alfapipe.model.Pool;
-import com.mugarov.alfapipe.view.Button;
 
 /**
  *
  * @author Mark
  */
 public class MainViewButtonPool {
-    private Button start;
-    private Button addSet;
+    private final Button start;
+    private final Button addSet;
     
     public MainViewButtonPool(){
         this.start = new Button(Pool.BUTTON_START_TEXT, Pool.BUTTON_START_COMMAND);

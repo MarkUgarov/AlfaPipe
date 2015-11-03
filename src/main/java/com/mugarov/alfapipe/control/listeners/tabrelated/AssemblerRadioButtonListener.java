@@ -7,7 +7,7 @@ package com.mugarov.alfapipe.control.listeners.tabrelated;
 
 import com.mugarov.alfapipe.model.Pool;
 import com.mugarov.alfapipe.model.datatypes.SetOfFiles;
-import com.mugarov.alfapipe.model.programparse.datatypes.Parseable;
+import com.mugarov.alfapipe.model.programparse.datatypes.ParseableProgramParameters;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -16,7 +16,7 @@ import java.awt.event.ActionListener;
  * @author Mark
  */
 public class AssemblerRadioButtonListener implements ActionListener{
-    private Parseable selectedAssembler;
+    private ParseableProgramParameters selectedAssembler;
     private SetOfFiles fileSet;
     
     public AssemblerRadioButtonListener(){
@@ -34,7 +34,7 @@ public class AssemblerRadioButtonListener implements ActionListener{
        
     }
     
-    public Parseable getSelectedAssembler(){
+    public ParseableProgramParameters getSelectedAssembler(){
         return this.selectedAssembler;
     }
     

@@ -5,9 +5,11 @@
  */
 package com.mugarov.alfapipe.model;
 
+import com.mugarov.alfapipe.model.datatypes.InputFile;
 import com.mugarov.alfapipe.model.datatypes.ProgramParameterSet;
 import com.mugarov.alfapipe.model.programparse.datatypes.ParameterField;
 import java.io.File;
+import java.util.ArrayList;
 import org.apache.commons.io.FilenameUtils;
 
 /**
@@ -35,7 +37,8 @@ public class ExecutionCommandBuilder {
      */
     public void buildString(   ProgramParameterSet parameterSet,
                                 File inputFile,
-                                String parentOutputDirectory){
+                                String parentOutputDirectory,
+                                ArrayList<File> pairedFiles){
         this.builder = new StringBuilder();
         
         /**
@@ -85,6 +88,13 @@ public class ExecutionCommandBuilder {
 
                     builder.append(inputFile.getAbsolutePath());
                     builder.append(" ");
+                    if(pairedFiles != null){
+                        for(File file:pairedFiles){
+                            builder.append(file.getAbsolutePath());
+                            builder.append(" ");
+                        }
+                    }
+                    
                 }
                 else if(pf.getName().equals(Pool.PROGRAM_OUTPUT_PATH_SET_PARAMETER_NAME)){
                     if(writeCommand){

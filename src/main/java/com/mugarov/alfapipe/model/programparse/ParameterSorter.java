@@ -6,7 +6,7 @@
 package com.mugarov.alfapipe.model.programparse;
 
 import com.mugarov.alfapipe.model.programparse.datatypes.ParameterField;
-import com.mugarov.alfapipe.model.programparse.datatypes.Parseable;
+import com.mugarov.alfapipe.model.programparse.datatypes.ParseableProgramParameters;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -17,9 +17,9 @@ import java.util.Comparator;
  */
 public class ParameterSorter implements Comparator<ParameterField> {
     
-    private final Parseable program;
+    private final ParseableProgramParameters program;
     
-    public ParameterSorter(Parseable program){
+    public ParameterSorter(ParseableProgramParameters program){
         this.program = program;
     }
     

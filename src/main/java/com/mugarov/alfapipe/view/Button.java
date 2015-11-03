@@ -15,6 +15,7 @@ public class Button extends JButton{
     
     public Button(String text, String command){
         super(text);
+        this.setDoubleBuffered(true);
         this.setActionCommand(command);
     }
 

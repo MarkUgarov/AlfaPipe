@@ -6,7 +6,7 @@
 package com.mugarov.alfapipe.model.programparse.generators;
 
 import com.mugarov.alfapipe.model.Pool;
-import com.mugarov.alfapipe.model.programparse.datatypes.Parseable;
+import com.mugarov.alfapipe.model.programparse.datatypes.ParseableProgramParameters;
 import java.util.ArrayList;
 
 /**
@@ -17,7 +17,7 @@ public class ProcessingGenerator implements Generator{
     
     private final String localFilePath;
     private final GeneratorCore core;
-    private final ArrayList<Parseable> defaultList;
+    private final ArrayList<ParseableProgramParameters> defaultList;
      
     public ProcessingGenerator(){
         this.defaultList = new ArrayList<>();       
@@ -25,7 +25,7 @@ public class ProcessingGenerator implements Generator{
 
         String[] endings = {".fa", ".fq"};
         String outputEnding = ".fa";
-        Parseable mainProcessor = new Parseable( Pool.NAME_DEFAULT_PROCESSING,
+        ParseableProgramParameters mainProcessor = new ParseableProgramParameters( Pool.NAME_DEFAULT_PROCESSING,
                                                                 "run processing", 
                                                                 "-insomething",
                                                                 -1,
@@ -48,7 +48,7 @@ public class ProcessingGenerator implements Generator{
     }
  
     @Override
-    public Parseable get(String name){
+    public ParseableProgramParameters get(String name){
         return this.core.get(name);
     }
     

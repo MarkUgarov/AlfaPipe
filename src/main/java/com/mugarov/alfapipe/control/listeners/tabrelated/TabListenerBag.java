@@ -14,7 +14,8 @@ import com.mugarov.alfapipe.view.mainview.tab.DataTabbedPane;
  * @author Mark
  */
 public class TabListenerBag {
-    private final AssemblerRadioButtonListener radioListener;
+    private final AssemblerRadioButtonListener assRadioListener;
+    private final ProcessingRadioButtonListener procRadioListener;
     private final TabButtonListener  buttonListener;
     private final ToolSelectListener toolListener;
     
@@ -23,7 +24,8 @@ public class TabListenerBag {
     
     
     public TabListenerBag(){
-        this.radioListener = new AssemblerRadioButtonListener();
+        this.assRadioListener = new AssemblerRadioButtonListener();
+        this.procRadioListener = new ProcessingRadioButtonListener();
         this.buttonListener = new TabButtonListener();
         this.toolListener = new ToolSelectListener();
         this.fileSet = null;
@@ -32,7 +34,8 @@ public class TabListenerBag {
     public void setFileSet(SetOfFiles set){
         this.fileSet = set;
         this.buttonListener.setFileSet(this.fileSet);
-        this.radioListener.setFileSet(this.fileSet);
+        this.assRadioListener.setFileSet(this.fileSet);
+        this.procRadioListener.setFileSet(this.fileSet);
         this.toolListener.setFileSet(this.fileSet);
     }
     
@@ -45,8 +48,12 @@ public class TabListenerBag {
         return this.buttonListener;
     }
     
-    public AssemblerRadioButtonListener getRadioListener(){
-        return this.radioListener;
+    public AssemblerRadioButtonListener getAssemblerRadioListener(){
+        return this.assRadioListener;
+    }
+    
+    public ProcessingRadioButtonListener getProcessingRadioButtonListener(){
+        return this.procRadioListener;
     }
     
     public ToolSelectListener getToolListener(){

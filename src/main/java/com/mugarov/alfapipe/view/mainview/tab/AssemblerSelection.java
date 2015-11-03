@@ -7,7 +7,7 @@ package com.mugarov.alfapipe.view.mainview.tab;
 
 import com.mugarov.alfapipe.model.Pool;
 import com.mugarov.alfapipe.control.listeners.tabrelated.AssemblerRadioButtonListener;
-import com.mugarov.alfapipe.model.programparse.datatypes.Parseable;
+import com.mugarov.alfapipe.model.programparse.datatypes.ParseableProgramParameters;
 import java.awt.GridBagConstraints;
 import java.awt.GridLayout;
 import java.util.Enumeration;

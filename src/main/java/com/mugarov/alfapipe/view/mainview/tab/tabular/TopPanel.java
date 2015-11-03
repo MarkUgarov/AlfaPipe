@@ -32,9 +32,10 @@ public class TopPanel extends JPanel{
     
     public TopPanel(TabListenerBag bag){
         super();
+        this.setDoubleBuffered(true);
         this.listenerBag = bag;
         double width = (java.awt.Toolkit.getDefaultToolkit().getScreenSize().width)*0.8;
-         this.setPreferredSize( new Dimension( (int) width, 40));
+        this.setPreferredSize( new Dimension( (int) width, 40));
          
         this.layout = new BorderLayout();
         this.setLayout(this.layout);

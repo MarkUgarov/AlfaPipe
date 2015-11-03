@@ -9,7 +9,7 @@ import com.mugarov.alfapipe.control.listeners.tabrelated.parameters.ParameterLis
 import com.mugarov.alfapipe.control.listeners.tabrelated.singlefile.SingleFileListener;
 import com.mugarov.alfapipe.model.Executioner;
 import com.mugarov.alfapipe.model.Pool;
-import com.mugarov.alfapipe.model.programparse.datatypes.Parseable;
+import com.mugarov.alfapipe.model.programparse.datatypes.ParseableProgramParameters;
 import com.mugarov.alfapipe.view.MultiFileChooser;
 import com.mugarov.alfapipe.view.OutputDirectoryChooser;
 import com.mugarov.alfapipe.view.mainview.tab.Tab;
@@ -34,6 +34,7 @@ public class SetOfFiles implements Executable, Runnable{
     
     private File outputDirectory;
     private ProgramParameterSet useAssembler;
+    private ProgramParameterSet useProcessing;
     private ArrayList<ProgramParameterSet> availableTools;
     
     private final Tab tab;
@@ -44,6 +45,7 @@ public class SetOfFiles implements Executable, Runnable{
     
     public SetOfFiles(String id, Tab tab){
         this.useAssembler = null;
+        this.useProcessing = null;
         this.id = id;
         this.name = id;
         this.outputDirectory = new File(Pool.FILE_ORIGIN_DEFAULT, id);
@@ -72,16 +74,20 @@ public class SetOfFiles implements Executable, Runnable{
             boolean add= true;
             int i=0;
             while(add && i<this.files.size()){
-                File old = this.files.get(i);
+                InputFile old = this.files.get(i);
                 if(old.getAbsolutePath().equals(file.getAbsolutePath())){
+                    add = false;
+                }
+                else if(old.shouldBePairedWith(file)){
+                    old.addPairedFile(file);
                     add = false;
                 }
                 i++;
             }
             if(add){
-                InputFile inFile = new InputFile(file.getPath());
-                inFile.selectAssembler(this.useAssembler);
-                inFile.setAvailableTools(this.availableTools);
+                InputFile inFile = new InputFile(file.getPath(), this.availableTools);
+                inFile.selectAssembler(this.useAssembler); 
+                inFile.selectProcessing(this.useProcessing); 
                 this.files.add(inFile);
                 this.tab.addFile(file.getAbsolutePath(),file.getName(), new SingleFileListener(inFile, this));
                 this.tab.setValidation(inFile.getAbsolutePath(), inFile.validateFile(), inFile.getValidTools());
@@ -120,12 +126,20 @@ public class SetOfFiles implements Executable, Runnable{
         // tools 
     }
     
-    public void setAssembler(Parseable ass){
+    public void setAssembler(ParseableProgramParameters ass){
         this.useAssembler = new ProgramParameterSet(ass);
         ParameterListener paramListener = new ParameterListener(this.useAssembler.getInputParameters());
         this.tab.setAssembler(this.useAssembler.getName(),this.useAssembler.getInputParameters(), paramListener );
         for(InputFile file: files){
             file.selectAssembler(this.useAssembler);
+            this.tab.setValidation(file.getAbsolutePath(), file.isValid(), file.getValidTools());
+        }
+    }
+    
+    public void setProcessing(ParseableProgramParameters proc){
+        this.useProcessing = new ProgramParameterSet(proc);
+        for(InputFile file: this.files){
+            file.selectProcessing(this.useProcessing);
             this.tab.setValidation(file.getAbsolutePath(), file.isValid(), file.getValidTools());
         }
     }

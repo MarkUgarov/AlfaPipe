@@ -6,7 +6,7 @@
 package com.mugarov.alfapipe.model.programparse.generators;
 
 import com.mugarov.alfapipe.model.Pool;
-import com.mugarov.alfapipe.model.programparse.datatypes.Parseable;
+import com.mugarov.alfapipe.model.programparse.datatypes.ParseableProgramParameters;
 import java.util.ArrayList;
 
 /**
@@ -17,7 +17,7 @@ public class ToolGenerator implements Generator{
     
     private final String localFilePath;
     private final GeneratorCore core;
-    private final ArrayList<Parseable> defaultList;
+    private final ArrayList<ParseableProgramParameters> defaultList;
     
      public ToolGenerator(){
         this.defaultList = new ArrayList<>();
@@ -25,7 +25,7 @@ public class ToolGenerator implements Generator{
 
         String[] endings = {".fa"};
         String outputEnding = ".fa";
-        Parseable Test1 = new Parseable( "Example Tool 1", 
+        ParseableProgramParameters Test1 = new ParseableProgramParameters( "Example Tool 1", 
                                                     "start Tool 1", 
                                                     "apply inputCommand Tool 1",
                                                     0,
@@ -33,7 +33,7 @@ public class ToolGenerator implements Generator{
                                                     -1,
                                                     endings,
                                                     outputEnding);  
-        Parseable Test2= new Parseable( "Example Tool 2", 
+        ParseableProgramParameters Test2= new ParseableProgramParameters( "Example Tool 2", 
                                                     "start Tool 2", 
                                                     "apply inputCommand Tool 2",
                                                     0,
@@ -41,7 +41,7 @@ public class ToolGenerator implements Generator{
                                                     0,
                                                     endings,
                                                     outputEnding);  
-        Parseable Test3=new Parseable( "Example Tool 3", 
+        ParseableProgramParameters Test3=new ParseableProgramParameters( "Example Tool 3", 
                                                     "start Tool 3", 
                                                     "apply inputCommand Tool 3",
                                                     0,
@@ -67,7 +67,7 @@ public class ToolGenerator implements Generator{
     }
  
     @Override
-    public Parseable get(String name){
+    public ParseableProgramParameters get(String name){
         return this.core.get(name);
     }
     

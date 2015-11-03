@@ -5,7 +5,7 @@
  */
 package com.mugarov.alfapipe.model.programparse.generators;
 
-import com.mugarov.alfapipe.model.programparse.datatypes.Parseable;
+import com.mugarov.alfapipe.model.programparse.datatypes.ParseableProgramParameters;
 
 /**
  *
@@ -15,7 +15,7 @@ public interface Generator {
     
     public String[] getAvailableNames();
  
-    public Parseable get(String name);
+    public ParseableProgramParameters get(String name);
     
     public void parseOut() ;
     

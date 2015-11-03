@@ -6,7 +6,7 @@
 package com.mugarov.alfapipe.model.programparse.generators;
 
 import com.mugarov.alfapipe.model.Pool;
-import com.mugarov.alfapipe.model.programparse.datatypes.Parseable;
+import com.mugarov.alfapipe.model.programparse.datatypes.ParseableProgramParameters;
 import java.util.ArrayList;
 
 /**
@@ -17,7 +17,7 @@ public class ProdigalGenerator implements Generator{
     
     private final String localFilePath;
     private final GeneratorCore core;
-    private final ArrayList<Parseable> defaultList;
+    private final ArrayList<ParseableProgramParameters> defaultList;
      
     public ProdigalGenerator(){
         this.defaultList = new ArrayList<>();       
@@ -25,7 +25,7 @@ public class ProdigalGenerator implements Generator{
 
         String[] endings = {".fa", ".fq"};
         String outputEnding = ".fa";
-        Parseable prodigal = new Parseable( Pool.NAME_DEFAULT_PRODIGAL,
+        ParseableProgramParameters prodigal = new ParseableProgramParameters( Pool.NAME_DEFAULT_PRODIGAL,
                                                                 "run prodigal", 
                                                                 "-in something",
                                                                 -1,
@@ -48,7 +48,7 @@ public class ProdigalGenerator implements Generator{
     }
  
     @Override
-    public Parseable get(String name){
+    public ParseableProgramParameters get(String name){
         return this.core.get(name);
     }
     

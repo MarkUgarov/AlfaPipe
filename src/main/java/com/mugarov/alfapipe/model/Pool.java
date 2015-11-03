@@ -97,6 +97,9 @@ public abstract class Pool {
     public static final String FILE_ORIGIN_DEFAULT = "output";
     public static final String FILE_LOGFILE_NAME = "log.txt";
     
+    public static final int FILE_PAIR_DISTINGUISHER_POSITION = -2;
+    public static final String FILE_PAIR_DISTIGNUISHER_REGEX = "_";
+    
     //static components
     public static MainViewButtonPool MAIN_BUTTON_POOL = new MainViewButtonPool();
    

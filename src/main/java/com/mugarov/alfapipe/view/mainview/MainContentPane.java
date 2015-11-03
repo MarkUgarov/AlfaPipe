@@ -6,15 +6,10 @@
 package com.mugarov.alfapipe.view.mainview;
 
 import com.mugarov.alfapipe.model.Pool;
-import com.mugarov.alfapipe.control.listeners.MainViewButtonListener;
 import com.mugarov.alfapipe.view.mainview.tab.DataTabbedPane;
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Insets;
 import java.awt.Panel;
 import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
 
 /**
  *
@@ -48,7 +43,6 @@ public class MainContentPane extends Panel{
     
     private void init(){
         this.add(this.tabs, BorderLayout.CENTER);
-       
         this.southPanel.add(this.addSet, BorderLayout.WEST);
         this.southPanel.add(this.start, BorderLayout.EAST);
         this.add(this.southPanel, BorderLayout.SOUTH);

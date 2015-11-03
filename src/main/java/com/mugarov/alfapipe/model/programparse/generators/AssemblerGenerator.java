@@ -6,7 +6,7 @@
 package com.mugarov.alfapipe.model.programparse.generators;
 
 import com.mugarov.alfapipe.model.Pool;
-import com.mugarov.alfapipe.model.programparse.datatypes.Parseable;
+import com.mugarov.alfapipe.model.programparse.datatypes.ParseableProgramParameters;
 import java.util.ArrayList;
 
 /**
@@ -17,7 +17,7 @@ public class AssemblerGenerator implements Generator{
     
     private final String localFilePath;
     private final GeneratorCore core;
-    private final ArrayList<Parseable> defaultList;
+    private final ArrayList<ParseableProgramParameters> defaultList;
      
     public AssemblerGenerator(){
         this.defaultList = new ArrayList<>();       
@@ -25,7 +25,7 @@ public class AssemblerGenerator implements Generator{
 
         String[] endings = {".fa", ".fq"};
         String outputEnding = ".fa";
-        Parseable newbler = new Parseable( "Newbler",
+        ParseableProgramParameters newbler = new ParseableProgramParameters( "Newbler",
                                                                 "runAssembler", 
                                                                 "-p",
                                                                 -1,
@@ -36,7 +36,7 @@ public class AssemblerGenerator implements Generator{
         newbler.setOnlyOutputDirectorySetable(true);
         newbler.setEnterCommand("newbler enter command");
         newbler.setExitCommand("newbler exit command");
-        Parseable allpath=  new Parseable( "Allpath",
+        ParseableProgramParameters allpath=  new ParseableProgramParameters( "Allpath",
                                                                 "apply startCommand", 
                                                                 "apply inputPathCommand",
                                                                 -1,
@@ -44,7 +44,7 @@ public class AssemblerGenerator implements Generator{
                                                                 0,
                                                                 endings,
                                                                 outputEnding);
-        Parseable nullAss= new Parseable( "Choose non", 
+        ParseableProgramParameters nullAss= new ParseableProgramParameters( "Choose non", 
                                                                 null, 
                                                                 null,
                                                                 0,
@@ -64,7 +64,7 @@ public class AssemblerGenerator implements Generator{
     }
  
     @Override
-    public Parseable get(String name){
+    public ParseableProgramParameters get(String name){
         return this.core.get(name);
     }
     

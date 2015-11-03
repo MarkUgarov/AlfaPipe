@@ -60,13 +60,14 @@ public class Tab extends JPanel{
         this.fileChooser = new Button(Pool.BUTTON_CHOOSE_RAW_FILE_TEXT, Pool.BUTTON_CHOOSE_RAW_FILE_COMMAND);
         this.deleteSet = new Button(Pool.BUTTON_DELETE_SET_TEXT, Pool.BUTTON_DELETE_SET_COMMAND);
         this.choosePath = new Button(Pool.BUTTON_CHOOOSE_OUTPUT_TEXT, Pool.BUTTON_CHOOSE_OUTPUT_COMMAND);
-        this.assSelect = new AssemblerSelection(this.listenerBag.getRadioListener());
+        this.assSelect = new AssemblerSelection(this.listenerBag.getAssemblerRadioListener());
         
         this.namePanel = new JPanel(new BorderLayout());
         this.nameLabel = new JLabel("Name:");
         this.nameField = new JTextField(this.id);
         this.applyName = new Button(Pool.BUTTON_APPLY_NAME_TEXT, Pool.BUTTON_APPLY_NAME_COMMAND);
         this.optionPanel = new OptionPanel();
+        this.optionPanel.setProcessing(this.listenerBag.getProcessingRadioButtonListener());
         
         this.outputPath = new JLabel();
         

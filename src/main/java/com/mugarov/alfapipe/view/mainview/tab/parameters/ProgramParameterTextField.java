@@ -16,6 +16,7 @@ public class ProgramParameterTextField extends JTextField{
     
     public ProgramParameterTextField(String name, ParameterListener listener){
         super();
+        this.setDoubleBuffered(true);
         this.setDocument(new ProgramParameterDocument(name, listener));
     }
     

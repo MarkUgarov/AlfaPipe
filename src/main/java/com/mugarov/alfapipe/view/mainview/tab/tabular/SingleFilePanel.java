@@ -44,7 +44,7 @@ import javax.swing.BorderFactory;
         
         public SingleFilePanel(String id, String name,  SingleFileListener listener){
             super();
-            
+            this.setDoubleBuffered(true);
             this.setAlignmentY(TOP_ALIGNMENT);
             this.id = id;
             this.name = name;
