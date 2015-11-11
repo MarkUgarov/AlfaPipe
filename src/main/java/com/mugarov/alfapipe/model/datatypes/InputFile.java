@@ -17,10 +17,12 @@ import java.util.ArrayList;
  */
 public class InputFile extends File implements Executable{
     
+    private ProgramParameterSet preprocessingInputParameters;
     private ProgramParameterSet processingInputParameters;
     private ProgramParameterSet assemblerInputParameters;
     private final ProgramParameterSet readsVsContigsParameters;
     private final ProgramParameterSet prodigalParameters;
+    private ProgramParameterSet lastNonNullParameters;
     private ArrayList<ProgramParameterSet>tools;
     
     
@@ -55,6 +57,7 @@ public class InputFile extends File implements Executable{
         this.tools = new ArrayList<>();
         this.pairedWith = new ArrayList<>();
         this.valid =false;
+        this.preprocessingInputParameters = null;
         this.processingInputParameters = null;
 //        this.processingInputParameters = new ProgramParameterSet(Pool.GENERATOR_PROCESSING.get(Pool.NAME_DEFAULT_PROCESSING));
         this.assemblerInputParameters = null;
@@ -70,6 +73,7 @@ public class InputFile extends File implements Executable{
         this.tools = new ArrayList<>();
         this.pairedWith = new ArrayList<>();
         this.valid =false;
+        this.preprocessingInputParameters = new ProgramParameterSet(Pool.GENERATOR_PREPROCESSING.get(Pool.GENERATOR_PREPROCESSING.getAvailableNames()[0]));
         this.processingInputParameters = new ProgramParameterSet(Pool.GENERATOR_PROCESSING.get(Pool.NAME_DEFAULT_PROCESSING));
         this.assemblerInputParameters = null;
         this.readsVsContigsParameters = new ProgramParameterSet(Pool.GENERATOR_READS_VS_CONTIGS.get(Pool.NAME_DEFAULT_READS_VS_CONTIGS));
@@ -126,11 +130,29 @@ public class InputFile extends File implements Executable{
         }
     }
     
-   
+    public boolean selectPreprocessing(ProgramParameterSet param, boolean validate){
+         this.preprocessingInputParameters = param;
+         if(this.preprocessingInputParameters != null && validate){
+             return this.validateFile();
+         }
+         else{
+             return this.valid;
+         }
+     }
+    
+    public boolean selectProcessing(ProgramParameterSet param, boolean validate){
+         this.processingInputParameters = param;
+         if(this.assemblerInputParameters != null && validate){
+             return this.validateFile();
+         }
+         else{
+             return this.valid;
+         }
+     }
 
-    public boolean selectAssembler(ProgramParameterSet param){
+    public boolean selectAssembler(ProgramParameterSet param, boolean validate){
         this.assemblerInputParameters = param;
-        if(this.processingInputParameters != null){
+        if(this.assemblerInputParameters != null && validate){
             return this.validateFile();
         }
         else{
@@ -138,15 +160,6 @@ public class InputFile extends File implements Executable{
         }
     }
     
-    public boolean selectProcessing(ProgramParameterSet param){
-        this.processingInputParameters = param;
-        if(this.assemblerInputParameters != null){
-            return this.validateFile();
-        }
-        else{
-            return this.valid;
-        }
-    }
     
     public boolean shouldBePairedWith(File file){
         String[] splitName1 = this.getName().split(Pool.FILE_PAIR_DISTIGNUISHER_REGEX);
@@ -168,14 +181,38 @@ public class InputFile extends File implements Executable{
         boolean should = true;
         for(int i=0; (i<pos1 && should); i++){
             if(!splitName1[i].equals(splitName2[i])){
-                should =false;
+                should = false;
+                return false;
             }
         }
-        return should;
+        // check endings
+        splitName1 = this.getName().split("\\.",2);
+        splitName2 = this.getName().split("\\.",2);
+        if(splitName1.length != splitName2.length || !splitName1[splitName1.length-1].equals(splitName2[splitName2.length-1])){
+            return false;
+        }
+        return true;
     }
     
     public void addPairedFile(File file){
         this.pairedWith.add(file);
+    }
+    
+    private boolean validateFromTo(String[] from, ParseableProgramParameters to){
+        if(from == null){
+            return true;
+        }
+        for(String f:from){
+            if(f== null){
+                return true;
+            }
+            for(String t:to.getValidInputEndings()){
+                if(t==null||t.equals(f)){
+                    return true;
+                }
+            }
+        }
+        return false;
     }
     
     /**
@@ -185,64 +222,73 @@ public class InputFile extends File implements Executable{
      */
     public boolean validateFile(){
         // check if processing can work
-        boolean processingValid = false;
+        
+        String[] splitname = this.getName().split("\\.",2);
+        String[] from = new String[]{splitname[splitname.length-1]};
+        
+        this.lastNonNullParameters = null;
+        ParseableProgramParameters to = null;
+        
+        boolean preprocessingValid = true;
+        if(this.preprocessingInputParameters.getParsedParameters().getStartCommand()!= null){
+            to = this.preprocessingInputParameters.getParsedParameters();
+            preprocessingValid = this.validateFromTo(from, to);
+            from = this.preprocessingInputParameters.getParsedParameters().getOutputEndings();
+            this.lastNonNullParameters = this.preprocessingInputParameters;
+        }
+        if(!preprocessingValid){
+            this.valid = false;
+            return false;
+        }
+        
+        boolean processingValid = true;
         if(this.processingInputParameters.getParsedParameters().getStartCommand() != null){
-            for(String ending: this.processingInputParameters.getParsedParameters().getValidInputEndings()){
-                if(this.getName().endsWith(ending)){
-                    processingValid = true;
-                }
-            }
-            if(!processingValid){
-                this.valid = false;
-                return false;
-            }
+            to = this.processingInputParameters.getParsedParameters();
+            processingValid = this.validateFromTo(from, to);
+            from = this.processingInputParameters.getParsedParameters().getOutputEndings();
+            this.lastNonNullParameters = this.processingInputParameters;
         }
-        else{
-            processingValid = true;
+        if(!processingValid){
+            this.valid = false;
+            return false;
         }
+          
         // check if output of the processing can be input of the assembler
-        boolean assemblerValid = false;
+        boolean assemblerValid = true;
         if(this.assemblerInputParameters.getParsedParameters().getStartCommand() != null){
-            for(String ending:this.assemblerInputParameters.getParsedParameters().getValidInputEndings()){
-                if(this.processingInputParameters.getParsedParameters().getOutputEnding().equals(ending)){
-                    assemblerValid=true&&processingValid;
-                }
-            }
-            if(!assemblerValid){
-                this.valid = false;
-                return false;
-            }
+            to = this.assemblerInputParameters.getParsedParameters();
+            assemblerValid = this.validateFromTo(from, to);
+            from = this.assemblerInputParameters.getParsedParameters().getOutputEndings();
+            this.lastNonNullParameters = this.assemblerInputParameters;
         }
-        else{
-            assemblerValid = true;
+        if(!assemblerValid){
+            this.valid = false;
+            return false;
         }
+        
         // check if output of the assembler can be input of the reads vs contigs
-        boolean readsVsContigsValid = false;
+        boolean readsVsContigsValid = true;
         if(this.readsVsContigsParameters.getParsedParameters().getStartCommand() != null){
-            for(String ending:this.readsVsContigsParameters.getParsedParameters().getValidInputEndings()){
-                if(this.assemblerInputParameters.getParsedParameters().getOutputEnding().equals(ending)){
-                    readsVsContigsValid=true&&assemblerValid;
-                }
-            }
-            if(!readsVsContigsValid){
-                this.valid = false;
-                return false;
-            }
+            to = this.readsVsContigsParameters.getParsedParameters();
+            readsVsContigsValid = this.validateFromTo(from, to);
+            from = this.readsVsContigsParameters.getParsedParameters().getOutputEndings();
+            this.lastNonNullParameters = this.readsVsContigsParameters;
         }
-        else{
-            readsVsContigsValid = true;
+        if(!readsVsContigsValid){
+            this.valid = false;
+            return false;
         }
          // check if output of the readsVsContigs can be input of prodigal
-        boolean prodigalValid = false;
+        boolean prodigalValid = true;
         if(this.prodigalParameters.getParsedParameters().getStartCommand() != null){
-            for(String ending:this.prodigalParameters.getParsedParameters().getValidInputEndings()){
-                if(this.readsVsContigsParameters.getParsedParameters().getOutputEnding().equals(ending)){
-                    prodigalValid=true&&readsVsContigsValid;
-                }
-            }
+            to = this.prodigalParameters.getParsedParameters();
+            prodigalValid = this.validateFromTo(from, to);
+            from = this.prodigalParameters.getParsedParameters().getOutputEndings();
+            this.lastNonNullParameters = this.prodigalParameters;
         }
-        else{
-            prodigalValid = true;
+        if(!prodigalValid){
+            this.valid = false;
+            return false;
         }
         
         this.valid = prodigalValid;
@@ -261,26 +307,18 @@ public class InputFile extends File implements Executable{
     public boolean toolIsValid(ParseableProgramParameters tool){
         boolean toolValid = false;
         // if an assembler is selected, the output has to be compatible with the tool
-        if(this.assemblerInputParameters.getParsedParameters().getStartCommand() != null){
-//             System.out.println("Assembler is not null");
-            for(String ending:tool.getValidInputEndings()){
-//                System.out.println("Testing if "+ending+" matches.");
-                if (this.assemblerInputParameters.getParsedParameters().getOutputEnding().equals(ending)){
-//                    System.out.println(this.assemblerInputParameters.getParsedParameters().getOutputEnding()+" equals "+ending);
-                    toolValid = true;
-                }
-            }
+        if(tool == null){
+            return true;
         }
-        else{ // if no assembler is selected, the input file itself has to be valid
-//            System.out.println("Assembler is null");
-            for(String ending:tool.getValidInputEndings()){
-                if (this.getName().endsWith(ending)){
-//                    System.out.println(this.getName()+" ends with "+ending);
-                    toolValid = true;
-                }
-            }
+        String[] from;
+        if(this.lastNonNullParameters == null || this.lastNonNullParameters.getParsedParameters().getStartCommand() == null){
+            String[] splitname = this.getName().split("\\.",2);
+            from = new String[]{splitname[splitname.length-1]};
         }
-        return toolValid;
+        else{
+            from = this.lastNonNullParameters.getParsedParameters().getOutputEndings();
+        }
+        return this.validateFromTo(from, tool);
     }
     
     public ArrayList<String> getValidTools(){

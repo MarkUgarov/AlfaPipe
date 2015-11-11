@@ -1,6 +1,6 @@
 ---
-- name: "defaultProcessing"
-  startCommand: "run processing"
+- name: "gzip"
+  startCommand: "gzip"
   outputEndings:
   - ".fa"
   onlyOutputDirectorySetable: false

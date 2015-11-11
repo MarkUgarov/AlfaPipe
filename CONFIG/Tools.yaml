@@ -1,7 +1,8 @@
 ---
 - name: "Example Tool 1"
   startCommand: "start Tool 1"
-  outputEnding: ".fa"
+  outputEndings:
+  - ".fa"
   onlyOutputDirectorySetable: false
   parameters:
   - name: "inputPathCommand"
@@ -36,7 +37,8 @@
   - ".fa"
 - name: "Example Tool 2"
   startCommand: "start Tool 2"
-  outputEnding: ".fa"
+  outputEndings:
+  - ".fa"
   onlyOutputDirectorySetable: false
   parameters:
   - name: "inputPathCommand"
@@ -56,7 +58,8 @@
   - ".fa"
 - name: "Example Tool 3"
   startCommand: "start Tool 3"
-  outputEnding: ".fa"
+  outputEndings:
+  - ".fa"
   onlyOutputDirectorySetable: false
   parameters:
   - name: "inputPathCommand"

@@ -58,7 +58,11 @@ public class ExecutionCommandBuilder {
                                                         + parameterSet.getParsedParameters().getName()
                                                         + "_"
                                                         + FilenameUtils.removeExtension(inputFile.getName())
-                                                        + parameterSet.getParsedParameters().getOutputEnding());
+                                                        + parameterSet.getParsedParameters().getOutputEndings()[0]);
+            File outputDirectory = new File(parentOutputDirectory);
+            if(!outputDirectory.exists()){
+                outputDirectory.mkdirs();
+            }
             this.outputIsDirectory = false;
         }
         if(parameterSet.getParsedParameters().getStartCommand() != null){

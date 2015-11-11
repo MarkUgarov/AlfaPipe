@@ -24,7 +24,7 @@ public class ReadsVsContigsGenerator implements Generator {
         this.localFilePath = Pool.PATH_READS_VS_CONTIGS_LIST;
 
         String[] endings = {".fa", ".fq"};
-        String outputEnding = ".fa";
+        String[] outputEnding = new String[]{".fa"};
         ParseableProgramParameters readsVsContigs = new ParseableProgramParameters( Pool.NAME_DEFAULT_READS_VS_CONTIGS,
                                                                 "run reads vs contigs", 
                                                                 "-in something",

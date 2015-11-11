@@ -24,7 +24,7 @@ public class ToolGenerator implements Generator{
         this.localFilePath = Pool.PATH_TOOLS_LIST;
 
         String[] endings = {".fa"};
-        String outputEnding = ".fa";
+        String[] outputEnding = new String[]{".fa"};
         ParseableProgramParameters Test1 = new ParseableProgramParameters( "Example Tool 1", 
                                                     "start Tool 1", 
                                                     "apply inputCommand Tool 1",

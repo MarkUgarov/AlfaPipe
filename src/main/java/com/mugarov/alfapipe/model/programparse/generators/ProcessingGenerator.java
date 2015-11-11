@@ -24,7 +24,7 @@ public class ProcessingGenerator implements Generator{
         this.localFilePath = Pool.PATH_PROCESSING_LIST;
 
         String[] endings = {".fa", ".fq"};
-        String outputEnding = ".fa";
+        String[] outputEnding = new String[]{".fa"};
         ParseableProgramParameters mainProcessor = new ParseableProgramParameters( Pool.NAME_DEFAULT_PROCESSING,
                                                                 "run processing", 
                                                                 "-insomething",

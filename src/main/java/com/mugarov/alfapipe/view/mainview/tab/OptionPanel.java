@@ -23,7 +23,7 @@ public class OptionPanel extends JPanel{
     private final JPanel processingOptions;
     private final JPanel toolOptions;
     private ProgramParameterPanel assemblerParamPanel;
-    private ProcessingSelection processingSelection;
+    private SelectionPanel processingSelection;
     private ArrayList<ProgramParameterPanel> toolParamPanels;
   
     public OptionPanel(){
@@ -52,7 +52,7 @@ public class OptionPanel extends JPanel{
     }
     
     public void setProcessing(ProcessingRadioButtonListener listener){
-       this.processingSelection = new ProcessingSelection(listener);
+       this.processingSelection = new SelectionPanel("Processing",listener,listener.getValidSelections());
        this.processingOptions.removeAll();
        this.processingOptions.add(this.processingSelection);
        this.updateUI();

@@ -10,6 +10,7 @@ import com.mugarov.alfapipe.control.listeners.MainViewButtonListener;
 import com.mugarov.alfapipe.control.listeners.MenuListener;
 import com.mugarov.alfapipe.model.programparse.generators.AssemblerGenerator;
 import com.mugarov.alfapipe.model.programparse.generators.Generator;
+import com.mugarov.alfapipe.model.programparse.generators.PreprocessingGenerator;
 import com.mugarov.alfapipe.model.programparse.generators.ProcessingGenerator;
 import com.mugarov.alfapipe.model.programparse.generators.ProdigalGenerator;
 import com.mugarov.alfapipe.model.programparse.generators.ReadsVsContigsGenerator;
@@ -67,6 +68,9 @@ public abstract class Pool {
     public static final Color COLOR_FAILURE = Color.darkGray;
     
     // available Tools and Assemblers
+    public static final Generator GENERATOR_PREPROCESSING = new PreprocessingGenerator();
+    public static final String PATH_PREPROCESSING_LIST ="CONFIG/Preprocessing.yaml";
+    
     public static final Generator GENERATOR_PROCESSING = new ProcessingGenerator();
     public static final String PATH_PROCESSING_LIST ="CONFIG/Processing.yaml";
     public static final String NAME_DEFAULT_PROCESSING ="defaultProcessing";

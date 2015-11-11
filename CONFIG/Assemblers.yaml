@@ -1,7 +1,8 @@
 ---
 - name: "Newbler"
   startCommand: "runAssembler"
-  outputEnding: ".fa"
+  outputEndings:
+  - ".fa"
   onlyOutputDirectorySetable: true
   enterCommand: "newbler enter command"
   exitCommand: "newbler exit command"
@@ -21,10 +22,11 @@
     optional: false
   validInputEndings:
   - ".fa"
-  - ".fq"
+  - ".fastq"
 - name: "Allpath"
   startCommand: "apply startCommand"
-  outputEnding: ".fa"
+  outputEndings:
+  - ".fa"
   onlyOutputDirectorySetable: false
   parameters:
   - name: "outputPathCommand"
@@ -42,7 +44,7 @@
     optional: false
   validInputEndings:
   - ".fa"
-  - ".fq"
+  - ".fastq"
 - name: "Choose non"
   onlyOutputDirectorySetable: false
   parameters:

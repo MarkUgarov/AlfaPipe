@@ -19,7 +19,7 @@ public class ParseableProgramParameters{
     private String name;
     private String startCommand;
     private String[] validEndings;
-    private String outputEnding;
+    private String[] outputEndings;
     private boolean onlyOutputDirectorySetable;
     private String enterCommand;
     private String exitCommand;
@@ -38,7 +38,7 @@ public class ParseableProgramParameters{
         this.inputPathCommand = null;
         this.outputPathCommand = null;
         this.validEndings = null;
-        this.outputEnding = null;
+        this.outputEndings = null;
         this.enterCommand = null;
         this.exitCommand = null;
         this.onlyOutputDirectorySetable = false;
@@ -52,7 +52,7 @@ public class ParseableProgramParameters{
                                 String outputPathCommand,
                                 int outputPathPosition,
                                 String[] validEndings,
-                                String outputEnding
+                                String[] outputEnding
                                 ){
         this.parameters = new ArrayList<>();
         this.name = name;
@@ -60,7 +60,7 @@ public class ParseableProgramParameters{
         this.setInputPathCommand(inputPathCommand, inputPathPosition);
         this.setOuputPathCommand(outputPathCommand, outputPathPosition);
         this.validEndings = validEndings;
-        this.outputEnding = outputEnding;
+        this.outputEndings = outputEnding;
         this.onlyOutputDirectorySetable = false;
         
         this.enterCommand = null;
@@ -109,12 +109,12 @@ public class ParseableProgramParameters{
         this.validEndings = validEndings;
     }
 
-    public String getOutputEnding() {
-        return this.outputEnding;
+    public String[] getOutputEndings() {
+        return this.outputEndings;
     }
 
-    public void setOutputEnding(String outputEnding) {
-        this.outputEnding = outputEnding;
+    public void setOutputEndings(String outputEndings[]) {
+        this.outputEndings = outputEndings;
     }
     
     public void setParameters(ArrayList<ParameterField> parameters) {

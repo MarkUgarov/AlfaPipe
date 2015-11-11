@@ -24,7 +24,7 @@ public class ProdigalGenerator implements Generator{
         this.localFilePath = Pool.PATH_PRODIGAL_LIST;
 
         String[] endings = {".fa", ".fq"};
-        String outputEnding = ".fa";
+        String[] outputEnding = new String[]{".fa"};
         ParseableProgramParameters prodigal = new ParseableProgramParameters( Pool.NAME_DEFAULT_PRODIGAL,
                                                                 "run prodigal", 
                                                                 "-in something",

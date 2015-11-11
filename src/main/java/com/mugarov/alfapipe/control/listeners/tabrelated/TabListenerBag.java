@@ -14,8 +14,10 @@ import com.mugarov.alfapipe.view.mainview.tab.DataTabbedPane;
  * @author Mark
  */
 public class TabListenerBag {
-    private final AssemblerRadioButtonListener assRadioListener;
     private final ProcessingRadioButtonListener procRadioListener;
+    private final PreprocessingListener preListener;
+    private final AssemblerRadioButtonListener assRadioListener;
+    
     private final TabButtonListener  buttonListener;
     private final ToolSelectListener toolListener;
     
@@ -24,8 +26,10 @@ public class TabListenerBag {
     
     
     public TabListenerBag(){
-        this.assRadioListener = new AssemblerRadioButtonListener();
         this.procRadioListener = new ProcessingRadioButtonListener();
+        this.preListener = new PreprocessingListener();
+        this.assRadioListener = new AssemblerRadioButtonListener();
+        
         this.buttonListener = new TabButtonListener();
         this.toolListener = new ToolSelectListener();
         this.fileSet = null;
@@ -34,8 +38,9 @@ public class TabListenerBag {
     public void setFileSet(SetOfFiles set){
         this.fileSet = set;
         this.buttonListener.setFileSet(this.fileSet);
-        this.assRadioListener.setFileSet(this.fileSet);
+        this.preListener.setFileSet(this.fileSet);
         this.procRadioListener.setFileSet(this.fileSet);
+        this.assRadioListener.setFileSet(this.fileSet);  
         this.toolListener.setFileSet(this.fileSet);
     }
     
@@ -48,13 +53,19 @@ public class TabListenerBag {
         return this.buttonListener;
     }
     
-    public AssemblerRadioButtonListener getAssemblerRadioListener(){
-        return this.assRadioListener;
+    public PreprocessingListener getPreprocessingRadioButtonListener(){
+        return this.preListener;
     }
     
     public ProcessingRadioButtonListener getProcessingRadioButtonListener(){
         return this.procRadioListener;
     }
+    
+    public AssemblerRadioButtonListener getAssemblerRadioListener(){
+        return this.assRadioListener;
+    }
+    
+    
     
     public ToolSelectListener getToolListener(){
         return this.toolListener;

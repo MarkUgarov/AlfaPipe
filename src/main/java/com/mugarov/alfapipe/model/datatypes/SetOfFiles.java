@@ -33,8 +33,9 @@ public class SetOfFiles implements Executable, Runnable{
     private final OutputDirectoryChooser outputChooser;
     
     private File outputDirectory;
-    private ProgramParameterSet useAssembler;
+    private ProgramParameterSet usePreprocessing;
     private ProgramParameterSet useProcessing;
+    private ProgramParameterSet useAssembler;
     private ArrayList<ProgramParameterSet> availableTools;
     
     private final Tab tab;
@@ -86,8 +87,9 @@ public class SetOfFiles implements Executable, Runnable{
             }
             if(add){
                 InputFile inFile = new InputFile(file.getPath(), this.availableTools);
-                inFile.selectAssembler(this.useAssembler); 
-                inFile.selectProcessing(this.useProcessing); 
+                inFile.selectPreprocessing(this.usePreprocessing, false);
+                inFile.selectProcessing(this.useProcessing,false); 
+                inFile.selectAssembler(this.useAssembler,false); 
                 this.files.add(inFile);
                 this.tab.addFile(file.getAbsolutePath(),file.getName(), new SingleFileListener(inFile, this));
                 this.tab.setValidation(inFile.getAbsolutePath(), inFile.validateFile(), inFile.getValidTools());
@@ -126,12 +128,10 @@ public class SetOfFiles implements Executable, Runnable{
         // tools 
     }
     
-    public void setAssembler(ParseableProgramParameters ass){
-        this.useAssembler = new ProgramParameterSet(ass);
-        ParameterListener paramListener = new ParameterListener(this.useAssembler.getInputParameters());
-        this.tab.setAssembler(this.useAssembler.getName(),this.useAssembler.getInputParameters(), paramListener );
-        for(InputFile file: files){
-            file.selectAssembler(this.useAssembler);
+    public void setPreprocessing(ParseableProgramParameters proc){
+        this.usePreprocessing = new ProgramParameterSet(proc);
+        for(InputFile file: this.files){
+            file.selectPreprocessing(this.usePreprocessing,true);
             this.tab.setValidation(file.getAbsolutePath(), file.isValid(), file.getValidTools());
         }
     }
@@ -139,10 +139,22 @@ public class SetOfFiles implements Executable, Runnable{
     public void setProcessing(ParseableProgramParameters proc){
         this.useProcessing = new ProgramParameterSet(proc);
         for(InputFile file: this.files){
-            file.selectProcessing(this.useProcessing);
+            file.selectProcessing(this.useProcessing,true);
             this.tab.setValidation(file.getAbsolutePath(), file.isValid(), file.getValidTools());
         }
     }
+    
+    public void setAssembler(ParseableProgramParameters ass){
+        this.useAssembler = new ProgramParameterSet(ass);
+        ParameterListener paramListener = new ParameterListener(this.useAssembler.getInputParameters());
+        this.tab.setAssembler(this.useAssembler.getName(),this.useAssembler.getInputParameters(), paramListener );
+        for(InputFile file: files){
+            file.selectAssembler(this.useAssembler,true);
+            this.tab.setValidation(file.getAbsolutePath(), file.isValid(), file.getValidTools());
+        }
+    }
+    
+    
     
     public void deleteAll(){
         this.files = new ArrayList<>();

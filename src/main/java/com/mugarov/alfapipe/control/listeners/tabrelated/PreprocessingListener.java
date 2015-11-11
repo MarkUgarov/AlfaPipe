@@ -15,36 +15,32 @@ import java.awt.event.ActionListener;
  *
  * @author mugarov
  */
-public class ProcessingRadioButtonListener implements ActionListener{
-    private ParseableProgramParameters selectedProcessing;
+public class PreprocessingListener implements ActionListener{
+    private ParseableProgramParameters selectedPreprocessing;
     private SetOfFiles fileSet;
     
-    public ProcessingRadioButtonListener(){
+    public PreprocessingListener(){
         this.fileSet = null;
-        this.selectedProcessing = Pool.GENERATOR_PROCESSING.get(Pool.GENERATOR_PROCESSING.getAvailableNames()[0]);
+        this.selectedPreprocessing = Pool.GENERATOR_PREPROCESSING.get(Pool.GENERATOR_PREPROCESSING.getAvailableNames()[0]);
     }
 
     @Override
     public void actionPerformed(ActionEvent ae) {
 //       System.out.println(ae.getActionCommand() +" has been performed");
-       this.selectedProcessing = Pool.GENERATOR_PROCESSING.get(ae.getActionCommand());
+       this.selectedPreprocessing = Pool.GENERATOR_PREPROCESSING.get(ae.getActionCommand());
        if(this.fileSet != null){
-            this.fileSet.setProcessing(this.selectedProcessing);
+            this.fileSet.setPreprocessing(this.selectedPreprocessing);
         }
        
     }
     
     public ParseableProgramParameters getSelectedProcessing(){
-        return this.selectedProcessing;
+        return this.selectedPreprocessing;
     }
     
     public void setFileSet(SetOfFiles set){
         this.fileSet =set;
-        this.fileSet.setProcessing(this.selectedProcessing);
+        this.fileSet.setPreprocessing(this.selectedPreprocessing);
+        
     }
-    
-    public String[] getValidSelections(){
-        return Pool.GENERATOR_PROCESSING.getAvailableNames();
-    }
-    
 }

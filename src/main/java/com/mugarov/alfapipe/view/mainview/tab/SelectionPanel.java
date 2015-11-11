@@ -5,35 +5,54 @@
  */
 package com.mugarov.alfapipe.view.mainview.tab;
 
-import com.mugarov.alfapipe.control.listeners.tabrelated.AssemblerRadioButtonListener;
-import com.mugarov.alfapipe.control.listeners.tabrelated.ProcessingRadioButtonListener;
 import com.mugarov.alfapipe.model.Pool;
-import java.awt.GridBagConstraints;
-import java.awt.GridLayout;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+import java.awt.event.ActionListener;
 import java.util.Enumeration;
 import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
 
 /**
  *
  * @author mugarov
  */
-public class ProcessingSelection extends JPanel{
+public class SelectionPanel extends JPanel{
     private final ButtonGroup group;
-    private final ProcessingRadioButtonListener listener;
-    private final GridBagConstraints c;
+    private final ActionListener listener;
     // needed to select only the first button
     private boolean isFirst;
     
-    public ProcessingSelection(ProcessingRadioButtonListener listener){
-        c = new GridBagConstraints();
-        this.setLayout(new GridLayout(1,1));
+    private JScrollPane scrollable;
+    private JPanel buttonPanel;
+    
+    private JPanel namePanel;
+    private JLabel nameLabel;
+    
+    
+    public SelectionPanel(String name, ActionListener listener, String[] values){
+        this.setLayout(new BorderLayout());
         this.isFirst = true;
         this.group = new ButtonGroup();
         this.listener = listener;
-        for(String a:Pool.GENERATOR_PROCESSING.getAvailableNames()){
+        
+        this.namePanel = new JPanel();
+        this.nameLabel = new JLabel(name);
+        this.namePanel.add(this.nameLabel);
+        this.add(this.namePanel, BorderLayout.WEST);
+        
+        this.scrollable = new JScrollPane();
+        this.buttonPanel = new JPanel();
+        this.buttonPanel.setLayout(new FlowLayout());
+        this.scrollable.add(this.buttonPanel);
+        this.scrollable.setViewportView(this.buttonPanel);
+        this.add(this.scrollable, BorderLayout.CENTER);
+        
+        for(String a:values){
             this.addButton(a);
         }
         this.group.setSelected(null, true);
@@ -43,7 +62,7 @@ public class ProcessingSelection extends JPanel{
         JRadioButton b = new JRadioButton(content);
         b.addActionListener(this.listener);
         this.group.add(b);
-        this.add(b);
+        this.buttonPanel.add(b);
         if(this.isFirst){
             b.setSelected(true);
             this.isFirst = false;

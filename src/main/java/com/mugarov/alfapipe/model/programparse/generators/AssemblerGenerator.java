@@ -23,8 +23,8 @@ public class AssemblerGenerator implements Generator{
         this.defaultList = new ArrayList<>();       
         this.localFilePath = Pool.PATH_ASSEMBLER_LIST;
 
-        String[] endings = {".fa", ".fq"};
-        String outputEnding = ".fa";
+        String[] endings = {".fa", ".fastq"};
+        String[] outputEnding = new String[]{".fa"};
         ParseableProgramParameters newbler = new ParseableProgramParameters( "Newbler",
                                                                 "runAssembler", 
                                                                 "-p",

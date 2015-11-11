@@ -1,7 +1,8 @@
 ---
 - name: "defaultReadsVsContigs"
   startCommand: "run reads vs contigs"
-  outputEnding: ".fa"
+  outputEndings:
+  - ".fa"
   onlyOutputDirectorySetable: false
   enterCommand: "reads vs contigs enter command"
   exitCommand: " reads vs contigs exit command"
