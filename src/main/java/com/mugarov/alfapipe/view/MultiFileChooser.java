@@ -7,6 +7,7 @@ package com.mugarov.alfapipe.view;
 
 import java.io.File;
 import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileFilter;
 
 /**
  *
@@ -14,8 +15,12 @@ import javax.swing.JFileChooser;
  */
 public class MultiFileChooser extends JFileChooser{
     
+    private InputFilter filter;
+    
     public MultiFileChooser(){
         this.setMultiSelectionEnabled(true);
+        this.filter = new InputFilter();
+        this.setFileFilter(filter);
     }
     
     @Override
@@ -24,6 +29,45 @@ public class MultiFileChooser extends JFileChooser{
              this.setCurrentDirectory(super.getSelectedFile().getParentFile());
         }
         return super.getSelectedFiles();
+    }
+    
+    public void setInputFilter(String name, String[] valids){
+        this.filter.setName(name);
+        this.filter.setValid(valids);
+    }
+
+    private static class InputFilter extends FileFilter {
+        private static String name;
+        private static String[] valid;
+        
+        public InputFilter() {
+        }
+
+        public void setName(String description){
+            name = description;
+        }
+        
+        public void setValid(String[] valids){
+            valid = valids;
+        }
+        
+        @Override
+        public boolean accept(File f) {
+            if(f.isDirectory()||valid ==null){
+                return true;
+            }
+            for(String v: valid){
+                if(f.getName().endsWith(v)){
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        @Override
+        public String getDescription() {
+            return name;
+        }
     }
     
 }

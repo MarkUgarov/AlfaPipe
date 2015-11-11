@@ -13,7 +13,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  */
 public interface Executable {
 
-    
+    public abstract String getPreprocessingCommand(String parentOutputDir);
 
     public abstract String getProcessingCommand(String parentOutputDir);
     

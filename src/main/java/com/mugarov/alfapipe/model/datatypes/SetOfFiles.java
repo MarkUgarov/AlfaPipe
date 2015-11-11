@@ -173,6 +173,7 @@ public class SetOfFiles implements Executable, Runnable{
     }
 
     public void showOpenDialog() {
+        this.checkInputFormat();
         int returnVal =this.inputChooser.showOpenDialog(null);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             this.addFiles(this.inputChooser.getSelectedFiles());
@@ -208,6 +209,28 @@ public class SetOfFiles implements Executable, Runnable{
             this.outputDirectory.mkdirs();
         }
         return this.outputDirectory.getAbsolutePath();
+    }
+    
+     /**
+     * This method only returns commands; to execute you may prefer to start this Runnable.
+     * @param parentOutputDir
+     * @return 
+     */
+    @Override
+    public String getPreprocessingCommand(String parentOutputDir) {
+        StringBuilder builder = new StringBuilder();
+         for(InputFile file: this.files){
+            if(file.getPreprocessingCommand(parentOutputDir) == null){
+                builder.append("echo Null");
+            }
+            else{
+                builder.append(file.getPreprocessingCommand(parentOutputDir));
+            }
+            builder.append("\n");
+            this.log.append(file.getPreprocessingCommand(parentOutputDir).replaceAll("\n", "\n \t"));
+            this.log.append("\n");
+        }
+        return builder.toString();
     }
     
 
@@ -363,6 +386,21 @@ public class SetOfFiles implements Executable, Runnable{
         }
         else{
             System.out.println("Set "+this.name+" allready progressed.");
+        }
+    }
+    
+    private void checkInputFormat(){
+        if (this.usePreprocessing != null|| this.usePreprocessing.getParsedParameters().getStartCommand() != null){
+            this.inputChooser.setInputFilter("Preprocessing input", this.usePreprocessing.getParsedParameters().getValidInputEndings());
+        }
+        else if (this.useProcessing != null|| this.useProcessing.getParsedParameters().getStartCommand() != null){
+            this.inputChooser.setInputFilter("Processing input", this.useProcessing.getParsedParameters().getValidInputEndings());
+        }
+        else if (this.useAssembler != null|| this.useAssembler.getParsedParameters().getStartCommand() != null){
+            this.inputChooser.setInputFilter("Assembler input", this.useAssembler.getParsedParameters().getValidInputEndings());
+        }
+        else{
+            this.inputChooser.setInputFilter("All", null);
         }
     }
     

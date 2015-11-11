@@ -33,6 +33,8 @@ public class InputFile extends File implements Executable{
     private boolean valid;
     
     private final StringBuilder log;
+    private ExecutionCommandBuilder preprocessingCommand;
+    private ArrayList<File> preprocessingOutputFiles;
     private ExecutionCommandBuilder processingCommand;
     private ArrayList<File> processingOutputFiles;
     private ExecutionCommandBuilder assemblerCommand;
@@ -389,12 +391,44 @@ public class InputFile extends File implements Executable{
      * @return 
      */
     @Override
-    public String getProcessingCommand(String parentOutputDir){
+    public String getPreprocessingCommand(String parentOutputDir){
 
         String ret;
 //        this.lastParameters = new ProgramParameterSet();
-//        this.currentParameters = this.processingInputParameters;
+//        this.currentParameters = this.preprocessingInputParameters;
         this.currentPaired = this.pairedWith;
+//        this.lastCommand = new ExecutionCommandBuilder();
+//        this.currentCommand = this.processingCommand;
+//        this.lastOutputFiles = new ArrayList<>(1);
+//        this.lastOutputFiles.add(this);
+        
+//        ret = this.getCurrentCommand(parentOutputDir);
+//          this.currentPaired = null;
+        
+//        this.processingOutputFiles = this.currentOutputFiles;
+        
+        // just for testing
+           this.preprocessingOutputFiles = new ArrayList<>();
+           this.preprocessingOutputFiles.add(this);
+           this.preprocessingCommand = new ExecutionCommandBuilder();
+           ret= "Preprocessing Output Command of "+this.getName();
+        // 
+
+        return ret;
+    }
+    
+    /**
+     * TODO
+     * @param parentOutputDir
+     * @return 
+     */
+    @Override
+    public String getProcessingCommand(String parentOutputDir){
+
+        String ret;
+//        this.lastParameters = this.preprocessingInputParameters;
+//        this.currentParameters = this.processingInputParameters;
+        this.currentPaired = null;
 //        this.lastCommand = new ExecutionCommandBuilder();
 //        this.currentCommand = this.processingCommand;
 //        this.lastOutputFiles = new ArrayList<>(1);
