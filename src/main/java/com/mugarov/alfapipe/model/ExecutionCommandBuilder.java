@@ -7,6 +7,7 @@ package com.mugarov.alfapipe.model;
 
 import com.mugarov.alfapipe.model.datatypes.InputFile;
 import com.mugarov.alfapipe.model.datatypes.ProgramParameterSet;
+import com.mugarov.alfapipe.model.programparse.datatypes.NameField;
 import com.mugarov.alfapipe.model.programparse.datatypes.ParameterField;
 import java.io.File;
 import java.util.ArrayList;
@@ -18,6 +19,8 @@ import org.apache.commons.io.FilenameUtils;
  */
 public class ExecutionCommandBuilder {
     
+    private ProgramParameterSet set;
+    private File inputFile;
     private File outputFile;
     private boolean outputIsDirectory;
     private StringBuilder builder;
@@ -40,7 +43,8 @@ public class ExecutionCommandBuilder {
                                 String parentOutputDirectory,
                                 ArrayList<File> pairedFiles){
         this.builder = new StringBuilder();
-        
+        this.set = parameterSet;
+        this.inputFile = inputFile;
         /**
          * create output directory and check if it is the value for the 
          * output-command or if it needs a special filepath for the output
@@ -163,8 +167,86 @@ public class ExecutionCommandBuilder {
         return this.outputIsDirectory;
     }
     
+    /**
+     * Be careful! OutputFile may not exist, especially if the outputpath can 
+     * not be set manually - better user "getRelevantOutputFor()"-method.
+     * @return 
+     */
     public String getOutputPath(){
         return this.outputFile.getAbsolutePath();
     }
+    
+    public ArrayList<File> getRelevantOutputFor(ProgramParameterSet following, File originalFile){
+        if(this.set == null){
+            return null;
+        }
+        ArrayList<File> ret;
+        if(this.set.getParsedParameters().getEssentialOutputs() == null){
+           ret = new ArrayList<>();
+           if(this.outputIsDirectory){
+               for(File f:this.outputFile.listFiles()){
+                   ret.add(f);
+               }
+               return ret;
+           } 
+           else{
+               ret.add(this.outputFile);
+               return ret;
+           }
+        }
+        else{
+            ret = new ArrayList<>(this.set.getParsedParameters().getEssentialOutputs().size());
+            for(NameField field:this.set.getParsedParameters().getEssentialOutputs()){
+                if(field.getEssentialFor() == null || field.getEssentialFor().equals(following.getName())){
+                    ret.add(this.getFileFor(field, originalFile));
+                }
+            }
+            
+        }
+        return ret;
+    }
+    
+    private File getFileFor(NameField field, File originalFile){
+        File ret=null;
+        if(field.isDynamic()){
+            if(this.outputIsDirectory){
+                ret = this.getDynamicNameOf(this.outputFile.getPath(),field, originalFile);
+            } 
+            else{
+                ret = this.getDynamicNameOf(this.outputFile.getParent(), field,originalFile);
+            }
+        }
+        else{
+            if(this.outputIsDirectory){
+                ret =  new File(this.outputFile.getAbsolutePath()+File.separatorChar+field.getName());
+            }
+            else{
+                ret= new File(this.outputFile.getParent()+File.separatorChar+field.getName());
+            }
+        }
+        if(!ret.exists()){
+            System.err.println("Output file of "+this.set.getName()+" with name "+ret.getPath()+" does not exist and can not be delivered to "+field.getName());
+        }
+        return ret;
+    }
+    
+    private File getDynamicNameOf(String parentDir, NameField field, File originalFile){
+        String[] splitname = originalFile.getName().split(field.getRegex());
+        StringBuilder newName = new StringBuilder();
+        int low = field.getLowerbound();
+        int up;
+        if(field.getUpperbound()>0){
+            up = field.getUpperbound();
+        }
+        else{
+            up = splitname.length-field.getUpperbound();
+        }
+        for(int i= low; i<up; low++){
+            newName.append(splitname[i]);
+        }
+        return new File(parentDir, newName.toString());
+        
+    }
+    
     
 }

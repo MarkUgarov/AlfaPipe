@@ -27,6 +27,8 @@ public class ParseableProgramParameters{
     private ArrayList<ParameterField> parameters;
     private ParameterField inputPathCommand;
     private ParameterField outputPathCommand;
+    
+    private ArrayList<NameField> essentialOutputs; 
    
     private final ParameterSorter sorter;
     
@@ -42,7 +44,9 @@ public class ParseableProgramParameters{
         this.enterCommand = null;
         this.exitCommand = null;
         this.onlyOutputDirectorySetable = false;
+        this.essentialOutputs = new ArrayList<>();
         this.sorter = new ParameterSorter(this);
+        
     }
     
     public ParseableProgramParameters( String name, 
@@ -62,6 +66,7 @@ public class ParseableProgramParameters{
         this.validEndings = validEndings;
         this.outputEndings = outputEnding;
         this.onlyOutputDirectorySetable = false;
+        this.essentialOutputs = new ArrayList<>();
         
         this.enterCommand = null;
         this.exitCommand = null;
@@ -224,5 +229,62 @@ public class ParseableProgramParameters{
     
     public void setOnlyOutputDirectorySetable(boolean setable){
         this.onlyOutputDirectorySetable = setable;
+    }
+
+    /**
+     * @return the essentialOutputs
+     */
+    public ArrayList<NameField> getEssentialOutputs() {
+        return essentialOutputs;
+    }
+
+    /**
+     * @param essentialOutputs the essentialOutputs to set
+     */
+    public void setEssentialOutputs(ArrayList<NameField> essentialOutputs) {
+        this.essentialOutputs = essentialOutputs;
+    }
+   
+    /**
+     * For fixed names.
+     * @param name is a fixed string
+     * @param targetProgram is a specific program / tool this output (which is 
+     * part of the output of this program) is meant for or leave null if you 
+     * want this for every program / tool following 
+     */
+    @JsonIgnore
+    public void addEssentialOutput(String name, String targetProgram){
+        NameField field = new NameField();
+        field.setDynamic(false);
+        field.setName(name);
+        field.setEssentialFor(targetProgram);
+        this.essentialOutputs.add(field);
+    }
+    
+    /**
+     * For dynamic names. 
+     * Choose a dynamic name, if the output can not be set directly but depends
+     * on the input, if you choose 
+     * prefix = "ABC_", postfix = "_XYZ", lowerBound = "0", upperBound="-1",
+     * regex = "."and the input has name "example.23", the dynamic name should 
+     * be build to "ABC_example_XYZ". 
+     * The dynamic name is build in the ProgramParameterSet.
+     * @param prefix
+     * @param lowerBound
+     * @param postfix
+     * @param upperBound
+     * @param targetProgram 
+     */
+    @JsonIgnore
+    public void addEssentialOutput(String prefix, int lowerBound, String postfix, int upperBound, String regex, String targetProgram){
+        NameField field = new NameField();
+        field.setDynamic(true);
+        field.setRegex(regex);
+        field.setPrefix(prefix);
+        field.setPostfix(postfix);
+        field.setLowerbound(lowerBound);
+        field.setUpperbound(upperBound);
+        field.setEssentialFor(targetProgram);
+        this.essentialOutputs.add(field);
     }
 }
