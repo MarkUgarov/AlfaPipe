@@ -63,7 +63,7 @@ public class ExecutionCommandBuilder {
                                                         + "_"
                                                         + FilenameUtils.removeExtension(inputFile.getName())
                                                         + parameterSet.getParsedParameters().getOutputEndings()[0]);
-            File outputDirectory = new File(parentOutputDirectory);
+            File outputDirectory = new File(this.outputFile.getParent());
             if(!outputDirectory.exists()){
                 outputDirectory.mkdirs();
             }
@@ -200,8 +200,7 @@ public class ExecutionCommandBuilder {
                 if(field.getEssentialFor() == null || field.getEssentialFor().equals(following.getName())){
                     ret.add(this.getFileFor(field, originalFile));
                 }
-            }
-            
+            }          
         }
         return ret;
     }
