@@ -182,27 +182,43 @@ public class ExecutionCommandBuilder {
         }
         ArrayList<File> ret;
         if(this.set.getParsedParameters().getEssentialOutputs() == null){
-           ret = new ArrayList<>();
-           if(this.outputIsDirectory){
-               for(File f:this.outputFile.listFiles()){
-                   ret.add(f);
-               }
-               return ret;
-           } 
-           else{
-               ret.add(this.outputFile);
-               return ret;
-           }
+           return this.getAllFiles();
         }
         else{
+            boolean found = false;
             ret = new ArrayList<>(this.set.getParsedParameters().getEssentialOutputs().size());
             for(NameField field:this.set.getParsedParameters().getEssentialOutputs()){
                 if(field.getEssentialFor() == null || field.getEssentialFor().equals(following.getName())){
                     ret.add(this.getFileFor(field, originalFile));
+                    found = false;
                 }
-            }          
+            }   
+            // 
+            /**
+             * if no specific output was declared for the following set (but 
+             * for other possible sets)
+             * Example: this.set has the role of an assembler and after that 
+             * a and b 
+             */
+            if(!found){
+                ret = this.getAllFiles();
+            }
         }
         return ret;
+    }
+    
+    private ArrayList<File> getAllFiles(){
+        ArrayList<File> ret = new ArrayList<>();
+           if(this.outputIsDirectory){
+               for(File f:this.outputFile.listFiles()){
+                   ret.add(f);
+               }
+               
+           } 
+           else{
+               ret.add(this.outputFile);
+           }
+           return ret;
     }
     
     private File getFileFor(NameField field, File originalFile){
@@ -222,9 +238,6 @@ public class ExecutionCommandBuilder {
             else{
                 ret= new File(this.outputFile.getParent()+File.separatorChar+field.getName());
             }
-        }
-        if(!ret.exists()){
-            System.err.println("Output file of "+this.set.getName()+" with name "+ret.getPath()+" does not exist and can not be delivered to "+field.getName());
         }
         return ret;
     }

@@ -367,7 +367,9 @@ public class InputFile extends File implements Executable{
      */
     @Override
     public String getPreprocessingCommand(String parentOutputDir){
-
+        /**
+         * TODO : check if null;
+         */
         String ret;
 //        this.lastParameters = new ProgramParameterSet();
 //        this.currentParameters = this.preprocessingInputParameters;
@@ -415,7 +417,10 @@ public class InputFile extends File implements Executable{
         // just for testing
            this.processingCommand = new ExecutionCommandBuilder();
            ret= "Processing Output Command of "+this.getName();
+           
         // 
+           this.lastCommand = this.processingCommand;
+           this.lastParameters = this.processingInputParameters;
 
         return ret;
     }
@@ -423,15 +428,19 @@ public class InputFile extends File implements Executable{
     @Override
     public String getAssemblerCommand(String parentOutputDir){
         String ret;
-        this.lastParameters = this.processingInputParameters;
+        
         this.currentParameters = this.assemblerInputParameters;
         
-        this.lastCommand = this.processingCommand;
         this.currentCommand = this.assemblerCommand;
-        this.lastRelevantOutputFiles = this.processingCommand.getRelevantOutputFor(this.assemblerInputParameters, this);
+        // for testing
+        this.lastRelevantOutputFiles= new ArrayList<>();
+        this.lastRelevantOutputFiles.add(this);
+        // 
+        //this.lastRelevantOutputFiles = this.lastCommand.getRelevantOutputFor(this.assemblerInputParameters, this);
 
         ret = this.getCurrentCommand(parentOutputDir);
         
+        this.lastCommand = this.assemblerCommand;
         return ret;
     }
     
