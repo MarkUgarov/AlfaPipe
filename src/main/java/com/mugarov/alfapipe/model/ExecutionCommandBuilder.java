@@ -176,19 +176,29 @@ public class ExecutionCommandBuilder {
         return this.outputFile.getAbsolutePath();
     }
     
+    /**
+     * Use buildString before!
+     * @param following ist the ProgramParameterSet which an output could be defined for
+     * @param originalFile is the original input-file at the beginning of the pipe
+     * @return 
+     */
     public ArrayList<File> getRelevantOutputFor(ProgramParameterSet following, File originalFile){
         if(this.set == null){
+            System.out.println("ATTENTION Commandbuilder: no set! ");
             return null;
         }
         ArrayList<File> ret;
         if(this.set.getParsedParameters().getEssentialOutputs() == null){
-           return this.getAllFiles();
+           ret= this.getAllFiles();
         }
         else{
             boolean found = false;
             ret = new ArrayList<>(this.set.getParsedParameters().getEssentialOutputs().size());
             for(NameField field:this.set.getParsedParameters().getEssentialOutputs()){
                 if(field.getEssentialFor() == null || field.getEssentialFor().equals(following.getName())){
+                    if(field.isUseAll()){
+                        return this.getAllFiles();
+                    }
                     ret.add(this.getFileFor(field, originalFile));
                     found = false;
                 }
@@ -203,6 +213,9 @@ public class ExecutionCommandBuilder {
             if(!found){
                 ret = this.getAllFiles();
             }
+        }
+        if(ret.isEmpty()){
+            System.out.println("ATTENTION Commandbuilder: empty returns ");
         }
         return ret;
     }
@@ -238,6 +251,9 @@ public class ExecutionCommandBuilder {
             else{
                 ret= new File(this.outputFile.getParent()+File.separatorChar+field.getName());
             }
+        }
+        if(!ret.exists()){
+            System.out.println("ATTENTION Commandbuilder: "+ret.getName()+" does not exist!");
         }
         return ret;
     }

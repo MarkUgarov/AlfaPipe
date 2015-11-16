@@ -6,6 +6,7 @@
 package com.mugarov.alfapipe.model.datatypes;
 
 import com.mugarov.alfapipe.model.Pool;
+import com.mugarov.alfapipe.model.programparse.datatypes.NameField;
 import com.mugarov.alfapipe.model.programparse.datatypes.ParseableProgramParameters;
 import com.mugarov.alfapipe.model.programparse.datatypes.ParameterField;
 import java.util.ArrayList;
@@ -67,6 +68,15 @@ public class ProgramParameterSet {
     
     public ParseableProgramParameters getParsedParameters(){
         return this.program;
+    }
+    
+    public boolean specificOutputDefinedFor(String followingName){
+        for(NameField field:this.program.getEssentialOutputs()){
+            if(field.getName().equals(followingName)){
+                return true;
+            }
+        }
+        return false;
     }
     
 }

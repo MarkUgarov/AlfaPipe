@@ -13,6 +13,7 @@ public class NameField {
     
     private boolean dynamic;
     private String essentialFor;
+    private boolean useAll;
     // for non-dynamic
     private String name;
     // for dynamic
@@ -22,8 +23,15 @@ public class NameField {
     private int lowerbound;
     private int upperbound;
     
+    /**
+     * Default: a static output is named "test" for an application "none",
+     * no other output of "test" will be used for "none".
+     */
     public NameField(){
+        this.name = "test";
+        this.essentialFor = "none";
         this.dynamic = false;
+        this.useAll = false;
     }
 
     /**
@@ -133,14 +141,14 @@ public class NameField {
     }
 
     /**
-     * @return the essentialFor
+     * @return the Name of the Program this output is essential for
      */
     public String getEssentialFor() {
         return essentialFor;
     }
 
     /**
-     * @param essentialFor the essentialFor to set
+     * @param essentialFor the Name of the Program this output is essential for
      */
     public void setEssentialFor(String essentialFor) {
         this.essentialFor = essentialFor;
@@ -158,6 +166,45 @@ public class NameField {
      */
     public void setRegex(String regex) {
         this.regex = regex;
+    }
+
+    /**
+     * @return the useAll
+     * 
+     */
+    public boolean isUseAll() {
+        return useAll;
+    }
+
+    /**
+     * @param useAll can be used to "sneak" outputs around the pipe for tools
+     * example
+     *    |Preprocessor|
+     *          |
+     * (preprocessing output)
+     *          |
+     *      |Processor|
+     *          |
+     *  (processing output)
+     *          |
+     *      |Assmbler|
+     *          |
+     *   (assembler output) -----------
+     *          |                     |
+     *    |ReadsVsContigs|            |
+     *          |                     |
+     *(readsVsContigs output)         |
+     *          |                     | 
+     *       |Prodigal|               |
+     *          |                     |
+     *  (prodigal output)      (assembler output)
+     *       ___|___                  |
+     *      /       \                 |
+     *  Tool1       Tool2           Tool3
+     *      
+     */
+    public void setUseAll(boolean useAll) {
+        this.useAll = useAll;
     }
     
 }
