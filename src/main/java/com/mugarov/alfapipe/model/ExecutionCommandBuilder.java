@@ -177,10 +177,15 @@ public class ExecutionCommandBuilder {
     }
     
     /**
-     * Use buildString before!
+     * Use buildString before! Make sure the execution of the set (= the execution 
+     * of the command given this.buildString(...) ) worked and the output files are
+     * written already.
      * @param following ist the ProgramParameterSet which an output could be defined for
      * @param originalFile is the original input-file at the beginning of the pipe
-     * @return 
+     * @return different parameters:
+     *  -all files if there is no specific output defined for ANY program at all
+     *  -OR the specific output defined if it is defined for the set "following"
+     *  -OR all files if there is no specific output defined for this specific set "following"
      */
     public ArrayList<File> getRelevantOutputFor(ProgramParameterSet following, File originalFile){
         if(this.set == null){
@@ -214,8 +219,8 @@ public class ExecutionCommandBuilder {
                 ret = this.getAllFiles();
             }
         }
-        if(ret.isEmpty()){
-            System.out.println("ATTENTION Commandbuilder: empty returns ");
+        if(ret== null||ret.isEmpty()){
+            System.out.println("ATTENTION Commandbuilder: empty or null returns ");
         }
         return ret;
     }
@@ -226,7 +231,6 @@ public class ExecutionCommandBuilder {
                for(File f:this.outputFile.listFiles()){
                    ret.add(f);
                }
-               
            } 
            else{
                ret.add(this.outputFile);

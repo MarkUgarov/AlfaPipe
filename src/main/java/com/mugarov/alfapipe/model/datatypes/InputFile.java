@@ -515,9 +515,12 @@ public class InputFile extends File implements Executable{
         else if(this.prodigalParameters.getParsedParameters().getStartCommand() != null && this.prodigalParameters.specificOutputDefinedFor(tool.getName())){
             this.lastRelevantOutputFiles=this.prodigalCommand.getRelevantOutputFor(tool, this);
         }
+        else{
+            this.lastRelevantOutputFiles=this.lastCommand.getRelevantOutputFor(tool, this);
+        }
         ret = this.getCurrentCommandString(parentOutputDir);
         this.toolCommands.add(this.currentCommand);
-        this.lastCommand = this.currentCommand;
+        // DO NOT: this.lastCommand = this.currentCommand;
         return ret;
         
     }
