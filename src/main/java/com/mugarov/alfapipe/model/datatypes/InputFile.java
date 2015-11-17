@@ -41,7 +41,6 @@ public class InputFile extends File implements Executable{
     private ArrayList<ExecutionCommandBuilder> toolCommands;
     private ArrayList<File> toolOutputDirectories;
     
-    private ProgramParameterSet lastParameters;
     private ProgramParameterSet currentParameters;
     private ArrayList<File> currentPaired;
     private ExecutionCommandBuilder lastCommand;
@@ -337,6 +336,13 @@ public class InputFile extends File implements Executable{
     private String getCurrentCommandString(String parentOutputDir){
         this.currentParameters.getParsedParameters().sortParameters();
         StringBuilder currentStringBuilder = new StringBuilder();
+        if(this.lastCommand == null){
+            this.lastRelevantOutputFiles= new ArrayList<>();
+            this.lastRelevantOutputFiles.add(this);
+        }
+        else{
+            this.lastCommand.getRelevantOutputFor(this.currentParameters, this);
+        }
         for(File lastOutputFile:this.lastRelevantOutputFiles){
             for(File file:lastOutputFile.listFiles()){
                 this.currentCommand = new ExecutionCommandBuilder();
@@ -367,29 +373,17 @@ public class InputFile extends File implements Executable{
      */
     @Override
     public String getPreprocessingCommand(String parentOutputDir){
-        /**
-         * TODO : check if null;
-         */
-        String ret;
-//        this.lastParameters = new ProgramParameterSet();
-//        this.currentParameters = this.preprocessingInputParameters;
-        this.currentPaired = this.pairedWith;
-//        this.lastCommand = new ExecutionCommandBuilder();
-//        this.currentCommand = this.processingCommand;
-//        this.lastOutputFiles = new ArrayList<>(1);
-//        this.lastOutputFiles.add(this);
-        
-//        ret = this.getCurrentCommand(parentOutputDir);
-//          this.currentPaired = null;
-        
-//        this.lastRelevantOutputFiles = this.currentOutputFiles;
-        
-        // just for testing
-           this.preprocessingCommand = new ExecutionCommandBuilder();
-           ret= "Preprocessing Output Command of "+this.getName();
-        // 
-
-        return ret;
+        if(this.preprocessingParameters.getParsedParameters().getStartCommand() == null){
+            return Pool.MESSAGE_PREFIX+Pool.MESSAGE_PREPROCESSING_IS_NULL;
+        }
+        else{
+            String ret;
+            this.currentParameters = this.preprocessingParameters;
+            ret = this.getCurrentCommandString(parentOutputDir);
+            this.preprocessingCommand = this.currentCommand;
+            this.lastCommand = this.preprocessingCommand;
+            return ret;
+        }
     }
     
     /**
@@ -399,49 +393,32 @@ public class InputFile extends File implements Executable{
      */
     @Override
     public String getProcessingCommand(String parentOutputDir){
-
-        String ret;
-//        this.lastParameters = this.preprocessingInputParameters;
-//        this.currentParameters = this.processingInputParameters;
-        this.currentPaired = null;
-//        this.lastCommand = new ExecutionCommandBuilder();
-//        this.currentCommand = this.processingCommand;
-//        this.lastOutputFiles = new ArrayList<>(1);
-//        this.lastOutputFiles.add(this);
-        
-//        ret = this.getCurrentCommand(parentOutputDir);
-//          this.currentPaired = null;
-        
-//        this.processingOutputFiles = this.currentOutputFiles;
-        
-        // just for testing
-           this.processingCommand = new ExecutionCommandBuilder();
-           ret= "Processing Output Command of "+this.getName();
-           
-        // 
-           this.preprocessingCommand = this.currentCommand;
-           this.lastCommand = this.processingCommand;
-           this.lastParameters = this.processingParameters;
-
-        return ret;
+        if(this.processingParameters.getParsedParameters().getStartCommand() == null){
+            return Pool.MESSAGE_PREFIX+Pool.MESSAGE_PROCESSING_IS_NULL;
+        }
+        else{
+            String ret;
+            this.currentParameters = this.processingParameters;
+            ret = this.getCurrentCommandString(parentOutputDir);
+            this.processingCommand = this.currentCommand;
+            this.lastCommand = this.processingCommand;
+            return ret;
+        }
     }
     
     @Override
     public String getAssemblerCommand(String parentOutputDir){
-        String ret;
-        
-        this.currentParameters = this.assemblerParameters;
-  
-        // for testing
-        this.lastRelevantOutputFiles= new ArrayList<>();
-        this.lastRelevantOutputFiles.add(this);
-        // 
-        //this.lastRelevantOutputFiles = this.lastCommand.getRelevantOutputFor(this.assemblerInputParameters, this);
-
-        ret = this.getCurrentCommandString(parentOutputDir);
-        this.assemblerCommand = this.currentCommand;
-        this.lastCommand = this.assemblerCommand;
-        return ret;
+        if(this.assemblerParameters.getParsedParameters().getStartCommand() == null){
+            return Pool.MESSAGE_PREFIX+Pool.MESSAGE_ASSEMBLER_IS_NULL;
+        }
+        else{
+            String ret;
+            this.currentParameters = this.assemblerParameters;
+            ret = this.getCurrentCommandString(parentOutputDir);
+            this.assemblerCommand = this.currentCommand;
+            this.lastCommand = this.assemblerCommand;
+            return ret;
+        }
     }
     
     /**
@@ -451,7 +428,17 @@ public class InputFile extends File implements Executable{
      */
     @Override
     public String getReadsVsContigsCommand(String parentOutputDir){
-        return "Reads Vs Contigs commands of "+this.getName();
+        if(this.readsVsContigsParameters.getParsedParameters().getStartCommand() == null){
+            return Pool.MESSAGE_PREFIX+Pool.MESSAGE_READSVSCONTIGS_IS_NULL;
+        }
+        else{
+            String ret;
+            this.currentParameters = this.readsVsContigsParameters;
+            ret = this.getCurrentCommandString(parentOutputDir);
+            this.readsVsContigsCommand = this.currentCommand;
+            this.lastCommand = this.readsVsContigsCommand;
+            return ret;
+        }
     }
     
     /**
@@ -461,8 +448,17 @@ public class InputFile extends File implements Executable{
      */
     @Override
     public String getProdigalCommand(String parentOutputDir){
-        
-        return "Prodigal commands of "+this.getName();
+        if(this.prodigalParameters.getParsedParameters().getStartCommand() == null){
+            return Pool.MESSAGE_PREFIX+Pool.MESSAGE_READSVSCONTIGS_IS_NULL;
+        }
+        else{
+            String ret;
+            this.currentParameters = this.prodigalParameters;
+            ret = this.getCurrentCommandString(parentOutputDir);
+            this.prodigalCommand = this.currentCommand;
+            this.lastCommand = this.prodigalCommand;
+            return ret;
+        }
     }
     
     /**
@@ -471,31 +467,23 @@ public class InputFile extends File implements Executable{
      * @return 
      */
     @Override
-    public String getToolCommands(String parentOutputDir){
-        
-//        return "Tool commands of "+this.getName();
-        //TODO: use ToolParameterSet and this.getSingleToolCommand
-        
-        StringBuilder toolStringBuilder = new StringBuilder();
+    public ArrayList<String> getToolCommands(String parentOutputDir){
+        ArrayList<String> ret = new ArrayList<>();
         for(int i = 0; i<this.tools.size(); i++){
             ProgramParameterSet tp =this.tools.get(i);
             if(this.toolSelected[i]){
-                /**
-                 * TODO: get the actual tool selection
-                 */
-                toolStringBuilder.append("Execute "+tp.getName()+" with parameters \n");
-                for(InputParameter ip:tp.getInputParameters()){
-                    if(ip.getBoolean()){
-                        toolStringBuilder.append("\t"+ip.getName());
-                        if(!ip.isBoolean()){
-                            toolStringBuilder.append(" with value "+ip.getValue());
-                            toolStringBuilder.append("\n");
-                        }
-                    }
-                }
+                ret.add(this.getSingleToolCommand(parentOutputDir, tp));
+            }
+            else{
+                ret.add(null);
             }
         }
-        return toolStringBuilder.toString();
+        if(ret.size() ==0){
+            System.out.println("ATTENTION: Input file "+this.getName() +" has no tool to execute.");
+            ret.add(Pool.MESSAGE_PREFIX+Pool.MESSAGE_TOOL_IS_NULL);
+
+        }
+        return ret;
     }
     
     private String getSingleToolCommand(String parentOutputDir, ProgramParameterSet tool){
@@ -515,8 +503,13 @@ public class InputFile extends File implements Executable{
         else if(this.prodigalParameters.getParsedParameters().getStartCommand() != null && this.prodigalParameters.specificOutputDefinedFor(tool.getName())){
             this.lastRelevantOutputFiles=this.prodigalCommand.getRelevantOutputFor(tool, this);
         }
-        else{
+        else if(this.lastCommand != null){
             this.lastRelevantOutputFiles=this.lastCommand.getRelevantOutputFor(tool, this);
+        }
+        // the else should be redundant to this.getCurrentCommandString(...) but the code will get some changes so I do it to get save
+        else{
+            this.lastRelevantOutputFiles = new ArrayList<>();
+            this.lastRelevantOutputFiles.add(this);
         }
         ret = this.getCurrentCommandString(parentOutputDir);
         this.toolCommands.add(this.currentCommand);

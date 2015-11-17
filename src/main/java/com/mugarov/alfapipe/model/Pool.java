@@ -104,6 +104,15 @@ public abstract class Pool {
     public static final int FILE_PAIR_DISTINGUISHER_POSITION = -2;
     public static final String FILE_PAIR_DISTIGNUISHER_REGEX = "_";
     
+    //standard messegas
+    public static final String MESSAGE_PREFIX = "echo ";
+    public static final String MESSAGE_PREPROCESSING_IS_NULL ="Null preprocessing was selected.";
+    public static final String MESSAGE_PROCESSING_IS_NULL ="Null processing was selected.";
+    public static final String MESSAGE_ASSEMBLER_IS_NULL ="Null assembler was selected.";
+    public static final String MESSAGE_READSVSCONTIGS_IS_NULL ="Null reads vs contigs was selected";
+    public static final String MESSAGE_PRODIGAL_IS_NULL ="Null prodigal was selected";
+    public static final String MESSAGE_TOOL_IS_NULL ="A tool with command null was selected";
+            
     //static components
     public static MainViewButtonPool MAIN_BUTTON_POOL = new MainViewButtonPool();
    

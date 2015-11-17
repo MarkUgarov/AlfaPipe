@@ -131,7 +131,9 @@ public class FileSetManager {
             System.out.println(sof.getAssemblerCommand(sof.getOutputPath()));
             System.out.println(sof.getReadsVsContigsCommand(sof.getOutputPath()));
             System.out.println(sof.getProdigalCommand(sof.getOutputPath()));
-            System.out.println(sof.getToolCommands(sof.getOutputPath()));
+            for(String s:sof.getToolCommands(sof.getOutputPath())){
+                System.out.println(s);
+            }
         }
 
     }

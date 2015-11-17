@@ -328,20 +328,23 @@ public class SetOfFiles implements Executable, Runnable{
      * @return 
      */
     @Override
-    public String getToolCommands(String parentOutputDir) {
-        StringBuilder builder = new StringBuilder();
+    public ArrayList<String> getToolCommands(String parentOutputDir) {
+        ArrayList<String> ret = new ArrayList<>();
         for(InputFile file: this.files){
             if(file.getToolCommands(parentOutputDir) == null){
-                builder.append("echo Null");
+                ret.add("echo Null");
             }
             else{
-                builder.append(file.getToolCommands(parentOutputDir));
+                for (String s:file.getToolCommands(parentOutputDir)){
+                    ret.add(s);
+                    log.append(s.replaceAll("\n", "\n \t"));
+                }
+                ret.add("\n");
             }
-            builder.append("\n");
-            this.log.append(file.getToolCommands(parentOutputDir).replaceAll("\n", "\n \t"));
+            
             this.log.append("\n");
         }
-        return builder.toString();
+        return ret;
     }
 
     @Override
@@ -364,22 +367,34 @@ public class SetOfFiles implements Executable, Runnable{
                /**
                 * end testing
                 */
+
+                for(InputFile file:this.files){
+
+                    boolean filePassed;
+                    filePassed = execution.execute(file.getPreprocessingCommand(this.outputDirectory.getPath()));
+                    if(filePassed){
+                        filePassed = execution.execute(file.getProcessingCommand(this.outputDirectory.getPath()));
+                    }
+                    if(filePassed){
+                        filePassed = execution.execute(file.getAssemblerCommand(this.outputDirectory.getPath()));
+                    }
+                    if(filePassed){
+                        filePassed = execution.execute(file.getReadsVsContigsCommand(this.outputDirectory.getPath()));
+                    }
+                    if(filePassed){
+                        filePassed = execution.execute(file.getProdigalCommand(this.outputDirectory.getPath()));
+                    }
+                    
+                    this.tab.setFileProgressed(file.getAbsolutePath(), filePassed);
+                    ArrayList<Boolean> toolBools = new ArrayList<>(file.getValidTools().size());
+                    for(String p:file.getToolCommands(this.outputDirectory.getPath())){
+                        toolBools.add(execution.execute(p));
+                    }
+                    this.tab.setToolProgressed(file.getAbsolutePath(), file.getValidTools(), toolBools);
+                }
             } catch (IOException ex) {
                 Logger.getLogger(SetOfFiles.class.getName()).log(Level.SEVERE, null, ex);
                 return;
-            }
-            
-            for(InputFile file:this.files){
-                /**
-                * TODO: test if file is valid, execute and get the right bools
-                * Use execution.execute(file.get....);
-                */
-                this.tab.setFileProgressed(file.getAbsolutePath(), true);
-                ArrayList<Boolean> bools = new ArrayList<>(file.getValidTools().size());
-                for(String valid: file.getValidTools()){
-                    bools.add(false);
-                }
-                this.tab.setToolProgressed(file.getAbsolutePath(), file.getValidTools(), bools);
             }
             this.tab.setAllProgressed(true);
             this.tab.reenableSetRemoval();

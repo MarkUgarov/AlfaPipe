@@ -46,6 +46,9 @@ public class Executioner {
      * @return 
      */
     public boolean execute(String input){
+        if(input == null){
+            return false;
+        }
         boolean success=true;
         
         for(String step:input.split("\n")){
@@ -94,6 +97,7 @@ public class Executioner {
             }
             if(!err.equals("noError")&&err.length()>0){
                 success=false;
+                System.out.println("Error stream: "+err);
             }
         }
         

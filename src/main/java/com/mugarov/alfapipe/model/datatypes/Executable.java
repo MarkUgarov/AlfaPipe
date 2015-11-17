@@ -6,6 +6,7 @@
 package com.mugarov.alfapipe.model.datatypes;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.ArrayList;
 
 /**
  *
@@ -23,7 +24,7 @@ public interface Executable {
     
     public abstract String getProdigalCommand(String parentOutputDir);
     
-    public abstract String getToolCommands(String parentOutputDir);
+    public abstract ArrayList<String> getToolCommands(String parentOutputDir);
     
     /**
      * Get the log
