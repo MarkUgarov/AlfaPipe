@@ -379,9 +379,11 @@ public class InputFile extends File implements Executable{
         else{
             String ret;
             this.currentParameters = this.preprocessingParameters;
+            this.currentPaired = this.pairedWith;
             ret = this.getCurrentCommandString(parentOutputDir);
             this.preprocessingCommand = this.currentCommand;
             this.lastCommand = this.preprocessingCommand;
+            this.currentPaired = null;
             return ret;
         }
     }
