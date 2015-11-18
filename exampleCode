@@ -1,0 +1,17 @@
+
+#Prozessing:
+##used gzip :
+##gzip -dck <InputFile>  > <OutputFile>
+sh SCRITPS/gzipPaired.sh <InputFile1> <InputFile2> <OutputDir>
+
+
+#Proces
+#SCRITPS/MiSeqFASTQ4Newbler_v2.8b_OutputOnArgs1.pl <InputFile> <OutputFile>
+
+
+#Assembler Newbler, also creates a File "454AllContigs.fna" in the <OutputDirectory> (and more)
+/vol/454/.old/2.8/bin/runAssembly -o <OutputDirectory> -large -cpu 0 <InputFile>
+
+
+#Annotation, input should be the "454AllContigs.fna"
+prokka --outdir <OutputDir> <InputFile>

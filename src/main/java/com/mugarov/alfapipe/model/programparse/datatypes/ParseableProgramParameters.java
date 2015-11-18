@@ -31,6 +31,7 @@ public class ParseableProgramParameters{
     private ArrayList<NameField> essentialOutputs; 
    
     private final ParameterSorter sorter;
+   
     
     
     public ParseableProgramParameters(){
