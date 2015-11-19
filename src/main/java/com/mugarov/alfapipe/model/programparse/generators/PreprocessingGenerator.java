@@ -6,6 +6,8 @@
 package com.mugarov.alfapipe.model.programparse.generators;
 
 import com.mugarov.alfapipe.model.Pool;
+import com.mugarov.alfapipe.model.programparse.datatypes.NameField;
+import com.mugarov.alfapipe.model.programparse.datatypes.PairedInputConditions;
 import com.mugarov.alfapipe.model.programparse.datatypes.ParseableProgramParameters;
 import java.util.ArrayList;
 
@@ -22,19 +24,25 @@ public class PreprocessingGenerator implements Generator{
         this.defaultList = new ArrayList<>();       
         this.localFilePath = Pool.PATH_PREPROCESSING_LIST;
 
-        String[] endings = {".fa", ".fq"};
-        String[] outputEnding = new String[]{".fa"};
+        String[] endings = {".fastq.gz"};
+        String[] outputEnding = new String[]{".fastq"};
         ParseableProgramParameters mainProcessor = new ParseableProgramParameters("gzip",
-                                                                "gzip", 
-                                                                "-insomething",
-                                                                -1,
-                                                                "-outsomething",
+                                                                "sh SCRITPS/gzipPaired.sh", 
+                                                                null,
                                                                 0,
+                                                                null,
+                                                                1,
                                                                 endings,
                                                                 outputEnding);
-        mainProcessor.setOnlyOutputDirectorySetable(false);
-        mainProcessor.setEnterCommand("processing enter command");
-        mainProcessor.setExitCommand("processing exit command");
+        mainProcessor.setOnlyOutputDirectorySetable(true);
+        NameField essential = new NameField();
+        essential.setDynamic(false);
+        essential.setName("Unziped_R1_001.fastq");
+        essential.setEssentialFor("Newbler");
+        ArrayList<NameField> fields = new ArrayList<>();
+        fields.add(essential);
+        mainProcessor.setEssentialOutputs(fields);
+        mainProcessor.setPairedConditions(new PairedInputConditions(true, "_",-2));
        
         this.defaultList.add(mainProcessor);
 

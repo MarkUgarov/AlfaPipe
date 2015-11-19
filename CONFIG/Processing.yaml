@@ -20,6 +20,7 @@
     command: "-outsomething"
     position: 0
     optional: false
+  essentialOutputs: []
   validInputEndings:
   - ".fa"
   - ".fq"

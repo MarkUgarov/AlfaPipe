@@ -32,6 +32,10 @@ public class MultiFileChooser extends JFileChooser{
     }
     
     public void setInputFilter(String name, String[] valids){
+//        System.out.println("Set input filter for "+name+" with ");
+//        for(String v:valids){
+//            System.out.println("\t"+v);
+//        }
         this.filter.setName(name);
         this.filter.setValid(valids);
     }

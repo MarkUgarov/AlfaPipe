@@ -24,11 +24,12 @@ public class MainContentPane extends Panel{
     private final JButton addSet;
     private final JButton start;
 
+    private Pool pool;
     
     
     
     public MainContentPane(){
-
+        
         this.layout = new BorderLayout();
         this.setLayout(layout);
         

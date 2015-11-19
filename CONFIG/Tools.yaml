@@ -33,6 +33,7 @@
     command: "apply outputCommand Tool 1"
     position: -1
     optional: false
+  essentialOutputs: []
   validInputEndings:
   - ".fa"
 - name: "Example Tool 2"
@@ -54,6 +55,7 @@
     command: "apply outputCommand Tool 2"
     position: 0
     optional: false
+  essentialOutputs: []
   validInputEndings:
   - ".fa"
 - name: "Example Tool 3"
@@ -75,5 +77,6 @@
     command: "apply outputCommand Tool 3"
     position: 0
     optional: false
+  essentialOutputs: []
   validInputEndings:
   - ".fa"

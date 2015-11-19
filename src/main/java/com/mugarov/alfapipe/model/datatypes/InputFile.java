@@ -24,6 +24,7 @@ public class InputFile extends File implements Executable{
     private final ProgramParameterSet prodigalParameters;
     private ProgramParameterSet lastNonNullParameters;
     private ArrayList<ProgramParameterSet>tools;
+    private ProgramParameterSet firstNonNullParameters;
     
     
     // needed for checking if the tool is selected for this File only
@@ -42,7 +43,6 @@ public class InputFile extends File implements Executable{
     private ArrayList<File> toolOutputDirectories;
     
     private ProgramParameterSet currentParameters;
-    private ArrayList<File> currentPaired;
     private ExecutionCommandBuilder lastCommand;
     private ExecutionCommandBuilder currentCommand;
     private ArrayList<File> lastRelevantOutputFiles;
@@ -157,17 +157,26 @@ public class InputFile extends File implements Executable{
     
     
     public boolean shouldBePairedWith(File file){
-        String[] splitName1 = this.getName().split(Pool.FILE_PAIR_DISTIGNUISHER_REGEX);
-        String[] splitName2 = file.getName().split(Pool.FILE_PAIR_DISTIGNUISHER_REGEX);
+        String regex;
+        int distinguishPosition;
+        if(this.firstNonNullParameters == null || this.firstNonNullParameters.getParsedParameters().getPairedConditions() == null){
+            return false;
+        }
+        else{
+            regex = this.firstNonNullParameters.getParsedParameters().getPairedConditions().getRegex();
+            distinguishPosition = this.firstNonNullParameters.getParsedParameters().getPairedConditions().getUpperIndex();
+        }
+        String[] splitName1 = this.getName().split(regex);
+        String[] splitName2 = file.getName().split(regex);
         if(splitName1.length != splitName2.length){
             return false;
         }
         int pos1;
-        if(Pool.FILE_PAIR_DISTINGUISHER_POSITION<0){
-            pos1 = (splitName1.length)+Pool.FILE_PAIR_DISTINGUISHER_POSITION;
+        if(distinguishPosition<0){
+            pos1 = (splitName1.length)+distinguishPosition;
         }
         else{
-            pos1 = Pool.FILE_PAIR_DISTINGUISHER_POSITION;
+            pos1 = distinguishPosition;
         }
         if(splitName1.length < pos1 || pos1<0){
             return false;
@@ -221,6 +230,7 @@ public class InputFile extends File implements Executable{
         String[] splitname = this.getName().split("\\.",2);
         String[] from = new String[]{splitname[splitname.length-1]};
         
+        this.firstNonNullParameters = null;
         this.lastNonNullParameters = null;
         ParseableProgramParameters to = null;
         
@@ -230,6 +240,7 @@ public class InputFile extends File implements Executable{
             preprocessingValid = this.validateFromTo(from, to);
             from = this.preprocessingParameters.getParsedParameters().getOutputEndings();
             this.lastNonNullParameters = this.preprocessingParameters;
+            this.firstNonNullParameters = this.preprocessingParameters;
         }
         if(!preprocessingValid){
             this.valid = false;
@@ -241,6 +252,9 @@ public class InputFile extends File implements Executable{
             to = this.processingParameters.getParsedParameters();
             processingValid = this.validateFromTo(from, to);
             from = this.processingParameters.getParsedParameters().getOutputEndings();
+            if(this.firstNonNullParameters == null){
+                this.firstNonNullParameters = this.processingParameters;
+            }
             this.lastNonNullParameters = this.processingParameters;
         }
         if(!processingValid){
@@ -254,6 +268,9 @@ public class InputFile extends File implements Executable{
             to = this.assemblerParameters.getParsedParameters();
             assemblerValid = this.validateFromTo(from, to);
             from = this.assemblerParameters.getParsedParameters().getOutputEndings();
+            if(this.firstNonNullParameters == null){
+                this.firstNonNullParameters = this.assemblerParameters;
+            }
             this.lastNonNullParameters = this.assemblerParameters;
         }
         if(!assemblerValid){
@@ -267,6 +284,9 @@ public class InputFile extends File implements Executable{
             to = this.readsVsContigsParameters.getParsedParameters();
             readsVsContigsValid = this.validateFromTo(from, to);
             from = this.readsVsContigsParameters.getParsedParameters().getOutputEndings();
+            if(this.firstNonNullParameters == null){
+                this.firstNonNullParameters = this.readsVsContigsParameters;
+            }
             this.lastNonNullParameters = this.readsVsContigsParameters;
         }
         if(!readsVsContigsValid){
@@ -279,6 +299,9 @@ public class InputFile extends File implements Executable{
             to = this.prodigalParameters.getParsedParameters();
             prodigalValid = this.validateFromTo(from, to);
             from = this.prodigalParameters.getParsedParameters().getOutputEndings();
+            if(this.firstNonNullParameters == null){
+                this.firstNonNullParameters = this.prodigalParameters;
+            }
             this.lastNonNullParameters = this.prodigalParameters;
         }
         if(!prodigalValid){
@@ -301,7 +324,6 @@ public class InputFile extends File implements Executable{
     
     public boolean toolIsValid(ParseableProgramParameters tool){
         boolean toolValid = false;
-        // if an assembler is selected, the output has to be compatible with the tool
         if(tool == null){
             return true;
         }
@@ -309,6 +331,9 @@ public class InputFile extends File implements Executable{
         if(this.lastNonNullParameters == null || this.lastNonNullParameters.getParsedParameters().getStartCommand() == null){
             String[] splitname = this.getName().split("\\.",2);
             from = new String[]{splitname[splitname.length-1]};
+            if(this.firstNonNullParameters == null){
+                this.firstNonNullParameters = new ProgramParameterSet(tool);
+            }
         }
         else{
             from = this.lastNonNullParameters.getParsedParameters().getOutputEndings();
@@ -336,17 +361,20 @@ public class InputFile extends File implements Executable{
     private String getCurrentCommandString(String parentOutputDir){
         this.currentParameters.getParsedParameters().sortParameters();
         StringBuilder currentStringBuilder = new StringBuilder();
+        ArrayList<File> currentPaired = new ArrayList<>();
         if(this.lastCommand == null){
             this.lastRelevantOutputFiles= new ArrayList<>();
             this.lastRelevantOutputFiles.add(this);
+            currentPaired = this.pairedWith;
         }
         else{
-            this.lastCommand.getRelevantOutputFor(this.currentParameters, this);
+            this.lastRelevantOutputFiles = this.lastCommand.getRelevantOutputFor(this.currentParameters, this);
+            currentPaired = null;
         }
         for(File lastOutputFile:this.lastRelevantOutputFiles){
             for(File file:lastOutputFile.listFiles()){
                 this.currentCommand = new ExecutionCommandBuilder();
-                this.currentCommand.buildString(this.currentParameters, file, parentOutputDir, this.currentPaired);
+                this.currentCommand.buildString(this.currentParameters, file, parentOutputDir, currentPaired);
                 if(this.currentCommand.getExecutionCommand() == null){
                     currentStringBuilder.append("echo no program was selected for "+file.getName()+"\n");
                     this.log.append("no assembler was selected for "+file.getName()+"\n");
@@ -379,11 +407,9 @@ public class InputFile extends File implements Executable{
         else{
             String ret;
             this.currentParameters = this.preprocessingParameters;
-            this.currentPaired = this.pairedWith;
             ret = this.getCurrentCommandString(parentOutputDir);
             this.preprocessingCommand = this.currentCommand;
             this.lastCommand = this.preprocessingCommand;
-            this.currentPaired = null;
             return ret;
         }
     }

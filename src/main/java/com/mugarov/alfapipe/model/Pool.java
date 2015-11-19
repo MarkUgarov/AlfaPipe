@@ -100,10 +100,7 @@ public abstract class Pool {
     // file management
     public static final String FILE_ORIGIN_DEFAULT = "output";
     public static final String FILE_LOGFILE_NAME = "log.txt";
-    
-    public static final int FILE_PAIR_DISTINGUISHER_POSITION = -2;
-    public static final String FILE_PAIR_DISTIGNUISHER_REGEX = "_";
-    
+       
     //standard messegas
     public static final String MESSAGE_PREFIX = "echo ";
     public static final String MESSAGE_PREPROCESSING_IS_NULL ="Null preprocessing was selected.";

@@ -1,25 +1,30 @@
 ---
 - name: "gzip"
-  startCommand: "gzip"
+  startCommand: "sh SCRITPS/gzipPaired.sh"
   outputEndings:
-  - ".fa"
-  onlyOutputDirectorySetable: false
-  enterCommand: "processing enter command"
-  exitCommand: "processing exit command"
+  - ".fastq"
+  onlyOutputDirectorySetable: true
   parameters:
-  - name: "outputPathCommand"
-    command: "-outsomething"
+  - name: "inputPathCommand"
     position: 0
     optional: false
-  - name: "inputPathCommand"
-    command: "-insomething"
-    position: -1
+  - name: "outputPathCommand"
+    position: 1
     optional: false
   outputPathCommand:
     name: "outputPathCommand"
-    command: "-outsomething"
-    position: 0
+    position: 1
     optional: false
+  pairedConditions:
+    usedPaired: true
+    regex: "_"
+    upperIndex: -2
+  essentialOutputs:
+  - dynamic: false
+    essentialFor: "Newbler"
+    useAll: false
+    name: "Unziped_R1_001.fastq"
+    lowerbound: 0
+    upperbound: 0
   validInputEndings:
-  - ".fa"
-  - ".fq"
+  - ".fastq.gz"

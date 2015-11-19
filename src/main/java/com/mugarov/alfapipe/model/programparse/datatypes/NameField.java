@@ -24,12 +24,12 @@ public class NameField {
     private int upperbound;
     
     /**
-     * Default: a static output is named "test" for an application "none",
-     * no other output of "test" will be used for "none".
+     * Example: a static output is named "test" for an application "none",
+     * no other output will be used for "none".
      */
     public NameField(){
-        this.name = "test";
-        this.essentialFor = "none";
+        this.name = null;
+        this.essentialFor = null;
         this.dynamic = false;
         this.useAll = false;
     }

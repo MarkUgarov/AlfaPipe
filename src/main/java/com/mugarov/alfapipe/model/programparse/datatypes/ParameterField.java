@@ -5,10 +5,6 @@
  */
 package com.mugarov.alfapipe.model.programparse.datatypes;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.mugarov.alfapipe.model.datatypes.Executable;
-import com.mugarov.alfapipe.model.Pool;
-
 /**
  *
  * @author Mark

@@ -27,6 +27,7 @@ public class ParseableProgramParameters{
     private ArrayList<ParameterField> parameters;
     private ParameterField inputPathCommand;
     private ParameterField outputPathCommand;
+    private PairedInputConditions  pairedConditions;
     
     private ArrayList<NameField> essentialOutputs; 
    
@@ -287,5 +288,19 @@ public class ParseableProgramParameters{
         field.setUpperbound(upperBound);
         field.setEssentialFor(targetProgram);
         this.essentialOutputs.add(field);
+    }
+
+    /**
+     * @return the pairedConditions
+     */
+    public PairedInputConditions getPairedConditions() {
+        return pairedConditions;
+    }
+
+    /**
+     * @param pairedConditions the pairedConditions to set
+     */
+    public void setPairedConditions(PairedInputConditions pairedConditions) {
+        this.pairedConditions = pairedConditions;
     }
 }

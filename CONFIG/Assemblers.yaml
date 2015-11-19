@@ -20,6 +20,7 @@
     command: "-o"
     position: 0
     optional: false
+  essentialOutputs: []
   validInputEndings:
   - ".fa"
   - ".fastq"
@@ -42,6 +43,7 @@
     command: "apply outputPathCommand"
     position: 0
     optional: false
+  essentialOutputs: []
   validInputEndings:
   - ".fa"
   - ".fastq"
@@ -58,3 +60,4 @@
     name: "outputPathCommand"
     position: 0
     optional: false
+  essentialOutputs: []
