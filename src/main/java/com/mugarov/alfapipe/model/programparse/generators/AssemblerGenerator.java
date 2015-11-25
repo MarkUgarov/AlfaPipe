@@ -26,16 +26,18 @@ public class AssemblerGenerator implements Generator{
         String[] endings = {".fa", ".fastq"};
         String[] outputEnding = new String[]{".fa"};
         ParseableProgramParameters newbler = new ParseableProgramParameters( "Newbler",
-                                                                "runAssembler", 
-                                                                "-p",
+                                                                "/vol/454/.old/2.8/bin/runAssembly", 
+                                                                null,
                                                                 -1,
                                                                 "-o",
                                                                 0,
                                                                 endings,
                                                                 outputEnding);
         newbler.setOnlyOutputDirectorySetable(true);
-        newbler.setEnterCommand("newbler enter command");
-        newbler.setExitCommand("newbler exit command");
+        newbler.addParameter("large", "-large", Pool.PROGRAM_EMPTY_PARAMETER_VALUE, 1, true);
+        newbler.addParameter("CPU", "-cpu", "0", 2, true);
+        newbler.addParameter("Force", "-force", Pool.PROGRAM_EMPTY_PARAMETER_VALUE, 3, false);
+
         ParseableProgramParameters allpath=  new ParseableProgramParameters( "Allpath",
                                                                 "apply startCommand", 
                                                                 "apply inputPathCommand",

@@ -30,7 +30,10 @@ public class Executioner {
      */
     public Executioner(String outputDirectory) throws IOException{
         this.workingDirectory = new File(outputDirectory);
-        this.logfile = new File(outputDirectory+File.separator+Pool.FILE_LOGFILE_NAME);
+        if(!this.workingDirectory.exists()){
+            this.workingDirectory.mkdirs();
+        }
+        this.logfile = new File(this.workingDirectory+File.separator+Pool.FILE_LOGFILE_NAME);
         if(!this.logfile.exists() || this.logfile.isDirectory()){
             this.logfile.createNewFile();
         }
@@ -46,7 +49,8 @@ public class Executioner {
      * @return 
      */
     public boolean execute(String input){
-        if(input == null){
+        
+        if(input == null || input.length() == 0){
             return false;
         }
         boolean success=true;
@@ -54,6 +58,7 @@ public class Executioner {
         for(String step:input.split("\n")){
             String[] commandsArray = step.split(" ");
             ArrayList<String> commandList = new ArrayList<>(commandsArray.length);
+//            commandList.add("pwd");
             for(String command:commandsArray){
                 if(command.trim().length()>0){
                     commandList.add(command.trim());
@@ -61,7 +66,6 @@ public class Executioner {
             }
 
             ProcessBuilder pb = new ProcessBuilder(commandList);
-            pb.directory(this.workingDirectory);
             pb.redirectErrorStream(true);
             pb.redirectOutput(this.logfile);
 
@@ -74,10 +78,11 @@ public class Executioner {
             }
             try {
                 process.waitFor();
+                System.out.println("Exit Value:"+process.exitValue());
             } catch (InterruptedException ex) {
                 Logger.getLogger(Executioner.class.getName()).log(Level.SEVERE, null, ex);
             }
-
+            
             String out = null; 
             try {
                 out = IOUtils.toString(process.getInputStream());

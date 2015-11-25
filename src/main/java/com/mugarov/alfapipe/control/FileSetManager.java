@@ -126,14 +126,14 @@ public class FileSetManager {
         */
         for (SetOfFiles sof: this.sets){
             (new Thread(sof)).start();
-            System.out.println(sof.getPreprocessingCommand(sof.getOutputPath()));
-            System.out.println(sof.getProcessingCommand(sof.getOutputPath()));
-            System.out.println(sof.getAssemblerCommand(sof.getOutputPath()));
-            System.out.println(sof.getReadsVsContigsCommand(sof.getOutputPath()));
-            System.out.println(sof.getProdigalCommand(sof.getOutputPath()));
-            for(String s:sof.getToolCommands(sof.getOutputPath())){
-                System.out.println(s);
-            }
+//            System.out.println(sof.getPreprocessingCommand(sof.getOutputPath()));
+//            System.out.println(sof.getProcessingCommand(sof.getOutputPath()));
+//            System.out.println(sof.getAssemblerCommand(sof.getOutputPath()));
+//            System.out.println(sof.getReadsVsContigsCommand(sof.getOutputPath()));
+//            System.out.println(sof.getProdigalCommand(sof.getOutputPath()));
+//            for(String s:sof.getToolCommands(sof.getOutputPath())){
+//                System.out.println(s);
+//            }
         }
 
     }

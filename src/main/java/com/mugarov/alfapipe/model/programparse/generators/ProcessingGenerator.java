@@ -23,21 +23,30 @@ public class ProcessingGenerator implements Generator{
         this.defaultList = new ArrayList<>();       
         this.localFilePath = Pool.PATH_PROCESSING_LIST;
 
-        String[] endings = {".fa", ".fq"};
+        String[] endings = {".fastq"};
         String[] outputEnding = new String[]{".fa"};
-        ParseableProgramParameters mainProcessor = new ParseableProgramParameters( Pool.NAME_DEFAULT_PROCESSING,
-                                                                "run processing", 
-                                                                "-insomething",
-                                                                -1,
-                                                                "-outsomething",
-                                                                0,
+        ParseableProgramParameters miseq = new ParseableProgramParameters( "MiSeqFASTQ4Newbler_v2.8b",
+                                                                "SCRITPS/MiSeqFASTQ4Newbler_v2.8b_OutputOnArgs1.pl", 
+                                                                null,
+                                                                1,
+                                                                null,
+                                                                2,
                                                                 endings,
                                                                 outputEnding);
-        mainProcessor.setOnlyOutputDirectorySetable(false);
-        mainProcessor.setEnterCommand("processing enter command");
-        mainProcessor.setExitCommand("processing exit command");
+        miseq.setOnlyOutputDirectorySetable(false);
+        
+        ParseableProgramParameters splitMiseq = new ParseableProgramParameters( "split_MiSeq_MP_nextera",
+                                                                "SCRITPS/split_MiSeq_MP_nextera_OutputOnArgs1.pl", 
+                                                                null,
+                                                                1,
+                                                                null,
+                                                                2,
+                                                                endings,
+                                                                outputEnding);
+        splitMiseq.setOnlyOutputDirectorySetable(false);
        
-        this.defaultList.add(mainProcessor);
+        this.defaultList.add(miseq);
+        this.defaultList.add(splitMiseq);
 
         this.core = new GeneratorCore(this.localFilePath, this.defaultList);
     }

@@ -5,13 +5,11 @@
  */
 package com.mugarov.alfapipe.model;
 
-import com.mugarov.alfapipe.model.datatypes.InputFile;
 import com.mugarov.alfapipe.model.datatypes.ProgramParameterSet;
 import com.mugarov.alfapipe.model.programparse.datatypes.NameField;
 import com.mugarov.alfapipe.model.programparse.datatypes.ParameterField;
 import java.io.File;
 import java.util.ArrayList;
-import org.apache.commons.io.FilenameUtils;
 
 /**
  *
@@ -49,10 +47,11 @@ public class ExecutionCommandBuilder {
          * create output directory and check if it is the value for the 
          * output-command or if it needs a special filepath for the output
          */
+        System.out.println("Building command for "+parameterSet.getName()+" with inputFile "+inputFile.getName());
         if(parameterSet.getParsedParameters().isOnlyOutputDirectorySetable()){
-            this.outputFile = new File(parentOutputDirectory, parameterSet.getName()
+            this.outputFile = new File(parentOutputDirectory, parameterSet.getParsedParameters().getName()
                                                               +"_"
-                                                              + inputFile.getName());
+                                                              +this.getNameWithoutExtensions(inputFile));
             this.outputFile.mkdirs();
             this.outputIsDirectory = true;
         }
@@ -61,7 +60,7 @@ public class ExecutionCommandBuilder {
                                                         + File.separatorChar
                                                         + parameterSet.getParsedParameters().getName()
                                                         + "_"
-                                                        + FilenameUtils.removeExtension(inputFile.getName())
+                                                        + this.getNameWithoutExtensions(inputFile)
                                                         + parameterSet.getParsedParameters().getOutputEndings()[0]);
             File outputDirectory = new File(this.outputFile.getParent());
             if(!outputDirectory.exists()){
@@ -153,6 +152,16 @@ public class ExecutionCommandBuilder {
         }
     }
     
+    private String getNameWithoutExtensions(File file){
+        String[] splitname = file.getName().split("\\.",2);
+        if(splitname.length== 0){
+            return "No_valid_name";
+        }
+        else{
+            return splitname[0];
+        }
+    }
+    
     public String getExecutionCommand(){
         if(this.builder.length()==0){
             return null;
@@ -220,9 +229,33 @@ public class ExecutionCommandBuilder {
             }
         }
         if(ret== null||ret.isEmpty()){
-            System.out.println("ATTENTION Commandbuilder: empty or null returns ");
+            System.out.println("ATTENTION Commandbuilder: empty or null returns for "+following.getName());
         }
         return ret;
+    }
+    
+    public ArrayList<File> getSpecifiFilesFor(ProgramParameterSet following, File originalFile){
+        ArrayList<File> ret;
+        ret = new ArrayList<>(this.set.getParsedParameters().getEssentialOutputs().size());
+        for(NameField field:this.set.getParsedParameters().getEssentialOutputs()){
+            if(field.getEssentialFor() == null || field.getEssentialFor().equals(following.getName())){
+                if(field.isUseAll()){
+                    return this.getAllFiles();
+                }
+                ret.add(this.getFileFor(field, originalFile));
+            }
+        }   
+        return ret;
+    }
+    
+    public ArrayList<File> getAllIfNotSpecificFor(ProgramParameterSet following, File originalFile){
+        // return null if there is specific output for following
+        for(NameField field:this.set.getParsedParameters().getEssentialOutputs()){
+            if(field.getEssentialFor() == null || field.getEssentialFor().equals(following.getName())){
+                return null;            }
+        }   
+        // return all datas if there is no specific output
+        return this.getAllFiles();
     }
     
     private ArrayList<File> getAllFiles(){
@@ -277,7 +310,25 @@ public class ExecutionCommandBuilder {
             newName.append(splitname[i]);
         }
         return new File(parentDir, newName.toString());
-        
+    }
+    
+    public boolean useOnlyThisOutput(ProgramParameterSet following){
+        if(this.set == null){
+            System.out.println("ATTENTION: No set !");
+            return false;
+        }
+        else if(following.getName() == null){
+            System.out.println("ATTENTION: Following has no name!");
+            return false;
+        }
+        else{
+            for(NameField field:this.set.getParsedParameters().getEssentialOutputs()){
+                if(field.getEssentialFor() == null || following.getName().equals(field.getEssentialFor())){
+                    return field.isUseOnly();
+                }
+            }
+            return false;
+        }
     }
     
     

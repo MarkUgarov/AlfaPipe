@@ -375,20 +375,31 @@ public class SetOfFiles implements Executable, Runnable{
                     if(filePassed){
                         filePassed = execution.execute(file.getProcessingCommand(this.outputDirectory.getPath()));
                     }
+                    else{
+                        System.out.println("Fail at preprocessing");
+                    }
                     if(filePassed){
                         filePassed = execution.execute(file.getAssemblerCommand(this.outputDirectory.getPath()));
                     }
-                    if(filePassed){
-                        filePassed = execution.execute(file.getReadsVsContigsCommand(this.outputDirectory.getPath()));
+                    else{
+                        System.out.println("Fail at processing");
                     }
-                    if(filePassed){
-                        filePassed = execution.execute(file.getProdigalCommand(this.outputDirectory.getPath()));
+                    if(!filePassed){
+                        System.out.println("Fail at assembly");
                     }
+                    
+//                    if(filePassed){
+//                        filePassed = execution.execute(file.getReadsVsContigsCommand(this.outputDirectory.getPath()));
+//                    }
+//                    if(filePassed){
+//                        filePassed = execution.execute(file.getProdigalCommand(this.outputDirectory.getPath()));
+//                    }
                     
                     this.tab.setFileProgressed(file.getAbsolutePath(), filePassed);
                     ArrayList<Boolean> toolBools = new ArrayList<>(file.getValidTools().size());
                     for(String p:file.getToolCommands(this.outputDirectory.getPath())){
                         toolBools.add(execution.execute(p));
+                        toolBools.add(true);
                     }
                     this.tab.setToolProgressed(file.getAbsolutePath(), file.getValidTools(), toolBools);
                 }

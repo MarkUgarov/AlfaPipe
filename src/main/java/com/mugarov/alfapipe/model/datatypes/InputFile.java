@@ -46,6 +46,14 @@ public class InputFile extends File implements Executable{
     private ExecutionCommandBuilder lastCommand;
     private ExecutionCommandBuilder currentCommand;
     private ArrayList<File> lastRelevantOutputFiles;
+    
+    private boolean preprocessingBuilt;
+    private boolean processingBuilt;
+    private boolean assemblerBuilt;
+    private boolean readsVsContigsBuilt;
+    private boolean prodigalBuilt;
+    private boolean toolsBuilt;
+    
 
     public InputFile(String inputPath, ArrayList<ProgramParameterSet> set) {
         super(inputPath);
@@ -362,33 +370,78 @@ public class InputFile extends File implements Executable{
         this.currentParameters.getParsedParameters().sortParameters();
         StringBuilder currentStringBuilder = new StringBuilder();
         ArrayList<File> currentPaired = new ArrayList<>();
+        this.lastRelevantOutputFiles= new ArrayList<>();
         if(this.lastCommand == null){
-            this.lastRelevantOutputFiles= new ArrayList<>();
             this.lastRelevantOutputFiles.add(this);
             currentPaired = this.pairedWith;
         }
         else{
-            this.lastRelevantOutputFiles = this.lastCommand.getRelevantOutputFor(this.currentParameters, this);
-            currentPaired = null;
-        }
-        for(File lastOutputFile:this.lastRelevantOutputFiles){
-            for(File file:lastOutputFile.listFiles()){
-                this.currentCommand = new ExecutionCommandBuilder();
-                this.currentCommand.buildString(this.currentParameters, file, parentOutputDir, currentPaired);
-                if(this.currentCommand.getExecutionCommand() == null){
-                    currentStringBuilder.append("echo no program was selected for "+file.getName()+"\n");
-                    this.log.append("no assembler was selected for "+file.getName()+"\n");
+            boolean addMore = true;
+            if(this.preprocessingBuilt && this.preprocessingCommand != null){
+                if(this.preprocessingCommand.useOnlyThisOutput(this.currentParameters)){
+                    this.lastRelevantOutputFiles = this.preprocessingCommand.getSpecifiFilesFor(this.currentParameters, this);
+                    addMore = false;
                 }
                 else{
-                    currentStringBuilder.append(this.currentCommand.getExecutionCommand());
-                    this.log.append(this.currentCommand.getExecutionCommand());
+                    this.lastRelevantOutputFiles.addAll(this.preprocessingCommand.getSpecifiFilesFor(this.currentParameters, this));
                 }
+            }
+            if(this.processingBuilt && this.processingCommand != null && addMore){
+                if(this.processingCommand.useOnlyThisOutput(this.currentParameters)){
+                    this.lastRelevantOutputFiles = this.processingCommand.getSpecifiFilesFor(this.currentParameters, this);
+                    addMore =false;
+                }
+                else{
+                    this.lastRelevantOutputFiles.addAll(this.preprocessingCommand.getSpecifiFilesFor(this.currentParameters, this));
+                }
+            }
+            if(this.assemblerBuilt && this.assemblerCommand != null && addMore){
+                if(this.assemblerCommand.useOnlyThisOutput(this.currentParameters)){
+                    this.lastRelevantOutputFiles = this.assemblerCommand.getSpecifiFilesFor(this.currentParameters, this);
+                    addMore =false;
+                }
+                else{
+                    this.lastRelevantOutputFiles.addAll(this.assemblerCommand.getSpecifiFilesFor(this.currentParameters, this));
+                }
+            }
+            if(this.readsVsContigsBuilt && this.readsVsContigsCommand != null && addMore){
+                if(this.readsVsContigsCommand.useOnlyThisOutput(this.currentParameters)){
+                    this.lastRelevantOutputFiles = this.readsVsContigsCommand.getSpecifiFilesFor(this.currentParameters, this);
+                    addMore =false;
+                }
+                else{
+                    this.lastRelevantOutputFiles.addAll(this.readsVsContigsCommand.getSpecifiFilesFor(this.currentParameters, this));
+                }
+            }
+            if(this.prodigalBuilt && this.prodigalCommand != null && addMore){
+                if(this.prodigalCommand.useOnlyThisOutput(this.currentParameters)){
+                    this.lastRelevantOutputFiles = this.prodigalCommand.getSpecifiFilesFor(this.currentParameters, this);
+                    addMore =false;
+                }
+                else{
+                    this.lastRelevantOutputFiles.addAll(this.prodigalCommand.getSpecifiFilesFor(this.currentParameters, this));
+                }
+            }
+            if(addMore && !this.lastCommand.useOnlyThisOutput(this.currentParameters)){ // && lastCommand != null
+                this.lastRelevantOutputFiles.addAll(this.lastCommand.getAllIfNotSpecificFor(this.currentParameters, this));
+                          
+            }
+            // currentPaired should only be set non-null if this is the beginning of the pipe (so lastCommand == null) - but this is not the case here
+            currentPaired = null;
+        }
+        for(File file:this.lastRelevantOutputFiles){
+            this.currentCommand = new ExecutionCommandBuilder();
+            this.currentCommand.buildString(this.currentParameters, file, parentOutputDir, currentPaired);
+            if(this.currentCommand.getExecutionCommand() == null){
+                currentStringBuilder.append("echo no program was selected for "+file.getName()+"\n");
+                this.log.append("no assembler was selected for "+file.getName()+"\n");
+            }
+            else{
+                currentStringBuilder.append(this.currentCommand.getExecutionCommand());
+                this.log.append(this.currentCommand.getExecutionCommand());
             }
                 
            
-        }
-        if(currentStringBuilder.toString().length() == 0){
-            return "Something went wrong while building current command";
         }
         return currentStringBuilder.toString();
     }
@@ -401,17 +454,18 @@ public class InputFile extends File implements Executable{
      */
     @Override
     public String getPreprocessingCommand(String parentOutputDir){
+        String ret;
         if(this.preprocessingParameters.getParsedParameters().getStartCommand() == null){
-            return Pool.MESSAGE_PREFIX+Pool.MESSAGE_PREPROCESSING_IS_NULL;
+            ret = Pool.MESSAGE_PREFIX+Pool.MESSAGE_PREPROCESSING_IS_NULL;
         }
         else{
-            String ret;
             this.currentParameters = this.preprocessingParameters;
             ret = this.getCurrentCommandString(parentOutputDir);
             this.preprocessingCommand = this.currentCommand;
             this.lastCommand = this.preprocessingCommand;
-            return ret;
         }
+        this.preprocessingBuilt = true;
+        return ret;
     }
     
     /**
@@ -421,32 +475,34 @@ public class InputFile extends File implements Executable{
      */
     @Override
     public String getProcessingCommand(String parentOutputDir){
+        String ret;
         if(this.processingParameters.getParsedParameters().getStartCommand() == null){
-            return Pool.MESSAGE_PREFIX+Pool.MESSAGE_PROCESSING_IS_NULL;
+            ret = Pool.MESSAGE_PREFIX+Pool.MESSAGE_PROCESSING_IS_NULL;
         }
         else{
-            String ret;
             this.currentParameters = this.processingParameters;
             ret = this.getCurrentCommandString(parentOutputDir);
             this.processingCommand = this.currentCommand;
             this.lastCommand = this.processingCommand;
-            return ret;
         }
+        this.processingBuilt = true;
+        return ret;
     }
     
     @Override
     public String getAssemblerCommand(String parentOutputDir){
+        String ret;
         if(this.assemblerParameters.getParsedParameters().getStartCommand() == null){
-            return Pool.MESSAGE_PREFIX+Pool.MESSAGE_ASSEMBLER_IS_NULL;
+            ret = Pool.MESSAGE_PREFIX+Pool.MESSAGE_ASSEMBLER_IS_NULL;
         }
         else{
-            String ret;
             this.currentParameters = this.assemblerParameters;
             ret = this.getCurrentCommandString(parentOutputDir);
             this.assemblerCommand = this.currentCommand;
             this.lastCommand = this.assemblerCommand;
-            return ret;
         }
+        this.assemblerBuilt = true;
+        return ret;
     }
     
     /**
@@ -456,17 +512,18 @@ public class InputFile extends File implements Executable{
      */
     @Override
     public String getReadsVsContigsCommand(String parentOutputDir){
+        String ret;
         if(this.readsVsContigsParameters.getParsedParameters().getStartCommand() == null){
-            return Pool.MESSAGE_PREFIX+Pool.MESSAGE_READSVSCONTIGS_IS_NULL;
+            ret = Pool.MESSAGE_PREFIX+Pool.MESSAGE_READSVSCONTIGS_IS_NULL;
         }
         else{
-            String ret;
             this.currentParameters = this.readsVsContigsParameters;
             ret = this.getCurrentCommandString(parentOutputDir);
             this.readsVsContigsCommand = this.currentCommand;
             this.lastCommand = this.readsVsContigsCommand;
-            return ret;
         }
+        this.readsVsContigsBuilt =true;
+        return ret;
     }
     
     /**
@@ -476,17 +533,18 @@ public class InputFile extends File implements Executable{
      */
     @Override
     public String getProdigalCommand(String parentOutputDir){
+        String ret;
         if(this.prodigalParameters.getParsedParameters().getStartCommand() == null){
             return Pool.MESSAGE_PREFIX+Pool.MESSAGE_READSVSCONTIGS_IS_NULL;
         }
         else{
-            String ret;
             this.currentParameters = this.prodigalParameters;
             ret = this.getCurrentCommandString(parentOutputDir);
             this.prodigalCommand = this.currentCommand;
             this.lastCommand = this.prodigalCommand;
-            return ret;
         }
+        this.prodigalBuilt = true;
+        return ret;
     }
     
     /**
@@ -497,6 +555,7 @@ public class InputFile extends File implements Executable{
     @Override
     public ArrayList<String> getToolCommands(String parentOutputDir){
         ArrayList<String> ret = new ArrayList<>();
+        ArrayList<ExecutionCommandBuilder> toolCommands = new ArrayList<>(this.tools.size());
         for(int i = 0; i<this.tools.size(); i++){
             ProgramParameterSet tp =this.tools.get(i);
             if(this.toolSelected[i]){
@@ -511,6 +570,7 @@ public class InputFile extends File implements Executable{
             ret.add(Pool.MESSAGE_PREFIX+Pool.MESSAGE_TOOL_IS_NULL);
 
         }
+        this.toolsBuilt = true;
         return ret;
     }
     
@@ -539,8 +599,12 @@ public class InputFile extends File implements Executable{
             this.lastRelevantOutputFiles = new ArrayList<>();
             this.lastRelevantOutputFiles.add(this);
         }
+        this.currentParameters = tool;
         ret = this.getCurrentCommandString(parentOutputDir);
-        this.toolCommands.add(this.currentCommand);
+        if(ret == null){
+            System.out.println("ToolCommand is null");
+        }
+//        this.toolCommands.add(this.currentCommand);
         // DO NOT: this.lastCommand = this.currentCommand;
         return ret;
         

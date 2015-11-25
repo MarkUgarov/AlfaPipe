@@ -14,6 +14,7 @@ public class NameField {
     private boolean dynamic;
     private String essentialFor;
     private boolean useAll;
+    private boolean useOnly;
     // for non-dynamic
     private String name;
     // for dynamic
@@ -32,6 +33,7 @@ public class NameField {
         this.essentialFor = null;
         this.dynamic = false;
         this.useAll = false;
+        this.useOnly = false;
     }
 
     /**
@@ -121,6 +123,9 @@ public class NameField {
 
     /**
      * @param lowerbound the lowerbound to set
+     *  for example: 
+     * "file_name_1.exe " with regex "_" and lowerbound "1" will lead to 
+     * "name_1.exe"
      */
     public void setLowerbound(int lowerbound) {
         this.lowerbound = lowerbound;
@@ -135,6 +140,9 @@ public class NameField {
 
     /**
      * @param upperbound the upperbound to set
+     * for example: 
+     * "file_name_1.exe " with regex "_" and upperbound "-1" or "1" will lead to 
+     * "file_name"
      */
     public void setUpperbound(int upperbound) {
         this.upperbound = upperbound;
@@ -155,22 +163,49 @@ public class NameField {
     }
 
     /**
-     * @return the regex
+     * @return the regex = where to distinguish the positions (should be
+     * anything like "_" or "-" for most cases, but also can be an 
+     * empty String "" )
      */
     public String getRegex() {
         return regex;
     }
 
     /**
-     * @param regex the regex to set
+     * @param regex the regex to set = where to distinguish the positions 
+     * (should be anything like "_" or "-" for most cases , but also can be an 
+     * empty String "" )
      */
     public void setRegex(String regex) {
         this.regex = regex;
     }
 
     /**
-     * @return the useAll
-     * 
+     * @return the useAll can be used to "sneak" outputs around the pipe for tools
+     * example
+     *    |Preprocessor|
+     *          |
+     * (preprocessing output)
+     *          |
+     *      |Processor|
+     *          |
+     *  (processing output)
+     *          |
+     *      |Assmbler|
+     *          |
+     *   (assembler output) --------|----------------|
+     *          |                   |                |
+     *    |ReadsVsContigs|          |                |
+     *          |                   |        (useOnly && useAll)
+     *(readsVsContigs output)       |                |
+     *          |               (useAll)             | 
+     *       |Prodigal|             |                |
+     *          |                   |                |
+     *  (prodigal output)-----------+                |
+     *       ___|___                |                |
+     *      /       \               |                |
+     *  Tool1       Tool2         Tool3             Tool4
+     *      
      */
     public boolean isUseAll() {
         return useAll;
@@ -189,22 +224,84 @@ public class NameField {
      *          |
      *      |Assmbler|
      *          |
-     *   (assembler output) -----------
-     *          |                     |
-     *    |ReadsVsContigs|            |
-     *          |                     |
-     *(readsVsContigs output)         |
-     *          |                     | 
-     *       |Prodigal|               |
-     *          |                     |
-     *  (prodigal output)      (assembler output)
-     *       ___|___                  |
-     *      /       \                 |
-     *  Tool1       Tool2           Tool3
+     *   (assembler output) --------|----------------|
+     *          |                   |                |
+     *    |ReadsVsContigs|          |                |
+     *          |                   |        (useOnly && useAll)
+     *(readsVsContigs output)       |                |
+     *          |               (useAll)             | 
+     *       |Prodigal|             |                |
+     *          |                   |                |
+     *  (prodigal output)-----------+                |
+     *       ___|___                |                |
+     *      /       \               |                |
+     *  Tool1       Tool2         Tool3             Tool4
      *      
      */
     public void setUseAll(boolean useAll) {
         this.useAll = useAll;
+    }
+
+    /**
+     * @return can be used to "sneak" outputs around the pipe for tools
+     * example
+     *    |Preprocessor|
+     *          |
+     * (preprocessing output)
+     *          |
+     *      |Processor|
+     *          |
+     *  (processing output)
+     *          |
+     *      |Assmbler|
+     *          |
+     *   (assembler output) --------|----------------|
+     *          |                   |                |
+     *    |ReadsVsContigs|          |                |
+     *          |                   |        (useOnly && useAll)
+     *(readsVsContigs output)       |                |
+     *          |               (useAll)             | 
+     *       |Prodigal|             |                |
+     *          |                   |                |
+     *  (prodigal output)-----------+                |
+     *       ___|___                |                |
+     *      /       \               |                |
+     *  Tool1       Tool2         Tool3             Tool4
+     *      
+     */
+    public boolean isUseOnly() {
+        return useOnly;
+    }
+
+    /**
+     * @param useOnly can be used to "sneak" outputs around the pipe for tools
+     * example
+     *    |Preprocessor|
+     *          |
+     * (preprocessing output)
+     *          |
+     *      |Processor|
+     *          |
+     *  (processing output)
+     *          |
+     *      |Assmbler|
+     *          |
+     *   (assembler output) --------|----------------|
+     *          |                   |                |
+     *    |ReadsVsContigs|          |                |
+     *          |                   |        (useOnly && useAll)
+     *(readsVsContigs output)       |                |
+     *          |               (useAll)             | 
+     *      |Prodigal|              |                |
+     *          |                   |                |
+     *  (prodigal output)-----------+                |
+     *       ___|___                |                |
+     *      /       \               |                |
+     *  Tool1       Tool2         Tool3             Tool4
+     *      
+     */
+    public void setUseOnly(boolean useOnly) {
+        this.useOnly = useOnly;
     }
     
 }
