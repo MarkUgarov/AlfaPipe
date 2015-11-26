@@ -64,6 +64,9 @@ public class GeneratorCore {
     
     public void parseOut() {
         try {
+            if(!this.localFile.getParentFile().exists()){
+                this.localFile.getParentFile().mkdirs();
+            }
             if (!localFile.exists()) {
                 localFile.createNewFile();
             }
