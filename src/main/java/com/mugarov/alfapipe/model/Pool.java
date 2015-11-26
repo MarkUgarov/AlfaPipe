@@ -92,6 +92,7 @@ public abstract class Pool {
     public static final String PROGRAM_EMPTY_PARAMETER_VALUE = "/empty";
     public static final String PROGRAM_INPUT_PATH_SET_PARAMETER_NAME = "inputPathCommand";
     public static final String PROGRAM_OUTPUT_PATH_SET_PARAMETER_NAME = "outputPathCommand";
+    public static final String PROGRAM_PAIRED_PARAMETER_NAME = "pairedCommand";
     
      // listeners for the main content - the components (Button, Menu....) will add them by themselves 
     public static final MainViewButtonListener LISTENER_BUTTON = new MainViewButtonListener();

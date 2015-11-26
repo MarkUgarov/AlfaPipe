@@ -360,13 +360,6 @@ public class SetOfFiles implements Executable, Runnable{
             this.tab.disableEditing();
             try {
                 Executioner execution = new Executioner(this.outputDirectory.getAbsolutePath());
-                /**
-                * for testing
-                */
-               execution.execute("mkdir TEST_NOTHING");
-               /**
-                * end testing
-                */
 
                 for(InputFile file:this.files){
 

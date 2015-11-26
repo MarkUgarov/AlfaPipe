@@ -38,7 +38,7 @@ public class PreprocessingGenerator implements Generator{
         NameField essential = new NameField();
         essential.setDynamic(false);
         essential.setName("Unziped_R1_001.fastq");
-        essential.setEssentialFor(null);
+        essential.setEssentialFor("MiSeqFASTQ4Newbler_v2.8b");
         essential.setUseOnly(true);
         ArrayList<NameField> fields = new ArrayList<>();
         fields.add(essential);

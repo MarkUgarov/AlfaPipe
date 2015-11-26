@@ -39,7 +39,8 @@ public class ExecutionCommandBuilder {
     public void buildString(   ProgramParameterSet parameterSet,
                                 File inputFile,
                                 String parentOutputDirectory,
-                                ArrayList<File> pairedFiles){
+                                ArrayList<File> pairedFiles,
+                                File originalFile){
         this.builder = new StringBuilder();
         this.set = parameterSet;
         this.inputFile = inputFile;
@@ -51,7 +52,7 @@ public class ExecutionCommandBuilder {
         if(parameterSet.getParsedParameters().isOnlyOutputDirectorySetable()){
             this.outputFile = new File(parentOutputDirectory, parameterSet.getParsedParameters().getName()
                                                               +"_"
-                                                              +this.getNameWithoutExtensions(inputFile));
+                                                              +this.getNameWithoutExtensions(originalFile));
             this.outputFile.mkdirs();
             this.outputIsDirectory = true;
         }
@@ -60,7 +61,7 @@ public class ExecutionCommandBuilder {
                                                         + File.separatorChar
                                                         + parameterSet.getParsedParameters().getName()
                                                         + "_"
-                                                        + this.getNameWithoutExtensions(inputFile)
+                                                        + this.getNameWithoutExtensions(originalFile)
                                                         + parameterSet.getParsedParameters().getOutputEndings()[0]);
             File outputDirectory = new File(this.outputFile.getParent());
             if(!outputDirectory.exists()){
@@ -92,24 +93,37 @@ public class ExecutionCommandBuilder {
                         builder.append(pf.getCommand()); 
                         builder.append(" ");
                     }
+                    
 
                     builder.append(inputFile.getAbsolutePath());
                     builder.append(" ");
-                    if(pairedFiles != null){
+                    if(pairedFiles != null && parameterSet.getParsedParameters().getPairedCommand() == null){
                         for(File file:pairedFiles){
                             builder.append(file.getAbsolutePath());
                             builder.append(" ");
                         }
                     }
-                    
                 }
                 else if(pf.getName().equals(Pool.PROGRAM_OUTPUT_PATH_SET_PARAMETER_NAME)){
                     if(writeCommand){
                         builder.append(pf.getCommand()); 
                         builder.append(" ");
                     }
-                    builder.append(this.outputFile.getAbsolutePath());
+                    builder.append(outputFile.getAbsolutePath());
                     builder.append(" ");
+                    
+                }
+                else if(pf.getName().equals(Pool.PROGRAM_PAIRED_PARAMETER_NAME)){
+                    if(writeCommand){
+                        builder.append(pf.getCommand()); 
+                        builder.append(" ");
+                    }
+                    if(pairedFiles != null){
+                        for(File file:pairedFiles){
+                            builder.append(file.getAbsolutePath());
+                            builder.append(" ");
+                        }
+                    }
                 }
                 else{
                     int i = 0;
@@ -164,6 +178,7 @@ public class ExecutionCommandBuilder {
     
     public String getExecutionCommand(){
         if(this.builder.length()==0){
+            
             return null;
         }
         else{
@@ -239,7 +254,9 @@ public class ExecutionCommandBuilder {
         ret = new ArrayList<>(this.set.getParsedParameters().getEssentialOutputs().size());
         for(NameField field:this.set.getParsedParameters().getEssentialOutputs()){
             if(field.getEssentialFor() == null || field.getEssentialFor().equals(following.getName())){
+                System.out.println("Found: "+this.set.getName()+" has specific file for "+following.getName());
                 if(field.isUseAll()){
+                    System.out.println("Returning all.");
                     return this.getAllFiles();
                 }
                 ret.add(this.getFileFor(field, originalFile));
@@ -292,6 +309,7 @@ public class ExecutionCommandBuilder {
         if(!ret.exists()){
             System.out.println("ATTENTION Commandbuilder: "+ret.getName()+" does not exist!");
         }
+        System.out.println("Returning "+ret.getName());
         return ret;
     }
     

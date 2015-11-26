@@ -27,6 +27,7 @@ public class ParseableProgramParameters{
     private ArrayList<ParameterField> parameters;
     private ParameterField inputPathCommand;
     private ParameterField outputPathCommand;
+    private ParameterField pairedCommand;
     private PairedInputConditions  pairedConditions;
     
     private ArrayList<NameField> essentialOutputs; 
@@ -41,6 +42,7 @@ public class ParseableProgramParameters{
         this.startCommand = null;
         this.inputPathCommand = null;
         this.outputPathCommand = null;
+        this.pairedCommand = null;
         this.validEndings = null;
         this.outputEndings = null;
         this.enterCommand = null;
@@ -65,6 +67,7 @@ public class ParseableProgramParameters{
         this.startCommand = startCommand;
         this.setInputPathCommand(inputPathCommand, inputPathPosition);
         this.setOuputPathCommand(outputPathCommand, outputPathPosition);
+        this.pairedCommand = null;
         this.validEndings = validEndings;
         this.outputEndings = outputEnding;
         this.onlyOutputDirectorySetable = false;
@@ -133,6 +136,9 @@ public class ParseableProgramParameters{
             else if(p.getName().equals(Pool.PROGRAM_OUTPUT_PATH_SET_PARAMETER_NAME)){
                 this.outputPathCommand = p;
             }
+            else if(p.getName().equals(Pool.PROGRAM_PAIRED_PARAMETER_NAME)){
+                this.pairedCommand = p;
+            }
         }
     }
 
@@ -163,10 +169,12 @@ public class ParseableProgramParameters{
         );
     }
 
+    @JsonIgnore
     public ParameterField getOutputPathCommand() {
         return this.outputPathCommand;
     }
 
+    @JsonIgnore
     public void setOutputPathCommand(ParameterField outputPathCommand) {
         this.outputPathCommand = outputPathCommand;
         this.addParameter(this.outputPathCommand);
@@ -176,6 +184,29 @@ public class ParseableProgramParameters{
     public void setOuputPathCommand(String command, int position){
          this.setOutputPathCommand(new ParameterField(
                                     Pool.PROGRAM_OUTPUT_PATH_SET_PARAMETER_NAME, 
+                                    command,
+                                    null,
+                                    position,
+                                    false
+                                 )
+        );
+    }
+    
+    @JsonIgnore
+    public ParameterField getPairedCommand() {
+        return this.pairedCommand;
+    }
+    
+    @JsonIgnore
+    public void setPairedCommand(ParameterField pairedCommand) {
+        this.pairedCommand = pairedCommand;
+        this.addParameter(this.pairedCommand);
+    }
+    
+    @JsonIgnore
+    public void setPairedCommand(String command, int position){
+         this.setOutputPathCommand(new ParameterField(
+                                    Pool.PROGRAM_PAIRED_PARAMETER_NAME, 
                                     command,
                                     null,
                                     position,
@@ -221,6 +252,7 @@ public class ParseableProgramParameters{
         this.parameters.add(parameter);
     }
 
+    @JsonIgnore
     public void sortParameters() {
             this.sorter.sort();
     }
@@ -260,6 +292,23 @@ public class ParseableProgramParameters{
         field.setDynamic(false);
         field.setName(name);
         field.setEssentialFor(targetProgram);
+        this.essentialOutputs.add(field);
+    }
+    
+    @JsonIgnore
+    public void addEssentialOutput(NameField field){
+        if(this.essentialOutputs == null){
+            this.essentialOutputs = new ArrayList<>();
+        }
+        else{
+            int i= 0;
+            while(i<this.essentialOutputs.size()){
+                if(this.essentialOutputs.get(i).getName().equals(field.getName())){
+                    this.essentialOutputs.remove(i);
+                }
+                i++;
+            } 
+        }
         this.essentialOutputs.add(field);
     }
     
