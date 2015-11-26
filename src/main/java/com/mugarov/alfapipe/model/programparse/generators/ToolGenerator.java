@@ -23,38 +23,35 @@ public class ToolGenerator implements Generator{
         this.defaultList = new ArrayList<>();
         this.localFilePath = Pool.PATH_TOOLS_LIST;
 
-        String[] endings = {".fa"};
-        String[] outputEnding = new String[]{".fa"};
-        ParseableProgramParameters Test1 = new ParseableProgramParameters( "Example Tool 1", 
-                                                    "start Tool 1", 
-                                                    "apply inputCommand Tool 1",
-                                                    0,
-                                                    "apply outputCommand Tool 1",
+//        String[] endings = {".fa"};
+//        String[] outputEnding = new String[]{".fa"};
+//        ParseableProgramParameters Test1 = new ParseableProgramParameters( "Example Tool 1", 
+//                                                    "start Tool 1", 
+//                                                    "apply inputCommand Tool 1",
+//                                                    0,
+//                                                    "apply outputCommand Tool 1",
+//                                                    -1,
+//                                                    endings,
+//                                                    outputEnding);  
+//        Test1.addParameter("Test Boolean", "boolean value", Pool.PROGRAM_EMPTY_PARAMETER_VALUE, 1, true);
+//        Test1.addParameter("Test optional", "optional value", "Test optional default", 2, true);
+//        Test1.addParameter("Test obligatory", "obligatory value", "Test obligatory default", 3, false);
+//        this.defaultList.add(Test1);
+        
+        String[] endings = {".fna"};
+        String[] outputEnding = new String[]{".fa", ".fna"};
+        ParseableProgramParameters prokka = new ParseableProgramParameters( "Prokka", 
+                                                    "prokka", 
+                                                    null,
                                                     -1,
-                                                    endings,
-                                                    outputEnding);  
-        ParseableProgramParameters Test2= new ParseableProgramParameters( "Example Tool 2", 
-                                                    "start Tool 2", 
-                                                    "apply inputCommand Tool 2",
-                                                    0,
-                                                    "apply outputCommand Tool 2",
+                                                    "--outdir",
                                                     0,
                                                     endings,
                                                     outputEnding);  
-        ParseableProgramParameters Test3=new ParseableProgramParameters( "Example Tool 3", 
-                                                    "start Tool 3", 
-                                                    "apply inputCommand Tool 3",
-                                                    0,
-                                                    "apply outputCommand Tool 3",
-                                                    0,
-                                                    endings,
-                                                    outputEnding);  
-        Test1.addParameter("Test Boolean", "boolean value", Pool.PROGRAM_EMPTY_PARAMETER_VALUE, 1, true);
-        Test1.addParameter("Test optional", "optional value", "Test optional default", 2, true);
-        Test1.addParameter("Test obligatory", "obligatory value", "Test obligatory default", 3, false);
-        this.defaultList.add(Test1);
-        this.defaultList.add(Test2);
-        this.defaultList.add(Test3);
+        prokka.setOnlyOutputDirectorySetable(true);
+        prokka.addParameter("Force", "--force", Pool.PROGRAM_EMPTY_PARAMETER_VALUE, 1, false);
+        this.defaultList.add(prokka);
+        
         
         this.core = new GeneratorCore(this.localFilePath, this.defaultList);
         
