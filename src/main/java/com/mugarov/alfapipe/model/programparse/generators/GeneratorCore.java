@@ -8,6 +8,7 @@ package com.mugarov.alfapipe.model.programparse.generators;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import com.mugarov.alfapipe.model.Pool;
 import com.mugarov.alfapipe.model.programparse.datatypes.ParseableProgramParameters;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -23,17 +24,14 @@ import java.util.logging.Logger;
 public class GeneratorCore {
     
     private ArrayList<ParseableProgramParameters> available;
-    private final File localFile;
-    private final String path;
+    private File localFile;
+    private String path;
      
     public GeneratorCore(String path, ArrayList<ParseableProgramParameters> defaultList){
         this.available = new ArrayList<>();
         this.path = path;
        
         this.localFile = new File(this.path);
-        if(!this.localFile.getParentFile().exists()){
-            this.localFile.getParentFile().mkdirs();
-        }
         if(!localFile.exists()){
             System.out.println("File does not exist! Creating default List. ");
             this.available = defaultList;

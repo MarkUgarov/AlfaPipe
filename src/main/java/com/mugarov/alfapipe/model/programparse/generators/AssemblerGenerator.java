@@ -6,7 +6,6 @@
 package com.mugarov.alfapipe.model.programparse.generators;
 
 import com.mugarov.alfapipe.model.Pool;
-import com.mugarov.alfapipe.model.programparse.datatypes.NameField;
 import com.mugarov.alfapipe.model.programparse.datatypes.ParseableProgramParameters;
 import java.util.ArrayList;
 
@@ -25,7 +24,7 @@ public class AssemblerGenerator implements Generator{
         this.localFilePath = Pool.PATH_ASSEMBLER_LIST;
 
         String[] endings = {".fa", ".fastq"};
-        String[] outputEnding = new String[]{".fna", ".fa"};
+        String[] outputEnding = new String[]{".fa"};
         ParseableProgramParameters newbler = new ParseableProgramParameters( "Newbler",
                                                                 "/vol/454/.old/2.8/bin/runAssembly", 
                                                                 null,
@@ -38,11 +37,6 @@ public class AssemblerGenerator implements Generator{
         newbler.addParameter("large", "-large", Pool.PROGRAM_EMPTY_PARAMETER_VALUE, 1, true);
         newbler.addParameter("CPU", "-cpu", "0", 2, true);
         newbler.addParameter("Force", "-force", Pool.PROGRAM_EMPTY_PARAMETER_VALUE, 3, false);
-        NameField  essential = new NameField();
-        essential.setName("454AllContigs.fna");
-        essential.setEssentialFor("Prokka");
-        essential.setUseOnly(true);
-        newbler.addEssentialOutput(essential);
 
         ParseableProgramParameters allpath=  new ParseableProgramParameters( "Allpath",
                                                                 "apply startCommand", 
