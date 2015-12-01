@@ -201,6 +201,8 @@ public class ExecutionCommandBuilder {
     }
     
     /**
+     * This is an old method! It does only return the relevant output if there 
+     * is no other ExecutionCommandBuilder than this and the following. 
      * Use buildString before! Make sure the execution of the set (= the execution 
      * of the command given this.buildString(...) ) worked and the output files are
      * written already.
@@ -252,14 +254,25 @@ public class ExecutionCommandBuilder {
     public ArrayList<File> getSpecifiFilesFor(ProgramParameterSet following, File originalFile){
         ArrayList<File> ret;
         ret = new ArrayList<>(this.set.getParsedParameters().getEssentialOutputs().size());
+        if(following.getName() == null){
+            System.out.println("No name for following. Returning all files.");
+            return this.getAllFiles();
+        }
         for(NameField field:this.set.getParsedParameters().getEssentialOutputs()){
             if(field.getEssentialFor() == null || field.getEssentialFor().equals(following.getName())){
+                if(field.getName() ==  null){
+                    System.out.println("Return empty file list - NameField was null.");
+                    return new ArrayList<File>();
+                }
                 System.out.println("Found: "+this.set.getName()+" has specific file for "+following.getName());
                 if(field.isUseAll()){
                     System.out.println("Returning all.");
                     return this.getAllFiles();
                 }
-                ret.add(this.getFileFor(field, originalFile));
+                File spec = this.getFileFor(field, originalFile);
+                if(spec!= null){
+                   ret.add(this.getFileFor(field, originalFile));
+                }
             }
         }   
         return ret;
@@ -269,7 +282,8 @@ public class ExecutionCommandBuilder {
         // return null if there is specific output for following
         for(NameField field:this.set.getParsedParameters().getEssentialOutputs()){
             if(field.getEssentialFor() == null || field.getEssentialFor().equals(following.getName())){
-                return null;            }
+                return new ArrayList<File>();            
+            }
         }   
         // return all datas if there is no specific output
         return this.getAllFiles();
