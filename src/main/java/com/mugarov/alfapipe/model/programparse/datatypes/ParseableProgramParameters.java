@@ -205,7 +205,7 @@ public class ParseableProgramParameters{
     
     @JsonIgnore
     public void setPairedCommand(String command, int position){
-         this.setOutputPathCommand(new ParameterField(
+         this.setPairedCommand(new ParameterField(
                                     Pool.PROGRAM_PAIRED_PARAMETER_NAME, 
                                     command,
                                     null,
