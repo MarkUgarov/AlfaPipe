@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mugarov.alfapipe.control.listeners.tabrelated;
+package com.mugarov.alfapipe.control.listeners.tabrelated.radiobuttons;
 
 import com.mugarov.alfapipe.model.Pool;
 import com.mugarov.alfapipe.model.datatypes.SetOfFiles;
@@ -15,13 +15,20 @@ import java.awt.event.ActionListener;
  *
  * @author Mark
  */
-public class AssemblerRadioButtonListener implements ActionListener{
+public class AssemblerListener implements ActionListener{
     private ParseableProgramParameters selectedAssembler;
     private SetOfFiles fileSet;
     
-    public AssemblerRadioButtonListener(){
+    public AssemblerListener(){
         this.fileSet = null;
-        this.selectedAssembler = Pool.GENERATOR_ASSEMBLER.get(Pool.GENERATOR_ASSEMBLER.getAvailableNames()[0]);
+        String[] names = Pool.GENERATOR_ASSEMBLER.getAvailableNames();
+        if(names.length > 0){
+            this.selectedAssembler = Pool.GENERATOR_ASSEMBLER.get(names[0]);
+        }
+        else{
+            this.selectedAssembler = null;
+        }
+        
     }
 
     @Override
@@ -41,6 +48,10 @@ public class AssemblerRadioButtonListener implements ActionListener{
     public void setFileSet(SetOfFiles set){
         this.fileSet =set;
         this.fileSet.setAssembler(this.selectedAssembler);
+    }
+    
+    public String[] getValidSelections(){
+        return Pool.GENERATOR_ASSEMBLER.getAvailableNames();
     }
     
 }

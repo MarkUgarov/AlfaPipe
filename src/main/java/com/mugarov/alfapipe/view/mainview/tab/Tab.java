@@ -5,7 +5,7 @@
  */
 package com.mugarov.alfapipe.view.mainview.tab;
 
-import com.mugarov.alfapipe.view.mainview.tab.tabular.FilePanel;
+import com.mugarov.alfapipe.view.mainview.tab.tabular.FileSetPanel;
 import com.mugarov.alfapipe.control.listeners.tabrelated.TabListenerBag;
 import com.mugarov.alfapipe.control.listeners.tabrelated.parameters.ParameterListener;
 import com.mugarov.alfapipe.control.listeners.tabrelated.singlefile.SingleFileListener;
@@ -13,7 +13,6 @@ import com.mugarov.alfapipe.model.Pool;
 import com.mugarov.alfapipe.model.datatypes.InputParameter;
 import com.mugarov.alfapipe.view.Button;
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -40,7 +39,7 @@ public class Tab extends JPanel{
     
     private final JPanel northPanel;
     private final JPanel centerPanel;
-    private final FilePanel centerScrollPanel;
+    private final FileSetPanel centerScrollPanel;
     private final JPanel southPanel;
     
     private final String id;
@@ -67,13 +66,17 @@ public class Tab extends JPanel{
         this.nameField = new JTextField(this.id);
         this.applyName = new Button(Pool.BUTTON_APPLY_NAME_TEXT, Pool.BUTTON_APPLY_NAME_COMMAND);
         this.optionPanel = new OptionPanel();
-        this.optionPanel.setProcessing(this.listenerBag.getProcessingRadioButtonListener());
+        this.optionPanel.initPreprocessingSelection(this.listenerBag.getPreprocessingRadioButtonListener());
+        this.optionPanel.initProcessingSelection(this.listenerBag.getProcessingRadioButtonListener());
+        this.optionPanel.initAssemblerSelection(this.listenerBag.getAssemblerRadioListener());
+        this.optionPanel.initReadsVsContigsSelection(this.listenerBag.getReadsVsContigsListener());
+        this.optionPanel.initProdigalSelection(this.listenerBag.getProdigalListener());
         
         this.outputPath = new JLabel();
         
         this.northPanel = new JPanel(new BorderLayout());
         this.centerPanel = new JPanel(new BorderLayout());
-        this.centerScrollPanel = new FilePanel(this.listenerBag);
+        this.centerScrollPanel = new FileSetPanel(this.listenerBag);
         this.southPanel = new JPanel(new BorderLayout());
         
         
@@ -126,6 +129,10 @@ public class Tab extends JPanel{
     
     public void addFile(String id, String name, SingleFileListener listener){
         this.centerScrollPanel.addFile(id, name, listener);
+    }
+    
+    public void addPaired(String mainFileID, String pairedName){
+        this.centerScrollPanel.addPaired(mainFileID, pairedName);
     }
     
     public void deleteFile(String id){

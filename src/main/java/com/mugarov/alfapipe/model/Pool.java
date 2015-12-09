@@ -113,6 +113,15 @@ public abstract class Pool {
             
     //static components
     public static MainViewButtonPool MAIN_BUTTON_POOL = new MainViewButtonPool();
-   
+    
+    //Logfile standard strings
+    public static final String LOG_LINE_PREFIX = "<>< ";
+    public static final String LOG_LINE_POSTFIX = "|°|";
+    public static final String LOG_COMMAND_PREFIX = "EXECUTE: ";
+    public static final String LOG_WARNING = "ATTENTION: ";
+    public static final String LOG_SOURCE_HINT = "  <- Message from ";
+    public static final String LOG_OVERWRITTEN_HINT = "Old logfile was overwritten";
+    public static final String LOG_CHANGE_TO = "Trying to change directory to ";
+    public static final String LOG_CHANGED_FROM = "Changed to this logfile from ";
     
 }

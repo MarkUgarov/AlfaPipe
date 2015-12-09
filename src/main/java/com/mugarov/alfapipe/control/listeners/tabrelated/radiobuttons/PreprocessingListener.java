@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mugarov.alfapipe.control.listeners.tabrelated;
+package com.mugarov.alfapipe.control.listeners.tabrelated.radiobuttons;
 
 import com.mugarov.alfapipe.model.Pool;
 import com.mugarov.alfapipe.model.datatypes.SetOfFiles;
@@ -21,7 +21,13 @@ public class PreprocessingListener implements ActionListener{
     
     public PreprocessingListener(){
         this.fileSet = null;
-        this.selectedPreprocessing = Pool.GENERATOR_PREPROCESSING.get(Pool.GENERATOR_PREPROCESSING.getAvailableNames()[0]);
+        String[] names = Pool.GENERATOR_PREPROCESSING.getAvailableNames();
+        if(names.length > 0){
+            this.selectedPreprocessing = Pool.GENERATOR_PREPROCESSING.get(names[0]);
+        }
+        else{
+            this.selectedPreprocessing = null;
+        }
     }
 
     @Override
@@ -42,5 +48,9 @@ public class PreprocessingListener implements ActionListener{
         this.fileSet =set;
         this.fileSet.setPreprocessing(this.selectedPreprocessing);
         
+    }
+    
+    public String[] getValidSelections(){
+        return Pool.GENERATOR_PREPROCESSING.getAvailableNames();
     }
 }

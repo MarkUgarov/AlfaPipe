@@ -5,18 +5,24 @@
  */
 package com.mugarov.alfapipe.control.listeners.tabrelated;
 
+import com.mugarov.alfapipe.control.listeners.tabrelated.radiobuttons.ProcessingListener;
+import com.mugarov.alfapipe.control.listeners.tabrelated.radiobuttons.AssemblerListener;
+import com.mugarov.alfapipe.control.listeners.tabrelated.radiobuttons.PreprocessingListener;
 import com.mugarov.alfapipe.control.FileSetManager;
+import com.mugarov.alfapipe.control.listeners.tabrelated.radiobuttons.ProdigalListener;
+import com.mugarov.alfapipe.control.listeners.tabrelated.radiobuttons.ReadsVsContigsListener;
 import com.mugarov.alfapipe.model.datatypes.SetOfFiles;
-import com.mugarov.alfapipe.view.mainview.tab.DataTabbedPane;
 
 /**
  *
  * @author Mark
  */
 public class TabListenerBag {
-    private final ProcessingRadioButtonListener procRadioListener;
+    private final ProcessingListener procRadioListener;
     private final PreprocessingListener preListener;
-    private final AssemblerRadioButtonListener assRadioListener;
+    private final AssemblerListener assRadioListener;
+    private final ReadsVsContigsListener readsVsContigsListener;
+    private final ProdigalListener prodigalListener;
     
     private final TabButtonListener  buttonListener;
     private final ToolSelectListener toolListener;
@@ -26,9 +32,11 @@ public class TabListenerBag {
     
     
     public TabListenerBag(){
-        this.procRadioListener = new ProcessingRadioButtonListener();
+        this.procRadioListener = new ProcessingListener();
         this.preListener = new PreprocessingListener();
-        this.assRadioListener = new AssemblerRadioButtonListener();
+        this.assRadioListener = new AssemblerListener();
+        this.readsVsContigsListener = new ReadsVsContigsListener();
+        this.prodigalListener = new ProdigalListener();
         
         this.buttonListener = new TabButtonListener();
         this.toolListener = new ToolSelectListener();
@@ -41,6 +49,8 @@ public class TabListenerBag {
         this.preListener.setFileSet(this.fileSet);
         this.procRadioListener.setFileSet(this.fileSet);
         this.assRadioListener.setFileSet(this.fileSet);  
+        this.readsVsContigsListener.setFileSet(this.fileSet);
+        this.prodigalListener.setFileSet(this.fileSet);
         this.toolListener.setFileSet(this.fileSet);
     }
     
@@ -57,17 +67,24 @@ public class TabListenerBag {
         return this.preListener;
     }
     
-    public ProcessingRadioButtonListener getProcessingRadioButtonListener(){
+    public ProcessingListener getProcessingRadioButtonListener(){
         return this.procRadioListener;
     }
     
-    public AssemblerRadioButtonListener getAssemblerRadioListener(){
+    public AssemblerListener getAssemblerRadioListener(){
         return this.assRadioListener;
     }
     
-    
+    public ReadsVsContigsListener getReadsVsContigsListener() {
+        return readsVsContigsListener;
+    }
+
+    public ProdigalListener getProdigalListener() {
+        return prodigalListener;
+    }
     
     public ToolSelectListener getToolListener(){
         return this.toolListener;
     }
+    
 }

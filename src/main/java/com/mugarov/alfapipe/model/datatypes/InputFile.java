@@ -6,6 +6,7 @@
 package com.mugarov.alfapipe.model.datatypes;
 
 import com.mugarov.alfapipe.model.ExecutionCommandBuilder;
+import com.mugarov.alfapipe.model.LogFileManager;
 import com.mugarov.alfapipe.model.Pool;
 import com.mugarov.alfapipe.model.programparse.datatypes.ParseableProgramParameters;
 import java.io.File;
@@ -18,11 +19,16 @@ import java.util.Arrays;
  */
 public class InputFile extends File implements Executable{
     
+    private final LogFileManager log;
+    private final ArrayList<File> pairedWith;
+    private boolean valid;
+    
+    
     private ProgramParameterSet preprocessingParameters;
     private ProgramParameterSet processingParameters;
     private ProgramParameterSet assemblerParameters;
-    private final ProgramParameterSet readsVsContigsParameters;
-    private final ProgramParameterSet prodigalParameters;
+    private ProgramParameterSet readsVsContigsParameters;
+    private ProgramParameterSet prodigalParameters;
     private ProgramParameterSet lastNonNullParameters;
     private ArrayList<ProgramParameterSet>tools;
     private ProgramParameterSet firstNonNullParameters;
@@ -31,10 +37,6 @@ public class InputFile extends File implements Executable{
     // needed for checking if the tool is selected for this File only
     private boolean[] toolSelected;
     
-    private final ArrayList<File> pairedWith;
-    private boolean valid;
-    
-    private final StringBuilder log;
     private ExecutionCommandBuilder preprocessingCommand;
     private ExecutionCommandBuilder processingCommand;
     private ExecutionCommandBuilder assemblerCommand;
@@ -56,7 +58,7 @@ public class InputFile extends File implements Executable{
     private boolean toolsBuilt;
     
 
-    public InputFile(String inputPath, ArrayList<ProgramParameterSet> set) {
+    public InputFile(String inputPath, ArrayList<ProgramParameterSet> set, LogFileManager logManager) {
         super(inputPath);
         this.tools = new ArrayList<>();
         this.pairedWith = new ArrayList<>();
@@ -65,28 +67,37 @@ public class InputFile extends File implements Executable{
         this.processingParameters = null;
 //        this.processingInputParameters = new ProgramParameterSet(Pool.GENERATOR_PROCESSING.get(Pool.NAME_DEFAULT_PROCESSING));
         this.assemblerParameters = null;
-        this.readsVsContigsParameters = new ProgramParameterSet(Pool.GENERATOR_READS_VS_CONTIGS.get(Pool.NAME_DEFAULT_READS_VS_CONTIGS));
-        this.prodigalParameters = new ProgramParameterSet(Pool.GENERATOR_PRODIGAL.get(Pool.NAME_DEFAULT_PRODIGAL));
+        this.readsVsContigsParameters = null;
+        this.prodigalParameters = null;
+//        this.readsVsContigsParameters = new ProgramParameterSet(Pool.GENERATOR_READS_VS_CONTIGS.get(Pool.NAME_DEFAULT_READS_VS_CONTIGS));
+//        this.prodigalParameters = new ProgramParameterSet(Pool.GENERATOR_PRODIGAL.get(Pool.NAME_DEFAULT_PRODIGAL));
         this.tools = set;
         this.toolSelected = new boolean[this.tools.size()];
-        this.log = new StringBuilder("Log for "+this.getName()+"\n");
+        this.log = logManager;
+        this.log.appendLine("File added : "+this.getName(), InputFile.class.getName());
     }
     
-    public InputFile(String inputPath) {
+    public InputFile(String inputPath, LogFileManager logManager) {
         super(inputPath);
         this.tools = new ArrayList<>();
         this.pairedWith = new ArrayList<>();
         this.valid =false;
-        this.preprocessingParameters = new ProgramParameterSet(Pool.GENERATOR_PREPROCESSING.get(Pool.GENERATOR_PREPROCESSING.getAvailableNames()[0]));
-        this.processingParameters = new ProgramParameterSet(Pool.GENERATOR_PROCESSING.get(Pool.NAME_DEFAULT_PROCESSING));
-        this.assemblerParameters = null;
-        this.readsVsContigsParameters = new ProgramParameterSet(Pool.GENERATOR_READS_VS_CONTIGS.get(Pool.NAME_DEFAULT_READS_VS_CONTIGS));
-        this.prodigalParameters = new ProgramParameterSet(Pool.GENERATOR_PRODIGAL.get(Pool.NAME_DEFAULT_PRODIGAL));
+        this.preprocessingParameters = null;
+        this.processingParameters = null;
+         this.assemblerParameters = null;
+        this.readsVsContigsParameters = null;
+        this.prodigalParameters = null;
+//        this.preprocessingParameters = new ProgramParameterSet(Pool.GENERATOR_PREPROCESSING.get(Pool.GENERATOR_PREPROCESSING.getAvailableNames()[0]));
+//        this.processingParameters = new ProgramParameterSet(Pool.GENERATOR_PROCESSING.get(Pool.NAME_DEFAULT_PROCESSING));
+       
+//        this.readsVsContigsParameters = new ProgramParameterSet(Pool.GENERATOR_READS_VS_CONTIGS.get(Pool.NAME_DEFAULT_READS_VS_CONTIGS));
+//        this.prodigalParameters = new ProgramParameterSet(Pool.GENERATOR_PRODIGAL.get(Pool.NAME_DEFAULT_PRODIGAL));
         for(String tool:Pool.GENERTATOR_TOOLS.getAvailableNames()){
             this.tools.add(new ProgramParameterSet(Pool.GENERTATOR_TOOLS.get(tool)));
         }
         this.toolSelected = new boolean[this.tools.size()];
-        this.log = new StringBuilder("Log for "+this.getName()+"\n");
+        this.log = logManager;
+        this.log.appendLine("File added : "+this.getName(), InputFile.class.getName());
     }
 
     public void setAvailableTools(ArrayList<ProgramParameterSet> set){
@@ -136,6 +147,9 @@ public class InputFile extends File implements Executable{
     
     public boolean selectPreprocessing(ProgramParameterSet param, boolean validate){
          this.preprocessingParameters = param;
+         if(this.preprocessingParameters != null){
+             this.log.appendLine("Preprocessing of file "+this.getName()+"has been changed to "+this.preprocessingParameters.getName(), InputFile.class.getName());
+         }
          if(this.preprocessingParameters != null && validate){
              return this.validateFile();
          }
@@ -146,6 +160,9 @@ public class InputFile extends File implements Executable{
     
     public boolean selectProcessing(ProgramParameterSet param, boolean validate){
          this.processingParameters = param;
+         if(this.processingParameters != null){
+             this.log.appendLine("Processing of file "+this.getName()+"has been changed to "+this.processingParameters.getName(), InputFile.class.getName());
+         }
          if(this.assemblerParameters != null && validate){
              return this.validateFile();
          }
@@ -156,6 +173,9 @@ public class InputFile extends File implements Executable{
 
     public boolean selectAssembler(ProgramParameterSet param, boolean validate){
         this.assemblerParameters = param;
+        if(this.assemblerParameters != null){
+             this.log.appendLine("Assembler of file "+this.getName()+"has been changed to "+this.assemblerParameters.getName(), InputFile.class.getName());
+        }
         if(this.assemblerParameters != null && validate){
             return this.validateFile();
         }
@@ -163,6 +183,32 @@ public class InputFile extends File implements Executable{
             return this.valid;
         }
     }
+    
+    public boolean selectReadsVsContigs(ProgramParameterSet param, boolean validate){
+        this.readsVsContigsParameters = param;
+        if(this.readsVsContigsParameters != null){
+             this.log.appendLine("ReadsVsContigs of file "+this.getName()+"has been changed to "+this.readsVsContigsParameters.getName(), InputFile.class.getName());
+        }
+        if(this.readsVsContigsParameters != null && validate){
+            return this.validateFile();
+         }
+        else{
+            return this.valid;
+        }
+     }
+    
+    public boolean selectProdigal(ProgramParameterSet param, boolean validate){
+        this.prodigalParameters = param;
+        if(this.prodigalParameters != null){
+             this.log.appendLine("Prodigal of file "+this.getName()+"has been changed to "+this.prodigalParameters.getName(), InputFile.class.getName());
+        }
+        if(this.prodigalParameters != null && validate){
+            return this.validateFile();
+        }
+        else{
+            return this.valid;
+        }
+     }
     
     
     public boolean shouldBePairedWith(File file){
@@ -209,6 +255,7 @@ public class InputFile extends File implements Executable{
     
     public void addPairedFile(File file){
         this.pairedWith.add(file);
+        this.log.appendLine("Paired : "+file.getName()+" added als 'paired' to "+this.getName(), InputFile.class.getName());
     }
     
     private boolean validateFromTo(ArrayList<String> from, ParseableProgramParameters to){
@@ -217,7 +264,7 @@ public class InputFile extends File implements Executable{
         }
         for(String f:from){
             if(f== null){
-                System.out.println("Ending (from) is null");
+                this.log.appendLine("Ending (from) is null - can't validate (threrefore assuming 'valid==true')", InputFile.class.getName());
                 return true;
             }
             for(String t:to.getValidInputEndings()){
@@ -250,7 +297,7 @@ public class InputFile extends File implements Executable{
         ParseableProgramParameters to = null;
         
         boolean preprocessingValid = true;
-        if(this.preprocessingParameters.getParsedParameters().getStartCommand()!= null){
+        if(this.preprocessingParameters != null && this.preprocessingParameters.getParsedParameters().getStartCommand()!= null){
             to = this.preprocessingParameters.getParsedParameters();
             preprocessingValid = this.validateFromTo(from, to);
             from.addAll(Arrays.asList(this.preprocessingParameters.getParsedParameters().getOutputEndings()));
@@ -258,13 +305,13 @@ public class InputFile extends File implements Executable{
             this.firstNonNullParameters = this.preprocessingParameters;
         }
         if(!preprocessingValid){
-            System.out.println("Preprocessing not valid for "+this.getName());
+            this.log.appendLine("Preprocessing not valid for "+this.getName(), InputFile.class.getName());
             this.valid = false;
             return false;
         }
         
         boolean processingValid = true;
-        if(this.processingParameters.getParsedParameters().getStartCommand() != null){
+        if(this.processingParameters != null && this.processingParameters.getParsedParameters().getStartCommand() != null){
             to = this.processingParameters.getParsedParameters();
             processingValid = this.validateFromTo(from, to);
             from.addAll(Arrays.asList(this.processingParameters.getParsedParameters().getOutputEndings()));
@@ -274,14 +321,14 @@ public class InputFile extends File implements Executable{
             this.lastNonNullParameters = this.processingParameters;
         }
         if(!processingValid){
-            System.out.println("Processing not valid for "+this.getName());
+            this.log.appendLine("Processing not valid for "+this.getName(), InputFile.class.getName());
             this.valid = false;
             return false;
         }
           
         // check if output of the processing can be input of the assembler
         boolean assemblerValid = true;
-        if(this.assemblerParameters.getParsedParameters().getStartCommand() != null){
+        if(this.assemblerParameters != null && this.assemblerParameters.getParsedParameters().getStartCommand() != null){
             to = this.assemblerParameters.getParsedParameters();
             assemblerValid = this.validateFromTo(from, to);
             from.addAll(Arrays.asList(this.assemblerParameters.getParsedParameters().getOutputEndings()));
@@ -291,14 +338,14 @@ public class InputFile extends File implements Executable{
             this.lastNonNullParameters = this.assemblerParameters;
         }
         if(!assemblerValid){
-            System.out.println("Assembler not valid for "+this.getName());
+            this.log.appendLine("Assembler not valid for "+this.getName(), InputFile.class.getName());
             this.valid = false;
             return false;
         }
         
         // check if output of the assembler can be input of the reads vs contigs
         boolean readsVsContigsValid = true;
-        if(this.readsVsContigsParameters.getParsedParameters().getStartCommand() != null){
+        if(this.readsVsContigsParameters != null && this.readsVsContigsParameters.getParsedParameters().getStartCommand() != null){
             to = this.readsVsContigsParameters.getParsedParameters();
             readsVsContigsValid = this.validateFromTo(from, to);
             from.addAll(Arrays.asList(this.readsVsContigsParameters.getParsedParameters().getOutputEndings()));
@@ -308,13 +355,13 @@ public class InputFile extends File implements Executable{
             this.lastNonNullParameters = this.readsVsContigsParameters;
         }
         if(!readsVsContigsValid){
-            System.out.println("ReadsVsContigs not valid for "+this.getName());
+            this.log.appendLine("ReadsVsContigs not valid for "+this.getName(), InputFile.class.getName());
             this.valid = false;
             return false;
         }
          // check if output of the readsVsContigs can be input of prodigal
         boolean prodigalValid = true;
-        if(this.prodigalParameters.getParsedParameters().getStartCommand() != null){
+        if(this.prodigalParameters != null && this.prodigalParameters.getParsedParameters().getStartCommand() != null){
             to = this.prodigalParameters.getParsedParameters();
             prodigalValid = this.validateFromTo(from, to);
             from.addAll(Arrays.asList(this.prodigalParameters.getParsedParameters().getOutputEndings()));
@@ -324,7 +371,7 @@ public class InputFile extends File implements Executable{
             this.lastNonNullParameters = this.prodigalParameters;
         }
         if(!prodigalValid){
-            System.out.println("Prodigal not valid for "+this.getName());
+            this.log.appendLine("Prodigal not valid for "+this.getName(), InputFile.class.getName());
             this.valid = false;
             return false;
         }
@@ -349,19 +396,19 @@ public class InputFile extends File implements Executable{
         }
         ArrayList<String> from = new ArrayList<>();
         
-        if(this.preprocessingParameters.getParsedParameters().getStartCommand() != null){
+        if(this.preprocessingParameters != null && this.preprocessingParameters.getParsedParameters().getStartCommand() != null){
             from.addAll(Arrays.asList(this.preprocessingParameters.getParsedParameters().getOutputEndings()));
         }
-        if(this.processingParameters.getParsedParameters().getStartCommand() != null){
+        if(this.processingParameters != null && this.processingParameters.getParsedParameters().getStartCommand() != null){
             from.addAll(Arrays.asList(this.processingParameters.getParsedParameters().getOutputEndings()));
         }
-        if(this.assemblerParameters.getParsedParameters().getStartCommand() != null){
+        if(this.assemblerParameters != null && this.assemblerParameters.getParsedParameters().getStartCommand() != null){
             from.addAll(Arrays.asList(this.assemblerParameters.getParsedParameters().getOutputEndings()));
         }
-        if(this.readsVsContigsParameters.getParsedParameters().getStartCommand() != null){
+        if(this.readsVsContigsParameters != null && this.readsVsContigsParameters.getParsedParameters().getStartCommand() != null){
             from.addAll(Arrays.asList(this.readsVsContigsParameters.getParsedParameters().getOutputEndings()));
         }
-        if(this.prodigalParameters.getParsedParameters().getStartCommand() != null){
+        if(this.prodigalParameters   != null && this.prodigalParameters.getParsedParameters().getStartCommand() != null){
             from.addAll(Arrays.asList(this.prodigalParameters.getParsedParameters().getOutputEndings()));
         }
         return this.validateFromTo(from, tool);
@@ -397,7 +444,7 @@ public class InputFile extends File implements Executable{
             boolean addMore = true;
             if(this.preprocessingBuilt && this.preprocessingCommand != null){
                 if(this.preprocessingCommand.useOnlyThisOutput(this.currentParameters)){
-                    System.out.println("Preprocessing has specific output for "+this.getName()+" without allowing other outputs.");
+                    this.log.appendLine("Preprocessing has specific output for "+this.getName()+" without allowing other outputs.", InputFile.class.getName());
                     this.lastRelevantOutputFiles = this.preprocessingCommand.getSpecifiFilesFor(this.currentParameters, this);
                     currentPaired = null;
                     addMore = false;
@@ -408,7 +455,7 @@ public class InputFile extends File implements Executable{
             }
             if(this.processingBuilt && this.processingCommand != null && addMore){
                 if(this.processingCommand.useOnlyThisOutput(this.currentParameters)){
-                    System.out.println("Processing has specific output for "+this.getName()+" without allowing other outputs.");
+                    this.log.appendLine("Processing has specific output for "+this.getName()+" without allowing other outputs.", InputFile.class.getName());
                     this.lastRelevantOutputFiles = this.processingCommand.getSpecifiFilesFor(this.currentParameters, this);
                     currentPaired = null;
                     addMore =false;
@@ -419,7 +466,7 @@ public class InputFile extends File implements Executable{
             }
             if(this.assemblerBuilt && this.assemblerCommand != null && addMore){
                 if(this.assemblerCommand.useOnlyThisOutput(this.currentParameters)){
-                    System.out.println("Assembly has specific output for "+this.getName()+" without allowing other outputs.");
+                    this.log.appendLine("Assembly has specific output for "+this.getName()+" without allowing other outputs.", InputFile.class.getName());
                     this.lastRelevantOutputFiles = this.assemblerCommand.getSpecifiFilesFor(this.currentParameters, this);
                     currentPaired = null;
                     addMore =false;
@@ -430,7 +477,7 @@ public class InputFile extends File implements Executable{
             }
             if(this.readsVsContigsBuilt && this.readsVsContigsCommand != null && addMore){
                 if(this.readsVsContigsCommand.useOnlyThisOutput(this.currentParameters)){
-                    System.out.println("Assembly has specific output for "+this.getName()+" without allowing other outputs.");
+                    this.log.appendLine("Assembly has specific output for "+this.getName()+" without allowing other outputs.", InputFile.class.getName());
                     this.lastRelevantOutputFiles = this.readsVsContigsCommand.getSpecifiFilesFor(this.currentParameters, this);
                     currentPaired = null;
                     addMore =false;
@@ -441,7 +488,7 @@ public class InputFile extends File implements Executable{
             }
             if(this.prodigalBuilt && this.prodigalCommand != null && addMore){
                 if(this.prodigalCommand.useOnlyThisOutput(this.currentParameters)){
-                    System.out.println("Assembly has specific output for "+this.getName()+" without allowing other outputs.");
+                    this.log.appendLine("Assembly has specific output for "+this.getName()+" without allowing other outputs.", InputFile.class.getName());
                     this.lastRelevantOutputFiles = this.prodigalCommand.getSpecifiFilesFor(this.currentParameters, this);
                     currentPaired = null;
                     addMore =false;
@@ -456,17 +503,15 @@ public class InputFile extends File implements Executable{
             }
         }
         for(File file:this.lastRelevantOutputFiles){
-            this.currentCommand = new ExecutionCommandBuilder();
+            this.currentCommand = new ExecutionCommandBuilder(this.log);
             this.currentCommand.buildString(this.currentParameters, file, parentOutputDir, currentPaired, this);
             if(this.currentCommand.getExecutionCommand() == null){
-                System.out.println("Command is empty");
-                currentStringBuilder.append("echo no program was selected for "+file.getName()+"\n");
-                this.log.append("no assembler was selected for "+file.getName()+"\n");
+                currentStringBuilder.append(Pool.MESSAGE_PREFIX+"no program was selected for "+file.getName()+"\n");
+                this.log.appendLine("Null command detected for "+file.getName(), InputFile.class.getName());
             }
             else{
-                System.out.println("Command is "+this.currentCommand.getExecutionCommand());
+                this.log.appendLine("Command for "+file.getName()+" is "+this.currentCommand.getExecutionCommand(), InputFile.class.getName());
                 currentStringBuilder.append(this.currentCommand.getExecutionCommand());
-                this.log.append(this.currentCommand.getExecutionCommand());
             }
                 
            
@@ -594,7 +639,7 @@ public class InputFile extends File implements Executable{
             }
         }
         if(ret.size() ==0){
-            System.out.println("ATTENTION: Input file "+this.getName() +" has no tool to execute.");
+            this.log.appendLine(Pool.LOG_WARNING+"Input file "+this.getName() +" has no tool to execute.", InputFile.class.getName());
             ret.add(Pool.MESSAGE_PREFIX+Pool.MESSAGE_TOOL_IS_NULL);
 
         }
@@ -607,10 +652,8 @@ public class InputFile extends File implements Executable{
         this.currentParameters = tool;
         ret = this.getCurrentCommandString(parentOutputDir);
         if(ret == null){
-            System.out.println("ToolCommand is null");
+            this.log.appendLine("Tool command of "+tool.getName()+" is null.", InputFile.class.getName());
         }
-//        this.toolCommands.add(this.currentCommand);
-        // DO NOT: this.lastCommand = this.currentCommand;
         return ret;
         
     }

@@ -25,20 +25,20 @@ import javax.swing.JTextArea;
  *
  * @author Mark
  */
-public class FilePanel extends JScrollPane{
+public class FileSetPanel extends JScrollPane{
     
     private final JPanel top = new JPanel();
     private TopPanel topLine;
     private final JPanel scrollable;
     private final JTextArea text = new JTextArea(6,30);
     private final Component glue;
-    private ArrayList<SingleFilePanel> files;
+    private final ArrayList<SingleFilePanel> files;
       
     private final TabListenerBag listenerBag;
     
     private final Image background;
     
-    public FilePanel(TabListenerBag bag){
+    public FileSetPanel(TabListenerBag bag){
         super();
         this.listenerBag = bag;
         this.setColumnHeaderView(top);
@@ -77,6 +77,19 @@ public class FilePanel extends JScrollPane{
         this.updateUI();
     }
     
+    public void addPaired(String mainFileID, String pairedFileName){
+        SingleFilePanel p = null;
+        for(int i = 0;i<this.scrollable.getComponentCount();i++){
+            if(!this.scrollable.getComponent(i).equals(this.glue)){
+                p= (SingleFilePanel)this.scrollable.getComponent(i);
+                if(mainFileID.equals(p.getID())){
+                    p.addPaired(pairedFileName);
+                }
+            }
+        }
+        this.updateUI();
+    }
+    
     private void initTop(){
         this.topLine = new TopPanel(this.listenerBag);
         this.top.add(this.topLine);
@@ -92,13 +105,13 @@ public class FilePanel extends JScrollPane{
                 }
             }
         }
-//        System.out.println("File deleted in FilePanel. Files in FilePanel are now:");
-        for(int j= 0; j<this.scrollable.getComponentCount(); j++){
-            if(!this.scrollable.getComponent(j).equals(this.glue)){
-                p = (SingleFilePanel) this.scrollable.getComponent(j);
-//                System.out.println("\t"+p.getID()+" with name "+p.getName());
-            }
-        }
+//        System.out.println("File deleted in FileSetPanel. Files in FileSetPanel are now:");
+//        for(int j= 0; j<this.scrollable.getComponentCount(); j++){
+//            if(!this.scrollable.getComponent(j).equals(this.glue)){
+//                p = (SingleFilePanel) this.scrollable.getComponent(j);
+////                System.out.println("\t"+p.getID()+" with name "+p.getName());
+//            }
+//        }
         this.updateUI();
     }
     

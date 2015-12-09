@@ -8,16 +8,14 @@ package com.mugarov.alfapipe.model.datatypes;
 import com.mugarov.alfapipe.control.listeners.tabrelated.parameters.ParameterListener;
 import com.mugarov.alfapipe.control.listeners.tabrelated.singlefile.SingleFileListener;
 import com.mugarov.alfapipe.model.Executioner;
+import com.mugarov.alfapipe.model.LogFileManager;
 import com.mugarov.alfapipe.model.Pool;
 import com.mugarov.alfapipe.model.programparse.datatypes.ParseableProgramParameters;
 import com.mugarov.alfapipe.view.MultiFileChooser;
 import com.mugarov.alfapipe.view.OutputDirectoryChooser;
 import com.mugarov.alfapipe.view.mainview.tab.Tab;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 
 /**
@@ -33,14 +31,16 @@ public class SetOfFiles implements Executable, Runnable{
     private final OutputDirectoryChooser outputChooser;
     
     private File outputDirectory;
+    private LogFileManager log;
     private ProgramParameterSet usePreprocessing;
     private ProgramParameterSet useProcessing;
     private ProgramParameterSet useAssembler;
+    private ProgramParameterSet useReadsVsContigs;
+    private ProgramParameterSet useProdigal;
     private ArrayList<ProgramParameterSet> availableTools;
     
     private final Tab tab;
     
-    private StringBuilder log;
     
     private boolean started;
     
@@ -55,8 +55,8 @@ public class SetOfFiles implements Executable, Runnable{
         this.inputChooser = new MultiFileChooser();
         this.outputChooser = new OutputDirectoryChooser();
         this.tab.setOutputPath(this.outputDirectory.getAbsolutePath());
-        this.log = new StringBuilder();
-        this.log.append("Log of the Set "+this.id);
+        this.log = new LogFileManager(this.outputDirectory.getAbsolutePath());
+        this.log.appendLine("Log of the Set "+this.id, SetOfFiles.class.getName());
         this.availableTools = new ArrayList<>();
         for(String toolName: Pool.GENERTATOR_TOOLS.getAvailableNames()){
             this.availableTools.add(new ProgramParameterSet(Pool.GENERTATOR_TOOLS.get(toolName)));
@@ -81,12 +81,13 @@ public class SetOfFiles implements Executable, Runnable{
                 }
                 else if(old.shouldBePairedWith(file)){
                     old.addPairedFile(file);
+                    this.tab.addPaired(old.getAbsolutePath(), file.getName());
                     add = false;
                 }
                 i++;
             }
             if(add){
-                InputFile inFile = new InputFile(file.getPath(), this.availableTools);
+                InputFile inFile = new InputFile(file.getPath(), this.availableTools, this.log);
                 inFile.selectPreprocessing(this.usePreprocessing, false);
                 inFile.selectProcessing(this.useProcessing,false); 
                 inFile.selectAssembler(this.useAssembler,false); 
@@ -154,9 +155,26 @@ public class SetOfFiles implements Executable, Runnable{
         }
     }
     
+    public void setReadsVsContigs(ParseableProgramParameters proc){
+       this.useReadsVsContigs = new ProgramParameterSet(proc);
+       for(InputFile file: this.files){
+           file.selectReadsVsContigs(this.useReadsVsContigs,true);
+           this.tab.setValidation(file.getAbsolutePath(), file.isValid(), file.getValidTools());
+       }
+    }
     
-    
+    public void setProdigal(ParseableProgramParameters proc){
+      this.useProdigal = new ProgramParameterSet(proc);
+      for(InputFile file: this.files){
+          file.selectProdigal(this.useProdigal,true);
+          this.tab.setValidation(file.getAbsolutePath(), file.isValid(), file.getValidTools());
+      }
+    }
+
     public void deleteAll(){
+        for(File f:this.files){
+            this.tab.deleteFile(f.getAbsolutePath());
+        }
         this.files = new ArrayList<>();
     }
     
@@ -164,6 +182,7 @@ public class SetOfFiles implements Executable, Runnable{
         this.tab.setName(arg);
         this.name = arg;
         this.outputDirectory = new File(this.outputDirectory.getParent(), this.name);
+        this.log.setParentDirectory(this.outputDirectory.getAbsolutePath());
         this.tab.setOutputPath(this.outputDirectory.getAbsolutePath());
     }
     
@@ -188,6 +207,7 @@ public class SetOfFiles implements Executable, Runnable{
         if(returnVal == JFileChooser.APPROVE_OPTION){
             this.outputDirectory=new File(this.outputChooser.getSelectedFile(), this.name);
             this.tab.setOutputPath(this.outputDirectory.getAbsolutePath());
+            this.log.setParentDirectory(this.outputDirectory.getAbsolutePath());
         }
         else{
 //            System.out.println("Output-Directory was not changed.");
@@ -227,8 +247,6 @@ public class SetOfFiles implements Executable, Runnable{
                 builder.append(file.getPreprocessingCommand(parentOutputDir));
             }
             builder.append("\n");
-            this.log.append(file.getPreprocessingCommand(parentOutputDir).replaceAll("\n", "\n \t"));
-            this.log.append("\n");
         }
         return builder.toString();
     }
@@ -250,8 +268,6 @@ public class SetOfFiles implements Executable, Runnable{
                 builder.append(file.getProcessingCommand(parentOutputDir));
             }
             builder.append("\n");
-            this.log.append(file.getProcessingCommand(parentOutputDir).replaceAll("\n", "\n \t"));
-            this.log.append("\n");
         }
         return builder.toString();
     }
@@ -272,8 +288,6 @@ public class SetOfFiles implements Executable, Runnable{
                 builder.append(file.getAssemblerCommand(parentOutputDir));
             }
             builder.append("\n");
-            this.log.append(file.getAssemblerCommand(parentOutputDir).replaceAll("\n", "\n \t"));
-            this.log.append("\n");
         }
         return builder.toString();
     }
@@ -294,8 +308,6 @@ public class SetOfFiles implements Executable, Runnable{
                 builder.append(file.getReadsVsContigsCommand(parentOutputDir));
             }
             builder.append("\n");
-            this.log.append(file.getReadsVsContigsCommand(parentOutputDir).replaceAll("\n", "\n \t"));
-            this.log.append("\n");
         }
         return builder.toString();
     }
@@ -316,8 +328,6 @@ public class SetOfFiles implements Executable, Runnable{
                 builder.append(file.getProdigalCommand(parentOutputDir));
             }
             builder.append("\n");
-            this.log.append(file.getProdigalCommand(parentOutputDir).replaceAll("\n", "\n \t"));
-            this.log.append("\n");
         }
         return builder.toString();
     }
@@ -337,12 +347,9 @@ public class SetOfFiles implements Executable, Runnable{
             else{
                 for (String s:file.getToolCommands(parentOutputDir)){
                     ret.add(s);
-                    log.append(s.replaceAll("\n", "\n \t"));
                 }
                 ret.add("\n");
             }
-            
-            this.log.append("\n");
         }
         return ret;
     }
@@ -358,47 +365,41 @@ public class SetOfFiles implements Executable, Runnable{
             this.started = true;
             System.out.println("Set "+this.name+ " has started.");
             this.tab.disableEditing();
-            try {
-                Executioner execution = new Executioner(this.outputDirectory.getAbsolutePath());
-
-                for(InputFile file:this.files){
-
-                    boolean filePassed;
-                    filePassed = execution.execute(file.getPreprocessingCommand(this.outputDirectory.getPath()));
-                    if(filePassed){
-                        filePassed = execution.execute(file.getProcessingCommand(this.outputDirectory.getPath()));
-                    }
-                    else{
-                        System.out.println("Fail at preprocessing");
-                    }
-                    if(filePassed){
-                        filePassed = execution.execute(file.getAssemblerCommand(this.outputDirectory.getPath()));
-                    }
-                    else{
-                        System.out.println("Fail at processing");
-                    }
-                    if(!filePassed){
-                        System.out.println("Fail at assembly");
-                    }
-                    
+            Executioner execution = new Executioner(this.log);
+            for(InputFile file:this.files){
+                
+                boolean filePassed;
+                filePassed = execution.execute(file.getPreprocessingCommand(this.outputDirectory.getPath()));
+                if(filePassed){
+                    filePassed = execution.execute(file.getProcessingCommand(this.outputDirectory.getPath()));
+                }
+                else{
+                    System.out.println("Fail at preprocessing");
+                }
+                if(filePassed){
+                    filePassed = execution.execute(file.getAssemblerCommand(this.outputDirectory.getPath()));
+                }
+                else{
+                    System.out.println("Fail at processing");
+                }
+                if(!filePassed){
+                    System.out.println("Fail at assembly");
+                }
+                
 //                    if(filePassed){
 //                        filePassed = execution.execute(file.getReadsVsContigsCommand(this.outputDirectory.getPath()));
 //                    }
 //                    if(filePassed){
 //                        filePassed = execution.execute(file.getProdigalCommand(this.outputDirectory.getPath()));
 //                    }
-                    
-                    this.tab.setFileProgressed(file.getAbsolutePath(), filePassed);
-                    ArrayList<Boolean> toolBools = new ArrayList<>(file.getValidTools().size());
-                    for(String p:file.getToolCommands(this.outputDirectory.getPath())){
-                        toolBools.add(execution.execute(p));
-                        toolBools.add(true);
-                    }
-                    this.tab.setToolProgressed(file.getAbsolutePath(), file.getValidTools(), toolBools);
+                
+                this.tab.setFileProgressed(file.getAbsolutePath(), filePassed);
+                ArrayList<Boolean> toolBools = new ArrayList<>(file.getValidTools().size());
+                for(String p:file.getToolCommands(this.outputDirectory.getPath())){
+                    toolBools.add(execution.execute(p));
+                    toolBools.add(true);
                 }
-            } catch (IOException ex) {
-                Logger.getLogger(SetOfFiles.class.getName()).log(Level.SEVERE, null, ex);
-                return;
+                this.tab.setToolProgressed(file.getAbsolutePath(), file.getValidTools(), toolBools);
             }
             this.tab.setAllProgressed(true);
             this.tab.reenableSetRemoval();

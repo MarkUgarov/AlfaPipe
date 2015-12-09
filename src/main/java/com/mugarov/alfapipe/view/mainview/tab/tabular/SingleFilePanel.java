@@ -9,12 +9,10 @@ import com.mugarov.alfapipe.control.listeners.tabrelated.singlefile.SingleFileLi
 import com.mugarov.alfapipe.model.Pool;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import javax.swing.BorderFactory;
 
@@ -28,9 +26,12 @@ import javax.swing.BorderFactory;
         private final String id;
         private final String name;
         
-        private JPanel leftPanel ;
+        private JPanel leftPanel;
         private JButton delete;
         private JLabel filename;
+        private JPanel filePanel;
+        
+        
         private JPanel rightPanel;
         private final BorderLayout  layout;
         
@@ -87,9 +88,12 @@ import javax.swing.BorderFactory;
             this.delete.addActionListener(this.fileListener);
             this.leftPanel.add(delete);
             
-            this.filename = new JLabel(name);
-            this.leftPanel.add(filename);
+            this.filePanel = new JPanel();
+            this.filePanel.setLayout(new BorderLayout());
             
+            this.filename = new JLabel(name);
+            this.filePanel.add(this.filename, BorderLayout.NORTH);
+            this.leftPanel.add(this.filePanel);
         }
         
         private void creatRightPanel(){
@@ -106,6 +110,10 @@ import javax.swing.BorderFactory;
 //                System.out.println("Component: "+c.toString());
 //            }
             
+        }
+        
+        public void addPaired(String filename){
+            this.filePanel.add(new JLabel(filename), BorderLayout.SOUTH);
         }
         
         public void selectTool(String toolName){

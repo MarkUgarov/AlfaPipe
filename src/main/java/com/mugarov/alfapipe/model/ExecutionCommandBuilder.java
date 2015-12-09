@@ -17,16 +17,18 @@ import java.util.ArrayList;
  */
 public class ExecutionCommandBuilder {
     
+    private final LogFileManager log;
     private ProgramParameterSet set;
     private File inputFile;
     private File outputFile;
     private boolean outputIsDirectory;
     private StringBuilder builder;
     
-    public ExecutionCommandBuilder(){
+    public ExecutionCommandBuilder(LogFileManager logManager){
         this.outputFile = null;
         this.outputIsDirectory = false;
         this.builder = null;
+        this.log = logManager;
     }
     
     
@@ -35,6 +37,8 @@ public class ExecutionCommandBuilder {
      * @param parameterSet
      * @param inputFile
      * @param parentOutputDirectory 
+     * @param pairedFiles 
+     * @param originalFile 
      */
     public void buildString(   ProgramParameterSet parameterSet,
                                 File inputFile,
@@ -48,7 +52,7 @@ public class ExecutionCommandBuilder {
          * create output directory and check if it is the value for the 
          * output-command or if it needs a special filepath for the output
          */
-        System.out.println("Building command for "+parameterSet.getName()+" with inputFile "+inputFile.getName());
+        this.log.appendLine("Building command for "+parameterSet.getName()+" with inputFile "+inputFile.getName(), ExecutionCommandBuilder.class.getName());
         if(parameterSet.getParsedParameters().isOnlyOutputDirectorySetable()){
             this.outputFile = new File(parentOutputDirectory, parameterSet.getParsedParameters().getName()
                                                               +"_"
@@ -155,7 +159,7 @@ public class ExecutionCommandBuilder {
                         i++;
                     }
                     if(!found){
-                        this.builder.append("NO InputFileParameter was found for "+pf.getName());
+                        this.log.appendLine(Pool.LOG_WARNING+"NO InputFileParameter was found for "+pf.getName(), ExecutionCommandBuilder.class.getName());
                     }
                 }
             }
@@ -215,7 +219,7 @@ public class ExecutionCommandBuilder {
      */
     public ArrayList<File> getRelevantOutputFor(ProgramParameterSet following, File originalFile){
         if(this.set == null){
-            System.out.println("ATTENTION Commandbuilder: no set! ");
+            this.log.appendLine(Pool.LOG_WARNING+"Commandbuilder: no set! ", ExecutionCommandBuilder.class.getName());
             return null;
         }
         ArrayList<File> ret;
@@ -246,7 +250,7 @@ public class ExecutionCommandBuilder {
             }
         }
         if(ret== null||ret.isEmpty()){
-            System.out.println("ATTENTION Commandbuilder: empty or null returns for "+following.getName());
+            this.log.appendLine(Pool.LOG_WARNING+"Commandbuilder: empty or null returns for "+following.getName(), ExecutionCommandBuilder.class.getName());
         }
         return ret;
     }
@@ -255,18 +259,18 @@ public class ExecutionCommandBuilder {
         ArrayList<File> ret;
         ret = new ArrayList<>(this.set.getParsedParameters().getEssentialOutputs().size());
         if(following.getName() == null){
-            System.out.println("No name for following. Returning all files.");
+            this.log.appendLine("No name for following. Returning all files.", ExecutionCommandBuilder.class.getName());
             return this.getAllFiles();
         }
         for(NameField field:this.set.getParsedParameters().getEssentialOutputs()){
             if(field.getEssentialFor() == null || field.getEssentialFor().equals(following.getName())){
                 if(field.getName() ==  null){
-                    System.out.println("Return empty file list - NameField was null.");
+                    this.log.appendLine("Return empty file list as specific files for "+following.getName()+" - NameField was null.", ExecutionCommandBuilder.class.getName());
                     return new ArrayList<File>();
                 }
-                System.out.println("Found: "+this.set.getName()+" has specific file for "+following.getName());
+                this.log.appendLine("Found: "+this.set.getName()+" has specific file(s) for "+following.getName(), ExecutionCommandBuilder.class.getName());
                 if(field.isUseAll()){
-                    System.out.println("Returning all.");
+                    this.log.appendLine("Returning all.(UseAll is true)", ExecutionCommandBuilder.class.getName());
                     return this.getAllFiles();
                 }
                 File spec = this.getFileFor(field, originalFile);
@@ -321,9 +325,9 @@ public class ExecutionCommandBuilder {
             }
         }
         if(!ret.exists()){
-            System.out.println("ATTENTION Commandbuilder: "+ret.getName()+" does not exist!");
+            this.log.appendLine(Pool.LOG_WARNING+"File: "+ret.getName()+" does not exist but will be used further!", ExecutionCommandBuilder.class.getName());
         }
-        System.out.println("Returning "+ret.getName());
+        this.log.appendLine("Returning "+ret.getName(), ExecutionCommandBuilder.class.getName());
         return ret;
     }
     
@@ -346,11 +350,11 @@ public class ExecutionCommandBuilder {
     
     public boolean useOnlyThisOutput(ProgramParameterSet following){
         if(this.set == null){
-            System.out.println("ATTENTION: No set !");
+           this.log.appendLine(Pool.LOG_WARNING+"Trying to access an ProgramParameterSet which is 'null'!", ExecutionCommandBuilder.class.getName());
             return false;
         }
         else if(following.getName() == null){
-            System.out.println("ATTENTION: Following has no name!");
+            this.log.appendLine(Pool.LOG_WARNING+"The ProgramParameterSet has no name!", ExecutionCommandBuilder.class.getName());
             return false;
         }
         else{

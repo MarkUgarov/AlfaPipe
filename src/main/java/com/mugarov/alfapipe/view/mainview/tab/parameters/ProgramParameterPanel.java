@@ -104,9 +104,10 @@ public class ProgramParameterPanel extends JPanel{
        
         
         this.parameterPanel.add(parPan);
-        
-
-       
+    }
+    
+    public boolean isEmpty(){
+        return this.boxes.isEmpty();
     }
 
     public void disableEditing() {

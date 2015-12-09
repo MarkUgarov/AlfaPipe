@@ -6,8 +6,7 @@
 package com.mugarov.alfapipe.view.mainview.tab;
 
 import com.mugarov.alfapipe.model.Pool;
-import com.mugarov.alfapipe.control.listeners.tabrelated.AssemblerRadioButtonListener;
-import com.mugarov.alfapipe.model.programparse.datatypes.ParseableProgramParameters;
+import com.mugarov.alfapipe.control.listeners.tabrelated.radiobuttons.AssemblerListener;
 import java.awt.GridBagConstraints;
 import java.awt.GridLayout;
 import java.util.Enumeration;
@@ -23,12 +22,12 @@ import javax.swing.JRadioButton;
 public class AssemblerSelection extends JPanel{
     
     private final ButtonGroup group;
-    private final AssemblerRadioButtonListener listener;
+    private final AssemblerListener listener;
     private final GridBagConstraints c;
     // needed to select only the first button
     private boolean isFirst;
     
-    public AssemblerSelection(AssemblerRadioButtonListener listener){
+    public AssemblerSelection(AssemblerListener listener){
         c = new GridBagConstraints();
         this.setLayout(new GridLayout(1,1));
         this.isFirst = true;

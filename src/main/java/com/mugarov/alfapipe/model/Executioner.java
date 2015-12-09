@@ -5,42 +5,23 @@
  */
 package com.mugarov.alfapipe.model;
 
-import java.io.File;
 import java.io.IOException;
+import java.lang.ProcessBuilder.Redirect;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 
 /**
  *
  * @author Mark
  */
 public class Executioner {
+
+    private LogFileManager log;
     
-    private final File logfile;
-    private final File workingDirectory;
-    
-    /**
-     * 
-     * @param outputDirectory
-     * @throws IOException if outputPath does not exist or file can not be created
-     * because of other reasons
-     */
-    public Executioner(String outputDirectory) throws IOException{
-        this.workingDirectory = new File(outputDirectory);
-        if(!this.workingDirectory.exists()){
-            this.workingDirectory.mkdirs();
-        }
-        this.logfile = new File(this.workingDirectory+File.separator+Pool.FILE_LOGFILE_NAME);
-        if(!this.logfile.exists() || this.logfile.isDirectory()){
-            this.logfile.createNewFile();
-        }
-        else if(this.logfile.exists()){
-            this.logfile.delete();
-            this.logfile.createNewFile();
-        }
+
+    public Executioner(LogFileManager logManager) {
+        this.log = logManager;
     }
     /**
      * You can give any string, but it should be executable on unix. 
@@ -66,8 +47,10 @@ public class Executioner {
             }
 
             ProcessBuilder pb = new ProcessBuilder(commandList);
+            log.appendLine(Pool.LOG_COMMAND_PREFIX+step, Executioner.class.getName());
             pb.redirectErrorStream(true);
-            pb.redirectOutput(this.logfile);
+            pb.redirectOutput(Redirect.appendTo(this.log.getLogfile()));
+
             
             Process process=null;
             try {
@@ -78,36 +61,35 @@ public class Executioner {
             }
             try {
                 process.waitFor();
-                System.out.println("Exit Value:"+process.exitValue());
+                log.appendLine("Exit Value:"+process.exitValue(), Executioner.class.getName());
+                success = (success&&(process.exitValue()==0));
             } catch (InterruptedException ex) {
                 Logger.getLogger(Executioner.class.getName()).log(Level.SEVERE, null, ex);
             }
             
-            String out = null; 
-            try {
-                out = IOUtils.toString(process.getInputStream());
-                FileUtils.writeStringToFile(this.logfile, out,true);
-            } catch (IOException ex) {
-                Logger.getLogger(Executioner.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            if(out==null){
-                System.err.println("ERROR by getting input stream and writing it.");
-            }
+//            String out = null; 
+//            try {
+//                out = IOUtils.toString(process.getInputStream());
+//                FileUtils.writeStringToFile(this., out,true);
+//            } catch (IOException ex) {
+//                Logger.getLogger(Executioner.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//            if(out==null){
+//                System.err.println("ERROR by getting input stream and writing it.");
+//            }
 
-            String err = "noError";
-            try {
-                err=IOUtils.toString(process.getErrorStream());
-            } catch (IOException ex) {
-                Logger.getLogger(Executioner.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            if(!err.equals("noError")&&err.length()>0){
-                success=false;
-                System.out.println("Error stream: "+err);
-            }
+//            String err = "noError";
+//            try {
+//                err=IOUtils.toString(process.getErrorStream());
+//            } catch (IOException ex) {
+//                Logger.getLogger(Executioner.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//            if(!err.equals("noError")&&err.length()>0){
+//                success=false;
+//                System.out.println("Error stream: "+err);
+//            }
         }
-        
 
-        
         return success;
     }
     

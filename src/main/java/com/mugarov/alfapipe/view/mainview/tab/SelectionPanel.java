@@ -5,7 +5,6 @@
  */
 package com.mugarov.alfapipe.view.mainview.tab;
 
-import com.mugarov.alfapipe.model.Pool;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
