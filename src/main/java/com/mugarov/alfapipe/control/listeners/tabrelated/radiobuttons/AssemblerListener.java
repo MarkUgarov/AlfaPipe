@@ -9,13 +9,12 @@ import com.mugarov.alfapipe.model.Pool;
 import com.mugarov.alfapipe.model.datatypes.SetOfFiles;
 import com.mugarov.alfapipe.model.programparse.datatypes.ParseableProgramParameters;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  *
  * @author Mark
  */
-public class AssemblerListener implements ActionListener{
+public class AssemblerListener implements ProgramListener{
     private ParseableProgramParameters selectedAssembler;
     private SetOfFiles fileSet;
     
@@ -30,7 +29,7 @@ public class AssemblerListener implements ActionListener{
         }
         
     }
-
+    
     @Override
     public void actionPerformed(ActionEvent ae) {
 //       System.out.println(ae.getActionCommand() +" has been performed");
@@ -41,15 +40,18 @@ public class AssemblerListener implements ActionListener{
        
     }
     
-    public ParseableProgramParameters getSelectedAssembler(){
+    @Override
+    public ParseableProgramParameters getSelected(){
         return this.selectedAssembler;
     }
     
+    @Override
     public void setFileSet(SetOfFiles set){
         this.fileSet =set;
         this.fileSet.setAssembler(this.selectedAssembler);
     }
     
+    @Override
     public String[] getValidSelections(){
         return Pool.GENERATOR_ASSEMBLER.getAvailableNames();
     }

@@ -20,7 +20,7 @@ import javax.swing.JScrollPane;
  *
  * @author mugarov
  */
-public class SelectionPanel extends JPanel{
+public class ProgramSelectionPanel extends JPanel{
     private final ButtonGroup group;
     private final ActionListener listener;
     // needed to select only the first button
@@ -33,7 +33,7 @@ public class SelectionPanel extends JPanel{
     private JLabel nameLabel;
     
     
-    public SelectionPanel(String name, ActionListener listener, String[] values){
+    public ProgramSelectionPanel(String name, ActionListener listener, String[] values){
         this.setLayout(new BorderLayout());
         this.isFirst = true;
         this.group = new ButtonGroup();

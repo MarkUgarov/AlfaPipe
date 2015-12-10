@@ -27,7 +27,7 @@ public class Tab extends JPanel{
     private final JButton fileChooser;
     private final JButton deleteSet;
     private final JButton choosePath;
-    private final AssemblerSelection assSelect;
+    private final JPanel outputPanel;
     
     private final JPanel namePanel;
     private final JLabel nameLabel;
@@ -59,7 +59,7 @@ public class Tab extends JPanel{
         this.fileChooser = new Button(Pool.BUTTON_CHOOSE_RAW_FILE_TEXT, Pool.BUTTON_CHOOSE_RAW_FILE_COMMAND);
         this.deleteSet = new Button(Pool.BUTTON_DELETE_SET_TEXT, Pool.BUTTON_DELETE_SET_COMMAND);
         this.choosePath = new Button(Pool.BUTTON_CHOOOSE_OUTPUT_TEXT, Pool.BUTTON_CHOOSE_OUTPUT_COMMAND);
-        this.assSelect = new AssemblerSelection(this.listenerBag.getAssemblerRadioListener());
+
         
         this.namePanel = new JPanel(new BorderLayout());
         this.nameLabel = new JLabel("Name:");
@@ -73,6 +73,7 @@ public class Tab extends JPanel{
         this.optionPanel.initProdigalSelection(this.listenerBag.getProdigalListener());
         
         this.outputPath = new JLabel();
+        this.outputPanel = new JPanel();
         
         this.northPanel = new JPanel(new BorderLayout());
         this.centerPanel = new JPanel(new BorderLayout());
@@ -90,20 +91,21 @@ public class Tab extends JPanel{
         this.choosePath.addActionListener(this.listenerBag.getButtonListener());
         this.applyName.addActionListener(this.listenerBag.getButtonListener());
         
+        this.outputPanel.setLayout(new BorderLayout());
+        this.outputPanel.add(this.choosePath, BorderLayout.WEST);
+        this.outputPanel.add(this.outputPath, BorderLayout.CENTER);
+        
         this.namePanel.add(this.nameLabel, BorderLayout.WEST);
         this.namePanel.add(this.nameField, BorderLayout.CENTER);
         this.namePanel.add(this.applyName, BorderLayout.EAST);
         
-        this.northPanel.add(this.assSelect, BorderLayout.NORTH);
+        this.northPanel.add(this.outputPanel, BorderLayout.NORTH);
         this.northPanel.add(this.fileChooser, BorderLayout.WEST);
         this.northPanel.add(this.namePanel, BorderLayout.CENTER);
         this.northPanel.add(this.deleteSet, BorderLayout.EAST);
         this.northPanel.add(this.optionPanel, BorderLayout.SOUTH);
         
         this.centerPanel.add(this.centerScrollPanel, BorderLayout.CENTER);
-        
-        this.southPanel.add(this.choosePath, BorderLayout.WEST);
-        this.southPanel.add(this.outputPath, BorderLayout.CENTER);
         
         this.add(this.northPanel, BorderLayout.NORTH);
         this.add(this.centerPanel, BorderLayout.CENTER);
@@ -119,9 +121,26 @@ public class Tab extends JPanel{
         return this.nameField.getText();
     }
     
+    public void setPreprocessing(String name, ArrayList<InputParameter> parameters, ParameterListener listener){
+        this.optionPanel.setPreprocessing(name, parameters, listener);
+    }
+    
+    public void setProcessing(String name, ArrayList<InputParameter> parameters, ParameterListener listener){
+        this.optionPanel.setProcessing(name, parameters, listener);
+    }
+    
     public void setAssembler(String name, ArrayList<InputParameter> parameters, ParameterListener listener){
         this.optionPanel.setAssembler(name, parameters, listener);
     }
+    
+    public void setReadsVsContigs(String name, ArrayList<InputParameter> parameters, ParameterListener listener){
+        this.optionPanel.setReadsVsContigs(name, parameters, listener);
+    }
+    
+    public void setProdigal(String name, ArrayList<InputParameter> parameters, ParameterListener listener){
+        this.optionPanel.setProdigal(name, parameters, listener);
+    }
+    
     
     public void addProgram(String name, ArrayList<InputParameter> parameters, ParameterListener listener){
         this.optionPanel.addProgram(name, parameters,listener);
@@ -158,7 +177,6 @@ public class Tab extends JPanel{
     public void disableEditing() {
         this.optionPanel.disableEditing();
         this.centerScrollPanel.disableEditing();
-        this.assSelect.disableEditing();
         this.fileChooser.setEnabled(false);
         this.applyName.setEnabled(false);
         this.choosePath.setEnabled(false);

@@ -9,13 +9,12 @@ import com.mugarov.alfapipe.model.Pool;
 import com.mugarov.alfapipe.model.datatypes.SetOfFiles;
 import com.mugarov.alfapipe.model.programparse.datatypes.ParseableProgramParameters;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  *
  * @author mugarov
  */
-public class ReadsVsContigsListener implements ActionListener{
+public class ReadsVsContigsListener implements ProgramListener{
       private ParseableProgramParameters selectedReadsVsContigs;
     private SetOfFiles fileSet;
     
@@ -41,15 +40,18 @@ public class ReadsVsContigsListener implements ActionListener{
        
     }
     
-    public ParseableProgramParameters getSelectedAssembler(){
+      @Override
+    public ParseableProgramParameters getSelected(){
         return this.selectedReadsVsContigs;
     }
     
+      @Override
     public void setFileSet(SetOfFiles set){
         this.fileSet =set;
         this.fileSet.setReadsVsContigs(this.selectedReadsVsContigs);
     }
     
+      @Override
     public String[] getValidSelections(){
         return Pool.GENERATOR_READS_VS_CONTIGS.getAvailableNames();
     }

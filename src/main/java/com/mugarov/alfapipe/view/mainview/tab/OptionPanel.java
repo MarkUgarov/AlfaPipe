@@ -23,23 +23,15 @@ import javax.swing.JPanel;
  */
 public class OptionPanel extends JPanel{
     
-    private final JPanel preprocessingPanel;
-    private final JPanel processingPanel;
-    private final JPanel assemblerPanel;
-    private final JPanel readsVsContigsPanel;
-    private final JPanel prodigalPanel;
+    private final SingleProgramPanel preprocessingPanel;
+    private final SingleProgramPanel processingPanel;
+    private final SingleProgramPanel assemblerPanel;
+    private final SingleProgramPanel readsVsContigsPanel;
+    private final SingleProgramPanel prodigalPanel;
     
-    private SelectionPanel preprocessingSelection;
-    private SelectionPanel processingSelection;
-    private SelectionPanel assemblySelection;
-    private SelectionPanel readsVsContigsSelection;
-    private SelectionPanel prodigalSelection;
-    
-    
-    private final JPanel assemblerParameters;
     
     private final JPanel toolOptionsPanel;
-    private ProgramParameterPanel assemblerParamPanel;
+//    private ProgramParameterPanel assemblerParamPanel;
     
     private ArrayList<ProgramParameterPanel> toolParamPanels;
   
@@ -47,35 +39,22 @@ public class OptionPanel extends JPanel{
         super();
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         
-        this.preprocessingSelection = null;
-        this.processingSelection = null;
-        this.assemblySelection = null;
-        this.assemblerParamPanel = null;
-        this.readsVsContigsSelection = null;
-        this.prodigalSelection = null;
+
         this.toolParamPanels = new ArrayList<>();
         
-        this.preprocessingPanel = new JPanel();
-        this.preprocessingPanel.setLayout(new BoxLayout(this.preprocessingPanel, BoxLayout.Y_AXIS));
+        this.preprocessingPanel = new SingleProgramPanel();
         this.add(this.preprocessingPanel);
         
-        this.processingPanel = new JPanel();
-        this.processingPanel.setLayout(new BoxLayout(this.processingPanel, BoxLayout.Y_AXIS));
+        this.processingPanel = new SingleProgramPanel();
         this.add(this.processingPanel);
         
-        this.assemblerPanel = new JPanel();
-        this.assemblerPanel.setLayout(new BoxLayout(this.assemblerPanel, BoxLayout.Y_AXIS));
+        this.assemblerPanel = new SingleProgramPanel();
         this.add(this.assemblerPanel);
-        this.assemblerParameters = new JPanel();
-        this.assemblerParameters.setLayout(new BoxLayout(assemblerParameters, BoxLayout.Y_AXIS));
-        this.assemblerPanel.add(this.assemblerParameters);
         
-        this.readsVsContigsPanel = new JPanel();
-        this.readsVsContigsPanel.setLayout(new BoxLayout(this.readsVsContigsPanel, BoxLayout.Y_AXIS));
+        this.readsVsContigsPanel = new SingleProgramPanel();
         this.add(this.readsVsContigsPanel);
         
-        this.prodigalPanel = new JPanel();
-        this.prodigalPanel.setLayout(new BoxLayout(this.prodigalPanel, BoxLayout.Y_AXIS));
+        this.prodigalPanel = new SingleProgramPanel();
         this.add(this.prodigalPanel);
         
         this.toolOptionsPanel = new JPanel();
@@ -85,52 +64,54 @@ public class OptionPanel extends JPanel{
     }
     
     public void initPreprocessingSelection(PreprocessingListener listener){
-       this.preprocessingSelection = new SelectionPanel("Preprocessing",listener,listener.getValidSelections());
-       this.preprocessingPanel.removeAll();
-       this.preprocessingPanel.add(this.preprocessingSelection);
+       this.preprocessingPanel.initSelection("Preprocessing", listener);
        this.updateUI();
     }
     
     public void initProcessingSelection(ProcessingListener listener){
-       this.processingSelection = new SelectionPanel("Processing",listener,listener.getValidSelections());
-       this.processingPanel.removeAll();
-       this.processingPanel.add(this.processingSelection);
+       this.processingPanel.initSelection("Processing", listener);
        this.updateUI();
     }
     
     public void initAssemblerSelection(AssemblerListener listener){
-       this.assemblySelection = new SelectionPanel("Assembler",listener,listener.getValidSelections());
-       this.assemblerPanel.removeAll();
-       this.assemblerPanel.add(this.assemblySelection);
-       this.assemblerPanel.add(this.assemblerParameters);
+       this.assemblerPanel.initSelection("Assembler", listener);
        this.updateUI();
     }
     
     public void initReadsVsContigsSelection(ReadsVsContigsListener listener){
-       this.readsVsContigsSelection = new SelectionPanel("ReadsVsContigs",listener,listener.getValidSelections());
-       this.readsVsContigsPanel.removeAll();
-       this.readsVsContigsPanel.add(this.readsVsContigsSelection);
+       this.readsVsContigsPanel.initSelection("ReadsVsContigs", listener);
        this.updateUI();
     }
     
     public void initProdigalSelection(ProdigalListener listener){
-       this.prodigalSelection = new SelectionPanel("Prodigal",listener,listener.getValidSelections());
-       this.prodigalPanel.removeAll();
-       this.prodigalPanel.add(this.prodigalSelection);
+       this.prodigalPanel.initSelection("Prodigal", listener);
        this.updateUI();
     }
-    
-    
-    public void setAssembler(String name, ArrayList<InputParameter> parameters, ParameterListener listener){
-        this.assemblerParameters.removeAll();
-        this.assemblerParamPanel = new ProgramParameterPanel(name, parameters, listener);
-        if(!this.assemblerParamPanel.isEmpty()){
-            this.assemblerParameters.add(this.assemblerParamPanel);
-        }
-        
+
+    public void setPreprocessing(String name, ArrayList<InputParameter> parameters, ParameterListener listener){
+        this.preprocessingPanel.setParameters(name, parameters, listener);
         this.updateUI();
     }
-   
+    
+    public void setProcessing(String name, ArrayList<InputParameter> parameters, ParameterListener listener){
+        this.preprocessingPanel.setParameters(name, parameters, listener);
+        this.updateUI();
+    }
+    
+    public void setAssembler(String name, ArrayList<InputParameter> parameters, ParameterListener listener){
+        this.assemblerPanel.setParameters(name, parameters, listener);
+        this.updateUI();
+    }
+    
+    public void setReadsVsContigs(String name, ArrayList<InputParameter> parameters, ParameterListener listener){
+        this.readsVsContigsPanel.setParameters(name, parameters, listener);
+        this.updateUI();
+    }
+    public void setProdigal(String name, ArrayList<InputParameter> parameters, ParameterListener listener){
+        this.prodigalPanel.setParameters(name, parameters, listener);
+        this.updateUI();
+    }
+    
     
     public void addProgram(String name, ArrayList<InputParameter> parameters, ParameterListener listener){
         ProgramParameterPanel tool = new ProgramParameterPanel(name, parameters, listener);
@@ -140,7 +121,11 @@ public class OptionPanel extends JPanel{
     }
 
     void disableEditing() {
-        this.assemblerParamPanel.disableEditing();
+        this.preprocessingPanel.disableEditing();
+        this.processingPanel.disableEditing();
+        this.assemblerPanel.disableEditing();
+        this.readsVsContigsPanel.disableEditing();
+        this.prodigalPanel.disableEditing();
         for(ProgramParameterPanel tool:this.toolParamPanels){
             tool.disableEditing();
         }

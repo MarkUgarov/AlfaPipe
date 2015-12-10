@@ -9,13 +9,12 @@ import com.mugarov.alfapipe.model.Pool;
 import com.mugarov.alfapipe.model.datatypes.SetOfFiles;
 import com.mugarov.alfapipe.model.programparse.datatypes.ParseableProgramParameters;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  *
  * @author mugarov
  */
-public class ProcessingListener implements ActionListener{
+public class ProcessingListener implements ProgramListener{
     private ParseableProgramParameters selectedProcessing;
     private SetOfFiles fileSet;
     
@@ -40,15 +39,18 @@ public class ProcessingListener implements ActionListener{
        
     }
     
-    public ParseableProgramParameters getSelectedProcessing(){
+    @Override
+    public ParseableProgramParameters getSelected(){
         return this.selectedProcessing;
     }
     
+    @Override
     public void setFileSet(SetOfFiles set){
         this.fileSet =set;
         this.fileSet.setProcessing(this.selectedProcessing);
     }
     
+    @Override
     public String[] getValidSelections(){
         return Pool.GENERATOR_PROCESSING.getAvailableNames();
     }

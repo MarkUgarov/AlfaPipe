@@ -9,13 +9,12 @@ import com.mugarov.alfapipe.model.Pool;
 import com.mugarov.alfapipe.model.datatypes.SetOfFiles;
 import com.mugarov.alfapipe.model.programparse.datatypes.ParseableProgramParameters;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  *
  * @author mugarov
  */
-public class ProdigalListener implements ActionListener{
+public class ProdigalListener implements ProgramListener{
     private ParseableProgramParameters selectedProdigal;
     private SetOfFiles fileSet;
     
@@ -41,15 +40,18 @@ public class ProdigalListener implements ActionListener{
        
     }
     
-    public ParseableProgramParameters getSelectedAssembler(){
+    @Override
+    public ParseableProgramParameters getSelected(){
         return this.selectedProdigal;
     }
     
+    @Override
     public void setFileSet(SetOfFiles set){
         this.fileSet =set;
         this.fileSet.setProdigal(this.selectedProdigal);
     }
     
+    @Override
     public String[] getValidSelections(){
         return Pool.GENERATOR_PRODIGAL.getAvailableNames();
     }
