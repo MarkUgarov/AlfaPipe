@@ -21,4 +21,8 @@ public interface ProgramListener extends ActionListener{
     
     public abstract String[] getValidSelections();
     
+    public abstract int getMaxNameLength();
+    
+    public abstract void setInitialParameters();
+    
 }

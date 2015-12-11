@@ -24,6 +24,7 @@ public class SingleProgramPanel extends JPanel{
     private ProgramParameterPanel parameters;
     
    public SingleProgramPanel(){
+       this.setDoubleBuffered(true);
        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
        
        this.selection = null;
@@ -45,7 +46,14 @@ public class SingleProgramPanel extends JPanel{
         this.parameterPanel.removeAll();
         this.parameters = new ProgramParameterPanel(name, parameters, listener);
         if(!this.parameters.isEmpty()){
+            System.out.println("Parameters of "+name+"should be shown.");
+            for(InputParameter par:parameters){
+                System.out.println("\t"+par.getName());
+            }
             this.parameterPanel.add(this.parameters);
+        }
+        else{
+            System.out.println("Parameters of "+name+" are empty!");
         }
         this.updateUI();
     }
@@ -53,6 +61,7 @@ public class SingleProgramPanel extends JPanel{
     public void disableEditing(){
         this.selection.disableEditing();
         this.parameters.disableEditing();
+        this.updateUI();
     }
     
     

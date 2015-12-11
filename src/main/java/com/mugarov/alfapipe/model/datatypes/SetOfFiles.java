@@ -31,13 +31,13 @@ public class SetOfFiles implements Executable, Runnable{
     private final OutputDirectoryChooser outputChooser;
     
     private File outputDirectory;
-    private LogFileManager log;
+    private final LogFileManager log;
     private ProgramParameterSet usePreprocessing;
     private ProgramParameterSet useProcessing;
     private ProgramParameterSet useAssembler;
     private ProgramParameterSet useReadsVsContigs;
     private ProgramParameterSet useProdigal;
-    private ArrayList<ProgramParameterSet> availableTools;
+    private final ArrayList<ProgramParameterSet> availableTools;
     
     private final Tab tab;
     
@@ -45,8 +45,6 @@ public class SetOfFiles implements Executable, Runnable{
     private boolean started;
     
     public SetOfFiles(String id, Tab tab){
-        this.useAssembler = null;
-        this.useProcessing = null;
         this.id = id;
         this.name = id;
         this.outputDirectory = new File(Pool.FILE_ORIGIN_DEFAULT, id);

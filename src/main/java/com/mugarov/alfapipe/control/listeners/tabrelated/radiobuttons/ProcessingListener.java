@@ -36,7 +36,20 @@ public class ProcessingListener implements ProgramListener{
        if(this.fileSet != null){
             this.fileSet.setProcessing(this.selectedProcessing);
         }
-       
+    }
+    
+    @Override
+    public void setInitialParameters(){
+       String[] names = Pool.GENERATOR_PROCESSING.getAvailableNames();
+        if(names.length > 0){
+            this.selectedProcessing = Pool.GENERATOR_PROCESSING.get(names[0]);
+        }
+        else{
+            this.selectedProcessing = null;
+        }
+        if(this.fileSet != null){
+             this.fileSet.setProcessing(this.selectedProcessing);
+         }
     }
     
     @Override
@@ -53,6 +66,17 @@ public class ProcessingListener implements ProgramListener{
     @Override
     public String[] getValidSelections(){
         return Pool.GENERATOR_PROCESSING.getAvailableNames();
+    }
+
+    public int getMaxNameLength() {
+        int maxLength = Pool.LABEL_PROCESSING.length();
+        String[] names = Pool.GENERATOR_PROCESSING.getAvailableNames();
+        for(String name:names){
+            if(name.length()<maxLength){
+                maxLength=name.length();
+            }
+        }
+        return maxLength;
     }
     
 }

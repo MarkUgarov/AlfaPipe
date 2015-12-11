@@ -50,6 +50,17 @@ public abstract class Pool {
     
     public static final int PARAMETERS_IN_ONE_ROW = 3;
     
+    // texts for the SingleProgramPanels in the tabs
+    public static final String LABEL_PREPROCESSING = "Preprocessing";
+    public static final String LABEL_PROCESSING = "Processing";
+    public static final String LABEL_ASSEMBLER = "Assembler";
+    public static final String LABEL_READS_VS_CONTIGS = "Reads vs. Contigs";
+    public static final String LABEL_PRODIGAL = "Prodigal";
+    public static final Dimension LABEL_DIMENSION = new Dimension(
+                (int)(java.awt.Toolkit.getDefaultToolkit().getScreenSize().width*0.05),
+                (int)(java.awt.Toolkit.getDefaultToolkit().getScreenSize().height*0.02)
+                );
+    
     // texts and parameters for the SingleFilePanels in the tabs
     public static final String BUTTON_DELETE_FILE_TEXT = "delete";
     public static final String BUTTON_DELETE_FILE_COMMAND = "delFile";
@@ -89,6 +100,7 @@ public abstract class Pool {
     public static final Generator GENERTATOR_TOOLS = new ToolGenerator();
     public static final String PATH_TOOLS_LIST = "CONFIG/Tools.yaml";
     
+    public static final String PROGRAM_DIRECTORY_VALUE = "//.";
     public static final String PROGRAM_EMPTY_PARAMETER_VALUE = "/empty";
     public static final String PROGRAM_INPUT_PATH_SET_PARAMETER_NAME = "inputPathCommand";
     public static final String PROGRAM_OUTPUT_PATH_SET_PARAMETER_NAME = "outputPathCommand";

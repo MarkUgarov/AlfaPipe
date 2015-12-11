@@ -5,6 +5,7 @@
  */
 package com.mugarov.alfapipe.view.mainview.tab;
 
+import com.mugarov.alfapipe.model.Pool;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
@@ -26,14 +27,15 @@ public class ProgramSelectionPanel extends JPanel{
     // needed to select only the first button
     private boolean isFirst;
     
-    private JScrollPane scrollable;
-    private JPanel buttonPanel;
+    private final JScrollPane scrollable;
+    private final JPanel buttonPanel;
     
-    private JPanel namePanel;
-    private JLabel nameLabel;
+    private final JPanel namePanel;
+    private final JLabel nameLabel;
     
     
     public ProgramSelectionPanel(String name, ActionListener listener, String[] values){
+        this.setDoubleBuffered(true);
         this.setLayout(new BorderLayout());
         this.isFirst = true;
         this.group = new ButtonGroup();
@@ -41,6 +43,7 @@ public class ProgramSelectionPanel extends JPanel{
         
         this.namePanel = new JPanel();
         this.nameLabel = new JLabel(name);
+        this.nameLabel.setPreferredSize(Pool.LABEL_DIMENSION);
         this.namePanel.add(this.nameLabel);
         this.add(this.namePanel, BorderLayout.WEST);
         

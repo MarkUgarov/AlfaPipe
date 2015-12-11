@@ -317,7 +317,15 @@ public class ExecutionCommandBuilder {
             }
         }
         else{
-            if(this.outputIsDirectory){
+            if(field.getName().equals(Pool.PROGRAM_DIRECTORY_VALUE)){
+                if(this.outputIsDirectory){
+                    return this.outputFile;
+                }
+                else{
+                    return this.outputFile.getParentFile();
+                }
+            }
+            else if(this.outputIsDirectory){
                 ret =  new File(this.outputFile.getAbsolutePath()+File.separatorChar+field.getName());
             }
             else{

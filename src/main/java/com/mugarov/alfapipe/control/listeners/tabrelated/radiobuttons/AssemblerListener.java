@@ -37,7 +37,20 @@ public class AssemblerListener implements ProgramListener{
        if(this.fileSet != null){
             this.fileSet.setAssembler(this.selectedAssembler);
         }
-       
+    }
+    
+    @Override
+    public void setInitialParameters(){
+       String[] names = Pool.GENERATOR_ASSEMBLER.getAvailableNames();
+        if(names.length > 0){
+            this.selectedAssembler = Pool.GENERATOR_ASSEMBLER.get(names[0]);
+        }
+        else{
+            this.selectedAssembler = null;
+        }
+        if(this.fileSet != null){
+             this.fileSet.setAssembler(this.selectedAssembler);
+        }
     }
     
     @Override
@@ -49,11 +62,24 @@ public class AssemblerListener implements ProgramListener{
     public void setFileSet(SetOfFiles set){
         this.fileSet =set;
         this.fileSet.setAssembler(this.selectedAssembler);
+        System.out.println("FileSet is set");
     }
     
     @Override
     public String[] getValidSelections(){
         return Pool.GENERATOR_ASSEMBLER.getAvailableNames();
+    }
+
+    @Override
+    public int getMaxNameLength() {
+        int maxLength = Pool.LABEL_ASSEMBLER.length();
+        String[] names = Pool.GENERATOR_ASSEMBLER.getAvailableNames();
+        for(String name:names){
+            if(name.length()<maxLength){
+                maxLength=name.length();
+            }
+        }
+        return maxLength;
     }
     
 }

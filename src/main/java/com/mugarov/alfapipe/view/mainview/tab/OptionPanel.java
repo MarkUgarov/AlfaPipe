@@ -11,6 +11,7 @@ import com.mugarov.alfapipe.control.listeners.tabrelated.radiobuttons.Processing
 import com.mugarov.alfapipe.control.listeners.tabrelated.parameters.ParameterListener;
 import com.mugarov.alfapipe.control.listeners.tabrelated.radiobuttons.ProdigalListener;
 import com.mugarov.alfapipe.control.listeners.tabrelated.radiobuttons.ReadsVsContigsListener;
+import com.mugarov.alfapipe.model.Pool;
 import com.mugarov.alfapipe.model.datatypes.InputParameter;
 import com.mugarov.alfapipe.view.mainview.tab.parameters.ProgramParameterPanel;
 import java.util.ArrayList;
@@ -64,27 +65,27 @@ public class OptionPanel extends JPanel{
     }
     
     public void initPreprocessingSelection(PreprocessingListener listener){
-       this.preprocessingPanel.initSelection("Preprocessing", listener);
+       this.preprocessingPanel.initSelection(Pool.LABEL_PREPROCESSING, listener);
        this.updateUI();
     }
     
     public void initProcessingSelection(ProcessingListener listener){
-       this.processingPanel.initSelection("Processing", listener);
+       this.processingPanel.initSelection(Pool.LABEL_PROCESSING, listener);
        this.updateUI();
     }
     
     public void initAssemblerSelection(AssemblerListener listener){
-       this.assemblerPanel.initSelection("Assembler", listener);
+       this.assemblerPanel.initSelection(Pool.LABEL_ASSEMBLER, listener);
        this.updateUI();
     }
     
     public void initReadsVsContigsSelection(ReadsVsContigsListener listener){
-       this.readsVsContigsPanel.initSelection("ReadsVsContigs", listener);
+       this.readsVsContigsPanel.initSelection(Pool.LABEL_READS_VS_CONTIGS, listener);
        this.updateUI();
     }
     
     public void initProdigalSelection(ProdigalListener listener){
-       this.prodigalPanel.initSelection("Prodigal", listener);
+       this.prodigalPanel.initSelection(Pool.LABEL_PRODIGAL, listener);
        this.updateUI();
     }
 

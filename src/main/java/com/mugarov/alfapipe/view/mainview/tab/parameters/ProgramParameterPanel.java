@@ -34,20 +34,22 @@ public class ProgramParameterPanel extends JPanel{
     private final JScrollPane scrollable;
     private final JPanel parameterPanel;
     
-    private ArrayList<JCheckBox> boxes;
-    private ArrayList<ProgramParameterTextField> textFields;
+    private final ArrayList<JCheckBox> boxes;
+    private final ArrayList<ProgramParameterTextField> textFields;
     
     
     
     public ProgramParameterPanel(String name, ArrayList<InputParameter> parameters, ParameterListener listener){
         super();
-//        System.out.println("Added Program "+name);
+        this.setDoubleBuffered(true);
+        System.out.println("Added Program "+name);
         this.name = name;
         this.setDoubleBuffered(true);
         this.setLayout(new BorderLayout());
         this.namePanel = new JPanel();
         this.namePanel.setLayout(new FlowLayout());
         this.nameLabel = new JLabel(this.name);
+        this.nameLabel.setPreferredSize(Pool.LABEL_DIMENSION);
         this.namePanel.add(this.nameLabel);
         this.add(this.namePanel, BorderLayout.WEST);
         
@@ -104,6 +106,7 @@ public class ProgramParameterPanel extends JPanel{
        
         
         this.parameterPanel.add(parPan);
+        this.updateUI();
     }
     
     public boolean isEmpty(){

@@ -37,7 +37,20 @@ public class ReadsVsContigsListener implements ProgramListener{
        if(this.fileSet != null){
             this.fileSet.setReadsVsContigs(this.selectedReadsVsContigs);
         }
-       
+    }
+    
+     @Override
+    public void setInitialParameters(){
+       String[] names = Pool.GENERATOR_READS_VS_CONTIGS.getAvailableNames();
+        if(names.length > 0){
+            this.selectedReadsVsContigs = Pool.GENERATOR_READS_VS_CONTIGS.get(names[0]);
+        }
+        else{
+            this.selectedReadsVsContigs = null;
+        }
+        if(this.fileSet != null){
+             this.fileSet.setReadsVsContigs(this.selectedReadsVsContigs);
+         }
     }
     
       @Override
@@ -54,5 +67,16 @@ public class ReadsVsContigsListener implements ProgramListener{
       @Override
     public String[] getValidSelections(){
         return Pool.GENERATOR_READS_VS_CONTIGS.getAvailableNames();
+    }
+
+    public int getMaxNameLength() {
+        int maxLength = Pool.LABEL_READS_VS_CONTIGS.length();
+        String[] names = Pool.GENERATOR_READS_VS_CONTIGS.getAvailableNames();
+        for(String name:names){
+            if(name.length()<maxLength){
+                maxLength=name.length();
+            }
+        }
+        return maxLength;
     }
 }

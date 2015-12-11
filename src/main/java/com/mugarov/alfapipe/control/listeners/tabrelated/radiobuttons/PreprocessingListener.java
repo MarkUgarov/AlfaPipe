@@ -36,7 +36,20 @@ public class PreprocessingListener implements ProgramListener{
        if(this.fileSet != null){
             this.fileSet.setPreprocessing(this.selectedPreprocessing);
         }
-       
+    }
+    
+    @Override
+    public void setInitialParameters(){
+       String[] names = Pool.GENERATOR_PREPROCESSING.getAvailableNames();
+        if(names.length > 0){
+            this.selectedPreprocessing = Pool.GENERATOR_PREPROCESSING.get(names[0]);
+        }
+        else{
+            this.selectedPreprocessing = null;
+        }
+        if(this.fileSet != null){
+             this.fileSet.setPreprocessing(this.selectedPreprocessing);
+         }
     }
     
     @Override
@@ -54,5 +67,16 @@ public class PreprocessingListener implements ProgramListener{
     @Override
     public String[] getValidSelections(){
         return Pool.GENERATOR_PREPROCESSING.getAvailableNames();
+    }
+
+    public int getMaxNameLength() {
+        int maxLength = Pool.LABEL_PREPROCESSING.length();
+        String[] names = Pool.GENERATOR_PREPROCESSING.getAvailableNames();
+        for(String name:names){
+            if(name.length()<maxLength){
+                maxLength=name.length();
+            }
+        }
+        return maxLength;
     }
 }

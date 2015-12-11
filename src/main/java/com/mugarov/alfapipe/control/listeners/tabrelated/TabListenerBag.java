@@ -29,6 +29,8 @@ public class TabListenerBag {
     
     private SetOfFiles fileSet;
     private FileSetManager fileManager;
+    private boolean evaluated;
+    private int maxLength;
     
     
     public TabListenerBag(){
@@ -41,6 +43,7 @@ public class TabListenerBag {
         this.buttonListener = new TabButtonListener();
         this.toolListener = new ToolSelectListener();
         this.fileSet = null;
+        this.evaluateMaxLength();
     }
     
     public void setFileSet(SetOfFiles set){
@@ -85,6 +88,40 @@ public class TabListenerBag {
     
     public ToolSelectListener getToolListener(){
         return this.toolListener;
+    }
+    
+    private void evaluateMaxLength(){
+        this.maxLength = 0;
+        int tmp;
+        this.maxLength = this.preListener.getMaxNameLength();
+        tmp = this.procRadioListener.getMaxNameLength();
+        if(this.maxLength<tmp){
+            this.maxLength = tmp;
+        }
+       tmp = this.assRadioListener.getMaxNameLength();
+       if(this.maxLength<tmp){
+           this.maxLength = tmp;
+       }
+       tmp = this.readsVsContigsListener.getMaxNameLength();
+       if(this.maxLength<tmp){
+           this.maxLength = tmp;
+       }
+       tmp = this.prodigalListener.getMaxNameLength();
+       if(this.maxLength<tmp){
+           this.maxLength = tmp;
+       }
+       tmp = this.toolListener.getMaxNameLength();
+       if(this.maxLength<tmp){
+           this.maxLength = tmp;
+       }
+       this.evaluated = true;
+    }
+    
+    public int getMaxNameLength(){
+        if(!evaluated){
+            this.evaluateMaxLength();
+        }
+        return this.maxLength;
     }
     
 }
