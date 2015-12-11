@@ -9,6 +9,7 @@ import com.mugarov.alfapipe.control.listeners.tabrelated.parameters.ParameterLis
 import com.mugarov.alfapipe.model.datatypes.InputParameter;
 import com.mugarov.alfapipe.model.Pool;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.util.ArrayList;
@@ -28,6 +29,8 @@ public class ProgramParameterPanel extends JPanel{
     private final int maxColumns;
     private final ParameterListener listener;
     
+    private final JPanel emptyPanel;
+    
     private final JPanel namePanel;
     private final JLabel nameLabel;
     
@@ -46,10 +49,17 @@ public class ProgramParameterPanel extends JPanel{
         this.name = name;
         this.setDoubleBuffered(true);
         this.setLayout(new BorderLayout());
+        
+        this.emptyPanel = new JPanel();
+        this.emptyPanel.setPreferredSize(Pool.LABEL_OFFSET);
+
+        
         this.namePanel = new JPanel();
         this.namePanel.setLayout(new FlowLayout());
         this.nameLabel = new JLabel(this.name);
         this.nameLabel.setPreferredSize(Pool.LABEL_DIMENSION);
+        
+        this.namePanel.add(this.emptyPanel);
         this.namePanel.add(this.nameLabel);
         this.add(this.namePanel, BorderLayout.WEST);
         

@@ -16,6 +16,7 @@ import com.mugarov.alfapipe.model.datatypes.InputParameter;
 import com.mugarov.alfapipe.view.mainview.tab.parameters.ProgramParameterPanel;
 import java.util.ArrayList;
 import javax.swing.BoxLayout;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 /**
@@ -24,13 +25,15 @@ import javax.swing.JPanel;
  */
 public class OptionPanel extends JPanel{
     
+    private final JLabel programLabel;
+    
     private final SingleProgramPanel preprocessingPanel;
     private final SingleProgramPanel processingPanel;
     private final SingleProgramPanel assemblerPanel;
     private final SingleProgramPanel readsVsContigsPanel;
     private final SingleProgramPanel prodigalPanel;
-    
-    
+
+    private final JLabel toolLabel;
     private final JPanel toolOptionsPanel;
 //    private ProgramParameterPanel assemblerParamPanel;
     
@@ -40,8 +43,14 @@ public class OptionPanel extends JPanel{
         super();
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         
-
         this.toolParamPanels = new ArrayList<>();
+        
+        this.add(this.getDistinguishBar());
+        
+        this.programLabel = new JLabel(Pool.LABEL_PROGRAMS);
+        this.programLabel.setPreferredSize(Pool.LABEL_DIMENSION);
+        this.programLabel.setForeground(Pool.LABEL_IMPORTANCE_COLOR);
+        this.add(this.programLabel);
         
         this.preprocessingPanel = new SingleProgramPanel();
         this.add(this.preprocessingPanel);
@@ -58,10 +67,26 @@ public class OptionPanel extends JPanel{
         this.prodigalPanel = new SingleProgramPanel();
         this.add(this.prodigalPanel);
         
+        this.add(this.getDistinguishBar());
+        this.toolLabel = new JLabel(Pool.LABEL_TOOLS);
+        this.toolLabel.setForeground(Pool.LABEL_IMPORTANCE_COLOR);
+        this.toolLabel.setPreferredSize(Pool.LABEL_DIMENSION);
+        this.add(this.toolLabel);
+        
         this.toolOptionsPanel = new JPanel();
         this.toolOptionsPanel.setLayout(new BoxLayout(toolOptionsPanel, BoxLayout.Y_AXIS));
+        
         this.add(this.toolOptionsPanel);
+        
+        this.add(this.getDistinguishBar());
 
+    }
+    
+    private JPanel getDistinguishBar(){
+        JPanel bar = new JPanel();
+        bar.setPreferredSize(Pool.DISTINGUISH_BAR_DIMENSION);
+        bar.setBackground(Pool.DISTINGUISH_BAR_COLOR);
+        return bar;
     }
     
     public void initPreprocessingSelection(PreprocessingListener listener){
@@ -95,7 +120,7 @@ public class OptionPanel extends JPanel{
     }
     
     public void setProcessing(String name, ArrayList<InputParameter> parameters, ParameterListener listener){
-        this.preprocessingPanel.setParameters(name, parameters, listener);
+        this.processingPanel.setParameters(name, parameters, listener);
         this.updateUI();
     }
     

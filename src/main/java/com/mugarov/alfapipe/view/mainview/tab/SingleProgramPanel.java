@@ -9,6 +9,7 @@ import com.mugarov.alfapipe.control.listeners.tabrelated.parameters.ParameterLis
 import com.mugarov.alfapipe.control.listeners.tabrelated.radiobuttons.ProgramListener;
 import com.mugarov.alfapipe.model.datatypes.InputParameter;
 import com.mugarov.alfapipe.view.mainview.tab.parameters.ProgramParameterPanel;
+import java.awt.BorderLayout;
 import java.util.ArrayList;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
@@ -20,40 +21,29 @@ import javax.swing.JPanel;
 public class SingleProgramPanel extends JPanel{
     
     private ProgramSelectionPanel selection;
-    private JPanel parameterPanel;
     private ProgramParameterPanel parameters;
     
    public SingleProgramPanel(){
        this.setDoubleBuffered(true);
-       this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+       this.setLayout(new BorderLayout());
        
        this.selection = null;
-       this.parameterPanel = new JPanel();
-       this.parameterPanel.setLayout(new BoxLayout(this.parameterPanel, BoxLayout.Y_AXIS));
        this.parameters = null;
    }
    
    
    public void initSelection(String name, ProgramListener listener){
        this.selection = new ProgramSelectionPanel(name,listener,listener.getValidSelections());
-       this.removeAll();
-       this.add(this.selection);
-       this.add(this.parameterPanel);
+       this.add(this.selection, BorderLayout.NORTH);
        this.updateUI();
     }
     
     public void setParameters(String name, ArrayList<InputParameter> parameters, ParameterListener listener){
-        this.parameterPanel.removeAll();
+        this.removeAll();
+        this.add(this.selection, BorderLayout.NORTH);
         this.parameters = new ProgramParameterPanel(name, parameters, listener);
         if(!this.parameters.isEmpty()){
-            System.out.println("Parameters of "+name+"should be shown.");
-            for(InputParameter par:parameters){
-                System.out.println("\t"+par.getName());
-            }
-            this.parameterPanel.add(this.parameters);
-        }
-        else{
-            System.out.println("Parameters of "+name+" are empty!");
+            this.add(this.parameters, BorderLayout.SOUTH);
         }
         this.updateUI();
     }

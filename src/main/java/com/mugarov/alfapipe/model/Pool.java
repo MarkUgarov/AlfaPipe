@@ -51,15 +51,27 @@ public abstract class Pool {
     public static final int PARAMETERS_IN_ONE_ROW = 3;
     
     // texts for the SingleProgramPanels in the tabs
+    public static final Color LABEL_IMPORTANCE_COLOR = Color.MAGENTA;
+    public static final String LABEL_PROGRAMS = "Programs:";
     public static final String LABEL_PREPROCESSING = "Preprocessing";
     public static final String LABEL_PROCESSING = "Processing";
     public static final String LABEL_ASSEMBLER = "Assembler";
     public static final String LABEL_READS_VS_CONTIGS = "Reads vs. Contigs";
     public static final String LABEL_PRODIGAL = "Prodigal";
+    public static final String LABEL_TOOLS = "Tools:";
+    public static final Dimension LABEL_OFFSET = new Dimension(
+                (int)(java.awt.Toolkit.getDefaultToolkit().getScreenSize().width*0.03),
+                (int)(java.awt.Toolkit.getDefaultToolkit().getScreenSize().height*0.02)
+                );
     public static final Dimension LABEL_DIMENSION = new Dimension(
                 (int)(java.awt.Toolkit.getDefaultToolkit().getScreenSize().width*0.05),
                 (int)(java.awt.Toolkit.getDefaultToolkit().getScreenSize().height*0.02)
                 );
+    public static final Dimension DISTINGUISH_BAR_DIMENSION = new Dimension(
+                (int)(java.awt.Toolkit.getDefaultToolkit().getScreenSize().width*0.05),
+                (int)(java.awt.Toolkit.getDefaultToolkit().getScreenSize().height*0.005)
+                );
+    public static final Color DISTINGUISH_BAR_COLOR = Color.gray;
     
     // texts and parameters for the SingleFilePanels in the tabs
     public static final String BUTTON_DELETE_FILE_TEXT = "delete";
