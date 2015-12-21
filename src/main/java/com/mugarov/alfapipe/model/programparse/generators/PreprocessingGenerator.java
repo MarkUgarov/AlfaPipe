@@ -44,8 +44,17 @@ public class PreprocessingGenerator implements Generator{
         fields.add(essential);
         mainProcessor.setEssentialOutputs(fields);
         mainProcessor.setPairedConditions(new PairedInputConditions(true, "_",-2));
-       
+        
+        ParseableProgramParameters nullPreProcessor= new ParseableProgramParameters( "Choose non", 
+                                                                null, 
+                                                                null,
+                                                                0,
+                                                                null,
+                                                                0,
+                                                                null,
+                                                                null); 
         this.defaultList.add(mainProcessor);
+        this.defaultList.add(nullPreProcessor);
 
         this.core = new GeneratorCore(this.localFilePath, this.defaultList);
     }

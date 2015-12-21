@@ -32,7 +32,8 @@ public class Executioner {
     public boolean execute(String input){
         
         if(input == null || input.length() == 0){
-            return false;
+            this.log.appendLine("Null has been seen selected. Waiting for the next input.", Executioner.class.getName());
+            return true;
         }
         boolean success=true;
         

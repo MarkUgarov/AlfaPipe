@@ -26,7 +26,7 @@ public class ReadsVsContigsGenerator implements Generator {
         String[] endings = {".fa", ".fq"};
         String[] outputEnding = new String[]{".fa"};
         ParseableProgramParameters readsVsContigs = new ParseableProgramParameters( Pool.NAME_DEFAULT_READS_VS_CONTIGS,
-                                                                "run reads vs contigs", 
+                                                                null, 
                                                                 "-in something",
                                                                 -1,
                                                                 "-out something",
@@ -36,8 +36,18 @@ public class ReadsVsContigsGenerator implements Generator {
         readsVsContigs.setOnlyOutputDirectorySetable(false);
         readsVsContigs.setEnterCommand("reads vs contigs enter command");
         readsVsContigs.setExitCommand(" reads vs contigs exit command");
+        
+        ParseableProgramParameters nullReadsVsContigs= new ParseableProgramParameters( "Choose non", 
+                                                                null, 
+                                                                null,
+                                                                0,
+                                                                null,
+                                                                0,
+                                                                null,
+                                                                null); 
        
         this.defaultList.add(readsVsContigs);
+        this.defaultList.add(nullReadsVsContigs);
 
         this.core = new GeneratorCore(this.localFilePath, this.defaultList);
     }

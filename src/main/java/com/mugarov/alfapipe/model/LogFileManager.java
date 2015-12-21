@@ -26,12 +26,12 @@ public class LogFileManager {
         File parent = new File(parentDirectory);
         this.logfile = new File(parent, Pool.FILE_LOGFILE_NAME);
         if( !this.logfile.getParentFile().exists() || !this.logfile.getParentFile().isDirectory() ){
-//            System.out.println("Trying to create directory "+parent.getAbsolutePath());
+            System.out.println("Trying to create directory "+parent.getAbsolutePath());
             parent.mkdirs();
         }
         boolean isOverwritten = false;
         if(!this.logfile.exists() || this.logfile.isDirectory()){
-//            System.out.println("Trying to create file "+this.logfile.getAbsolutePath());
+            System.out.println("Trying to create file "+this.logfile.getAbsolutePath());
             try {
                 this.logfile.createNewFile();
             } catch (IOException ex) {
@@ -59,6 +59,8 @@ public class LogFileManager {
             this.bufferedWriter = new BufferedWriter(this.writer);
         
             this.bufferedWriter.write(Pool.LOG_LINE_PREFIX);
+            this.bufferedWriter.append(System.currentTimeMillis()+"");
+            this.bufferedWriter.append(":");
             this.bufferedWriter.write(args.trim());
             this.bufferedWriter.write(Pool.LOG_SOURCE_HINT);
             this.bufferedWriter.write(source);

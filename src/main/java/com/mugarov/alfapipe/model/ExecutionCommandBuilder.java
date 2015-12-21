@@ -82,7 +82,7 @@ public class ExecutionCommandBuilder {
             builder.append(" ");
             for(ParameterField pf:parameterSet.getParsedParameters().getParameters() ){
                 boolean writeCommand =true;
-                if(pf.getCommand() == null){
+                if(pf.getCommand() == null || pf.getCommand().length() == 0 || pf.getCommand().equals(Pool.PROGRAM_EMPTY_PARAMETER_VALUE)){
                     writeCommand=false;
                 }
 

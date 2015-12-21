@@ -45,7 +45,6 @@ public class ProgramParameterPanel extends JPanel{
     public ProgramParameterPanel(String name, ArrayList<InputParameter> parameters, ParameterListener listener){
         super();
         this.setDoubleBuffered(true);
-        System.out.println("Added Program "+name);
         this.name = name;
         this.setDoubleBuffered(true);
         this.setLayout(new BorderLayout());

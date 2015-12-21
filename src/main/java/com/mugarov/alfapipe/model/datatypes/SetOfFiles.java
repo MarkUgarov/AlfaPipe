@@ -392,12 +392,12 @@ public class SetOfFiles implements Executable, Runnable{
                     System.out.println("Fail at assembly");
                 }
                 
-//                    if(filePassed){
-//                        filePassed = execution.execute(file.getReadsVsContigsCommand(this.outputDirectory.getPath()));
-//                    }
-//                    if(filePassed){
-//                        filePassed = execution.execute(file.getProdigalCommand(this.outputDirectory.getPath()));
-//                    }
+                if(filePassed){
+                    filePassed = execution.execute(file.getReadsVsContigsCommand(this.outputDirectory.getPath()));
+                }
+                if(filePassed){
+                    filePassed = execution.execute(file.getProdigalCommand(this.outputDirectory.getPath()));
+                }
                 
                 this.tab.setFileProgressed(file.getAbsolutePath(), filePassed);
                 ArrayList<Boolean> toolBools = new ArrayList<>(file.getValidTools().size());

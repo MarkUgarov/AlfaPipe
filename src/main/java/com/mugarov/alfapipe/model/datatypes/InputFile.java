@@ -65,12 +65,9 @@ public class InputFile extends File implements Executable{
         this.valid =false;
         this.preprocessingParameters = null;
         this.processingParameters = null;
-//        this.processingInputParameters = new ProgramParameterSet(Pool.GENERATOR_PROCESSING.get(Pool.NAME_DEFAULT_PROCESSING));
         this.assemblerParameters = null;
         this.readsVsContigsParameters = null;
         this.prodigalParameters = null;
-//        this.readsVsContigsParameters = new ProgramParameterSet(Pool.GENERATOR_READS_VS_CONTIGS.get(Pool.NAME_DEFAULT_READS_VS_CONTIGS));
-//        this.prodigalParameters = new ProgramParameterSet(Pool.GENERATOR_PRODIGAL.get(Pool.NAME_DEFAULT_PRODIGAL));
         this.tools = set;
         this.toolSelected = new boolean[this.tools.size()];
         this.log = logManager;
@@ -87,11 +84,6 @@ public class InputFile extends File implements Executable{
          this.assemblerParameters = null;
         this.readsVsContigsParameters = null;
         this.prodigalParameters = null;
-//        this.preprocessingParameters = new ProgramParameterSet(Pool.GENERATOR_PREPROCESSING.get(Pool.GENERATOR_PREPROCESSING.getAvailableNames()[0]));
-//        this.processingParameters = new ProgramParameterSet(Pool.GENERATOR_PROCESSING.get(Pool.NAME_DEFAULT_PROCESSING));
-       
-//        this.readsVsContigsParameters = new ProgramParameterSet(Pool.GENERATOR_READS_VS_CONTIGS.get(Pool.NAME_DEFAULT_READS_VS_CONTIGS));
-//        this.prodigalParameters = new ProgramParameterSet(Pool.GENERATOR_PRODIGAL.get(Pool.NAME_DEFAULT_PRODIGAL));
         for(String tool:Pool.GENERTATOR_TOOLS.getAvailableNames()){
             this.tools.add(new ProgramParameterSet(Pool.GENERTATOR_TOOLS.get(tool)));
         }

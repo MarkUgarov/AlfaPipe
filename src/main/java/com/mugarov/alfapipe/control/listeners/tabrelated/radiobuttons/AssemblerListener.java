@@ -62,7 +62,6 @@ public class AssemblerListener implements ProgramListener{
     public void setFileSet(SetOfFiles set){
         this.fileSet =set;
         this.fileSet.setAssembler(this.selectedAssembler);
-        System.out.println("FileSet is set");
     }
     
     @Override

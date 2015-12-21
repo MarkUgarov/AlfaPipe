@@ -26,7 +26,7 @@ public class ProdigalGenerator implements Generator{
         String[] endings = {".fa", ".fq"};
         String[] outputEnding = new String[]{".fa"};
         ParseableProgramParameters prodigal = new ParseableProgramParameters( Pool.NAME_DEFAULT_PRODIGAL,
-                                                                "run prodigal", 
+                                                                null, 
                                                                 "-in something",
                                                                 -1,
                                                                 "-out something",
@@ -36,8 +36,18 @@ public class ProdigalGenerator implements Generator{
         prodigal.setOnlyOutputDirectorySetable(false);
         prodigal.setEnterCommand("prodigal enter command");
         prodigal.setExitCommand("prodigal exit command");
+        
+        ParseableProgramParameters nullProdigal= new ParseableProgramParameters( "Choose non", 
+                                                                null, 
+                                                                null,
+                                                                0,
+                                                                null,
+                                                                0,
+                                                                null,
+                                                                null); 
        
         this.defaultList.add(prodigal);
+        this.defaultList.add(nullProdigal);
 
         this.core = new GeneratorCore(this.localFilePath, this.defaultList);
     }

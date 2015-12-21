@@ -44,9 +44,19 @@ public class ProcessingGenerator implements Generator{
                                                                 endings,
                                                                 outputEnding);
         splitMiseq.setOnlyOutputDirectorySetable(false);
+        
+        ParseableProgramParameters nullProcessor= new ParseableProgramParameters( "Choose non", 
+                                                                null, 
+                                                                null,
+                                                                0,
+                                                                null,
+                                                                0,
+                                                                null,
+                                                                null); 
        
         this.defaultList.add(miseq);
         this.defaultList.add(splitMiseq);
+        this.defaultList.add(nullProcessor);
 
         this.core = new GeneratorCore(this.localFilePath, this.defaultList);
     }
