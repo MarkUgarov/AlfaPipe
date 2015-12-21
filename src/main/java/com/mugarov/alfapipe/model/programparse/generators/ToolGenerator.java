@@ -52,6 +52,29 @@ public class ToolGenerator implements Generator{
         prokka.addParameter("Force", "--force", Pool.PROGRAM_EMPTY_PARAMETER_VALUE, 1, false);
         this.defaultList.add(prokka);
         
+        String[] outputEndings2 = new String[]{".txt"};
+        ParseableProgramParameters extractHeader = new ParseableProgramParameters( "Extract Header Info", 
+                                                    "SCRITPS/extract_header_info.plx", 
+                                                    null,
+                                                    2,
+                                                    "|tee",
+                                                    3,
+                                                    endings,
+                                                    outputEndings2);  
+        extractHeader.addParameter("prepare Excel", "-E", Pool.PROGRAM_EMPTY_PARAMETER_VALUE, 1, true);
+        this.defaultList.add(extractHeader);
+        
+        String[] endingsB = {".txt"};
+        ParseableProgramParameters assemblyStatistics = new ParseableProgramParameters( "Assembly Statistics", 
+                                                    "SCRITPS/assembly_statistics.plx", 
+                                                    null,
+                                                    2,
+                                                    "|tee",
+                                                    3,
+                                                    endingsB,
+                                                    outputEndings2);  
+        assemblyStatistics.addParameter("Skip listprint", "-l", Pool.PROGRAM_EMPTY_PARAMETER_VALUE, 1, true);
+        this.defaultList.add(assemblyStatistics);
         
         this.core = new GeneratorCore(this.localFilePath, this.defaultList);
         

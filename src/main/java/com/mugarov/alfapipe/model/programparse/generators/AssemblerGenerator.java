@@ -25,7 +25,7 @@ public class AssemblerGenerator implements Generator{
         this.localFilePath = Pool.PATH_ASSEMBLER_LIST;
 
         String[] endings = {".fa", ".fastq"};
-        String[] outputEnding = new String[]{".fna", ".fa"};
+        String[] outputEnding = new String[]{".fna", ".fa", ".txt"};
         ParseableProgramParameters newbler = new ParseableProgramParameters( "Newbler",
                                                                 "/vol/454/.old/2.8/bin/runAssembly", 
                                                                 null,
@@ -38,11 +38,25 @@ public class AssemblerGenerator implements Generator{
         newbler.addParameter("large", "-large", Pool.PROGRAM_EMPTY_PARAMETER_VALUE, 1, true);
         newbler.addParameter("CPU", "-cpu", "0", 2, true);
         newbler.addParameter("Force", "-force", Pool.PROGRAM_EMPTY_PARAMETER_VALUE, 3, false);
-        NameField  essential = new NameField();
-        essential.setName("454AllContigs.fna");
-        essential.setEssentialFor("Prokka");
-        essential.setUseOnly(true);
-        newbler.addEssentialOutput(essential);
+        
+        NameField  essential1 = new NameField();
+        essential1.setName("454AllContigs.fna");
+        essential1.setEssentialFor("Prokka");
+        essential1.setUseOnly(true);
+        newbler.addEssentialOutput(essential1);
+        
+        NameField essential2 = new NameField();
+        essential2.setName("454AllContigs.fna");
+        essential2.setEssentialFor("Extract Header Info");
+        essential2.setUseOnly(true);
+        newbler.addEssentialOutput(essential2);
+        
+        NameField essential3 = new NameField();
+        essential3.setName(Pool.PROGRAM_DIRECTORY_VALUE);
+        essential3.setEssentialFor("Assembly Statistics");
+        essential3.setUseOnly(true);
+        newbler.addEssentialOutput(essential3);
+        
 
         ParseableProgramParameters allpath=  new ParseableProgramParameters( "Allpath",
                                                                 "apply startCommand", 
