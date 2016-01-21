@@ -23,16 +23,18 @@ public class ProdigalGenerator implements Generator{
         this.defaultList = new ArrayList<>();       
         this.localFilePath = Pool.PATH_PRODIGAL_LIST;
 
-        String[] endings = {".fa", ".fq"};
+        String[] endings = {".fa", ".fasta", ".fna"};
         String[] outputEnding = new String[]{".fa"};
         ParseableProgramParameters prodigal = new ParseableProgramParameters( Pool.NAME_DEFAULT_PRODIGAL,
-                                                                null, 
-                                                                "-in something",
+                                                                "prodigal", 
+                                                                "-i",
+                                                                -2,
+                                                                "-o",
                                                                 -1,
-                                                                "-out something",
-                                                                0,
                                                                 endings,
                                                                 outputEnding);
+        prodigal.addParameter("add right protein translations","-a" , Pool.PROGRAM_EMPTY_PARAMETER_VALUE, 1, true);
+        prodigal.addParameter("write nucleotide sequence", "-d", Pool.PROGRAM_EMPTY_PARAMETER_VALUE, 2, true);
         prodigal.setOnlyOutputDirectorySetable(false);
         prodigal.setEnterCommand("prodigal enter command");
         prodigal.setExitCommand("prodigal exit command");

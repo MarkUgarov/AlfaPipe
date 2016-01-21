@@ -57,6 +57,12 @@ public class AssemblerGenerator implements Generator{
         essential3.setUseOnly(true);
         newbler.addEssentialOutput(essential3);
         
+        NameField essential4 = new NameField();
+        essential4.setName("454AllContigs.fna");
+        essential4.setEssentialFor(Pool.NAME_DEFAULT_PRODIGAL);
+        essential4.setUseOnly(true);
+        newbler.addEssentialOutput(essential4);
+        
 
         ParseableProgramParameters allpath=  new ParseableProgramParameters( "Allpath",
                                                                 "apply startCommand", 
