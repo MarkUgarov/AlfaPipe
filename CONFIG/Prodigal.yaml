@@ -1,0 +1,42 @@
+---
+- name: "defaultProdigal"
+  startCommand: "prodigal"
+  outputEndings:
+  - ".fa"
+  onlyOutputDirectorySetable: false
+  enterCommand: "prodigal enter command"
+  exitCommand: "prodigal exit command"
+  parameters:
+  - name: "inputPathCommand"
+    command: "-i"
+    position: -2
+    optional: false
+  - name: "outputPathCommand"
+    command: "-o"
+    position: -1
+    optional: false
+  - name: "add right protein translations"
+    command: "-a"
+    defaultValue: "/empty"
+    position: 1
+    optional: true
+  - name: "write nucleotide sequence"
+    command: "-d"
+    defaultValue: "/empty"
+    position: 2
+    optional: true
+  essentialOutputs: []
+  validInputEndings:
+  - ".fa"
+  - ".fasta"
+  - ".fna"
+- name: "Choose non"
+  onlyOutputDirectorySetable: false
+  parameters:
+  - name: "inputPathCommand"
+    position: 0
+    optional: false
+  - name: "outputPathCommand"
+    position: 0
+    optional: false
+  essentialOutputs: []

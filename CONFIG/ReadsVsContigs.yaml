@@ -1,0 +1,30 @@
+---
+- name: "defaultReadsVsContigs"
+  outputEndings:
+  - ".fa"
+  onlyOutputDirectorySetable: false
+  enterCommand: "reads vs contigs enter command"
+  exitCommand: " reads vs contigs exit command"
+  parameters:
+  - name: "outputPathCommand"
+    command: "-out something"
+    position: 0
+    optional: false
+  - name: "inputPathCommand"
+    command: "-in something"
+    position: -1
+    optional: false
+  essentialOutputs: []
+  validInputEndings:
+  - ".fa"
+  - ".fq"
+- name: "Choose non"
+  onlyOutputDirectorySetable: false
+  parameters:
+  - name: "inputPathCommand"
+    position: 0
+    optional: false
+  - name: "outputPathCommand"
+    position: 0
+    optional: false
+  essentialOutputs: []

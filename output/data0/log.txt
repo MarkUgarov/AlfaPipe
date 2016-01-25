@@ -1,0 +1,2 @@
+<>< 1453724488844:Old logfile was overwritten  <- Message from com.mugarov.alfapipe.model.LogFileManager|°|
+<>< 1453724488845:Log of the Set data0  <- Message from com.mugarov.alfapipe.model.datatypes.SetOfFiles|°|

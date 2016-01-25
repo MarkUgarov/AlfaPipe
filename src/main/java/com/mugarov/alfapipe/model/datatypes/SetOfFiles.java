@@ -416,14 +416,20 @@ public class SetOfFiles implements Executable, Runnable{
     }
     
     private void checkInputFormat(){
-        if (this.usePreprocessing != null|| this.usePreprocessing.getParsedParameters().getStartCommand() != null){
+        if (this.usePreprocessing != null && this.usePreprocessing.getParsedParameters().getStartCommand() != null){
             this.inputChooser.setInputFilter("Preprocessing input", this.usePreprocessing.getParsedParameters().getValidInputEndings());
         }
-        else if (this.useProcessing != null|| this.useProcessing.getParsedParameters().getStartCommand() != null){
+        else if (this.useProcessing != null && this.useProcessing.getParsedParameters().getStartCommand() != null){
             this.inputChooser.setInputFilter("Processing input", this.useProcessing.getParsedParameters().getValidInputEndings());
         }
-        else if (this.useAssembler != null|| this.useAssembler.getParsedParameters().getStartCommand() != null){
+        else if (this.useAssembler != null && this.useAssembler.getParsedParameters().getStartCommand() != null){
             this.inputChooser.setInputFilter("Assembler input", this.useAssembler.getParsedParameters().getValidInputEndings());
+        }
+        else if (this.useReadsVsContigs != null && this.useReadsVsContigs.getParsedParameters().getStartCommand() != null){
+            this.inputChooser.setInputFilter("ReadsVsContigs input", this.useAssembler.getParsedParameters().getValidInputEndings());
+        }
+        else if (this.useProdigal != null && this.useProdigal.getParsedParameters().getStartCommand() != null){
+            this.inputChooser.setInputFilter("Prodigal input", this.useProdigal.getParsedParameters().getValidInputEndings());
         }
         else{
             this.inputChooser.setInputFilter("All", null);

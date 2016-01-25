@@ -1,0 +1,37 @@
+---
+- name: "gzip"
+  startCommand: "sh SCRITPS/gzipPaired.sh"
+  outputEndings:
+  - ".fastq"
+  onlyOutputDirectorySetable: true
+  parameters:
+  - name: "inputPathCommand"
+    position: 0
+    optional: false
+  - name: "outputPathCommand"
+    position: 1
+    optional: false
+  pairedConditions:
+    usedPaired: true
+    regex: "_"
+    upperIndex: -2
+  essentialOutputs:
+  - dynamic: false
+    essentialFor: "MiSeqFASTQ4Newbler_v2.8b"
+    useAll: false
+    useOnly: true
+    name: "Unziped_R1_001.fastq"
+    lowerbound: 0
+    upperbound: 0
+  validInputEndings:
+  - ".fastq.gz"
+- name: "Choose non"
+  onlyOutputDirectorySetable: false
+  parameters:
+  - name: "inputPathCommand"
+    position: 0
+    optional: false
+  - name: "outputPathCommand"
+    position: 0
+    optional: false
+  essentialOutputs: []

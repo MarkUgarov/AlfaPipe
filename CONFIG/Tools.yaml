@@ -1,0 +1,65 @@
+---
+- name: "Prokka"
+  startCommand: "prokka"
+  outputEndings:
+  - ".fa"
+  - ".fna"
+  onlyOutputDirectorySetable: true
+  parameters:
+  - name: "outputPathCommand"
+    command: "--outdir"
+    position: 0
+    optional: false
+  - name: "inputPathCommand"
+    position: -1
+    optional: false
+  - name: "Force"
+    command: "--force"
+    defaultValue: "/empty"
+    position: 1
+    optional: false
+  essentialOutputs: []
+  validInputEndings:
+  - ".fna"
+- name: "Extract Header Info"
+  startCommand: "SCRITPS/extract_header_info.plx"
+  outputEndings:
+  - ".txt"
+  onlyOutputDirectorySetable: false
+  parameters:
+  - name: "inputPathCommand"
+    position: 2
+    optional: false
+  - name: "outputPathCommand"
+    command: "|tee"
+    position: 3
+    optional: false
+  - name: "prepare Excel"
+    command: "-E"
+    defaultValue: "/empty"
+    position: 1
+    optional: true
+  essentialOutputs: []
+  validInputEndings:
+  - ".fna"
+- name: "Assembly Statistics"
+  startCommand: "SCRITPS/assembly_statistics.plx"
+  outputEndings:
+  - ".txt"
+  onlyOutputDirectorySetable: false
+  parameters:
+  - name: "inputPathCommand"
+    position: 2
+    optional: false
+  - name: "outputPathCommand"
+    command: "|tee"
+    position: 3
+    optional: false
+  - name: "Skip listprint"
+    command: "-l"
+    defaultValue: "/empty"
+    position: 1
+    optional: true
+  essentialOutputs: []
+  validInputEndings:
+  - ".txt"
