@@ -1,0 +1,2 @@
+<>< 1453740078276:Log of the Set data1  <- Message from com.mugarov.alfapipe.model.datatypes.SetOfFiles|°|
+<>< 1453740491216:Trying to change directory to C:\Users\Mark\Documents\NetBeansProjects\AlfaPipe\output\data0  <- Message from com.mugarov.alfapipe.model.LogFileManager|°|

@@ -426,11 +426,11 @@ public class InputFile extends File implements Executable{
     private String getCurrentCommandString(String parentOutputDir){
         this.currentParameters.getParsedParameters().sortParameters();
         StringBuilder currentStringBuilder = new StringBuilder();
-        ArrayList<File> currentPaired = new ArrayList<>();
+       
         this.lastRelevantOutputFiles= new ArrayList<>();
         if(this.lastCommand == null){
             this.lastRelevantOutputFiles.add(this);
-            currentPaired = this.pairedWith;
+            this.lastRelevantOutputFiles.addAll(this.pairedWith);
         }
         else{
             boolean addMore = true;
@@ -438,55 +438,50 @@ public class InputFile extends File implements Executable{
                 if(this.preprocessingCommand.useOnlyThisOutput(this.currentParameters)){
                     this.log.appendLine("Preprocessing has specific output for "+this.getName()+" without allowing other outputs.", InputFile.class.getName());
                     this.lastRelevantOutputFiles = this.preprocessingCommand.getSpecifiFilesFor(this.currentParameters, this);
-                    currentPaired = null;
                     addMore = false;
                 }
                 else{
-                    currentPaired.addAll(this.preprocessingCommand.getSpecifiFilesFor(this.currentParameters, this));
+                    this.lastRelevantOutputFiles.addAll(this.preprocessingCommand.getSpecifiFilesFor(this.currentParameters, this));
                 }
             }
             if(this.processingBuilt && this.processingCommand != null && addMore){
                 if(this.processingCommand.useOnlyThisOutput(this.currentParameters)){
                     this.log.appendLine("Processing has specific output for "+this.getName()+" without allowing other outputs.", InputFile.class.getName());
                     this.lastRelevantOutputFiles = this.processingCommand.getSpecifiFilesFor(this.currentParameters, this);
-                    currentPaired = null;
                     addMore =false;
                 }
                 else{
-                    currentPaired.addAll(this.preprocessingCommand.getSpecifiFilesFor(this.currentParameters, this));
+                    this.lastRelevantOutputFiles.addAll(this.preprocessingCommand.getSpecifiFilesFor(this.currentParameters, this));
                 }
             }
             if(this.assemblerBuilt && this.assemblerCommand != null && addMore){
                 if(this.assemblerCommand.useOnlyThisOutput(this.currentParameters)){
                     this.log.appendLine("Assembly has specific output for "+this.getName()+" without allowing other outputs.", InputFile.class.getName());
                     this.lastRelevantOutputFiles = this.assemblerCommand.getSpecifiFilesFor(this.currentParameters, this);
-                    currentPaired = null;
                     addMore =false;
                 }
                 else{
-                   currentPaired.addAll(this.assemblerCommand.getSpecifiFilesFor(this.currentParameters, this));
+                   this.lastRelevantOutputFiles.addAll(this.assemblerCommand.getSpecifiFilesFor(this.currentParameters, this));
                 }
             }
             if(this.readsVsContigsBuilt && this.readsVsContigsCommand != null && addMore){
                 if(this.readsVsContigsCommand.useOnlyThisOutput(this.currentParameters)){
                     this.log.appendLine("Assembly has specific output for "+this.getName()+" without allowing other outputs.", InputFile.class.getName());
                     this.lastRelevantOutputFiles = this.readsVsContigsCommand.getSpecifiFilesFor(this.currentParameters, this);
-                    currentPaired = null;
                     addMore =false;
                 }
                 else{
-                    currentPaired.addAll(this.readsVsContigsCommand.getSpecifiFilesFor(this.currentParameters, this));
+                    this.lastRelevantOutputFiles.addAll(this.readsVsContigsCommand.getSpecifiFilesFor(this.currentParameters, this));
                 }
             }
             if(this.prodigalBuilt && this.prodigalCommand != null && addMore){
                 if(this.prodigalCommand.useOnlyThisOutput(this.currentParameters)){
                     this.log.appendLine("Assembly has specific output for "+this.getName()+" without allowing other outputs.", InputFile.class.getName());
                     this.lastRelevantOutputFiles = this.prodigalCommand.getSpecifiFilesFor(this.currentParameters, this);
-                    currentPaired = null;
                     addMore =false;
                 }
                 else{
-                    currentPaired.addAll(this.prodigalCommand.getSpecifiFilesFor(this.currentParameters, this));
+                    this.lastRelevantOutputFiles.addAll(this.prodigalCommand.getSpecifiFilesFor(this.currentParameters, this));
                 }
             }
             if(addMore && !this.lastCommand.useOnlyThisOutput(this.currentParameters)){ // && lastCommand != null
@@ -494,7 +489,17 @@ public class InputFile extends File implements Executable{
                           
             }
         }
-        for(File file:this.lastRelevantOutputFiles){
+        if(this.lastRelevantOutputFiles.size() > 0){
+            File file = this.lastRelevantOutputFiles.get(0);
+            ArrayList<File> currentPaired = new ArrayList<>();
+            if(this.lastRelevantOutputFiles.size()>1){
+                for(int i=1; i<this.lastRelevantOutputFiles.size(); i++){
+                    currentPaired.add(this.lastRelevantOutputFiles.get(i));
+                }
+            }
+            else{
+                currentPaired=null;
+            }
             this.currentCommand = new ExecutionCommandBuilder(this.log);
             this.currentCommand.buildString(this.currentParameters, file, parentOutputDir, currentPaired, this);
             if(this.currentCommand.getExecutionCommand() == null){
@@ -505,8 +510,9 @@ public class InputFile extends File implements Executable{
                 this.log.appendLine("Command for "+file.getName()+" is "+this.currentCommand.getExecutionCommand(), InputFile.class.getName());
                 currentStringBuilder.append(this.currentCommand.getExecutionCommand());
             }
-                
-           
+        }
+        else{
+            this.log.appendLine("No input files where found for "+this.getName()+" on step "+ this.currentParameters.getName(), InputFile.class.getName());
         }
         return currentStringBuilder.toString();
     }
