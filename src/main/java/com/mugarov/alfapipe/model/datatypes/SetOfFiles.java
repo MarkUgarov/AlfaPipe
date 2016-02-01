@@ -89,6 +89,8 @@ public class SetOfFiles implements Executable, Runnable{
                 inFile.selectPreprocessing(this.usePreprocessing, false);
                 inFile.selectProcessing(this.useProcessing,false); 
                 inFile.selectAssembler(this.useAssembler,false); 
+                inFile.selectReadsVsContigs(this.useReadsVsContigs, false);
+                inFile.selectProdigal(this.useProdigal, false);
                 this.files.add(inFile);
                 this.tab.addFile(file.getAbsolutePath(),file.getName(), new SingleFileListener(inFile, this));
                 this.tab.setValidation(inFile.getAbsolutePath(), inFile.validateFile(), inFile.getValidTools());

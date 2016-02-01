@@ -4,8 +4,6 @@
   outputEndings:
   - ".fa"
   onlyOutputDirectorySetable: false
-  enterCommand: "prodigal enter command"
-  exitCommand: "prodigal exit command"
   parameters:
   - name: "inputPathCommand"
     command: "-i"

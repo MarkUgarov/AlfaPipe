@@ -168,6 +168,9 @@ public class InputFile extends File implements Executable{
         if(this.assemblerParameters != null){
              this.log.appendLine("Assembler of file "+this.getName()+"has been changed to "+this.assemblerParameters.getName(), InputFile.class.getName());
         }
+        else{
+            this.log.appendLine("Assembler of file "+this.getName()+"has been changed to null", InputFile.class.getName());
+        }
         if(this.assemblerParameters != null && validate){
             return this.validateFile();
         }
@@ -181,6 +184,9 @@ public class InputFile extends File implements Executable{
         if(this.readsVsContigsParameters != null){
              this.log.appendLine("ReadsVsContigs of file "+this.getName()+"has been changed to "+this.readsVsContigsParameters.getName(), InputFile.class.getName());
         }
+        else{
+            this.log.appendLine("ReadsVsContigs of file "+this.getName()+"has been changed to null.", InputFile.class.getName());
+        }
         if(this.readsVsContigsParameters != null && validate){
             return this.validateFile();
          }
@@ -193,6 +199,9 @@ public class InputFile extends File implements Executable{
         this.prodigalParameters = param;
         if(this.prodigalParameters != null){
              this.log.appendLine("Prodigal of file "+this.getName()+"has been changed to "+this.prodigalParameters.getName(), InputFile.class.getName());
+        }
+        else{
+            this.log.appendLine("Prodigal of file "+this.getName()+"has been changed to null.", InputFile.class.getName());
         }
         if(this.prodigalParameters != null && validate){
             return this.validateFile();

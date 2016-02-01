@@ -36,8 +36,6 @@ public class ProdigalGenerator implements Generator{
         prodigal.addParameter("add right protein translations","-a" , Pool.PROGRAM_EMPTY_PARAMETER_VALUE, 1, true);
         prodigal.addParameter("write nucleotide sequence", "-d", Pool.PROGRAM_EMPTY_PARAMETER_VALUE, 2, true);
         prodigal.setOnlyOutputDirectorySetable(false);
-        prodigal.setEnterCommand("prodigal enter command");
-        prodigal.setExitCommand("prodigal exit command");
         
         ParseableProgramParameters nullProdigal= new ParseableProgramParameters( "Choose non", 
                                                                 null, 
