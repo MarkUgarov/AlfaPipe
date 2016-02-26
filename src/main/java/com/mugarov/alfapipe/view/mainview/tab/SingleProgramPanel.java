@@ -22,6 +22,7 @@ public class SingleProgramPanel extends JPanel{
     
     private ProgramSelectionPanel selection;
     private ProgramParameterPanel parameters;
+    private boolean isEmpty;
     
    public SingleProgramPanel(){
        this.setDoubleBuffered(true);
@@ -33,26 +34,41 @@ public class SingleProgramPanel extends JPanel{
    
    
    public void initSelection(String name, ProgramListener listener){
-       this.selection = new ProgramSelectionPanel(name,listener,listener.getValidSelections());
+       if(listener.getValidSelections().length>0){
+           this.selection = new ProgramSelectionPanel(name,listener,listener.getValidSelections());
+           this.isEmpty = false;
+       }
+       else{
+           this.selection = new ProgramSelectionPanel();
+       }
        this.add(this.selection, BorderLayout.NORTH);
        this.updateUI();
     }
     
     public void setParameters(String name, ArrayList<InputParameter> parameters, ParameterListener listener){
-        this.removeAll();
-        this.add(this.selection, BorderLayout.NORTH);
-        this.parameters = new ProgramParameterPanel(name, parameters, listener);
-        if(!this.parameters.isEmpty()){
-            this.add(this.parameters, BorderLayout.SOUTH);
+        if(!this.isEmpty){
+            this.removeAll();
+            this.add(this.selection, BorderLayout.NORTH);
+            this.parameters = new ProgramParameterPanel(name, parameters, listener);
+            if(!this.parameters.isEmpty()){
+                this.add(this.parameters, BorderLayout.SOUTH);
+            }
+            this.updateUI();
+        }
+    }
+    
+    public void disableEditing(){
+        if(this.selection != null & !this.isEmpty){
+            this.selection.disableEditing();
+        }
+        if(this.parameters != null && !this.isEmpty){
+            this.parameters.disableEditing();
         }
         this.updateUI();
     }
     
-    public void disableEditing(){
-        this.selection.disableEditing();
-        this.parameters.disableEditing();
-        this.updateUI();
+    public boolean isEmpty(){
+        return this.isEmpty;
     }
-    
     
 }

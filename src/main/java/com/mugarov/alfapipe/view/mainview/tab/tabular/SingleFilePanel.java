@@ -6,7 +6,7 @@
 package com.mugarov.alfapipe.view.mainview.tab.tabular;
 
 import com.mugarov.alfapipe.control.listeners.tabrelated.singlefile.SingleFileListener;
-import com.mugarov.alfapipe.model.Pool;
+import com.mugarov.alfapipe.model.ParameterPool;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import javax.swing.JButton;
@@ -63,7 +63,7 @@ import javax.swing.BorderFactory;
             this.add(this.leftPanel, BorderLayout.WEST); 
             this.add(this.rightPanel, BorderLayout.EAST);  
             
-            this.setPreferredSize( Pool.SINGLEFIlE_DIMENSION);
+            this.setPreferredSize(ParameterPool.SINGLEFIlE_DIMENSION);
             this.setMaximumSize(this.getPreferredSize());
             
             
@@ -83,8 +83,8 @@ import javax.swing.BorderFactory;
             this.leftPanel = new JPanel();
             
             this.delete = new JButton();
-            this.delete.setText(Pool.BUTTON_DELETE_FILE_TEXT);
-            this.delete.setActionCommand(Pool.BUTTON_DELETE_FILE_COMMAND);
+            this.delete.setText(ParameterPool.BUTTON_DELETE_FILE_TEXT);
+            this.delete.setActionCommand(ParameterPool.BUTTON_DELETE_FILE_COMMAND);
             this.delete.addActionListener(this.fileListener);
             this.leftPanel.add(delete);
             
@@ -99,7 +99,7 @@ import javax.swing.BorderFactory;
         private void creatRightPanel(){
             this.rightPanel = new JPanel();
             
-            for(String tool: Pool.GENERTATOR_TOOLS.getAvailableNames()){
+            for(String tool: ParameterPool.GENERTATOR_TOOLS.getAvailableNames()){
                 JCheckBox toolBox= new JCheckBox(tool);
                 toolBox.addItemListener(this.fileListener);
                 toolBox.setSelected(true);
@@ -134,14 +134,14 @@ import javax.swing.BorderFactory;
         
         public void setValidation(boolean fileValid, ArrayList<String> validTools){
 
-            this.leftPanel.setBackground(fileValid?Pool.COLOR_VALID:Pool.COLOR_INVALID);
+            this.leftPanel.setBackground(fileValid?ParameterPool.COLOR_VALID:ParameterPool.COLOR_INVALID);
 
             for(JCheckBox box:this.tools){
                 if(validTools.contains(box.getText()) == true){
-                    box.setBackground(Pool.COLOR_VALID);
+                    box.setBackground(ParameterPool.COLOR_VALID);
                 }
                 else{
-                    box.setBackground(Pool.COLOR_INVALID);
+                    box.setBackground(ParameterPool.COLOR_INVALID);
                 }
             }
         }
@@ -154,14 +154,14 @@ import javax.swing.BorderFactory;
     }
 
     public void setProgressed(boolean success) {
-        this.setBackground(success?Pool.COLOR_SUCCESS:Pool.COLOR_FAILURE);
+        this.setBackground(success?ParameterPool.COLOR_SUCCESS:ParameterPool.COLOR_FAILURE);
     }
     
     public void setToolsProgressed(ArrayList<String> tools, ArrayList<Boolean> success){
         for(int i=0; i<tools.size(); i++){
             for(JCheckBox box:this.tools){
                 if(box.getText().equals(tools.get(i))){
-                    box.setBackground(success.get(i) ? Pool.COLOR_SUCCESS:Pool.COLOR_FAILURE);
+                    box.setBackground(success.get(i) ? ParameterPool.COLOR_SUCCESS:ParameterPool.COLOR_FAILURE);
                 }
             }
         }

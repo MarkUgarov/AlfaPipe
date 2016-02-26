@@ -5,7 +5,7 @@
  */
 package com.mugarov.alfapipe.control.listeners.tabrelated;
 
-import com.mugarov.alfapipe.model.Pool;
+import com.mugarov.alfapipe.model.ParameterPool;
 import com.mugarov.alfapipe.model.datatypes.SetOfFiles;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
@@ -49,7 +49,7 @@ public class ToolSelectListener implements ItemListener{
 
     public int getMaxNameLength() {
         int maxLength = 0;
-        String[] names = Pool.GENERTATOR_TOOLS.getAvailableNames();
+        String[] names = ParameterPool.GENERTATOR_TOOLS.getAvailableNames();
         for(String name:names){
             if(name.length()<maxLength){
                 maxLength=name.length();

@@ -5,7 +5,7 @@
  */
 package com.mugarov.alfapipe.view;
 
-import com.mugarov.alfapipe.model.Pool;
+import com.mugarov.alfapipe.model.ParameterPool;
 import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
@@ -39,7 +39,7 @@ public class MultiFileChooser extends JFileChooser{
             this.setFileFilter(filter);
             this.filter.setName("Fuck you");
         }
-        else if(valids.length == 1 && valids[0].equals(Pool.PROGRAM_DIRECTORY_VALUE)){
+        else if(valids.length == 1 && valids[0].equals(ParameterPool.PROGRAM_DIRECTORY_VALUE)){
             this.filter.setName(name);
             this.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         }
@@ -47,7 +47,7 @@ public class MultiFileChooser extends JFileChooser{
             this.filter.setName(name);
             boolean dirFound=false;
             for(String v:valids){
-                if(v.equals(Pool.PROGRAM_DIRECTORY_VALUE)){
+                if(v.equals(ParameterPool.PROGRAM_DIRECTORY_VALUE)){
                     dirFound=true;
                 }
             }

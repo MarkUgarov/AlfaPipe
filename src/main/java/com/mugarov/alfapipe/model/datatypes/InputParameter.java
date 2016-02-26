@@ -6,7 +6,7 @@
  */
 package com.mugarov.alfapipe.model.datatypes;
 
-import com.mugarov.alfapipe.model.Pool;
+import com.mugarov.alfapipe.model.ParameterPool;
 import com.mugarov.alfapipe.model.programparse.datatypes.ParameterField;
 
 /**
@@ -25,7 +25,7 @@ public class InputParameter {
     public InputParameter(ParameterField field, boolean shown){
         this.name = field.getName();
         this.value = field.getDefaultValue();
-        if(this.value != null &&this.value.equals(Pool.PROGRAM_EMPTY_PARAMETER_VALUE)){
+        if(this.value != null &&this.value.equals(ParameterPool.PROGRAM_EMPTY_PARAMETER_VALUE)){
             this.isBoolean = true;
         }
         else{

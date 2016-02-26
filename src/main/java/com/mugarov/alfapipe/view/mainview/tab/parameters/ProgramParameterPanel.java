@@ -7,7 +7,7 @@ package com.mugarov.alfapipe.view.mainview.tab.parameters;
 
 import com.mugarov.alfapipe.control.listeners.tabrelated.parameters.ParameterListener;
 import com.mugarov.alfapipe.model.datatypes.InputParameter;
-import com.mugarov.alfapipe.model.Pool;
+import com.mugarov.alfapipe.model.ParameterPool;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
@@ -50,20 +50,20 @@ public class ProgramParameterPanel extends JPanel{
         this.setLayout(new BorderLayout());
         
         this.emptyPanel = new JPanel();
-        this.emptyPanel.setPreferredSize(Pool.LABEL_OFFSET);
+        this.emptyPanel.setPreferredSize(ParameterPool.LABEL_OFFSET);
 
         
         this.namePanel = new JPanel();
         this.namePanel.setLayout(new FlowLayout());
         this.nameLabel = new JLabel(this.name);
-        this.nameLabel.setPreferredSize(Pool.LABEL_DIMENSION);
+        this.nameLabel.setPreferredSize(ParameterPool.LABEL_DIMENSION);
         
         this.namePanel.add(this.emptyPanel);
         this.namePanel.add(this.nameLabel);
         this.add(this.namePanel, BorderLayout.WEST);
         
         
-        this.maxColumns = Pool.PARAMETERS_IN_ONE_ROW;
+        this.maxColumns = ParameterPool.PARAMETERS_IN_ONE_ROW;
         this.maxRows = parameters.size()/this.maxColumns;
         this.listener = listener;
         

@@ -5,7 +5,8 @@
  */
 package com.mugarov.alfapipe.view.mainview;
 
-import com.mugarov.alfapipe.model.Pool;
+import com.mugarov.alfapipe.model.ComponentPool;
+import com.mugarov.alfapipe.model.ParameterPool;
 import com.mugarov.alfapipe.view.mainview.tab.DataTabbedPane;
 import java.awt.BorderLayout;
 import java.awt.Panel;
@@ -23,8 +24,6 @@ public class MainContentPane extends Panel{
     private final Panel southPanel;
     private final JButton addSet;
     private final JButton start;
-
-    private Pool pool;
     
     
     
@@ -33,16 +32,20 @@ public class MainContentPane extends Panel{
         this.layout = new BorderLayout();
         this.setLayout(layout);
         
+        
         this.tabs = new DataTabbedPane();
         
         this.southPanel = new Panel(new BorderLayout());
-        this.start = Pool.MAIN_BUTTON_POOL.getStartButton();
-        this.addSet = Pool.MAIN_BUTTON_POOL.getNewSetButton();
+       
+        this.addSet = ComponentPool.MAIN_BUTTON_POOL.getNewSetButton();
+        this.start = ComponentPool.MAIN_BUTTON_POOL.getStartButton();
+        
         this.init();
 
     }
     
     private void init(){
+        
         this.add(this.tabs, BorderLayout.CENTER);
         this.southPanel.add(this.addSet, BorderLayout.WEST);
         this.southPanel.add(this.start, BorderLayout.EAST);

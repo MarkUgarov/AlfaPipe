@@ -5,6 +5,7 @@
  */
 package com.mugarov.alfapipe.model;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.ProcessBuilder.Redirect;
 import java.util.ArrayList;
@@ -18,10 +19,15 @@ import java.util.logging.Logger;
 public class Executioner {
 
     private LogFileManager log;
+    private File workfile;
     
 
     public Executioner(LogFileManager logManager) {
         this.log = logManager;
+        this.workfile = new File(ParameterPool.WORKING_DIRECTORY);
+        if(!this.workfile.exists() || !this.workfile.isDirectory()){
+            this.workfile.mkdirs();
+        }
     }
     /**
      * You can give any string, but it should be executable on unix. 
@@ -40,7 +46,6 @@ public class Executioner {
         for(String step:input.split("\n")){
             String[] commandsArray = step.split(" ");
             ArrayList<String> commandList = new ArrayList<>(commandsArray.length);
-//            commandList.add("pwd");
             for(String command:commandsArray){
                 if(command.trim().length()>0){
                     commandList.add(command.trim());
@@ -48,15 +53,19 @@ public class Executioner {
             }
 
             ProcessBuilder pb = new ProcessBuilder(commandList);
-            log.appendLine(Pool.LOG_COMMAND_PREFIX+step, Executioner.class.getName());
+            log.appendLine(ParameterPool.LOG_COMMAND_PREFIX+step, Executioner.class.getName());
             pb.redirectErrorStream(true);
             pb.redirectOutput(Redirect.appendTo(this.log.getLogfile()));
+            
+            
+            pb.directory(this.workfile);
 
             
             Process process=null;
             try {
                 process = pb.start();
             } catch (IOException ex) {
+                this.log.appendLine("Error while executing.", Executioner.class.getName());
                 Logger.getLogger(Executioner.class.getName()).log(Level.SEVERE, null, ex);
                 return false;
             }
@@ -68,27 +77,6 @@ public class Executioner {
                 Logger.getLogger(Executioner.class.getName()).log(Level.SEVERE, null, ex);
             }
             
-//            String out = null; 
-//            try {
-//                out = IOUtils.toString(process.getInputStream());
-//                FileUtils.writeStringToFile(this., out,true);
-//            } catch (IOException ex) {
-//                Logger.getLogger(Executioner.class.getName()).log(Level.SEVERE, null, ex);
-//            }
-//            if(out==null){
-//                System.err.println("ERROR by getting input stream and writing it.");
-//            }
-
-//            String err = "noError";
-//            try {
-//                err=IOUtils.toString(process.getErrorStream());
-//            } catch (IOException ex) {
-//                Logger.getLogger(Executioner.class.getName()).log(Level.SEVERE, null, ex);
-//            }
-//            if(!err.equals("noError")&&err.length()>0){
-//                success=false;
-//                System.out.println("Error stream: "+err);
-//            }
         }
 
         return success;

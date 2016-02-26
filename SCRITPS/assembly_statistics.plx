@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
 # A simple script to extract all the statistics data needed for
 # a quick evaluation of the assembled data 
 

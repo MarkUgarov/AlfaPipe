@@ -5,7 +5,7 @@
  */
 package com.mugarov.alfapipe.control.listeners.tabrelated.radiobuttons;
 
-import com.mugarov.alfapipe.model.Pool;
+import com.mugarov.alfapipe.model.ParameterPool;
 import com.mugarov.alfapipe.model.datatypes.SetOfFiles;
 import com.mugarov.alfapipe.model.programparse.datatypes.ParseableProgramParameters;
 import java.awt.event.ActionEvent;
@@ -20,9 +20,9 @@ public class PreprocessingListener implements ProgramListener{
     
     public PreprocessingListener(){
         this.fileSet = null;
-        String[] names = Pool.GENERATOR_PREPROCESSING.getAvailableNames();
+        String[] names = ParameterPool.GENERATOR_PREPROCESSING.getAvailableNames();
         if(names.length > 0){
-            this.selectedPreprocessing = Pool.GENERATOR_PREPROCESSING.get(names[0]);
+            this.selectedPreprocessing = ParameterPool.GENERATOR_PREPROCESSING.get(names[0]);
         }
         else{
             this.selectedPreprocessing = null;
@@ -32,7 +32,7 @@ public class PreprocessingListener implements ProgramListener{
     @Override
     public void actionPerformed(ActionEvent ae) {
 //       System.out.println(ae.getActionCommand() +" has been performed");
-       this.selectedPreprocessing = Pool.GENERATOR_PREPROCESSING.get(ae.getActionCommand());
+       this.selectedPreprocessing = ParameterPool.GENERATOR_PREPROCESSING.get(ae.getActionCommand());
        if(this.fileSet != null){
             this.fileSet.setPreprocessing(this.selectedPreprocessing);
         }
@@ -40,9 +40,9 @@ public class PreprocessingListener implements ProgramListener{
     
     @Override
     public void setInitialParameters(){
-       String[] names = Pool.GENERATOR_PREPROCESSING.getAvailableNames();
+       String[] names = ParameterPool.GENERATOR_PREPROCESSING.getAvailableNames();
         if(names.length > 0){
-            this.selectedPreprocessing = Pool.GENERATOR_PREPROCESSING.get(names[0]);
+            this.selectedPreprocessing = ParameterPool.GENERATOR_PREPROCESSING.get(names[0]);
         }
         else{
             this.selectedPreprocessing = null;
@@ -66,12 +66,12 @@ public class PreprocessingListener implements ProgramListener{
     
     @Override
     public String[] getValidSelections(){
-        return Pool.GENERATOR_PREPROCESSING.getAvailableNames();
+        return ParameterPool.GENERATOR_PREPROCESSING.getAvailableNames();
     }
 
     public int getMaxNameLength() {
-        int maxLength = Pool.LABEL_PREPROCESSING.length();
-        String[] names = Pool.GENERATOR_PREPROCESSING.getAvailableNames();
+        int maxLength = ParameterPool.LABEL_PREPROCESSING.length();
+        String[] names = ParameterPool.GENERATOR_PREPROCESSING.getAvailableNames();
         for(String name:names){
             if(name.length()<maxLength){
                 maxLength=name.length();

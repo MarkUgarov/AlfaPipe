@@ -5,7 +5,8 @@
  */
 package com.mugarov.alfapipe.view;
 
-import com.mugarov.alfapipe.model.Pool;
+import com.mugarov.alfapipe.model.ComponentPool;
+import com.mugarov.alfapipe.model.ParameterPool;
 
 /**
  *
@@ -16,10 +17,10 @@ public class MainViewButtonPool {
     private final Button addSet;
     
     public MainViewButtonPool(){
-        this.start = new Button(Pool.BUTTON_START_TEXT, Pool.BUTTON_START_COMMAND);
-        this.addSet = new Button(Pool.BUTTON_ADD_DATA_SET_TEXT, Pool.BUTTON_ADD_DATA_SET_COMMAND);
-        this.start.addActionListener(Pool.LISTENER_BUTTON);
-        this.addSet.addActionListener(Pool.LISTENER_BUTTON);
+        this.start = new Button(ParameterPool.BUTTON_START_TEXT, ParameterPool.BUTTON_START_COMMAND);
+        this.addSet = new Button(ParameterPool.BUTTON_ADD_DATA_SET_TEXT, ParameterPool.BUTTON_ADD_DATA_SET_COMMAND);
+        this.start.addActionListener(ComponentPool.LISTENER_BUTTON);
+        this.addSet.addActionListener(ComponentPool.LISTENER_BUTTON);
          
     }
     

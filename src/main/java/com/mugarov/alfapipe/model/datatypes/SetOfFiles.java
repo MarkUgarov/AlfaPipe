@@ -9,7 +9,7 @@ import com.mugarov.alfapipe.control.listeners.tabrelated.parameters.ParameterLis
 import com.mugarov.alfapipe.control.listeners.tabrelated.singlefile.SingleFileListener;
 import com.mugarov.alfapipe.model.Executioner;
 import com.mugarov.alfapipe.model.LogFileManager;
-import com.mugarov.alfapipe.model.Pool;
+import com.mugarov.alfapipe.model.ParameterPool;
 import com.mugarov.alfapipe.model.programparse.datatypes.ParseableProgramParameters;
 import com.mugarov.alfapipe.view.MultiFileChooser;
 import com.mugarov.alfapipe.view.OutputDirectoryChooser;
@@ -47,7 +47,7 @@ public class SetOfFiles implements Executable, Runnable{
     public SetOfFiles(String id, Tab tab){
         this.id = id;
         this.name = id;
-        this.outputDirectory = new File(Pool.FILE_ORIGIN_DEFAULT, id);
+        this.outputDirectory = new File(ParameterPool.FILE_ORIGIN_DEFAULT, id);
         this.files = new ArrayList<>();
         this.tab = tab;
         this.inputChooser = new MultiFileChooser();
@@ -56,8 +56,8 @@ public class SetOfFiles implements Executable, Runnable{
         this.log = new LogFileManager(this.outputDirectory.getAbsolutePath());
         this.log.appendLine("Log of the Set "+this.id, SetOfFiles.class.getName());
         this.availableTools = new ArrayList<>();
-        for(String toolName: Pool.GENERTATOR_TOOLS.getAvailableNames()){
-            this.availableTools.add(new ProgramParameterSet(Pool.GENERTATOR_TOOLS.get(toolName)));
+        for(String toolName: ParameterPool.GENERTATOR_TOOLS.getAvailableNames()){
+            this.availableTools.add(new ProgramParameterSet(ParameterPool.GENERTATOR_TOOLS.get(toolName)));
         }
        
         for(ProgramParameterSet par:this.availableTools){

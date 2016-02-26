@@ -5,10 +5,9 @@
  */
 package com.mugarov.alfapipe.view.mainview;
 
-import com.mugarov.alfapipe.model.Pool;
+import com.mugarov.alfapipe.model.ParameterPool;
 import com.mugarov.alfapipe.control.listeners.MenuListener;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import com.mugarov.alfapipe.model.ComponentPool;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -34,12 +33,12 @@ public class MainMenuBar extends JMenuBar{
     private void init(){
         
         
-        this.main = new JMenu(Pool.MENU_MAIN);
+        this.main = new JMenu(ParameterPool.MENU_MAIN);
         this.add(main);
         
-        this.exit = new JMenuItem(Pool.MENU_EXIT);
-        this.exit.setActionCommand(Pool.MENU_EXIT);
-        this.listener = Pool.LISTENER_MENU;
+        this.exit = new JMenuItem(ParameterPool.MENU_EXIT);
+        this.exit.setActionCommand(ParameterPool.MENU_EXIT);
+        this.listener = ComponentPool.LISTENER_MENU;
         this.exit.addActionListener(this.listener);
         this.main.add(exit);
         

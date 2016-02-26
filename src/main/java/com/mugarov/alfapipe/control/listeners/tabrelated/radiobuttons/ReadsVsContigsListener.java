@@ -5,7 +5,7 @@
  */
 package com.mugarov.alfapipe.control.listeners.tabrelated.radiobuttons;
 
-import com.mugarov.alfapipe.model.Pool;
+import com.mugarov.alfapipe.model.ParameterPool;
 import com.mugarov.alfapipe.model.datatypes.SetOfFiles;
 import com.mugarov.alfapipe.model.programparse.datatypes.ParseableProgramParameters;
 import java.awt.event.ActionEvent;
@@ -20,9 +20,9 @@ public class ReadsVsContigsListener implements ProgramListener{
     
     public ReadsVsContigsListener(){
         this.fileSet = null;
-        String[] names = Pool.GENERATOR_READS_VS_CONTIGS.getAvailableNames();
+        String[] names = ParameterPool.GENERATOR_READS_VS_CONTIGS.getAvailableNames();
         if(names.length > 0){
-            this.selectedReadsVsContigs = Pool.GENERATOR_READS_VS_CONTIGS.get(names[0]);
+            this.selectedReadsVsContigs = ParameterPool.GENERATOR_READS_VS_CONTIGS.get(names[0]);
         }
         else{
             this.selectedReadsVsContigs = null;
@@ -33,7 +33,7 @@ public class ReadsVsContigsListener implements ProgramListener{
     @Override
     public void actionPerformed(ActionEvent ae) {
 //       System.out.println(ae.getActionCommand() +" has been performed");
-       this.selectedReadsVsContigs = Pool.GENERATOR_READS_VS_CONTIGS.get(ae.getActionCommand());
+       this.selectedReadsVsContigs = ParameterPool.GENERATOR_READS_VS_CONTIGS.get(ae.getActionCommand());
        if(this.fileSet != null){
             this.fileSet.setReadsVsContigs(this.selectedReadsVsContigs);
         }
@@ -41,9 +41,9 @@ public class ReadsVsContigsListener implements ProgramListener{
     
      @Override
     public void setInitialParameters(){
-       String[] names = Pool.GENERATOR_READS_VS_CONTIGS.getAvailableNames();
+       String[] names = ParameterPool.GENERATOR_READS_VS_CONTIGS.getAvailableNames();
         if(names.length > 0){
-            this.selectedReadsVsContigs = Pool.GENERATOR_READS_VS_CONTIGS.get(names[0]);
+            this.selectedReadsVsContigs = ParameterPool.GENERATOR_READS_VS_CONTIGS.get(names[0]);
         }
         else{
             this.selectedReadsVsContigs = null;
@@ -66,12 +66,12 @@ public class ReadsVsContigsListener implements ProgramListener{
     
       @Override
     public String[] getValidSelections(){
-        return Pool.GENERATOR_READS_VS_CONTIGS.getAvailableNames();
+        return ParameterPool.GENERATOR_READS_VS_CONTIGS.getAvailableNames();
     }
 
     public int getMaxNameLength() {
-        int maxLength = Pool.LABEL_READS_VS_CONTIGS.length();
-        String[] names = Pool.GENERATOR_READS_VS_CONTIGS.getAvailableNames();
+        int maxLength = ParameterPool.LABEL_READS_VS_CONTIGS.length();
+        String[] names = ParameterPool.GENERATOR_READS_VS_CONTIGS.getAvailableNames();
         for(String name:names){
             if(name.length()<maxLength){
                 maxLength=name.length();

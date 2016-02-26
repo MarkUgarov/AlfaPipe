@@ -24,7 +24,7 @@ public class LogFileManager {
     
     public LogFileManager(String parentDirectory){
         File parent = new File(parentDirectory);
-        this.logfile = new File(parent, Pool.FILE_LOGFILE_NAME);
+        this.logfile = new File(parent, ParameterPool.FILE_LOGFILE_NAME);
         if( !this.logfile.getParentFile().exists() || !this.logfile.getParentFile().isDirectory() ){
             System.out.println("Trying to create directory "+parent.getAbsolutePath());
             parent.mkdirs();
@@ -48,7 +48,7 @@ public class LogFileManager {
             }
         }
         if(isOverwritten){
-            this.appendLine(Pool.LOG_OVERWRITTEN_HINT, LogFileManager.class.getName());
+            this.appendLine(ParameterPool.LOG_OVERWRITTEN_HINT, LogFileManager.class.getName());
         }
     }
     
@@ -58,13 +58,13 @@ public class LogFileManager {
             this.writer = new FileWriter(this.logfile.getAbsoluteFile(), true);
             this.bufferedWriter = new BufferedWriter(this.writer);
         
-            this.bufferedWriter.write(Pool.LOG_LINE_PREFIX);
+            this.bufferedWriter.write(ParameterPool.LOG_LINE_PREFIX);
             this.bufferedWriter.append(System.currentTimeMillis()+"");
             this.bufferedWriter.append(":");
             this.bufferedWriter.write(args.trim());
-            this.bufferedWriter.write(Pool.LOG_SOURCE_HINT);
+            this.bufferedWriter.write(ParameterPool.LOG_SOURCE_HINT);
             this.bufferedWriter.write(source);
-            this.bufferedWriter.write(Pool.LOG_LINE_POSTFIX);
+            this.bufferedWriter.write(ParameterPool.LOG_LINE_POSTFIX);
             this.bufferedWriter.newLine();
             
             this.bufferedWriter.flush();
@@ -86,12 +86,12 @@ public class LogFileManager {
     
     public void setParentDirectory(String parentDir){
         String old = this.logfile.getAbsolutePath();
-        this.appendLine(Pool.LOG_CHANGE_TO+parentDir, LogFileManager.class.getName());
+        this.appendLine(ParameterPool.LOG_CHANGE_TO+parentDir, LogFileManager.class.getName());
         File parent = new File(parentDir);
         if( !parent.exists() || !parent.isDirectory() ){
             parent.mkdirs();
         }
-        this.logfile = new File(parent, Pool.FILE_LOGFILE_NAME);
+        this.logfile = new File(parent, ParameterPool.FILE_LOGFILE_NAME);
         boolean isOverwritten = false;
         if(!this.logfile.exists() || this.logfile.isDirectory()){
             try {
@@ -109,9 +109,9 @@ public class LogFileManager {
                 java.util.logging.Logger.getLogger(LogFileManager.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        this.appendLine(Pool.LOG_CHANGED_FROM+old, LogFileManager.class.getName());
+        this.appendLine(ParameterPool.LOG_CHANGED_FROM+old, LogFileManager.class.getName());
         if(isOverwritten){
-            this.appendLine(Pool.LOG_OVERWRITTEN_HINT, LogFileManager.class.getName());
+            this.appendLine(ParameterPool.LOG_OVERWRITTEN_HINT, LogFileManager.class.getName());
         }
     }
     

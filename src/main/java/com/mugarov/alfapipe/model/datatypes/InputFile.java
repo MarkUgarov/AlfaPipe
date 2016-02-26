@@ -7,7 +7,7 @@ package com.mugarov.alfapipe.model.datatypes;
 
 import com.mugarov.alfapipe.model.ExecutionCommandBuilder;
 import com.mugarov.alfapipe.model.LogFileManager;
-import com.mugarov.alfapipe.model.Pool;
+import com.mugarov.alfapipe.model.ParameterPool;
 import com.mugarov.alfapipe.model.programparse.datatypes.ParseableProgramParameters;
 import java.io.File;
 import java.util.ArrayList;
@@ -84,8 +84,8 @@ public class InputFile extends File implements Executable{
          this.assemblerParameters = null;
         this.readsVsContigsParameters = null;
         this.prodigalParameters = null;
-        for(String tool:Pool.GENERTATOR_TOOLS.getAvailableNames()){
-            this.tools.add(new ProgramParameterSet(Pool.GENERTATOR_TOOLS.get(tool)));
+        for(String tool:ParameterPool.GENERTATOR_TOOLS.getAvailableNames()){
+            this.tools.add(new ProgramParameterSet(ParameterPool.GENERTATOR_TOOLS.get(tool)));
         }
         this.toolSelected = new boolean[this.tools.size()];
         this.log = logManager;
@@ -417,8 +417,8 @@ public class InputFile extends File implements Executable{
     
     public ArrayList<String> getValidTools(){
         ArrayList<String> valids = new ArrayList<>();
-        for(String pName:Pool.GENERTATOR_TOOLS.getAvailableNames()){
-            if(this.toolIsValid(Pool.GENERTATOR_TOOLS.get(pName))){
+        for(String pName:ParameterPool.GENERTATOR_TOOLS.getAvailableNames()){
+            if(this.toolIsValid(ParameterPool.GENERTATOR_TOOLS.get(pName))){
                 valids.add(pName);
             }
         }
@@ -512,7 +512,7 @@ public class InputFile extends File implements Executable{
             this.currentCommand = new ExecutionCommandBuilder(this.log);
             this.currentCommand.buildString(this.currentParameters, file, parentOutputDir, currentPaired, this);
             if(this.currentCommand.getExecutionCommand() == null){
-                currentStringBuilder.append(Pool.MESSAGE_PREFIX+"no program was selected for "+file.getName()+"\n");
+                currentStringBuilder.append(ParameterPool.MESSAGE_PREFIX+"no program was selected for "+file.getName()+"\n");
                 this.log.appendLine("Null command detected for "+file.getName(), InputFile.class.getName());
             }
             else{
@@ -536,7 +536,7 @@ public class InputFile extends File implements Executable{
     public String getPreprocessingCommand(String parentOutputDir){
         String ret;
         if(this.preprocessingParameters.getParsedParameters().getStartCommand() == null){
-            ret = Pool.MESSAGE_PREFIX+Pool.MESSAGE_PREPROCESSING_IS_NULL;
+            ret = ParameterPool.MESSAGE_PREFIX+ParameterPool.MESSAGE_PREPROCESSING_IS_NULL;
         }
         else{
             this.currentParameters = this.preprocessingParameters;
@@ -557,7 +557,7 @@ public class InputFile extends File implements Executable{
     public String getProcessingCommand(String parentOutputDir){
         String ret;
         if(this.processingParameters.getParsedParameters().getStartCommand() == null){
-            ret = Pool.MESSAGE_PREFIX+Pool.MESSAGE_PROCESSING_IS_NULL;
+            ret = ParameterPool.MESSAGE_PREFIX+ParameterPool.MESSAGE_PROCESSING_IS_NULL;
         }
         else{
             this.currentParameters = this.processingParameters;
@@ -573,7 +573,7 @@ public class InputFile extends File implements Executable{
     public String getAssemblerCommand(String parentOutputDir){
         String ret;
         if(this.assemblerParameters.getParsedParameters().getStartCommand() == null){
-            ret = Pool.MESSAGE_PREFIX+Pool.MESSAGE_ASSEMBLER_IS_NULL;
+            ret = ParameterPool.MESSAGE_PREFIX+ParameterPool.MESSAGE_ASSEMBLER_IS_NULL;
         }
         else{
             this.currentParameters = this.assemblerParameters;
@@ -594,7 +594,7 @@ public class InputFile extends File implements Executable{
     public String getReadsVsContigsCommand(String parentOutputDir){
         String ret;
         if(this.readsVsContigsParameters.getParsedParameters().getStartCommand() == null){
-            ret = Pool.MESSAGE_PREFIX+Pool.MESSAGE_READSVSCONTIGS_IS_NULL;
+            ret = ParameterPool.MESSAGE_PREFIX+ParameterPool.MESSAGE_READSVSCONTIGS_IS_NULL;
         }
         else{
             this.currentParameters = this.readsVsContigsParameters;
@@ -615,7 +615,7 @@ public class InputFile extends File implements Executable{
     public String getProdigalCommand(String parentOutputDir){
         String ret;
         if(this.prodigalParameters.getParsedParameters().getStartCommand() == null){
-            return Pool.MESSAGE_PREFIX+Pool.MESSAGE_READSVSCONTIGS_IS_NULL;
+            return ParameterPool.MESSAGE_PREFIX+ParameterPool.MESSAGE_READSVSCONTIGS_IS_NULL;
         }
         else{
             this.currentParameters = this.prodigalParameters;
@@ -646,8 +646,8 @@ public class InputFile extends File implements Executable{
             }
         }
         if(ret.size() ==0){
-            this.log.appendLine(Pool.LOG_WARNING+"Input file "+this.getName() +" has no tool to execute.", InputFile.class.getName());
-            ret.add(Pool.MESSAGE_PREFIX+Pool.MESSAGE_TOOL_IS_NULL);
+            this.log.appendLine(ParameterPool.LOG_WARNING+"Input file "+this.getName() +" has no tool to execute.", InputFile.class.getName());
+            ret.add(ParameterPool.MESSAGE_PREFIX+ParameterPool.MESSAGE_TOOL_IS_NULL);
 
         }
         this.toolsBuilt = true;

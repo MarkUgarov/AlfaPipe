@@ -6,7 +6,7 @@
 package com.mugarov.alfapipe.view.mainview.tab.tabular;
 
 import com.mugarov.alfapipe.control.listeners.tabrelated.TabListenerBag;
-import com.mugarov.alfapipe.model.Pool;
+import com.mugarov.alfapipe.model.ParameterPool;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.util.ArrayList;
@@ -58,7 +58,7 @@ public class TopPanel extends JPanel{
     
      private void creatRightPanel(){
             this.rightPanel = new JPanel();
-             for(String tool: Pool.GENERTATOR_TOOLS.getAvailableNames()){
+             for(String tool: ParameterPool.GENERTATOR_TOOLS.getAvailableNames()){
                 JCheckBox toolBox= new JCheckBox(tool);
                 toolBox.addItemListener(this.listenerBag.getToolListener());
                 toolBox.setSelected(true);

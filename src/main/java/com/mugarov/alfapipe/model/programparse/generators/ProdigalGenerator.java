@@ -5,7 +5,7 @@
  */
 package com.mugarov.alfapipe.model.programparse.generators;
 
-import com.mugarov.alfapipe.model.Pool;
+import com.mugarov.alfapipe.model.ParameterPool;
 import com.mugarov.alfapipe.model.programparse.datatypes.ParseableProgramParameters;
 import java.util.ArrayList;
 
@@ -21,11 +21,11 @@ public class ProdigalGenerator implements Generator{
      
     public ProdigalGenerator(){
         this.defaultList = new ArrayList<>();       
-        this.localFilePath = Pool.PATH_PRODIGAL_LIST;
+        this.localFilePath = ParameterPool.PATH_PRODIGAL_LIST;
 
         String[] endings = {".fa", ".fasta", ".fna"};
         String[] outputEnding = new String[]{".fa"};
-        ParseableProgramParameters prodigal = new ParseableProgramParameters( Pool.NAME_DEFAULT_PRODIGAL,
+        ParseableProgramParameters prodigal = new ParseableProgramParameters( ParameterPool.NAME_DEFAULT_PRODIGAL,
                                                                 "prodigal", 
                                                                 "-i",
                                                                 -2,
@@ -33,8 +33,8 @@ public class ProdigalGenerator implements Generator{
                                                                 -1,
                                                                 endings,
                                                                 outputEnding);
-        prodigal.addParameter("add right protein translations","-a" , Pool.PROGRAM_EMPTY_PARAMETER_VALUE, 1, true);
-        prodigal.addParameter("write nucleotide sequence", "-d", Pool.PROGRAM_EMPTY_PARAMETER_VALUE, 2, true);
+        prodigal.addParameter("add right protein translations","-a" , ParameterPool.PROGRAM_EMPTY_PARAMETER_VALUE, 1, true);
+        prodigal.addParameter("write nucleotide sequence", "-d", ParameterPool.PROGRAM_EMPTY_PARAMETER_VALUE, 2, true);
         prodigal.setOnlyOutputDirectorySetable(false);
         
         ParseableProgramParameters nullProdigal= new ParseableProgramParameters( "Choose non", 

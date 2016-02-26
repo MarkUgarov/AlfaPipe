@@ -6,7 +6,7 @@
 package com.mugarov.alfapipe.model.programparse.datatypes;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.mugarov.alfapipe.model.Pool;
+import com.mugarov.alfapipe.model.ParameterPool;
 import com.mugarov.alfapipe.model.programparse.ParameterSorter;
 import java.util.ArrayList;
 
@@ -130,13 +130,13 @@ public class ParseableProgramParameters{
     public void setParameters(ArrayList<ParameterField> parameters) {
         this.parameters = parameters;
         for (ParameterField p:this.parameters){
-            if(p.getName().equals(Pool.PROGRAM_INPUT_PATH_SET_PARAMETER_NAME)){
+            if(p.getName().equals(ParameterPool.PROGRAM_INPUT_PATH_SET_PARAMETER_NAME)){
                 this.inputPathCommand = p;
             }
-            else if(p.getName().equals(Pool.PROGRAM_OUTPUT_PATH_SET_PARAMETER_NAME)){
+            else if(p.getName().equals(ParameterPool.PROGRAM_OUTPUT_PATH_SET_PARAMETER_NAME)){
                 this.outputPathCommand = p;
             }
-            else if(p.getName().equals(Pool.PROGRAM_PAIRED_PARAMETER_NAME)){
+            else if(p.getName().equals(ParameterPool.PROGRAM_PAIRED_PARAMETER_NAME)){
                 this.pairedCommand = p;
             }
         }
@@ -160,7 +160,7 @@ public class ParseableProgramParameters{
     @JsonIgnore
     public void setInputPathCommand(String command, int position){
         this.setInputPathCommand(new ParameterField(
-                                    Pool.PROGRAM_INPUT_PATH_SET_PARAMETER_NAME, 
+                                    ParameterPool.PROGRAM_INPUT_PATH_SET_PARAMETER_NAME, 
                                     command,
                                     null,
                                     position,
@@ -183,7 +183,7 @@ public class ParseableProgramParameters{
     @JsonIgnore
     public void setOuputPathCommand(String command, int position){
          this.setOutputPathCommand(new ParameterField(
-                                    Pool.PROGRAM_OUTPUT_PATH_SET_PARAMETER_NAME, 
+                                    ParameterPool.PROGRAM_OUTPUT_PATH_SET_PARAMETER_NAME, 
                                     command,
                                     null,
                                     position,
@@ -206,7 +206,7 @@ public class ParseableProgramParameters{
     @JsonIgnore
     public void setPairedCommand(String command, int position){
          this.setPairedCommand(new ParameterField(
-                                    Pool.PROGRAM_PAIRED_PARAMETER_NAME, 
+                                    ParameterPool.PROGRAM_PAIRED_PARAMETER_NAME, 
                                     command,
                                     null,
                                     position,
@@ -224,7 +224,7 @@ public class ParseableProgramParameters{
      * Add a parameter
      * @param name the shown label 
      * @param command the executed command
-     * @param defaultValue can be empty or Pool.PROGRAM_EMPTY_PARAMETER_VALUE if you want a boolean
+     * @param defaultValue can be empty or ParameterPool.PROGRAM_EMPTY_PARAMETER_VALUE if you want a boolean
      * @param position can be positive (count 0->position-> end ) or negative (count 0<-position<-X)
      * @param optional if this parameter does not need a value but it can be set
      */

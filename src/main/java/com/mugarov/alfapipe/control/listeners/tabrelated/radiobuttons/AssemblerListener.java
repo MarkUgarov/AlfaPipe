@@ -5,7 +5,7 @@
  */
 package com.mugarov.alfapipe.control.listeners.tabrelated.radiobuttons;
 
-import com.mugarov.alfapipe.model.Pool;
+import com.mugarov.alfapipe.model.ParameterPool;
 import com.mugarov.alfapipe.model.datatypes.SetOfFiles;
 import com.mugarov.alfapipe.model.programparse.datatypes.ParseableProgramParameters;
 import java.awt.event.ActionEvent;
@@ -20,9 +20,9 @@ public class AssemblerListener implements ProgramListener{
     
     public AssemblerListener(){
         this.fileSet = null;
-        String[] names = Pool.GENERATOR_ASSEMBLER.getAvailableNames();
+        String[] names = ParameterPool.GENERATOR_ASSEMBLER.getAvailableNames();
         if(names.length > 0){
-            this.selectedAssembler = Pool.GENERATOR_ASSEMBLER.get(names[0]);
+            this.selectedAssembler = ParameterPool.GENERATOR_ASSEMBLER.get(names[0]);
         }
         else{
             this.selectedAssembler = null;
@@ -33,7 +33,7 @@ public class AssemblerListener implements ProgramListener{
     @Override
     public void actionPerformed(ActionEvent ae) {
 //       System.out.println(ae.getActionCommand() +" has been performed");
-       this.selectedAssembler = Pool.GENERATOR_ASSEMBLER.get(ae.getActionCommand());
+       this.selectedAssembler = ParameterPool.GENERATOR_ASSEMBLER.get(ae.getActionCommand());
        if(this.fileSet != null){
             this.fileSet.setAssembler(this.selectedAssembler);
         }
@@ -41,9 +41,9 @@ public class AssemblerListener implements ProgramListener{
     
     @Override
     public void setInitialParameters(){
-       String[] names = Pool.GENERATOR_ASSEMBLER.getAvailableNames();
+       String[] names = ParameterPool.GENERATOR_ASSEMBLER.getAvailableNames();
         if(names.length > 0){
-            this.selectedAssembler = Pool.GENERATOR_ASSEMBLER.get(names[0]);
+            this.selectedAssembler = ParameterPool.GENERATOR_ASSEMBLER.get(names[0]);
         }
         else{
             this.selectedAssembler = null;
@@ -66,13 +66,13 @@ public class AssemblerListener implements ProgramListener{
     
     @Override
     public String[] getValidSelections(){
-        return Pool.GENERATOR_ASSEMBLER.getAvailableNames();
+        return ParameterPool.GENERATOR_ASSEMBLER.getAvailableNames();
     }
 
     @Override
     public int getMaxNameLength() {
-        int maxLength = Pool.LABEL_ASSEMBLER.length();
-        String[] names = Pool.GENERATOR_ASSEMBLER.getAvailableNames();
+        int maxLength = ParameterPool.LABEL_ASSEMBLER.length();
+        String[] names = ParameterPool.GENERATOR_ASSEMBLER.getAvailableNames();
         for(String name:names){
             if(name.length()<maxLength){
                 maxLength=name.length();

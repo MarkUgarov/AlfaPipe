@@ -5,7 +5,7 @@
  */
 package com.mugarov.alfapipe.model.programparse.generators;
 
-import com.mugarov.alfapipe.model.Pool;
+import com.mugarov.alfapipe.model.ParameterPool;
 import com.mugarov.alfapipe.model.programparse.datatypes.NameField;
 import com.mugarov.alfapipe.model.programparse.datatypes.ParseableProgramParameters;
 import java.util.ArrayList;
@@ -22,7 +22,7 @@ public class AssemblerGenerator implements Generator{
      
     public AssemblerGenerator(){
         this.defaultList = new ArrayList<>();       
-        this.localFilePath = Pool.PATH_ASSEMBLER_LIST;
+        this.localFilePath = ParameterPool.PATH_ASSEMBLER_LIST;
 
         String[] endings = {".fa", ".fastq"};
         String[] outputEnding = new String[]{".fna", ".fa", ".txt"};
@@ -35,9 +35,9 @@ public class AssemblerGenerator implements Generator{
                                                                 endings,
                                                                 outputEnding);
         newbler.setOnlyOutputDirectorySetable(true);
-        newbler.addParameter("large", "-large", Pool.PROGRAM_EMPTY_PARAMETER_VALUE, 1, true);
-        newbler.addParameter("CPU", "-cpu", "0", 2, true);
-        newbler.addParameter("Force", "-force", Pool.PROGRAM_EMPTY_PARAMETER_VALUE, 3, false);
+        newbler.addParameter("large", "-large", ParameterPool.PROGRAM_EMPTY_PARAMETER_VALUE, 1, true);
+        newbler.addParameter("CPU", "-cpu", "10", 2, true);
+        newbler.addParameter("Force", "-force", ParameterPool.PROGRAM_EMPTY_PARAMETER_VALUE, 3, false);
         
         NameField  essential1 = new NameField();
         essential1.setName("454AllContigs.fna");
@@ -52,14 +52,14 @@ public class AssemblerGenerator implements Generator{
         newbler.addEssentialOutput(essential2);
         
         NameField essential3 = new NameField();
-        essential3.setName(Pool.PROGRAM_DIRECTORY_VALUE);
+        essential3.setName(ParameterPool.PROGRAM_DIRECTORY_VALUE);
         essential3.setEssentialFor("Assembly Statistics");
         essential3.setUseOnly(true);
         newbler.addEssentialOutput(essential3);
         
         NameField essential4 = new NameField();
         essential4.setName("454AllContigs.fna");
-        essential4.setEssentialFor(Pool.NAME_DEFAULT_PRODIGAL);
+        essential4.setEssentialFor(ParameterPool.NAME_DEFAULT_PRODIGAL);
         essential4.setUseOnly(true);
         newbler.addEssentialOutput(essential4);
         

@@ -5,7 +5,7 @@
  */
 package com.mugarov.alfapipe.model.programparse.generators;
 
-import com.mugarov.alfapipe.model.Pool;
+import com.mugarov.alfapipe.model.ParameterPool;
 import com.mugarov.alfapipe.model.programparse.datatypes.ParseableProgramParameters;
 import java.util.ArrayList;
 
@@ -21,11 +21,11 @@ public class ReadsVsContigsGenerator implements Generator {
      
     public ReadsVsContigsGenerator(){
         this.defaultList = new ArrayList<>();       
-        this.localFilePath = Pool.PATH_READS_VS_CONTIGS_LIST;
+        this.localFilePath = ParameterPool.PATH_READS_VS_CONTIGS_LIST;
 
         String[] endings = {".fa", ".fq"};
         String[] outputEnding = new String[]{".fa"};
-        ParseableProgramParameters readsVsContigs = new ParseableProgramParameters( Pool.NAME_DEFAULT_READS_VS_CONTIGS,
+        ParseableProgramParameters readsVsContigs = new ParseableProgramParameters( ParameterPool.NAME_DEFAULT_READS_VS_CONTIGS,
                                                                 null, 
                                                                 "-in something",
                                                                 -1,

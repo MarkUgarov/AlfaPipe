@@ -5,7 +5,7 @@
  */
 package com.mugarov.alfapipe.model.programparse.generators;
 
-import com.mugarov.alfapipe.model.Pool;
+import com.mugarov.alfapipe.model.ParameterPool;
 import com.mugarov.alfapipe.model.programparse.datatypes.ParseableProgramParameters;
 import java.util.ArrayList;
 
@@ -21,7 +21,7 @@ public class ToolGenerator implements Generator{
     
      public ToolGenerator(){
         this.defaultList = new ArrayList<>();
-        this.localFilePath = Pool.PATH_TOOLS_LIST;
+        this.localFilePath = ParameterPool.PATH_TOOLS_LIST;
 
 //        String[] endings = {".fa"};
 //        String[] outputEnding = new String[]{".fa"};
@@ -33,7 +33,7 @@ public class ToolGenerator implements Generator{
 //                                                    -1,
 //                                                    endings,
 //                                                    outputEnding);  
-//        Test1.addParameter("Test Boolean", "boolean value", Pool.PROGRAM_EMPTY_PARAMETER_VALUE, 1, true);
+//        Test1.addParameter("Test Boolean", "boolean value", ParameterPool.PROGRAM_EMPTY_PARAMETER_VALUE, 1, true);
 //        Test1.addParameter("Test optional", "optional value", "Test optional default", 2, true);
 //        Test1.addParameter("Test obligatory", "obligatory value", "Test obligatory default", 3, false);
 //        this.defaultList.add(Test1);
@@ -49,7 +49,7 @@ public class ToolGenerator implements Generator{
                                                     endings,
                                                     outputEnding);  
         prokka.setOnlyOutputDirectorySetable(true);
-        prokka.addParameter("Force", "--force", Pool.PROGRAM_EMPTY_PARAMETER_VALUE, 1, false);
+        prokka.addParameter("Force", "--force", ParameterPool.PROGRAM_EMPTY_PARAMETER_VALUE, 1, false);
         this.defaultList.add(prokka);
         
         String[] outputEndings2 = new String[]{".txt"};
@@ -61,7 +61,7 @@ public class ToolGenerator implements Generator{
                                                     3,
                                                     endings,
                                                     outputEndings2);  
-        extractHeader.addParameter("prepare Excel", "-E", Pool.PROGRAM_EMPTY_PARAMETER_VALUE, 1, true);
+        extractHeader.addParameter("prepare Excel", "-E", ParameterPool.PROGRAM_EMPTY_PARAMETER_VALUE, 1, true);
         this.defaultList.add(extractHeader);
         
         String[] endingsB = {".txt"};
@@ -73,7 +73,7 @@ public class ToolGenerator implements Generator{
                                                     3,
                                                     endingsB,
                                                     outputEndings2);  
-        assemblyStatistics.addParameter("Skip listprint", "-l", Pool.PROGRAM_EMPTY_PARAMETER_VALUE, 1, true);
+        assemblyStatistics.addParameter("Skip listprint", "-l", ParameterPool.PROGRAM_EMPTY_PARAMETER_VALUE, 1, true);
         this.defaultList.add(assemblyStatistics);
         
         this.core = new GeneratorCore(this.localFilePath, this.defaultList);

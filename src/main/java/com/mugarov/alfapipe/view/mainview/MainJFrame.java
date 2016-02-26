@@ -6,7 +6,7 @@
 package com.mugarov.alfapipe.view.mainview;
 
 import com.mugarov.alfapipe.control.listeners.tabrelated.TabListenerBag;
-import com.mugarov.alfapipe.model.Pool;
+import com.mugarov.alfapipe.model.ParameterPool;
 import com.mugarov.alfapipe.view.mainview.tab.DataTabbedPane;
 import com.mugarov.alfapipe.view.mainview.tab.Tab;
 import java.awt.Container;
@@ -24,14 +24,14 @@ public class MainJFrame extends JFrame{
     
     public MainJFrame(){
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        this.setTitle(Pool.TITLE);
+        this.setTitle(ParameterPool.TITLE);
         
 //        this.menu=new MainMenuBar();
         this.setJMenuBar(menu);
         this.content = new MainContentPane();
         this.setContentPane(content);
-        this.setSize(Pool.FRAMESIZE);
-        if(Pool.FULLSCREAN){
+        this.setSize(ParameterPool.FRAMESIZE);
+        if(ParameterPool.FULLSCREAN){
             this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         }
         this.setVisible(true);

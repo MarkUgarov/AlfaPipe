@@ -7,12 +7,11 @@ package com.mugarov.alfapipe.control
 ;
 
 import com.mugarov.alfapipe.control.listeners.tabrelated.TabListenerBag;
-import com.mugarov.alfapipe.model.Pool;
+import com.mugarov.alfapipe.model.ComponentPool;
 import com.mugarov.alfapipe.model.datatypes.SetOfFiles;
 import com.mugarov.alfapipe.view.mainview.MainJFrame;
 import com.mugarov.alfapipe.view.mainview.tab.Tab;
 import java.util.ArrayList;
-import javax.swing.JFrame;
 
 /**
  *
@@ -28,7 +27,7 @@ public class FileSetManager {
         this.sets = new ArrayList<>();
         this.lastIndex = 0;
         this.frame = frame;
-        Pool.LISTENER_BUTTON.setFileManager(this);
+        ComponentPool.LISTENER_BUTTON.setFileManager(this);
         this.add();
     }
     

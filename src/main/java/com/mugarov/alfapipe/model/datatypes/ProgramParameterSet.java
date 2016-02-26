@@ -5,7 +5,7 @@
  */
 package com.mugarov.alfapipe.model.datatypes;
 
-import com.mugarov.alfapipe.model.Pool;
+import com.mugarov.alfapipe.model.ParameterPool;
 import com.mugarov.alfapipe.model.programparse.datatypes.NameField;
 import com.mugarov.alfapipe.model.programparse.datatypes.ParseableProgramParameters;
 import com.mugarov.alfapipe.model.programparse.datatypes.ParameterField;
@@ -24,14 +24,22 @@ public class ProgramParameterSet {
     private boolean isSelected;
     
     public ProgramParameterSet(ParseableProgramParameters program){
-        this.program = program;
-        this.name = this.program.getName();
-        this.isSelected = (program.getStartCommand() != null);
-        this.parameters = new ArrayList<>();
-        
-        for(ParameterField pF: program.getParameters()){
-            boolean shown = !(pF.getName().equals(Pool.PROGRAM_INPUT_PATH_SET_PARAMETER_NAME)||pF.getName().equals(Pool.PROGRAM_OUTPUT_PATH_SET_PARAMETER_NAME));
-            this.parameters.add(new InputParameter(pF, shown));
+        if(program != null){
+            this.program = program;
+            this.name = this.program.getName();
+            this.isSelected = (program.getStartCommand() != null);
+            this.parameters = new ArrayList<>();
+
+            for(ParameterField pF: program.getParameters()){
+                boolean shown = !(pF.getName().equals(ParameterPool.PROGRAM_INPUT_PATH_SET_PARAMETER_NAME)||pF.getName().equals(ParameterPool.PROGRAM_OUTPUT_PATH_SET_PARAMETER_NAME));
+                this.parameters.add(new InputParameter(pF, shown));
+            }
+        }
+        else{
+            this.program = null;
+            this.name = null;
+            this.isSelected = false;
+            this.parameters = new ArrayList<>();
         }
     }
     

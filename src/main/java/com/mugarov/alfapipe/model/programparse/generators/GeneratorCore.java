@@ -8,6 +8,7 @@ package com.mugarov.alfapipe.model.programparse.generators;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import com.mugarov.alfapipe.model.ParameterPool;
 import com.mugarov.alfapipe.model.programparse.datatypes.ParseableProgramParameters;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -28,14 +29,15 @@ public class GeneratorCore {
      
     public GeneratorCore(String path, ArrayList<ParseableProgramParameters> defaultList){
         this.available = new ArrayList<>();
-        this.path = path;
-       
+        this.path = ParameterPool.CONFIG_PREFIX + System.getProperty("user.name")+ File.separatorChar  + path;
+   
+
         this.localFile = new File(this.path);
         if(!this.localFile.getParentFile().exists()){
             this.localFile.getParentFile().mkdirs();
         }
         if(!localFile.exists()){
-            System.out.println("File does not exist! Creating default List. ");
+            System.out.println("File does not exist! Creating default List in "+this.path);
             this.available = defaultList;
             this.parseOut();
         }
@@ -83,14 +85,17 @@ public class GeneratorCore {
     }
     
      public void parseIn(){ 
-        try {
-            ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
-            ParseableProgramParameters[] result =   mapper.readValue(this.localFile, ParseableProgramParameters[].class);                             
-            for(ParseableProgramParameters ass:result){
-                this.available.add(ass);
+        if(this.localFile.length() >0){
+            try {
+                ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
+                ParseableProgramParameters[] result =   mapper.readValue(this.localFile, ParseableProgramParameters[].class);                             
+                for(ParseableProgramParameters ass:result){
+                    this.available.add(ass);
+                }
+            } catch (IOException ex) {
+                Logger.getLogger(AssemblerGenerator.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } catch (IOException ex) {
-            Logger.getLogger(AssemblerGenerator.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
     }
 }

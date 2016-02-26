@@ -5,7 +5,7 @@
  */
 package com.mugarov.alfapipe.view.mainview.tab;
 
-import com.mugarov.alfapipe.model.Pool;
+import com.mugarov.alfapipe.model.ParameterPool;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
@@ -43,7 +43,7 @@ public class ProgramSelectionPanel extends JPanel{
         
         this.namePanel = new JPanel();
         this.nameLabel = new JLabel(name);
-        this.nameLabel.setPreferredSize(Pool.LABEL_DIMENSION);
+        this.nameLabel.setPreferredSize(ParameterPool.LABEL_DIMENSION);
         this.namePanel.add(this.nameLabel);
         this.add(this.namePanel, BorderLayout.WEST);
         
@@ -58,6 +58,20 @@ public class ProgramSelectionPanel extends JPanel{
             this.addButton(a);
         }
         this.group.setSelected(null, true);
+    }
+    
+    /**
+     * Creates basically an empty Panel.
+     */
+    public ProgramSelectionPanel(){
+        super();
+        this.isFirst = true;
+        this.group = null;
+        this.listener = null;
+        this.scrollable = null;
+        this.nameLabel = null;
+        this.namePanel = null;
+        this.buttonPanel = null;
     }
     
     private void addButton(String content){

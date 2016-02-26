@@ -11,7 +11,7 @@ import com.mugarov.alfapipe.control.listeners.tabrelated.radiobuttons.Processing
 import com.mugarov.alfapipe.control.listeners.tabrelated.parameters.ParameterListener;
 import com.mugarov.alfapipe.control.listeners.tabrelated.radiobuttons.ProdigalListener;
 import com.mugarov.alfapipe.control.listeners.tabrelated.radiobuttons.ReadsVsContigsListener;
-import com.mugarov.alfapipe.model.Pool;
+import com.mugarov.alfapipe.model.ParameterPool;
 import com.mugarov.alfapipe.model.datatypes.InputParameter;
 import com.mugarov.alfapipe.view.mainview.tab.parameters.ProgramParameterPanel;
 import java.util.ArrayList;
@@ -47,9 +47,9 @@ public class OptionPanel extends JPanel{
         
         this.add(this.getDistinguishBar());
         
-        this.programLabel = new JLabel(Pool.LABEL_PROGRAMS);
-        this.programLabel.setPreferredSize(Pool.LABEL_DIMENSION);
-        this.programLabel.setForeground(Pool.LABEL_IMPORTANCE_COLOR);
+        this.programLabel = new JLabel(ParameterPool.LABEL_PROGRAMS);
+        this.programLabel.setPreferredSize(ParameterPool.LABEL_DIMENSION);
+        this.programLabel.setForeground(ParameterPool.LABEL_IMPORTANCE_COLOR);
         this.add(this.programLabel);
         
         this.preprocessingPanel = new SingleProgramPanel();
@@ -68,9 +68,9 @@ public class OptionPanel extends JPanel{
         this.add(this.prodigalPanel);
         
         this.add(this.getDistinguishBar());
-        this.toolLabel = new JLabel(Pool.LABEL_TOOLS);
-        this.toolLabel.setForeground(Pool.LABEL_IMPORTANCE_COLOR);
-        this.toolLabel.setPreferredSize(Pool.LABEL_DIMENSION);
+        this.toolLabel = new JLabel(ParameterPool.LABEL_TOOLS);
+        this.toolLabel.setForeground(ParameterPool.LABEL_IMPORTANCE_COLOR);
+        this.toolLabel.setPreferredSize(ParameterPool.LABEL_DIMENSION);
         this.add(this.toolLabel);
         
         this.toolOptionsPanel = new JPanel();
@@ -84,33 +84,33 @@ public class OptionPanel extends JPanel{
     
     private JPanel getDistinguishBar(){
         JPanel bar = new JPanel();
-        bar.setPreferredSize(Pool.DISTINGUISH_BAR_DIMENSION);
-        bar.setBackground(Pool.DISTINGUISH_BAR_COLOR);
+        bar.setPreferredSize(ParameterPool.DISTINGUISH_BAR_DIMENSION);
+        bar.setBackground(ParameterPool.DISTINGUISH_BAR_COLOR);
         return bar;
     }
     
     public void initPreprocessingSelection(PreprocessingListener listener){
-       this.preprocessingPanel.initSelection(Pool.LABEL_PREPROCESSING, listener);
+       this.preprocessingPanel.initSelection(ParameterPool.LABEL_PREPROCESSING, listener);
        this.updateUI();
     }
     
     public void initProcessingSelection(ProcessingListener listener){
-       this.processingPanel.initSelection(Pool.LABEL_PROCESSING, listener);
+       this.processingPanel.initSelection(ParameterPool.LABEL_PROCESSING, listener);
        this.updateUI();
     }
     
     public void initAssemblerSelection(AssemblerListener listener){
-       this.assemblerPanel.initSelection(Pool.LABEL_ASSEMBLER, listener);
+       this.assemblerPanel.initSelection(ParameterPool.LABEL_ASSEMBLER, listener);
        this.updateUI();
     }
     
     public void initReadsVsContigsSelection(ReadsVsContigsListener listener){
-       this.readsVsContigsPanel.initSelection(Pool.LABEL_READS_VS_CONTIGS, listener);
+       this.readsVsContigsPanel.initSelection(ParameterPool.LABEL_READS_VS_CONTIGS, listener);
        this.updateUI();
     }
     
     public void initProdigalSelection(ProdigalListener listener){
-       this.prodigalPanel.initSelection(Pool.LABEL_PRODIGAL, listener);
+       this.prodigalPanel.initSelection(ParameterPool.LABEL_PRODIGAL, listener);
        this.updateUI();
     }
 

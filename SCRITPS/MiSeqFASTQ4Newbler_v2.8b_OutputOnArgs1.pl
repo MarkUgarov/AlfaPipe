@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
 use Getopt::Std;
 
 our($opt_f, $opt_h);

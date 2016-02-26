@@ -7,7 +7,7 @@ package com.mugarov.alfapipe.view.mainview.tab.tabular;
 
 import com.mugarov.alfapipe.control.listeners.tabrelated.TabListenerBag;
 import com.mugarov.alfapipe.control.listeners.tabrelated.singlefile.SingleFileListener;
-import com.mugarov.alfapipe.model.Pool;
+import com.mugarov.alfapipe.model.ParameterPool;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -188,8 +188,8 @@ public class FileSetPanel extends JScrollPane{
     }
 
     public void setAllProgressed(boolean success) {
-        this.top.setBackground(success?Pool.COLOR_SUCCESS:Pool.COLOR_FAILURE);
-        this.scrollable.setBackground(success?Pool.COLOR_SUCCESS:Pool.COLOR_FAILURE);
+        this.top.setBackground(success?ParameterPool.COLOR_SUCCESS:ParameterPool.COLOR_FAILURE);
+        this.scrollable.setBackground(success?ParameterPool.COLOR_SUCCESS:ParameterPool.COLOR_FAILURE);
     }
    
 }

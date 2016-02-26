@@ -9,7 +9,7 @@ import com.mugarov.alfapipe.view.mainview.tab.tabular.FileSetPanel;
 import com.mugarov.alfapipe.control.listeners.tabrelated.TabListenerBag;
 import com.mugarov.alfapipe.control.listeners.tabrelated.parameters.ParameterListener;
 import com.mugarov.alfapipe.control.listeners.tabrelated.singlefile.SingleFileListener;
-import com.mugarov.alfapipe.model.Pool;
+import com.mugarov.alfapipe.model.ParameterPool;
 import com.mugarov.alfapipe.model.datatypes.InputParameter;
 import com.mugarov.alfapipe.view.Button;
 import java.awt.BorderLayout;
@@ -56,15 +56,15 @@ public class Tab extends JPanel{
         this.listenerBag = bag;
         this.layout = new BorderLayout();
         this.setLayout(this.layout);
-        this.fileChooser = new Button(Pool.BUTTON_CHOOSE_RAW_FILE_TEXT, Pool.BUTTON_CHOOSE_RAW_FILE_COMMAND);
-        this.deleteSet = new Button(Pool.BUTTON_DELETE_SET_TEXT, Pool.BUTTON_DELETE_SET_COMMAND);
-        this.choosePath = new Button(Pool.BUTTON_CHOOOSE_OUTPUT_TEXT, Pool.BUTTON_CHOOSE_OUTPUT_COMMAND);
+        this.fileChooser = new Button(ParameterPool.BUTTON_CHOOSE_RAW_FILE_TEXT, ParameterPool.BUTTON_CHOOSE_RAW_FILE_COMMAND);
+        this.deleteSet = new Button(ParameterPool.BUTTON_DELETE_SET_TEXT, ParameterPool.BUTTON_DELETE_SET_COMMAND);
+        this.choosePath = new Button(ParameterPool.BUTTON_CHOOOSE_OUTPUT_TEXT, ParameterPool.BUTTON_CHOOSE_OUTPUT_COMMAND);
 
         
         this.namePanel = new JPanel(new BorderLayout());
         this.nameLabel = new JLabel("Name:");
         this.nameField = new JTextField(this.id);
-        this.applyName = new Button(Pool.BUTTON_APPLY_NAME_TEXT, Pool.BUTTON_APPLY_NAME_COMMAND);
+        this.applyName = new Button(ParameterPool.BUTTON_APPLY_NAME_TEXT, ParameterPool.BUTTON_APPLY_NAME_COMMAND);
         this.optionPanel = new OptionPanel();
         this.optionPanel.initPreprocessingSelection(this.listenerBag.getPreprocessingRadioButtonListener());
         this.optionPanel.initProcessingSelection(this.listenerBag.getProcessingRadioButtonListener());

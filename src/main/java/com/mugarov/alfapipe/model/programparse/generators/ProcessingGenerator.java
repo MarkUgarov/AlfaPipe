@@ -5,7 +5,7 @@
  */
 package com.mugarov.alfapipe.model.programparse.generators;
 
-import com.mugarov.alfapipe.model.Pool;
+import com.mugarov.alfapipe.model.ParameterPool;
 import com.mugarov.alfapipe.model.programparse.datatypes.ParseableProgramParameters;
 import java.util.ArrayList;
 
@@ -21,7 +21,7 @@ public class ProcessingGenerator implements Generator{
      
     public ProcessingGenerator(){
         this.defaultList = new ArrayList<>();       
-        this.localFilePath = Pool.PATH_PROCESSING_LIST;
+        this.localFilePath = ParameterPool.PATH_PROCESSING_LIST;
 
         String[] endings = {".fastq"};
         String[] outputEnding = new String[]{".fa"};

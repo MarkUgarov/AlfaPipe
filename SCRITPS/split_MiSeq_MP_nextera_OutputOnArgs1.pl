@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
 use strict;
 use lib "/vol/assembly454/bin/";
 use Statistics::Descriptive;

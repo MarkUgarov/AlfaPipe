@@ -7,7 +7,7 @@
 package com.mugarov.alfapipe.control.listeners.tabrelated.singlefile;
 
 import com.mugarov.alfapipe.model.datatypes.InputFile;
-import com.mugarov.alfapipe.model.Pool;
+import com.mugarov.alfapipe.model.ParameterPool;
 import com.mugarov.alfapipe.model.datatypes.SetOfFiles;
 import com.mugarov.alfapipe.model.programparse.datatypes.ParseableProgramParameters;
 import java.awt.event.ActionEvent;
@@ -33,7 +33,7 @@ public class SingleFileListener implements ActionListener, ItemListener{
     @Override
     public void actionPerformed(ActionEvent ae) {
 //        System.out.println(ae.getActionCommand()+" was performed in SingleFileListener for file " +this.file.getAbsolutePath());
-        if(ae.getActionCommand().equals(Pool.BUTTON_DELETE_FILE_COMMAND)){
+        if(ae.getActionCommand().equals(ParameterPool.BUTTON_DELETE_FILE_COMMAND)){
 //            System.out.println("Listener tries to delete.");
             this.parentSet.deleteFile(this.file.getAbsolutePath());
         }
@@ -47,7 +47,7 @@ public class SingleFileListener implements ActionListener, ItemListener{
     public void itemStateChanged(ItemEvent ie) {
        JCheckBox box =((JCheckBox) ie.getItemSelectable());
 //       System.out.println(ie.getStateChange() == ItemEvent.SELECTED ? "was selected" : "was unselected");
-       ParseableProgramParameters tool= Pool.GENERTATOR_TOOLS.get(box.getText());
+       ParseableProgramParameters tool= ParameterPool.GENERTATOR_TOOLS.get(box.getText());
        
        if(ie.getStateChange() == ItemEvent.SELECTED){
 //           System.out.println(box.getText()+" was selected;");

@@ -5,7 +5,7 @@
  */
 package com.mugarov.alfapipe.model.programparse.generators;
 
-import com.mugarov.alfapipe.model.Pool;
+import com.mugarov.alfapipe.model.ParameterPool;
 import com.mugarov.alfapipe.model.programparse.datatypes.NameField;
 import com.mugarov.alfapipe.model.programparse.datatypes.PairedInputConditions;
 import com.mugarov.alfapipe.model.programparse.datatypes.ParseableProgramParameters;
@@ -22,7 +22,8 @@ public class PreprocessingGenerator implements Generator{
      
     public PreprocessingGenerator(){
         this.defaultList = new ArrayList<>();       
-        this.localFilePath = Pool.PATH_PREPROCESSING_LIST;
+        this.localFilePath = ParameterPool.PATH_PREPROCESSING_LIST;
+        System.out.println(this.localFilePath);
 
         String[] endings = {".fastq.gz"};
         String[] outputEnding = new String[]{".fastq"};

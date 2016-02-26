@@ -22,9 +22,12 @@ import java.awt.Dimension;
  *
  * @author Mark
  */
-public abstract class Pool {
+public abstract class ParameterPool {
+    
+    
+    
     // general optical parameters
-    public static final String TITLE = "Alfa - Pipe: A likely functionally assembler Pipe.";
+    public static final String TITLE = "Alfa - Pipe: A likely functional assembler Pipe.";
     public static final boolean FULLSCREAN = true;
     public static final Dimension FRAMESIZE = new Dimension(400,600);
     // text for menu
@@ -64,7 +67,7 @@ public abstract class Pool {
                 (int)(java.awt.Toolkit.getDefaultToolkit().getScreenSize().height*0.02)
                 );
     public static final Dimension LABEL_DIMENSION = new Dimension(
-                (int)(java.awt.Toolkit.getDefaultToolkit().getScreenSize().width*0.05),
+                (int)(java.awt.Toolkit.getDefaultToolkit().getScreenSize().width*0.1),
                 (int)(java.awt.Toolkit.getDefaultToolkit().getScreenSize().height*0.02)
                 );
     public static final Dimension DISTINGUISH_BAR_DIMENSION = new Dimension(
@@ -91,11 +94,14 @@ public abstract class Pool {
     public static final Color COLOR_FAILURE = Color.darkGray;
     
     // available Tools and Assemblers
+    
+    public static final String CONFIG_PREFIX = "/vol/ampipe/data/";
+    
     public static final Generator GENERATOR_PREPROCESSING = new PreprocessingGenerator();
-    public static final String PATH_PREPROCESSING_LIST ="CONFIG/Preprocessing.yaml";
+    public static final String PATH_PREPROCESSING_LIST = "CONFIG/Preprocessing.yaml";
     
     public static final Generator GENERATOR_PROCESSING = new ProcessingGenerator();
-    public static final String PATH_PROCESSING_LIST ="CONFIG/Processing.yaml";
+    public static final String PATH_PROCESSING_LIST = "CONFIG/Processing.yaml";
     public static final String NAME_DEFAULT_PROCESSING ="defaultProcessing";
     
     public static final Generator GENERATOR_ASSEMBLER= new AssemblerGenerator();
@@ -114,18 +120,19 @@ public abstract class Pool {
     
     public static final String PROGRAM_DIRECTORY_VALUE = "//.";
     public static final String PROGRAM_EMPTY_PARAMETER_VALUE = "/empty";
+    public static final String PROGRAM_PATH_VALUE = "[path]";
+    public static final String PROGRAM_NAME_VALUE = "[name]";
     public static final String PROGRAM_INPUT_PATH_SET_PARAMETER_NAME = "inputPathCommand";
     public static final String PROGRAM_OUTPUT_PATH_SET_PARAMETER_NAME = "outputPathCommand";
     public static final String PROGRAM_PAIRED_PARAMETER_NAME = "pairedCommand";
     
-     // listeners for the main content - the components (Button, Menu....) will add them by themselves 
-    public static final MainViewButtonListener LISTENER_BUTTON = new MainViewButtonListener();
-    public static final MenuListener LISTENER_MENU = new MenuListener();
+     
     
     // file management
-    public static final String FILE_ORIGIN_DEFAULT = "output";
+    public static final String FILE_ORIGIN_DEFAULT = "/vol/ampipe/data/"+System.getProperty("user.name")+"/output";
     public static final String FILE_LOGFILE_NAME = "log.txt";
-       
+    public static final String WORKING_DIRECTORY = "/vol/ampipe/data";
+    
     //standard messegas
     public static final String MESSAGE_PREFIX = "echo ";
     public static final String MESSAGE_PREPROCESSING_IS_NULL ="Null preprocessing was selected.";
@@ -135,8 +142,7 @@ public abstract class Pool {
     public static final String MESSAGE_PRODIGAL_IS_NULL ="Null prodigal was selected";
     public static final String MESSAGE_TOOL_IS_NULL ="A tool with command null was selected";
             
-    //static components
-    public static MainViewButtonPool MAIN_BUTTON_POOL = new MainViewButtonPool();
+    
     
     //Logfile standard strings
     public static final String LOG_LINE_PREFIX = "<>< ";
@@ -147,5 +153,9 @@ public abstract class Pool {
     public static final String LOG_OVERWRITTEN_HINT = "Old logfile was overwritten";
     public static final String LOG_CHANGE_TO = "Trying to change directory to ";
     public static final String LOG_CHANGED_FROM = "Changed to this logfile from ";
+    
+    // Standard substitutions
+    public static final String[] REPLACE_REGEX = {"-", "/","\\", "?", ":"};
+    public static final String REPLACE_REPLACEMENT = "_";
     
 }

@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
 # small script to extract the header information of 454 assemblies
 # end prepare them for visualization in EXCEL
 # INPUT: a 454[All|Large]Contigs.fna file

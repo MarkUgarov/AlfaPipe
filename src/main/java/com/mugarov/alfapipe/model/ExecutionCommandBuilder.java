@@ -56,7 +56,7 @@ public class ExecutionCommandBuilder {
         if(parameterSet.getParsedParameters().isOnlyOutputDirectorySetable()){
             this.outputFile = new File(parentOutputDirectory, parameterSet.getParsedParameters().getName()
                                                               +"_"
-                                                              +this.getNameWithoutExtensions(originalFile));
+                                                              +this.getClearName(originalFile));
             this.outputFile.mkdirs();
             this.outputIsDirectory = true;
         }
@@ -65,7 +65,7 @@ public class ExecutionCommandBuilder {
                                                         + File.separatorChar
                                                         + parameterSet.getParsedParameters().getName()
                                                         + "_"
-                                                        + this.getNameWithoutExtensions(originalFile)
+                                                        + this.getClearName(originalFile)
                                                         + parameterSet.getParsedParameters().getOutputEndings()[0]);
             File outputDirectory = new File(this.outputFile.getParent());
             if(!outputDirectory.exists()){
@@ -82,17 +82,17 @@ public class ExecutionCommandBuilder {
             builder.append(" ");
             for(ParameterField pf:parameterSet.getParsedParameters().getParameters() ){
                 boolean writeCommand =true;
-                if(pf.getCommand() == null || pf.getCommand().length() == 0 || pf.getCommand().equals(Pool.PROGRAM_EMPTY_PARAMETER_VALUE)){
+                if(pf.getCommand() == null || pf.getCommand().length() == 0 || pf.getCommand().equals(ParameterPool.PROGRAM_EMPTY_PARAMETER_VALUE)){
                     writeCommand=false;
                 }
 
                 boolean writeValue = true;
-                if(pf.getDefaultValue() != null && pf.getDefaultValue().equals(Pool.PROGRAM_EMPTY_PARAMETER_VALUE)){
+                if(pf.getDefaultValue() != null && pf.getDefaultValue().equals(ParameterPool.PROGRAM_EMPTY_PARAMETER_VALUE)){
                     writeValue = false;
                 }
 
 
-                if(pf.getName().equals(Pool.PROGRAM_INPUT_PATH_SET_PARAMETER_NAME)){
+                if(pf.getName().equals(ParameterPool.PROGRAM_INPUT_PATH_SET_PARAMETER_NAME)){
                     if(writeCommand){
                         builder.append(pf.getCommand()); 
                         builder.append(" ");
@@ -108,7 +108,7 @@ public class ExecutionCommandBuilder {
                         }
                     }
                 }
-                else if(pf.getName().equals(Pool.PROGRAM_OUTPUT_PATH_SET_PARAMETER_NAME)){
+                else if(pf.getName().equals(ParameterPool.PROGRAM_OUTPUT_PATH_SET_PARAMETER_NAME)){
                     if(writeCommand){
                         builder.append(pf.getCommand()); 
                         builder.append(" ");
@@ -117,7 +117,7 @@ public class ExecutionCommandBuilder {
                     builder.append(" ");
                     
                 }
-                else if(pf.getName().equals(Pool.PROGRAM_PAIRED_PARAMETER_NAME)){
+                else if(pf.getName().equals(ParameterPool.PROGRAM_PAIRED_PARAMETER_NAME)){
                     if(writeCommand){
                         builder.append(pf.getCommand()); 
                         builder.append(" ");
@@ -149,7 +149,19 @@ public class ExecutionCommandBuilder {
                                         builder.append(" ");
                                     }
                                     if(writeValue){
-                                        builder.append(parameterSet.getInputParameters().get(i).getValue());
+                                        String value = parameterSet.getInputParameters().get(i).getValue();
+                                        if(value.contains(ParameterPool.PROGRAM_DIRECTORY_VALUE)){
+                                            if(this.outputIsDirectory){
+                                                value.replaceAll(ParameterPool.PROGRAM_DIRECTORY_VALUE, outputFile.getPath());
+                                            }
+                                            else{
+                                                value.replaceAll(ParameterPool.PROGRAM_DIRECTORY_VALUE, outputFile.getParent());
+                                            }
+                                        }
+                                        if(value.contains(ParameterPool.PROGRAM_NAME_VALUE)){
+                                            value.replaceAll(ParameterPool.PROGRAM_NAME_VALUE, this.getClearName(originalFile));
+                                        }
+                                        builder.append(value);
                                         builder.append(" ");  
                                     }
                                 }
@@ -159,7 +171,7 @@ public class ExecutionCommandBuilder {
                         i++;
                     }
                     if(!found){
-                        this.log.appendLine(Pool.LOG_WARNING+"NO InputFileParameter was found for "+pf.getName(), ExecutionCommandBuilder.class.getName());
+                        this.log.appendLine(ParameterPool.LOG_WARNING+"NO InputFileParameter was found for "+pf.getName(), ExecutionCommandBuilder.class.getName());
                     }
                 }
             }
@@ -170,13 +182,24 @@ public class ExecutionCommandBuilder {
         }
     }
     
-    private String getNameWithoutExtensions(File file){
+    /**
+     * Removes the extension and most of the special characters from a filename.
+     * @param file can be any file with a non-empty name
+     * @return the name of the file without extensions and most of the 
+     * special characters,
+     * returns "No_valid_name" if the filename could not be cleared
+     */
+    private String getClearName(File file){
         String[] splitname = file.getName().split("\\.",2);
         if(splitname.length== 0){
             return "No_valid_name";
         }
         else{
-            return splitname[0];
+            String name = splitname[0];
+            for(String reg:ParameterPool.REPLACE_REGEX){
+                name.replaceAll(reg, ParameterPool.REPLACE_REPLACEMENT);
+            }
+            return name;
         }
     }
     
@@ -219,7 +242,7 @@ public class ExecutionCommandBuilder {
      */
     public ArrayList<File> getRelevantOutputFor(ProgramParameterSet following, File originalFile){
         if(this.set == null){
-            this.log.appendLine(Pool.LOG_WARNING+"Commandbuilder: no set! ", ExecutionCommandBuilder.class.getName());
+            this.log.appendLine(ParameterPool.LOG_WARNING+"Commandbuilder: no set! ", ExecutionCommandBuilder.class.getName());
             return null;
         }
         ArrayList<File> ret;
@@ -250,7 +273,7 @@ public class ExecutionCommandBuilder {
             }
         }
         if(ret== null||ret.isEmpty()){
-            this.log.appendLine(Pool.LOG_WARNING+"Commandbuilder: empty or null returns for "+following.getName(), ExecutionCommandBuilder.class.getName());
+            this.log.appendLine(ParameterPool.LOG_WARNING+"Commandbuilder: empty or null returns for "+following.getName(), ExecutionCommandBuilder.class.getName());
         }
         return ret;
     }
@@ -317,7 +340,7 @@ public class ExecutionCommandBuilder {
             }
         }
         else{
-            if(field.getName().equals(Pool.PROGRAM_DIRECTORY_VALUE)){
+            if(field.getName().equals(ParameterPool.PROGRAM_DIRECTORY_VALUE)){
                 if(this.outputIsDirectory){
                     return this.outputFile;
                 }
@@ -333,7 +356,7 @@ public class ExecutionCommandBuilder {
             }
         }
         if(!ret.exists()){
-            this.log.appendLine(Pool.LOG_WARNING+"File: "+ret.getName()+" does not exist but will be used further!", ExecutionCommandBuilder.class.getName());
+            this.log.appendLine(ParameterPool.LOG_WARNING+"File: "+ret.getName()+" does not exist but will be used further!", ExecutionCommandBuilder.class.getName());
         }
         this.log.appendLine("Returning "+ret.getName(), ExecutionCommandBuilder.class.getName());
         return ret;
@@ -358,11 +381,11 @@ public class ExecutionCommandBuilder {
     
     public boolean useOnlyThisOutput(ProgramParameterSet following){
         if(this.set == null){
-           this.log.appendLine(Pool.LOG_WARNING+"Trying to access an ProgramParameterSet which is 'null'!", ExecutionCommandBuilder.class.getName());
+           this.log.appendLine(ParameterPool.LOG_WARNING+"Trying to access an ProgramParameterSet which is 'null'!", ExecutionCommandBuilder.class.getName());
             return false;
         }
         else if(following.getName() == null){
-            this.log.appendLine(Pool.LOG_WARNING+"The ProgramParameterSet has no name!", ExecutionCommandBuilder.class.getName());
+            this.log.appendLine(ParameterPool.LOG_WARNING+"The ProgramParameterSet has no name!", ExecutionCommandBuilder.class.getName());
             return false;
         }
         else{
