@@ -6,6 +6,7 @@
 package com.mugarov.alfapipe.control.listeners.tabrelated.parameters;
 
 import com.mugarov.alfapipe.model.datatypes.InputParameter;
+import com.mugarov.alfapipe.model.datatypes.SetOfFiles;
 import com.mugarov.alfapipe.view.mainview.tab.parameters.ProgramParameterDocument;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
@@ -22,6 +23,7 @@ public class ParameterListener implements ItemListener, DocumentListener{
     
     private final ArrayList<InputParameter> parameters;
     private InputParameter lastParameter;
+    private SetOfFiles fileSet;
     
     public ParameterListener( ArrayList<InputParameter> parameters){
         this.parameters = parameters;
@@ -31,6 +33,10 @@ public class ParameterListener implements ItemListener, DocumentListener{
         else{
             this.lastParameter = this.parameters.get(0);
         }
+    }
+    
+    public void setFileSet(SetOfFiles fileSet) {
+        this.fileSet = fileSet;
     }
 
     @Override
@@ -103,4 +109,6 @@ public class ParameterListener implements ItemListener, DocumentListener{
     public ArrayList<InputParameter> getInputParameters(){
         return this.parameters;
     }
+
+    
 }

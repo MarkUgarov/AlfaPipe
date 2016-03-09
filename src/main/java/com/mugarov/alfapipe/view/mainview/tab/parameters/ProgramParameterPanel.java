@@ -39,6 +39,7 @@ public class ProgramParameterPanel extends JPanel{
     
     private final ArrayList<JCheckBox> boxes;
     private final ArrayList<ProgramParameterTextField> textFields;
+    private final ArrayList<JPanel> singeParameters;
     
     
     
@@ -52,16 +53,19 @@ public class ProgramParameterPanel extends JPanel{
         this.emptyPanel = new JPanel();
         this.emptyPanel.setPreferredSize(ParameterPool.LABEL_OFFSET);
 
-        
         this.namePanel = new JPanel();
-        this.namePanel.setLayout(new FlowLayout());
-        this.nameLabel = new JLabel(this.name);
-        this.nameLabel.setPreferredSize(ParameterPool.LABEL_DIMENSION);
-        
-        this.namePanel.add(this.emptyPanel);
-        this.namePanel.add(this.nameLabel);
-        this.add(this.namePanel, BorderLayout.WEST);
-        
+        if(this.name != null){
+            this.namePanel.setLayout(new FlowLayout());
+            this.nameLabel = new JLabel(this.name);
+            this.nameLabel.setPreferredSize(ParameterPool.LABEL_DIMENSION);
+
+            this.namePanel.add(this.emptyPanel);
+            this.namePanel.add(this.nameLabel);
+            this.add(this.namePanel, BorderLayout.WEST);
+        }
+        else{
+            this.nameLabel = null;
+        }
         
         this.maxColumns = ParameterPool.PARAMETERS_IN_ONE_ROW;
         this.maxRows = parameters.size()/this.maxColumns;
@@ -69,6 +73,7 @@ public class ProgramParameterPanel extends JPanel{
         
         this.boxes = new ArrayList<>();
         this.textFields = new ArrayList<>();
+        this.singeParameters = new ArrayList<>();
                 
         this.scrollable = new JScrollPane();
         this.parameterPanel = new JPanel();   
@@ -115,6 +120,7 @@ public class ProgramParameterPanel extends JPanel{
        
         
         this.parameterPanel.add(parPan);
+        this.singeParameters.add(parPan);
         this.updateUI();
     }
     
@@ -131,5 +137,35 @@ public class ProgramParameterPanel extends JPanel{
         }
     }
     
+    @Override
+    public void setBackground(Color bg){
+        super.setBackground(bg);
+        if(this.namePanel != null){
+            this.namePanel.setBackground(bg);
+        }
+        if(this.nameLabel != null){
+            this.nameLabel.setBackground(bg);
+        }
+        if(this.emptyPanel != null){
+            this.emptyPanel.setBackground(bg);
+        }
+        if(this.parameterPanel != null){
+            this.parameterPanel.setBackground(bg);
+        }
+        if(this.singeParameters != null){
+            for(JPanel parPan:this.singeParameters){
+                parPan.setBackground(bg);
+            }
+        }
+        if(this.boxes != null){
+            for(JCheckBox box:this.boxes){
+                box.setBackground(bg);
+            }
+        }
+        if(this.scrollable != null){
+            this.scrollable.setBackground(bg);
+        }
+        
+    }
    
 }

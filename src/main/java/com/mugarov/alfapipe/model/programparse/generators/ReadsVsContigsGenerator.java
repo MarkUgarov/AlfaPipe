@@ -6,7 +6,7 @@
 package com.mugarov.alfapipe.model.programparse.generators;
 
 import com.mugarov.alfapipe.model.ParameterPool;
-import com.mugarov.alfapipe.model.programparse.datatypes.ParseableProgramParameters;
+import com.mugarov.alfapipe.model.programparse.datatypes.ParseableProgram;
 import java.util.ArrayList;
 
 /**
@@ -17,7 +17,7 @@ public class ReadsVsContigsGenerator implements Generator {
     
     private final String localFilePath;
     private final GeneratorCore core;
-    private final ArrayList<ParseableProgramParameters> defaultList;
+    private final ArrayList<ParseableProgram> defaultList;
      
     public ReadsVsContigsGenerator(){
         this.defaultList = new ArrayList<>();       
@@ -25,7 +25,7 @@ public class ReadsVsContigsGenerator implements Generator {
 
         String[] endings = {".fa", ".fq"};
         String[] outputEnding = new String[]{".fa"};
-        ParseableProgramParameters readsVsContigs = new ParseableProgramParameters( ParameterPool.NAME_DEFAULT_READS_VS_CONTIGS,
+        ParseableProgram readsVsContigs = new ParseableProgram( ParameterPool.NAME_DEFAULT_READS_VS_CONTIGS,
                                                                 null, 
                                                                 "-in something",
                                                                 -1,
@@ -37,7 +37,7 @@ public class ReadsVsContigsGenerator implements Generator {
         readsVsContigs.setEnterCommand("reads vs contigs enter command");
         readsVsContigs.setExitCommand(" reads vs contigs exit command");
         
-        ParseableProgramParameters nullReadsVsContigs= new ParseableProgramParameters( "Choose non", 
+        ParseableProgram nullReadsVsContigs= new ParseableProgram( "Choose non", 
                                                                 null, 
                                                                 null,
                                                                 0,
@@ -58,7 +58,7 @@ public class ReadsVsContigsGenerator implements Generator {
     }
  
     @Override
-    public ParseableProgramParameters get(String name){
+    public ParseableProgram get(String name){
         return this.core.get(name);
     }
     

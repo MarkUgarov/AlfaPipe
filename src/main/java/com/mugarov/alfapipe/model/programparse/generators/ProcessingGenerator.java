@@ -6,7 +6,7 @@
 package com.mugarov.alfapipe.model.programparse.generators;
 
 import com.mugarov.alfapipe.model.ParameterPool;
-import com.mugarov.alfapipe.model.programparse.datatypes.ParseableProgramParameters;
+import com.mugarov.alfapipe.model.programparse.datatypes.ParseableProgram;
 import java.util.ArrayList;
 
 /**
@@ -17,7 +17,7 @@ public class ProcessingGenerator implements Generator{
     
     private final String localFilePath;
     private final GeneratorCore core;
-    private final ArrayList<ParseableProgramParameters> defaultList;
+    private final ArrayList<ParseableProgram> defaultList;
      
     public ProcessingGenerator(){
         this.defaultList = new ArrayList<>();       
@@ -25,7 +25,7 @@ public class ProcessingGenerator implements Generator{
 
         String[] endings = {".fastq"};
         String[] outputEnding = new String[]{".fa"};
-        ParseableProgramParameters miseq = new ParseableProgramParameters( "MiSeqFASTQ4Newbler_v2.8b",
+        ParseableProgram miseq = new ParseableProgram( "MiSeqFASTQ4Newbler_v2.8b",
                                                                 "SCRITPS/MiSeqFASTQ4Newbler_v2.8b_OutputOnArgs1.pl", 
                                                                 null,
                                                                 1,
@@ -35,7 +35,7 @@ public class ProcessingGenerator implements Generator{
                                                                 outputEnding);
         miseq.setOnlyOutputDirectorySetable(false);
         
-        ParseableProgramParameters splitMiseq = new ParseableProgramParameters( "split_MiSeq_MP_nextera",
+        ParseableProgram splitMiseq = new ParseableProgram( "split_MiSeq_MP_nextera",
                                                                 "SCRITPS/split_MiSeq_MP_nextera_OutputOnArgs1.pl", 
                                                                 null,
                                                                 1,
@@ -45,7 +45,7 @@ public class ProcessingGenerator implements Generator{
                                                                 outputEnding);
         splitMiseq.setOnlyOutputDirectorySetable(false);
         
-        ParseableProgramParameters nullProcessor= new ParseableProgramParameters( "Choose non", 
+        ParseableProgram nullProcessor= new ParseableProgram( "Choose non", 
                                                                 null, 
                                                                 null,
                                                                 0,
@@ -67,7 +67,7 @@ public class ProcessingGenerator implements Generator{
     }
  
     @Override
-    public ParseableProgramParameters get(String name){
+    public ParseableProgram get(String name){
         return this.core.get(name);
     }
     

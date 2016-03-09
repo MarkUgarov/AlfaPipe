@@ -6,7 +6,7 @@
 package com.mugarov.alfapipe.model.programparse;
 
 import com.mugarov.alfapipe.model.programparse.datatypes.ParameterField;
-import com.mugarov.alfapipe.model.programparse.datatypes.ParseableProgramParameters;
+import com.mugarov.alfapipe.model.programparse.datatypes.ParseableProgram;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -17,9 +17,9 @@ import java.util.Comparator;
  */
 public class ParameterSorter implements Comparator<ParameterField> {
     
-    private final ParseableProgramParameters program;
+    private final ParseableProgram program;
     
-    public ParameterSorter(ParseableProgramParameters program){
+    public ParameterSorter(ParseableProgram program){
         this.program = program;
     }
     
@@ -28,15 +28,7 @@ public class ParameterSorter implements Comparator<ParameterField> {
         if(!parameters.isEmpty()){
              Collections.sort(parameters, this);
             this.program.setParameters(parameters);
-//            System.out.println("Sorted to:");
-//            for(ParameterField p:parameters){
-//                System.out.println("\t"+ p.getName());
-//            }
         }
-//        else{
-//            System.out.println("No Parameters.");
-//        }
-//       
     }
     
     

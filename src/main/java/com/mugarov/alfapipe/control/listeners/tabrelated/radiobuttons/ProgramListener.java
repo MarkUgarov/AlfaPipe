@@ -6,7 +6,7 @@
 package com.mugarov.alfapipe.control.listeners.tabrelated.radiobuttons;
 
 import com.mugarov.alfapipe.model.datatypes.SetOfFiles;
-import com.mugarov.alfapipe.model.programparse.datatypes.ParseableProgramParameters;
+import com.mugarov.alfapipe.model.programparse.datatypes.ParseableProgram;
 import java.awt.event.ActionListener;
 
 /**
@@ -15,7 +15,7 @@ import java.awt.event.ActionListener;
  */
 public interface ProgramListener extends ActionListener{
     
-    public abstract ParseableProgramParameters getSelected();
+    public abstract ParseableProgram getSelected();
     
     public abstract void setFileSet(SetOfFiles set);
     

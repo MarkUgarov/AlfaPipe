@@ -6,7 +6,7 @@
 package com.mugarov.alfapipe.model.programparse.generators;
 
 import com.mugarov.alfapipe.model.ParameterPool;
-import com.mugarov.alfapipe.model.programparse.datatypes.ParseableProgramParameters;
+import com.mugarov.alfapipe.model.programparse.datatypes.ParseableProgram;
 import java.util.ArrayList;
 
 /**
@@ -17,7 +17,7 @@ public class ToolGenerator implements Generator{
     
     private final String localFilePath;
     private final GeneratorCore core;
-    private final ArrayList<ParseableProgramParameters> defaultList;
+    private final ArrayList<ParseableProgram> defaultList;
     
      public ToolGenerator(){
         this.defaultList = new ArrayList<>();
@@ -25,7 +25,7 @@ public class ToolGenerator implements Generator{
 
 //        String[] endings = {".fa"};
 //        String[] outputEnding = new String[]{".fa"};
-//        ParseableProgramParameters Test1 = new ParseableProgramParameters( "Example Tool 1", 
+//        ParseableProgram Test1 = new ParseableProgram( "Example Tool 1", 
 //                                                    "start Tool 1", 
 //                                                    "apply inputCommand Tool 1",
 //                                                    0,
@@ -40,7 +40,7 @@ public class ToolGenerator implements Generator{
         
         String[] endings = {".fna"};
         String[] outputEnding = new String[]{".fa", ".fna"};
-        ParseableProgramParameters prokka = new ParseableProgramParameters( "Prokka", 
+        ParseableProgram prokka = new ParseableProgram( "Prokka", 
                                                     "prokka", 
                                                     null,
                                                     -1,
@@ -53,7 +53,7 @@ public class ToolGenerator implements Generator{
         this.defaultList.add(prokka);
         
         String[] outputEndings2 = new String[]{".txt"};
-        ParseableProgramParameters extractHeader = new ParseableProgramParameters( "Extract Header Info", 
+        ParseableProgram extractHeader = new ParseableProgram( "Extract Header Info", 
                                                     "SCRITPS/extract_header_info.plx", 
                                                     null,
                                                     2,
@@ -65,7 +65,7 @@ public class ToolGenerator implements Generator{
         this.defaultList.add(extractHeader);
         
         String[] endingsB = {".txt"};
-        ParseableProgramParameters assemblyStatistics = new ParseableProgramParameters( "Assembly Statistics", 
+        ParseableProgram assemblyStatistics = new ParseableProgram( "Assembly Statistics", 
                                                     "SCRITPS/assembly_statistics.plx", 
                                                     null,
                                                     2,
@@ -87,7 +87,7 @@ public class ToolGenerator implements Generator{
     }
  
     @Override
-    public ParseableProgramParameters get(String name){
+    public ParseableProgram get(String name){
         return this.core.get(name);
     }
     

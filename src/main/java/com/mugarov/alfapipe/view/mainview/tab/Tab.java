@@ -5,6 +5,7 @@
  */
 package com.mugarov.alfapipe.view.mainview.tab;
 
+import com.mugarov.alfapipe.view.mainview.tab.selection.OptionPanel;
 import com.mugarov.alfapipe.view.mainview.tab.tabular.FileSetPanel;
 import com.mugarov.alfapipe.control.listeners.tabrelated.TabListenerBag;
 import com.mugarov.alfapipe.control.listeners.tabrelated.parameters.ParameterListener;
@@ -51,7 +52,6 @@ public class Tab extends JPanel{
     
     public Tab(String id, TabListenerBag bag){
         
-//        System.out.println("New Tab has been created with id "+id);
         this.id = id;
         this.listenerBag = bag;
         this.layout = new BorderLayout();
@@ -65,12 +65,19 @@ public class Tab extends JPanel{
         this.nameLabel = new JLabel("Name:");
         this.nameField = new JTextField(this.id);
         this.applyName = new Button(ParameterPool.BUTTON_APPLY_NAME_TEXT, ParameterPool.BUTTON_APPLY_NAME_COMMAND);
-        this.optionPanel = new OptionPanel();
-        this.optionPanel.initPreprocessingSelection(this.listenerBag.getPreprocessingRadioButtonListener());
-        this.optionPanel.initProcessingSelection(this.listenerBag.getProcessingRadioButtonListener());
-        this.optionPanel.initAssemblerSelection(this.listenerBag.getAssemblerRadioListener());
-        this.optionPanel.initReadsVsContigsSelection(this.listenerBag.getReadsVsContigsListener());
-        this.optionPanel.initProdigalSelection(this.listenerBag.getProdigalListener());
+        /**
+         * TODO: rewrite as soon as ListenerBag is rewritten
+         */
+        this.optionPanel = new OptionPanel(5, this.listenerBag);
+        this.optionPanel.initSelection(0, ParameterPool.LABEL_PREPROCESSING, this.listenerBag.getPreprocessingRadioButtonListener());
+        this.optionPanel.initSelection(1, ParameterPool.LABEL_PROCESSING, this.listenerBag.getProcessingRadioButtonListener());
+        this.optionPanel.initSelection(2, ParameterPool.LABEL_ASSEMBLER, this.listenerBag.getAssemblerRadioListener());
+        this.optionPanel.initSelection(3, ParameterPool.LABEL_COMPARISON, this.listenerBag.getReadsVsContigsListener());
+        this.optionPanel.initSelection(4, ParameterPool.LABEL_ANNOTATION, this.listenerBag.getProdigalListener());
+        /**
+         * end rewrite
+         */
+        this.optionPanel.initCluster(this.listenerBag.getClusterParameterListener());
         
         this.outputPath = new JLabel();
         this.outputPanel = new JPanel();
@@ -121,29 +128,33 @@ public class Tab extends JPanel{
         return this.nameField.getText();
     }
     
+    
     public void setPreprocessing(String name, ArrayList<InputParameter> parameters, ParameterListener listener){
-        this.optionPanel.setPreprocessing(name, parameters, listener);
+        this.optionPanel.selectProgram(0, name, parameters, listener, true);
     }
     
     public void setProcessing(String name, ArrayList<InputParameter> parameters, ParameterListener listener){
-        this.optionPanel.setProcessing(name, parameters, listener);
+//        this.optionPanel.setProcessing(name, parameters, listener);
+        this.optionPanel.selectProgram(1, name, parameters, listener, true);
     }
     
     public void setAssembler(String name, ArrayList<InputParameter> parameters, ParameterListener listener){
-        this.optionPanel.setAssembler(name, parameters, listener);
+        this.optionPanel.selectProgram(2, name, parameters, listener, true);
     }
     
     public void setReadsVsContigs(String name, ArrayList<InputParameter> parameters, ParameterListener listener){
-        this.optionPanel.setReadsVsContigs(name, parameters, listener);
+//        this.optionPanel.setReadsVsContigs(name, parameters, listener);
+        this.optionPanel.selectProgram(3, name, parameters, listener, true);
     }
     
     public void setProdigal(String name, ArrayList<InputParameter> parameters, ParameterListener listener){
-        this.optionPanel.setProdigal(name, parameters, listener);
+//        this.optionPanel.setProdigal(name, parameters, listener);
+        this.optionPanel.selectProgram(4, name, parameters, listener, true);
     }
     
     
-    public void addProgram(String name, ArrayList<InputParameter> parameters, ParameterListener listener){
-        this.optionPanel.addProgram(name, parameters,listener);
+    public void addTool(String name, ArrayList<InputParameter> parameters, ParameterListener listener){
+        this.optionPanel.addTool(name, parameters,listener);
     }
     
     public void addFile(String id, String name, SingleFileListener listener){

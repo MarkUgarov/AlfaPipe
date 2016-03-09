@@ -14,7 +14,7 @@ import java.util.ArrayList;
  *
  * @author Mark
  */
-public class ParseableProgramParameters{
+public class ParseableProgram{
     
     private String name;
     private String startCommand;
@@ -36,7 +36,7 @@ public class ParseableProgramParameters{
    
     
     
-    public ParseableProgramParameters(){
+    public ParseableProgram(){
         this.parameters = new ArrayList<>();
         this.name = null;
         this.startCommand = null;
@@ -53,7 +53,7 @@ public class ParseableProgramParameters{
         
     }
     
-    public ParseableProgramParameters( String name, 
+    public ParseableProgram( String name, 
                                 String startCommand, 
                                 String inputPathCommand,
                                 int inputPathPosition,

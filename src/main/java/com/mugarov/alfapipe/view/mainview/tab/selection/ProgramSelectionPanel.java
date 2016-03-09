@@ -3,10 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mugarov.alfapipe.view.mainview.tab;
+package com.mugarov.alfapipe.view.mainview.tab.selection;
 
 import com.mugarov.alfapipe.model.ParameterPool;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
 import java.util.Enumeration;
@@ -85,11 +86,39 @@ public class ProgramSelectionPanel extends JPanel{
         }
     }
 
-    void disableEditing() {
-       Enumeration<AbstractButton> buttons = this.group.getElements();
-        while (buttons.hasMoreElements()){     
-            AbstractButton button = (AbstractButton)buttons.nextElement();
-            button.setEnabled(false);
+    public void disableEditing() {
+        if(this.group != null){
+            Enumeration<AbstractButton> buttons = this.group.getElements();
+            while (buttons.hasMoreElements()){     
+                AbstractButton button = (AbstractButton)buttons.nextElement();
+                button.setEnabled(false);
+            }
+        }
+       
+    }
+    
+    @Override
+    public void setBackground(Color bg){
+        super.setBackground(bg);
+        if(this.namePanel != null){
+            this.namePanel.setBackground(bg);
+        }
+        if(this.nameLabel != null){
+            this.nameLabel.setBackground(bg);
+        }
+        if(this.buttonPanel != null){
+            this.buttonPanel.setBackground(bg);
+        }
+        if(this.scrollable != null){
+            this.scrollable.setBackground(bg);
+        }
+        
+        if(this.group != null){
+            Enumeration<AbstractButton> buttons = this.group.getElements();
+            while (buttons.hasMoreElements()){     
+                AbstractButton button = (AbstractButton)buttons.nextElement();
+                button.setBackground(bg);
+            }
         }
     }
 }

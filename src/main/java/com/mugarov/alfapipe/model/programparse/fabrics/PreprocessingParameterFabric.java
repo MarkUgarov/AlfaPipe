@@ -3,11 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mugarov.alfapipe.model.programparse.generators;
+package com.mugarov.alfapipe.model.programparse.fabrics;
 
 import com.mugarov.alfapipe.model.ParameterPool;
 import com.mugarov.alfapipe.model.programparse.datatypes.NameField;
 import com.mugarov.alfapipe.model.programparse.datatypes.PairedInputConditions;
+import com.mugarov.alfapipe.model.programparse.datatypes.ParseableProgramList;
 import com.mugarov.alfapipe.model.programparse.datatypes.ParseableProgram;
 import java.util.ArrayList;
 
@@ -15,15 +16,18 @@ import java.util.ArrayList;
  *
  * @author mugarov
  */
-public class PreprocessingGenerator implements Generator{
-    private final String localFilePath;
-    private final GeneratorCore core;
+public class PreprocessingParameterFabric {
+    
     private final ArrayList<ParseableProgram> defaultList;
-     
-    public PreprocessingGenerator(){
+    private final int index;
+    private final String name;
+    
+    private final ParseableProgramList parameterList;
+            
+    public PreprocessingParameterFabric(){
         this.defaultList = new ArrayList<>();       
-        this.localFilePath = ParameterPool.PATH_PREPROCESSING_LIST;
-
+        this.name = ParameterPool.LABEL_PREPROCESSING;
+        this.index = 0;
         String[] endings = {".fastq.gz"};
         String[] outputEnding = new String[]{".fastq"};
         ParseableProgram mainProcessor = new ParseableProgram("gzip",
@@ -45,7 +49,7 @@ public class PreprocessingGenerator implements Generator{
         mainProcessor.setEssentialOutputs(fields);
         mainProcessor.setPairedConditions(new PairedInputConditions(true, "_",-2));
         
-        ParseableProgram nullPreProcessor= new ParseableProgram( "Choose non", 
+        ParseableProgram nullPreProcessor= new ParseableProgram( "Skip", 
                                                                 null, 
                                                                 null,
                                                                 0,
@@ -55,27 +59,16 @@ public class PreprocessingGenerator implements Generator{
                                                                 null); 
         this.defaultList.add(mainProcessor);
         this.defaultList.add(nullPreProcessor);
-
-        this.core = new GeneratorCore(this.localFilePath, this.defaultList);
+        
+        this.parameterList = new ParseableProgramList();
+        this.parameterList.setIndex(this.index);
+        this.parameterList.setName(this.name);
+        this.parameterList.setPrograms(this.defaultList);
     }
     
-    @Override
-    public String[] getAvailableNames(){
-        return this.core.getAvailableNames();
-    }
- 
-    @Override
-    public ParseableProgram get(String name){
-        return this.core.get(name);
+    public ParseableProgramList getList(){
+        return this.parameterList;
     }
     
-    @Override
-    public void parseOut() {
-        this.core.parseOut();
-    }
-    
-    @Override
-     public void parseIn(){ 
-        this.core.parseIn();
-    }
+        
 }

@@ -55,12 +55,13 @@ public abstract class ParameterPool {
     
     // texts for the SingleProgramPanels in the tabs
     public static final Color LABEL_IMPORTANCE_COLOR = Color.MAGENTA;
+    public static final String LABEL_CLUSTER = "Cluster settings";
     public static final String LABEL_PROGRAMS = "Programs:";
     public static final String LABEL_PREPROCESSING = "Preprocessing";
     public static final String LABEL_PROCESSING = "Processing";
     public static final String LABEL_ASSEMBLER = "Assembler";
-    public static final String LABEL_READS_VS_CONTIGS = "Reads vs. Contigs";
-    public static final String LABEL_PRODIGAL = "Prodigal";
+    public static final String LABEL_COMPARISON = "Comparison";
+    public static final String LABEL_ANNOTATION = "Gene Annotation";
     public static final String LABEL_TOOLS = "Tools:";
     public static final Dimension LABEL_OFFSET = new Dimension(
                 (int)(java.awt.Toolkit.getDefaultToolkit().getScreenSize().width*0.03),
@@ -74,6 +75,8 @@ public abstract class ParameterPool {
                 (int)(java.awt.Toolkit.getDefaultToolkit().getScreenSize().width*0.05),
                 (int)(java.awt.Toolkit.getDefaultToolkit().getScreenSize().height*0.005)
                 );
+    public static final Color DISTINGUISH_PROGRAM_COLOR_1 = Color.LIGHT_GRAY;
+    public static final Color DISTINGUISH_PROGRAM_COLOR_0 = Color.WHITE;
     public static final Color DISTINGUISH_BAR_COLOR = Color.gray;
     
     // texts and parameters for the SingleFilePanels in the tabs
@@ -93,9 +96,22 @@ public abstract class ParameterPool {
     public static final Color COLOR_SUCCESS = Color.CYAN;
     public static final Color COLOR_FAILURE = Color.darkGray;
     
+    
+    // standard Tooltips
+    public static final String TOOLTIP_CLUSTER_CHECKBOX_SELECTED = "The selected program will run on the Cluster.";
+    public static final String TOOLTIP_CLUSTER_CHECKBOX_UNSELECTED = "The selected program will run on you local machine.";
+    
     // available Tools and Assemblers
     
-    public static final String CONFIG_PREFIX = "/vol/ampipe/data/";
+        public static final String CONFIG_PREFIX = "/vol/ampipe/data/";
+    public static final String CONFIG_PATH = "CONFIG";
+    
+    public static final String OBLIGATORY_PREPROCESSING = "Preprocessing.yaml";
+    public static final String OBLIGATORY_PROCESSING = "Processing.yaml";
+    public static final String OBLIGATORY_ASSEMBLY = "Assembly.yaml";
+    public static final String OBLIGATORY_COMPARISON = "Comparison.yaml";
+    public static final String OBLIGATORY_ANNOTATION = "Annotation.yaml";
+    public static final String[] CONFIG_OBLIGATORIES = {"OBLIGATORY_PREPROCESSING", "OBLIGATORY_PROCESSING", "OBLIGATORY_ASSEMBLY","OBLIGATORY_COMPARISON","OBLIGATORY_ANNOTATION"};
     
     public static final Generator GENERATOR_PREPROCESSING = new PreprocessingGenerator();
     public static final String PATH_PREPROCESSING_LIST = "CONFIG/Preprocessing.yaml";
@@ -155,7 +171,7 @@ public abstract class ParameterPool {
     public static final String LOG_CHANGED_FROM = "Changed to this logfile from ";
     
     // Standard substitutions
-    public static final String[] REPLACE_REGEX = {"-", "/","\\", "?", ":"};
+    public static final String[] REPLACE_REGEX = {"-", "/", ":"};
     public static final String REPLACE_REPLACEMENT = "_";
     
 }

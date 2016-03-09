@@ -7,7 +7,7 @@ package com.mugarov.alfapipe.model.datatypes;
 
 import com.mugarov.alfapipe.model.ParameterPool;
 import com.mugarov.alfapipe.model.programparse.datatypes.NameField;
-import com.mugarov.alfapipe.model.programparse.datatypes.ParseableProgramParameters;
+import com.mugarov.alfapipe.model.programparse.datatypes.ParseableProgram;
 import com.mugarov.alfapipe.model.programparse.datatypes.ParameterField;
 import java.util.ArrayList;
 
@@ -15,20 +15,22 @@ import java.util.ArrayList;
  *
  * @author Mark
  */
-public class ProgramParameterSet {
+public class ProgramSet {
     
     private final String name;
     
-    private final ParseableProgramParameters program;
+    private final ParseableProgram program;
     private final ArrayList<InputParameter> parameters;
     private boolean isSelected;
+    private boolean isEmpty;
     
-    public ProgramParameterSet(ParseableProgramParameters program){
+    public ProgramSet(ParseableProgram program){
         if(program != null){
             this.program = program;
             this.name = this.program.getName();
             this.isSelected = (program.getStartCommand() != null);
             this.parameters = new ArrayList<>();
+            this.isEmpty = false;
 
             for(ParameterField pF: program.getParameters()){
                 boolean shown = !(pF.getName().equals(ParameterPool.PROGRAM_INPUT_PATH_SET_PARAMETER_NAME)||pF.getName().equals(ParameterPool.PROGRAM_OUTPUT_PATH_SET_PARAMETER_NAME));
@@ -39,11 +41,12 @@ public class ProgramParameterSet {
             this.program = null;
             this.name = null;
             this.isSelected = false;
+            this.isEmpty = true;
             this.parameters = new ArrayList<>();
         }
     }
     
-    public ProgramParameterSet(){
+    public ProgramSet(){
         this.program = null;
         this.name = null;
         this.isSelected = false;
@@ -74,7 +77,7 @@ public class ProgramParameterSet {
         return this.parameters;
     }
     
-    public ParseableProgramParameters getParsedParameters(){
+    public ParseableProgram getParsedParameters(){
         return this.program;
     }
     
@@ -85,6 +88,10 @@ public class ProgramParameterSet {
             }
         }
         return false;
+    }
+    
+    public boolean isEmpty(){
+        return this.isEmpty;
     }
     
 }

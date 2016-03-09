@@ -7,7 +7,7 @@ package com.mugarov.alfapipe.control.listeners.tabrelated.radiobuttons;
 
 import com.mugarov.alfapipe.model.ParameterPool;
 import com.mugarov.alfapipe.model.datatypes.SetOfFiles;
-import com.mugarov.alfapipe.model.programparse.datatypes.ParseableProgramParameters;
+import com.mugarov.alfapipe.model.programparse.datatypes.ParseableProgram;
 import java.awt.event.ActionEvent;
 
 /**
@@ -15,7 +15,7 @@ import java.awt.event.ActionEvent;
  * @author Mark
  */
 public class AssemblerListener implements ProgramListener{
-    private ParseableProgramParameters selectedAssembler;
+    private ParseableProgram selectedAssembler;
     private SetOfFiles fileSet;
     
     public AssemblerListener(){
@@ -35,7 +35,7 @@ public class AssemblerListener implements ProgramListener{
 //       System.out.println(ae.getActionCommand() +" has been performed");
        this.selectedAssembler = ParameterPool.GENERATOR_ASSEMBLER.get(ae.getActionCommand());
        if(this.fileSet != null){
-            this.fileSet.setAssembler(this.selectedAssembler);
+            this.fileSet.setProgram(2, selectedAssembler);
         }
     }
     
@@ -54,7 +54,7 @@ public class AssemblerListener implements ProgramListener{
     }
     
     @Override
-    public ParseableProgramParameters getSelected(){
+    public ParseableProgram getSelected(){
         return this.selectedAssembler;
     }
     

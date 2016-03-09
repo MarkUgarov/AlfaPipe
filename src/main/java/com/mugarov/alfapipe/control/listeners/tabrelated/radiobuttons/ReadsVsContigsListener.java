@@ -7,7 +7,7 @@ package com.mugarov.alfapipe.control.listeners.tabrelated.radiobuttons;
 
 import com.mugarov.alfapipe.model.ParameterPool;
 import com.mugarov.alfapipe.model.datatypes.SetOfFiles;
-import com.mugarov.alfapipe.model.programparse.datatypes.ParseableProgramParameters;
+import com.mugarov.alfapipe.model.programparse.datatypes.ParseableProgram;
 import java.awt.event.ActionEvent;
 
 /**
@@ -15,7 +15,7 @@ import java.awt.event.ActionEvent;
  * @author mugarov
  */
 public class ReadsVsContigsListener implements ProgramListener{
-      private ParseableProgramParameters selectedReadsVsContigs;
+      private ParseableProgram selectedReadsVsContigs;
     private SetOfFiles fileSet;
     
     public ReadsVsContigsListener(){
@@ -35,7 +35,7 @@ public class ReadsVsContigsListener implements ProgramListener{
 //       System.out.println(ae.getActionCommand() +" has been performed");
        this.selectedReadsVsContigs = ParameterPool.GENERATOR_READS_VS_CONTIGS.get(ae.getActionCommand());
        if(this.fileSet != null){
-            this.fileSet.setReadsVsContigs(this.selectedReadsVsContigs);
+            this.fileSet.setProgram(3, selectedReadsVsContigs);
         }
     }
     
@@ -54,7 +54,7 @@ public class ReadsVsContigsListener implements ProgramListener{
     }
     
       @Override
-    public ParseableProgramParameters getSelected(){
+    public ParseableProgram getSelected(){
         return this.selectedReadsVsContigs;
     }
     
@@ -70,7 +70,7 @@ public class ReadsVsContigsListener implements ProgramListener{
     }
 
     public int getMaxNameLength() {
-        int maxLength = ParameterPool.LABEL_READS_VS_CONTIGS.length();
+        int maxLength = ParameterPool.LABEL_COMPARISON.length();
         String[] names = ParameterPool.GENERATOR_READS_VS_CONTIGS.getAvailableNames();
         for(String name:names){
             if(name.length()<maxLength){

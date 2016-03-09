@@ -10,7 +10,7 @@ import com.mugarov.alfapipe.control.listeners.tabrelated.singlefile.SingleFileLi
 import com.mugarov.alfapipe.model.Executioner;
 import com.mugarov.alfapipe.model.LogFileManager;
 import com.mugarov.alfapipe.model.ParameterPool;
-import com.mugarov.alfapipe.model.programparse.datatypes.ParseableProgramParameters;
+import com.mugarov.alfapipe.model.programparse.datatypes.ParseableProgram;
 import com.mugarov.alfapipe.view.MultiFileChooser;
 import com.mugarov.alfapipe.view.OutputDirectoryChooser;
 import com.mugarov.alfapipe.view.mainview.tab.Tab;
@@ -30,23 +30,27 @@ public class SetOfFiles implements Executable, Runnable{
     private final MultiFileChooser inputChooser;
     private final OutputDirectoryChooser outputChooser;
     
+    private final ProgramSet clusterParameters;
+    
     private File outputDirectory;
     private final LogFileManager log;
-    private ProgramParameterSet usePreprocessing;
-    private ProgramParameterSet useProcessing;
-    private ProgramParameterSet useAssembler;
-    private ProgramParameterSet useReadsVsContigs;
-    private ProgramParameterSet useProdigal;
-    private final ArrayList<ProgramParameterSet> availableTools;
+    private ArrayList<ProgramSet> usedPrograms;
+    private ProgramSet usePreprocessing;
+    private ProgramSet useProcessing;
+    private ProgramSet useAssembler;
+    private ProgramSet useReadsVsContigs;
+    private ProgramSet useProdigal;
+    private final ArrayList<ProgramSet> availableTools;
     
     private final Tab tab;
     
     
     private boolean started;
     
-    public SetOfFiles(String id, Tab tab){
+    public SetOfFiles(String id, Tab tab, ProgramSet clusterSet){
         this.id = id;
         this.name = id;
+        this.clusterParameters = clusterSet;
         this.outputDirectory = new File(ParameterPool.FILE_ORIGIN_DEFAULT, id);
         this.files = new ArrayList<>();
         this.tab = tab;
@@ -55,18 +59,19 @@ public class SetOfFiles implements Executable, Runnable{
         this.tab.setOutputPath(this.outputDirectory.getAbsolutePath());
         this.log = new LogFileManager(this.outputDirectory.getAbsolutePath());
         this.log.appendLine("Log of the Set "+this.id, SetOfFiles.class.getName());
+        this.usedPrograms = new ArrayList<>();
         this.availableTools = new ArrayList<>();
         for(String toolName: ParameterPool.GENERTATOR_TOOLS.getAvailableNames()){
-            this.availableTools.add(new ProgramParameterSet(ParameterPool.GENERTATOR_TOOLS.get(toolName)));
+            this.availableTools.add(new ProgramSet(ParameterPool.GENERTATOR_TOOLS.get(toolName)));
         }
        
-        for(ProgramParameterSet par:this.availableTools){
+        for(ProgramSet par:this.availableTools){
             ParameterListener paramListener = new ParameterListener(par.getInputParameters());
-            this.tab.addProgram(par.getName(), par.getInputParameters(), paramListener);
+            this.tab.addTool(par.getName(), par.getInputParameters(), paramListener);
         }
         this.started =false;
     }
-    
+
     
     public void addFiles(File[] additionalFiles){
         for(File file:additionalFiles){
@@ -86,6 +91,9 @@ public class SetOfFiles implements Executable, Runnable{
             }
             if(add){
                 InputFile inFile = new InputFile(file.getPath(), this.availableTools, this.log);
+                for(ProgramSet progSet:this.usedPrograms){
+                    // TODO
+                }
                 inFile.selectPreprocessing(this.usePreprocessing, false);
                 inFile.selectProcessing(this.useProcessing,false); 
                 inFile.selectAssembler(this.useAssembler,false); 
@@ -97,24 +105,17 @@ public class SetOfFiles implements Executable, Runnable{
             }
             
         }
-//        System.out.println("Files are now:");
-//        for(InputFile f: this.files){
-//            System.out.println("\t"+f.getName());
-//        }
+
     }
     
+    
     public void deleteFile(String path){
-//        System.out.println("Set tries to find and delete "+path);
         for(int i=0; i<this.files.size(); i++){
             if (this.files.get(i).getPath().equals(path)|| !this.files.get(i).exists() ){
                 this.files.remove(i);
             }
         }
         this.tab.deleteFile(path);
-//        System.out.println("Files are now:");
-//        for(InputFile f: this.files){
-//            System.out.println("\t"+f.getName());
-//        }
     }
     
     public void selectToolForAll(String toolName){
@@ -129,8 +130,41 @@ public class SetOfFiles implements Executable, Runnable{
         // tools 
     }
     
-    public void setPreprocessing(ParseableProgramParameters proc){
-        this.usePreprocessing = new ProgramParameterSet(proc);
+    public void setProgram(int index, ParseableProgram proc){
+        ProgramSet set = new ProgramSet(proc);
+        if(index>=this.usedPrograms.size()){
+            this.usedPrograms.add(set);
+        }
+        /**
+         * TODO: rewrite as soon as 
+         * tab.set(int index, ArrayList<InputParameter> parameters, ParameterListener listener) 
+         * is implemented
+         */
+        switch(index){
+            case 0: this.setPreprocessing(proc);
+                    break;
+            case 1: this.setProcessing(proc);
+                    break;
+            case 2: this.setAssembler(proc);
+                    break;
+            case 3: this.setReadsVsContigs(proc);
+                    break;
+            case 4: this.setProdigal(proc);
+                    break;
+            default:System.err.println("Index "+index+" is not available for this old program structure.");
+        }
+        
+        /**
+         * end rewrite
+         */
+        for(InputFile file:this.files){
+            file.selectProgram(index, set, true);
+            this.tab.setValidation(file.getAbsolutePath(), file.isValid(), file.getValidTools());
+        }
+    }
+    
+    public void setPreprocessing(ParseableProgram proc){
+        this.usePreprocessing = new ProgramSet(proc);
         ParameterListener paramListener = new ParameterListener(this.usePreprocessing.getInputParameters());
         this.tab.setPreprocessing(this.usePreprocessing.getName(), this.usePreprocessing.getInputParameters(), paramListener);
         for(InputFile file: this.files){
@@ -139,8 +173,8 @@ public class SetOfFiles implements Executable, Runnable{
         }
     }
     
-    public void setProcessing(ParseableProgramParameters proc){
-        this.useProcessing = new ProgramParameterSet(proc);
+    public void setProcessing(ParseableProgram proc){
+        this.useProcessing = new ProgramSet(proc);
         ParameterListener paramListener = new ParameterListener(this.useProcessing.getInputParameters());
         this.tab.setProcessing(this.useProcessing.getName(), this.useProcessing.getInputParameters(), paramListener);
         for(InputFile file: this.files){
@@ -149,8 +183,8 @@ public class SetOfFiles implements Executable, Runnable{
         }
     }
     
-    public void setAssembler(ParseableProgramParameters ass){
-        this.useAssembler = new ProgramParameterSet(ass);
+    public void setAssembler(ParseableProgram ass){
+        this.useAssembler = new ProgramSet(ass);
         ParameterListener paramListener = new ParameterListener(this.useAssembler.getInputParameters());
         this.tab.setAssembler(this.useAssembler.getName(),this.useAssembler.getInputParameters(), paramListener);
         for(InputFile file: files){
@@ -159,8 +193,8 @@ public class SetOfFiles implements Executable, Runnable{
         }
     }
     
-    public void setReadsVsContigs(ParseableProgramParameters proc){
-       this.useReadsVsContigs = new ProgramParameterSet(proc);
+    public void setReadsVsContigs(ParseableProgram proc){
+       this.useReadsVsContigs = new ProgramSet(proc);
        ParameterListener paramListener = new ParameterListener(this.useReadsVsContigs.getInputParameters());
        this.tab.setReadsVsContigs(this.useReadsVsContigs.getName(),this.useReadsVsContigs.getInputParameters(), paramListener);
        for(InputFile file: this.files){
@@ -169,8 +203,8 @@ public class SetOfFiles implements Executable, Runnable{
        }
     }
     
-    public void setProdigal(ParseableProgramParameters proc){
-      this.useProdigal = new ProgramParameterSet(proc);
+    public void setProdigal(ParseableProgram proc){
+      this.useProdigal = new ProgramSet(proc);
       ParameterListener paramListener = new ParameterListener(this.useProdigal.getInputParameters());
       this.tab.setProdigal(this.useProdigal.getName(),this.useProdigal.getInputParameters(), paramListener);
       for(InputFile file: this.files){
@@ -206,7 +240,6 @@ public class SetOfFiles implements Executable, Runnable{
             this.addFiles(this.inputChooser.getSelectedFiles());
 
         } else {
-//            System.out.println("File Choosing was canceled by user.");
         }
     }
     
@@ -218,7 +251,6 @@ public class SetOfFiles implements Executable, Runnable{
             this.log.setParentDirectory(this.outputDirectory.getAbsolutePath());
         }
         else{
-//            System.out.println("Output-Directory was not changed.");
         }
         
     }
@@ -436,6 +468,14 @@ public class SetOfFiles implements Executable, Runnable{
         else{
             this.inputChooser.setInputFilter("All", null);
         }
+    }
+
+    public void selectClusterFor(int index) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void unselectClusterFor(int index) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
     

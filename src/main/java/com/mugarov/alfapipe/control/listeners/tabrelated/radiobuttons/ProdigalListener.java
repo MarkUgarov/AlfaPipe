@@ -7,7 +7,7 @@ package com.mugarov.alfapipe.control.listeners.tabrelated.radiobuttons;
 
 import com.mugarov.alfapipe.model.ParameterPool;
 import com.mugarov.alfapipe.model.datatypes.SetOfFiles;
-import com.mugarov.alfapipe.model.programparse.datatypes.ParseableProgramParameters;
+import com.mugarov.alfapipe.model.programparse.datatypes.ParseableProgram;
 import java.awt.event.ActionEvent;
 
 /**
@@ -15,7 +15,7 @@ import java.awt.event.ActionEvent;
  * @author mugarov
  */
 public class ProdigalListener implements ProgramListener{
-    private ParseableProgramParameters selectedProdigal;
+    private ParseableProgram selectedProdigal;
     private SetOfFiles fileSet;
     
     public ProdigalListener(){
@@ -35,7 +35,7 @@ public class ProdigalListener implements ProgramListener{
 //       System.out.println(ae.getActionCommand() +" has been performed");
        this.selectedProdigal = ParameterPool.GENERATOR_PRODIGAL.get(ae.getActionCommand());
        if(this.fileSet != null){
-            this.fileSet.setProdigal(this.selectedProdigal);
+            this.fileSet.setProgram(4, selectedProdigal);
         }
     }
     
@@ -54,7 +54,7 @@ public class ProdigalListener implements ProgramListener{
     }
     
     @Override
-    public ParseableProgramParameters getSelected(){
+    public ParseableProgram getSelected(){
         return this.selectedProdigal;
     }
     
@@ -70,7 +70,7 @@ public class ProdigalListener implements ProgramListener{
     }
 
     public int getMaxNameLength() {
-        int maxLength = ParameterPool.LABEL_PRODIGAL.length();
+        int maxLength = ParameterPool.LABEL_ANNOTATION.length();
         String[] names = ParameterPool.GENERATOR_PRODIGAL.getAvailableNames();
         for(String name:names){
             if(name.length()<maxLength){

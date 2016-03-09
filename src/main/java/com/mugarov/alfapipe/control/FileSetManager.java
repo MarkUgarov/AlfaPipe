@@ -7,8 +7,11 @@ package com.mugarov.alfapipe.control
 ;
 
 import com.mugarov.alfapipe.control.listeners.tabrelated.TabListenerBag;
+import com.mugarov.alfapipe.control.listeners.tabrelated.parameters.ParameterListener;
 import com.mugarov.alfapipe.model.ComponentPool;
+import com.mugarov.alfapipe.model.datatypes.ProgramSet;
 import com.mugarov.alfapipe.model.datatypes.SetOfFiles;
+import com.mugarov.alfapipe.model.programparse.fabrics.ClusterParameterFabric;
 import com.mugarov.alfapipe.view.mainview.MainJFrame;
 import com.mugarov.alfapipe.view.mainview.tab.Tab;
 import java.util.ArrayList;
@@ -53,10 +56,11 @@ public class FileSetManager {
                 i--;
             }
         }
+        ProgramSet clusterSet = (new ClusterParameterFabric()).getSet();
+        TabListenerBag bag = new TabListenerBag(clusterSet);
         
-        TabListenerBag bag = new TabListenerBag();
         Tab tab = this.frame.getTabPane().newTab(name,bag);
-        SetOfFiles set = new SetOfFiles(name, tab);
+        SetOfFiles set = new SetOfFiles(name, tab, clusterSet);
         bag.setFileSet(set);
         bag.setFileManager(this);
         this.sets.add(set);

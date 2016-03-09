@@ -15,6 +15,7 @@ public class ParameterField{
     private String defaultValue;
     private int position;
     private boolean optional;
+    private boolean avoidLeadingSpace;
     
     public ParameterField(){
         this.name= null;
@@ -22,6 +23,7 @@ public class ParameterField{
         this.defaultValue = null;
         this.position = 0;
         this.optional = true;
+        this.avoidLeadingSpace = false;
     }
     
     /**
@@ -44,6 +46,7 @@ public class ParameterField{
         this.defaultValue = defaultValue;
         this.position = pos;
         this.optional = optional;
+        this.avoidLeadingSpace = false;
         
     }
 
@@ -95,6 +98,20 @@ public class ParameterField{
     
     public void setOptional(boolean optional){
         this.optional = optional;
+    }
+
+    /**
+     * @return the avoidLeadingSpace
+     */
+    public boolean isAvoidLeadingSpace() {
+        return avoidLeadingSpace;
+    }
+
+    /**
+     * @param avoidLeadingSpace the avoidLeadingSpace to set
+     */
+    public void setAvoidLeadingSpace(boolean avoidLeadingSpace) {
+        this.avoidLeadingSpace = avoidLeadingSpace;
     }
     
 

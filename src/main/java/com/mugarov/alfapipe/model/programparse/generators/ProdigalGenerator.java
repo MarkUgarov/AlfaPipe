@@ -6,7 +6,7 @@
 package com.mugarov.alfapipe.model.programparse.generators;
 
 import com.mugarov.alfapipe.model.ParameterPool;
-import com.mugarov.alfapipe.model.programparse.datatypes.ParseableProgramParameters;
+import com.mugarov.alfapipe.model.programparse.datatypes.ParseableProgram;
 import java.util.ArrayList;
 
 /**
@@ -17,7 +17,7 @@ public class ProdigalGenerator implements Generator{
     
     private final String localFilePath;
     private final GeneratorCore core;
-    private final ArrayList<ParseableProgramParameters> defaultList;
+    private final ArrayList<ParseableProgram> defaultList;
      
     public ProdigalGenerator(){
         this.defaultList = new ArrayList<>();       
@@ -25,7 +25,7 @@ public class ProdigalGenerator implements Generator{
 
         String[] endings = {".fa", ".fasta", ".fna"};
         String[] outputEnding = new String[]{".fa"};
-        ParseableProgramParameters prodigal = new ParseableProgramParameters( ParameterPool.NAME_DEFAULT_PRODIGAL,
+        ParseableProgram prodigal = new ParseableProgram( ParameterPool.NAME_DEFAULT_PRODIGAL,
                                                                 "prodigal", 
                                                                 "-i",
                                                                 -2,
@@ -37,7 +37,7 @@ public class ProdigalGenerator implements Generator{
         prodigal.addParameter("write nucleotide sequence", "-d", ParameterPool.PROGRAM_EMPTY_PARAMETER_VALUE, 2, true);
         prodigal.setOnlyOutputDirectorySetable(false);
         
-        ParseableProgramParameters nullProdigal= new ParseableProgramParameters( "Choose non", 
+        ParseableProgram nullProdigal= new ParseableProgram( "Choose non", 
                                                                 null, 
                                                                 null,
                                                                 0,
@@ -58,7 +58,7 @@ public class ProdigalGenerator implements Generator{
     }
  
     @Override
-    public ParseableProgramParameters get(String name){
+    public ParseableProgram get(String name){
         return this.core.get(name);
     }
     

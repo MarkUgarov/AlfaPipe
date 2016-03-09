@@ -5,7 +5,7 @@
  */
 package com.mugarov.alfapipe.model;
 
-import com.mugarov.alfapipe.model.datatypes.ProgramParameterSet;
+import com.mugarov.alfapipe.model.datatypes.ProgramSet;
 import com.mugarov.alfapipe.model.programparse.datatypes.NameField;
 import com.mugarov.alfapipe.model.programparse.datatypes.ParameterField;
 import java.io.File;
@@ -18,7 +18,7 @@ import java.util.ArrayList;
 public class ExecutionCommandBuilder {
     
     private final LogFileManager log;
-    private ProgramParameterSet set;
+    private ProgramSet set;
     private File inputFile;
     private File outputFile;
     private boolean outputIsDirectory;
@@ -40,7 +40,7 @@ public class ExecutionCommandBuilder {
      * @param pairedFiles 
      * @param originalFile 
      */
-    public void buildString(   ProgramParameterSet parameterSet,
+    public void buildString(   ProgramSet parameterSet,
                                 File inputFile,
                                 String parentOutputDirectory,
                                 ArrayList<File> pairedFiles,
@@ -54,14 +54,14 @@ public class ExecutionCommandBuilder {
          */
         this.log.appendLine("Building command for "+parameterSet.getName()+" with inputFile "+inputFile.getName(), ExecutionCommandBuilder.class.getName());
         if(parameterSet.getParsedParameters().isOnlyOutputDirectorySetable()){
-            this.outputFile = new File(parentOutputDirectory, parameterSet.getParsedParameters().getName()
+            this.outputFile = new File(parentOutputDirectory, this.getClearName(parameterSet.getParsedParameters().getName())
                                                               +"_"
                                                               +this.getClearName(originalFile));
             this.outputFile.mkdirs();
             this.outputIsDirectory = true;
         }
         else{
-            this.outputFile = new File(parentOutputDirectory, parameterSet.getName()
+            this.outputFile = new File(parentOutputDirectory, this.getClearName(parameterSet.getName())
                                                         + File.separatorChar
                                                         + parameterSet.getParsedParameters().getName()
                                                         + "_"
@@ -95,12 +95,17 @@ public class ExecutionCommandBuilder {
                 if(pf.getName().equals(ParameterPool.PROGRAM_INPUT_PATH_SET_PARAMETER_NAME)){
                     if(writeCommand){
                         builder.append(pf.getCommand()); 
-                        builder.append(" ");
+                        if(!pf.isAvoidLeadingSpace()){
+                            builder.append(" ");
+                        }
+                        
                     }
                     
 
                     builder.append(inputFile.getAbsolutePath());
-                    builder.append(" ");
+                    if(!pf.isAvoidLeadingSpace()){
+                        builder.append(" ");
+                    }
                     if(pairedFiles != null && parameterSet.getParsedParameters().getPairedCommand() == null){
                         for(File file:pairedFiles){
                             builder.append(file.getAbsolutePath());
@@ -111,7 +116,9 @@ public class ExecutionCommandBuilder {
                 else if(pf.getName().equals(ParameterPool.PROGRAM_OUTPUT_PATH_SET_PARAMETER_NAME)){
                     if(writeCommand){
                         builder.append(pf.getCommand()); 
-                        builder.append(" ");
+                        if(!pf.isAvoidLeadingSpace()){
+                            builder.append(" ");
+                        }
                     }
                     builder.append(outputFile.getAbsolutePath());
                     builder.append(" ");
@@ -120,7 +127,9 @@ public class ExecutionCommandBuilder {
                 else if(pf.getName().equals(ParameterPool.PROGRAM_PAIRED_PARAMETER_NAME)){
                     if(writeCommand){
                         builder.append(pf.getCommand()); 
-                        builder.append(" ");
+                        if(!pf.isAvoidLeadingSpace()){
+                            builder.append(" ");
+                        }
                     }
                     if(pairedFiles != null){
                         for(File file:pairedFiles){
@@ -146,7 +155,9 @@ public class ExecutionCommandBuilder {
                                 if(parameterSet.getInputParameters().get(i).getBoolean()||!parameterSet.getInputParameters().get(i).isOptional()){
                                     if(writeCommand){
                                         builder.append(pf.getCommand()); 
-                                        builder.append(" ");
+                                        if(!pf.isAvoidLeadingSpace() || !writeValue){
+                                            builder.append(" ");
+                                        }
                                     }
                                     if(writeValue){
                                         String value = parameterSet.getInputParameters().get(i).getValue();
@@ -190,14 +201,25 @@ public class ExecutionCommandBuilder {
      * returns "No_valid_name" if the filename could not be cleared
      */
     private String getClearName(File file){
-        String[] splitname = file.getName().split("\\.",2);
+        return this.getClearName(file.getName());
+    }
+    
+    /**
+     * Removes the extension and most of the special characters from a String.
+     * @param name can be any non-empty String
+     * @return the name of the file without extensions and most of the 
+     * special characters,
+     * returns "No_valid_name" if the String could not be cleared
+     */
+    private String getClearName(String name){
+        String[] splitname = name.split("\\.",2);
         if(splitname.length== 0){
             return "No_valid_name";
         }
         else{
-            String name = splitname[0];
+            String spln = splitname[0];
             for(String reg:ParameterPool.REPLACE_REGEX){
-                name.replaceAll(reg, ParameterPool.REPLACE_REPLACEMENT);
+                spln.replaceAll(reg, ParameterPool.REPLACE_REPLACEMENT);
             }
             return name;
         }
@@ -221,7 +243,7 @@ public class ExecutionCommandBuilder {
     /**
      * Be careful! OutputFile may not exist, especially if the outputpath can 
      * not be set manually - better user "getRelevantOutputFor()"-method.
-     * @return 
+     * @return the absolute output path 
      */
     public String getOutputPath(){
         return this.outputFile.getAbsolutePath();
@@ -233,14 +255,14 @@ public class ExecutionCommandBuilder {
      * Use buildString before! Make sure the execution of the set (= the execution 
      * of the command given this.buildString(...) ) worked and the output files are
      * written already.
-     * @param following ist the ProgramParameterSet which an output could be defined for
+     * @param following ist the ProgramSet which an output could be defined for
      * @param originalFile is the original input-file at the beginning of the pipe
      * @return different parameters:
      *  -all files if there is no specific output defined for ANY program at all
      *  -OR the specific output defined if it is defined for the set "following"
      *  -OR all files if there is no specific output defined for this specific set "following"
      */
-    public ArrayList<File> getRelevantOutputFor(ProgramParameterSet following, File originalFile){
+    public ArrayList<File> getRelevantOutputFor(ProgramSet following, File originalFile){
         if(this.set == null){
             this.log.appendLine(ParameterPool.LOG_WARNING+"Commandbuilder: no set! ", ExecutionCommandBuilder.class.getName());
             return null;
@@ -278,7 +300,7 @@ public class ExecutionCommandBuilder {
         return ret;
     }
     
-    public ArrayList<File> getSpecifiFilesFor(ProgramParameterSet following, File originalFile){
+    public ArrayList<File> getSpecifiFilesFor(ProgramSet following, File originalFile){
         ArrayList<File> ret;
         ret = new ArrayList<>(this.set.getParsedParameters().getEssentialOutputs().size());
         if(following.getName() == null){
@@ -305,7 +327,7 @@ public class ExecutionCommandBuilder {
         return ret;
     }
     
-    public ArrayList<File> getAllIfNotSpecificFor(ProgramParameterSet following, File originalFile){
+    public ArrayList<File> getAllIfNotSpecificFor(ProgramSet following, File originalFile){
         // return null if there is specific output for following
         for(NameField field:this.set.getParsedParameters().getEssentialOutputs()){
             if(field.getEssentialFor() == null || field.getEssentialFor().equals(following.getName())){
@@ -379,7 +401,7 @@ public class ExecutionCommandBuilder {
         return new File(parentDir, newName.toString());
     }
     
-    public boolean useOnlyThisOutput(ProgramParameterSet following){
+    public boolean useOnlyThisOutput(ProgramSet following){
         if(this.set == null){
            this.log.appendLine(ParameterPool.LOG_WARNING+"Trying to access an ProgramParameterSet which is 'null'!", ExecutionCommandBuilder.class.getName());
             return false;

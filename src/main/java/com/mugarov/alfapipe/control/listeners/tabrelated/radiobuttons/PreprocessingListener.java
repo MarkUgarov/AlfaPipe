@@ -7,7 +7,7 @@ package com.mugarov.alfapipe.control.listeners.tabrelated.radiobuttons;
 
 import com.mugarov.alfapipe.model.ParameterPool;
 import com.mugarov.alfapipe.model.datatypes.SetOfFiles;
-import com.mugarov.alfapipe.model.programparse.datatypes.ParseableProgramParameters;
+import com.mugarov.alfapipe.model.programparse.datatypes.ParseableProgram;
 import java.awt.event.ActionEvent;
 
 /**
@@ -15,7 +15,7 @@ import java.awt.event.ActionEvent;
  * @author mugarov
  */
 public class PreprocessingListener implements ProgramListener{
-    private ParseableProgramParameters selectedPreprocessing;
+    private ParseableProgram selectedPreprocessing;
     private SetOfFiles fileSet;
     
     public PreprocessingListener(){
@@ -34,7 +34,7 @@ public class PreprocessingListener implements ProgramListener{
 //       System.out.println(ae.getActionCommand() +" has been performed");
        this.selectedPreprocessing = ParameterPool.GENERATOR_PREPROCESSING.get(ae.getActionCommand());
        if(this.fileSet != null){
-            this.fileSet.setPreprocessing(this.selectedPreprocessing);
+            this.fileSet.setProgram(0, selectedPreprocessing);
         }
     }
     
@@ -53,7 +53,7 @@ public class PreprocessingListener implements ProgramListener{
     }
     
     @Override
-    public ParseableProgramParameters getSelected(){
+    public ParseableProgram getSelected(){
         return this.selectedPreprocessing;
     }
     

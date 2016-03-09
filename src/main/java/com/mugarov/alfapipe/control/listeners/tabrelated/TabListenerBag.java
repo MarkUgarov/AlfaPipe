@@ -9,8 +9,11 @@ import com.mugarov.alfapipe.control.listeners.tabrelated.radiobuttons.Processing
 import com.mugarov.alfapipe.control.listeners.tabrelated.radiobuttons.AssemblerListener;
 import com.mugarov.alfapipe.control.listeners.tabrelated.radiobuttons.PreprocessingListener;
 import com.mugarov.alfapipe.control.FileSetManager;
+import com.mugarov.alfapipe.control.listeners.tabrelated.cluster.ClusterSelectionListener;
+import com.mugarov.alfapipe.control.listeners.tabrelated.parameters.ParameterListener;
 import com.mugarov.alfapipe.control.listeners.tabrelated.radiobuttons.ProdigalListener;
 import com.mugarov.alfapipe.control.listeners.tabrelated.radiobuttons.ReadsVsContigsListener;
+import com.mugarov.alfapipe.model.datatypes.ProgramSet;
 import com.mugarov.alfapipe.model.datatypes.SetOfFiles;
 
 /**
@@ -24,6 +27,9 @@ public class TabListenerBag {
     private final ReadsVsContigsListener readsVsContigsListener;
     private final ProdigalListener prodigalListener;
     
+    private final ParameterListener clusterParameterListener;
+    private final ClusterSelectionListener clusterSelectionListener;
+    
     private final TabButtonListener  buttonListener;
     private final ToolSelectListener toolListener;
     
@@ -33,12 +39,15 @@ public class TabListenerBag {
     private int maxLength;
     
     
-    public TabListenerBag(){
+    public TabListenerBag(ProgramSet clusterSet){
         this.procRadioListener = new ProcessingListener();
         this.preListener = new PreprocessingListener();
         this.assRadioListener = new AssemblerListener();
         this.readsVsContigsListener = new ReadsVsContigsListener();
         this.prodigalListener = new ProdigalListener();
+        
+        this.clusterParameterListener = new ParameterListener(clusterSet.getInputParameters());
+        this.clusterSelectionListener = new ClusterSelectionListener();
         
         this.buttonListener = new TabButtonListener();
         this.toolListener = new ToolSelectListener();
@@ -55,6 +64,7 @@ public class TabListenerBag {
         this.readsVsContigsListener.setFileSet(this.fileSet);
         this.prodigalListener.setFileSet(this.fileSet);
         this.toolListener.setFileSet(this.fileSet);
+        this.clusterParameterListener.setFileSet(this.fileSet);
     }
     
     public void setFileManager(FileSetManager man){
@@ -88,6 +98,14 @@ public class TabListenerBag {
     
     public ToolSelectListener getToolListener(){
         return this.toolListener;
+    }
+    
+    public ParameterListener getClusterParameterListener(){
+        return this.clusterParameterListener;
+    }
+    
+    public ClusterSelectionListener getClusterSelectionListener(){
+        return this.clusterSelectionListener;
     }
     
     private void evaluateMaxLength(){

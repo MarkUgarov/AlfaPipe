@@ -6,6 +6,7 @@
 package com.mugarov.alfapipe.view.mainview.tab;
 
 import com.mugarov.alfapipe.control.listeners.tabrelated.TabListenerBag;
+import com.mugarov.alfapipe.control.listeners.tabrelated.parameters.ParameterListener;
 import javax.swing.JTabbedPane;
 
 /**

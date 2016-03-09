@@ -21,6 +21,7 @@ public class InputParameter {
     private final boolean isBoolean;
     private boolean booleanValue;
     private final boolean isOptional;
+    private final boolean avoidLeadingSpace;
     
     public InputParameter(ParameterField field, boolean shown){
         this.name = field.getName();
@@ -35,7 +36,19 @@ public class InputParameter {
         this.booleanValue = true;
         this.isOptional = field.isOptional();
         this.shown = shown;
+        this.avoidLeadingSpace = field.isAvoidLeadingSpace();
     }
+
+    public InputParameter(String name, String value, boolean isBoolean, boolean booleanValue, boolean optional, boolean shown, boolean avoidLeadingSpace) {
+        this.name = name;
+        this.value = value;
+        this.isBoolean = isBoolean;
+        this.booleanValue = (this.isBoolean && booleanValue);
+        this.isOptional = optional;
+        this.shown = shown;
+        this.avoidLeadingSpace = avoidLeadingSpace;
+    }
+    
     
     public String getName() {
         return name;
@@ -84,5 +97,12 @@ public class InputParameter {
     
     public boolean isOptional(){
         return this.isOptional;
+    }
+
+    /**
+     * @return the avoidLeadingSpace
+     */
+    public boolean isAvoidLeadingSpace() {
+        return avoidLeadingSpace;
     }
 }
