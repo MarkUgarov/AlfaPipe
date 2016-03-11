@@ -81,7 +81,7 @@ public class GeneratorCore {
 
                 factory.createGenerator(fos).writeObject(this.available);
             } catch (IOException ex) {
-                Logger.getLogger(AssemblerGenerator.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(GeneratorCore.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
@@ -95,7 +95,7 @@ public class GeneratorCore {
                     this.available.add(ass);
                 }
             } catch (IOException ex) {
-                Logger.getLogger(AssemblerGenerator.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(GeneratorCore.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         

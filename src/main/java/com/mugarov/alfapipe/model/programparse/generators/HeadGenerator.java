@@ -31,6 +31,7 @@ public class HeadGenerator{
     public HeadGenerator(){
         this.cores = new ArrayList<>();
         this.usedIndices = new ArrayList<>();
+//        this.configDir = new File(ParameterPool.CONFIG_PREFIX+System.getProperty("user.name")+File.separator+"TestExtendedCore"); 
         this.configDir = new File(ParameterPool.CONFIG_PREFIX+System.getProperty("user.name")+File.separator+ParameterPool.CONFIG_PATH); 
         if(!this.configDir.exists() || this.configDir.isDirectory()){
             this.configDir.mkdirs();
@@ -50,8 +51,8 @@ public class HeadGenerator{
     /**
      * 
      * @param name the name of the application
-     * @param listID the ID of the list you want to get the 
-     * ParseableProgramParamter from
+     * @param listID the ID of the list you want to getProgramSetList the 
+ ParseableProgramParamter from
      * @return the ParseableProgram with the requested name or
  null if the list is null or the index is out of range or if the 
  requested name does not exist in that list
@@ -70,6 +71,22 @@ public class HeadGenerator{
         else{
             return null;
         }
+    }
+    
+    public ParseableProgramList getParseableProgramList(int listID){
+        if(this.cores != null && !this.cores.isEmpty() && listID<this.cores.size()){
+            return this.cores.get(listID).getList();
+        }
+        else if(this.cores != null && !this.cores.isEmpty() && listID<0){
+            int i = listID;
+            while(i<0){
+                i= this.cores.size() + i;
+            }
+            return this.cores.get(i).getList();
+        }
+         else{
+             return null;
+         }
     }
 
     /**
@@ -98,12 +115,18 @@ public class HeadGenerator{
         for(String obl:ParameterPool.CONFIG_OBLIGATORIES){
             if(!fileNames.contains(obl)){
                 params = this.generateDefaultOfObligatory(obl);
-                index = params.getIndex();
-                while(this.usedIndices.contains(index)){
-                    index++;
+                if(params == null){
+                    System.err.println("Parameter for "+obl+" could not be found!");
                 }
-                this.cores.add(new ExtendedCore((new File(this.configDir, obl)).getPath(), params, index));
-                this.usedIndices.add(index);
+                else{
+                    index = params.getIndex();
+                    while(this.usedIndices.contains(index)){
+                        index++;
+                    }
+                    this.cores.add(new ExtendedCore((new File(this.configDir, obl)).getPath(), params, index));
+                    this.usedIndices.add(index);
+                }
+                
             }
 
         }
@@ -115,7 +138,7 @@ public class HeadGenerator{
         
     }
     
-    public ProgramSetList get(int index){
+    public ProgramSetList getProgramSetList(int index){
         return this.getAll().get(index);
     }
     

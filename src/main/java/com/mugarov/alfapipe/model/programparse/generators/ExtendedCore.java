@@ -8,7 +8,6 @@ package com.mugarov.alfapipe.model.programparse.generators;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import com.mugarov.alfapipe.model.ParameterPool;
 import com.mugarov.alfapipe.model.programparse.datatypes.ParseableProgramList;
 import com.mugarov.alfapipe.model.programparse.datatypes.ParseableProgram;
 import java.io.File;
@@ -92,7 +91,7 @@ public class ExtendedCore {
 
                 factory.createGenerator(fos).writeObject(this.parseableList);
             } catch (IOException ex) {
-                Logger.getLogger(AssemblerGenerator.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ExtendedCore.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         else{
@@ -106,7 +105,7 @@ public class ExtendedCore {
                 ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
                 this.parseableList =   mapper.readValue(this.localFile, ParseableProgramList.class);        
             } catch (IOException ex) {
-                Logger.getLogger(AssemblerGenerator.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ExtendedCore.class.getName()).log(Level.SEVERE, null, ex);
             }
         }    
     }

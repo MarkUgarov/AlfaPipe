@@ -62,7 +62,7 @@ public class AssemblerParameterFabric {
         
         NameField essential4 = new NameField();
         essential4.setName("454AllContigs.fna");
-        essential4.setEssentialFor(ParameterPool.NAME_DEFAULT_PRODIGAL);
+        essential4.setEssentialFor("Prodigal");
         essential4.setUseOnly(true);
         newbler.addEssentialOutput(essential4);
         

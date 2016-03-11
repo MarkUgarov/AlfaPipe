@@ -31,7 +31,7 @@ public class GeneAnnotationParameterFabric {
 
         String[] endings = {".fa", ".fasta", ".fna"};
         String[] outputEnding = new String[]{".fa"};
-        ParseableProgram prodigal = new ParseableProgram( ParameterPool.NAME_DEFAULT_PRODIGAL,
+        ParseableProgram prodigal = new ParseableProgram( "Prodigal",
                                                                 "prodigal", 
                                                                 "-i",
                                                                 -2,
@@ -39,8 +39,8 @@ public class GeneAnnotationParameterFabric {
                                                                 -1,
                                                                 endings,
                                                                 outputEnding);
-        prodigal.addParameter("write protein translations to","-a" , ParameterPool.PROGRAM_DIRECTORY_VALUE+File.separator+"protein_translation.fa", 1, true);
-        prodigal.addParameter("write nucleotide sequence to", "-d", ParameterPool.PROGRAM_DIRECTORY_VALUE+File.separator+"nucleotide_sequence.fa", 2, true);
+        prodigal.addParameter("write protein translations to","-a" , ParameterPool.PROGRAM_PATH_VALUE+File.separator+"protein_translation.fa", 1, true);
+        prodigal.addParameter("write nucleotide sequence to", "-d", ParameterPool.PROGRAM_PATH_VALUE+File.separator+"nucleotide_sequence.fa", 2, true);
         prodigal.setOnlyOutputDirectorySetable(false);
         
         ParseableProgram nullProdigal= new ParseableProgram( "Choose non", 

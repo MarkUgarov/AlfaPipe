@@ -5,15 +5,9 @@
  */
 package com.mugarov.alfapipe.model;
 
-import com.mugarov.alfapipe.view.MainViewButtonPool;
-import com.mugarov.alfapipe.control.listeners.MainViewButtonListener;
-import com.mugarov.alfapipe.control.listeners.MenuListener;
-import com.mugarov.alfapipe.model.programparse.generators.AssemblerGenerator;
+
 import com.mugarov.alfapipe.model.programparse.generators.Generator;
-import com.mugarov.alfapipe.model.programparse.generators.PreprocessingGenerator;
-import com.mugarov.alfapipe.model.programparse.generators.ProcessingGenerator;
-import com.mugarov.alfapipe.model.programparse.generators.ProdigalGenerator;
-import com.mugarov.alfapipe.model.programparse.generators.ReadsVsContigsGenerator;
+
 import com.mugarov.alfapipe.model.programparse.generators.ToolGenerator;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -111,25 +105,8 @@ public abstract class ParameterPool {
     public static final String OBLIGATORY_ASSEMBLY = "Assembly.yaml";
     public static final String OBLIGATORY_COMPARISON = "Comparison.yaml";
     public static final String OBLIGATORY_ANNOTATION = "Annotation.yaml";
-    public static final String[] CONFIG_OBLIGATORIES = {"OBLIGATORY_PREPROCESSING", "OBLIGATORY_PROCESSING", "OBLIGATORY_ASSEMBLY","OBLIGATORY_COMPARISON","OBLIGATORY_ANNOTATION"};
-    
-    public static final Generator GENERATOR_PREPROCESSING = new PreprocessingGenerator();
-    public static final String PATH_PREPROCESSING_LIST = "CONFIG/Preprocessing.yaml";
-    
-    public static final Generator GENERATOR_PROCESSING = new ProcessingGenerator();
-    public static final String PATH_PROCESSING_LIST = "CONFIG/Processing.yaml";
-    public static final String NAME_DEFAULT_PROCESSING ="defaultProcessing";
-    
-    public static final Generator GENERATOR_ASSEMBLER= new AssemblerGenerator();
-    public static final String PATH_ASSEMBLER_LIST = "CONFIG/Assemblers.yaml";
-    
-    public static final Generator GENERATOR_READS_VS_CONTIGS = new ReadsVsContigsGenerator();
-    public static final String PATH_READS_VS_CONTIGS_LIST = "CONFIG/ReadsVsContigs.yaml";
-    public static final String NAME_DEFAULT_READS_VS_CONTIGS = "defaultReadsVsContigs";
-    
-    public static final Generator GENERATOR_PRODIGAL = new ProdigalGenerator();
-    public static final String PATH_PRODIGAL_LIST = "CONFIG/Prodigal.yaml";
-    public static final String NAME_DEFAULT_PRODIGAL = "defaultProdigal";
+    public static final String[] CONFIG_OBLIGATORIES = {OBLIGATORY_PREPROCESSING, OBLIGATORY_PROCESSING, OBLIGATORY_ASSEMBLY,OBLIGATORY_COMPARISON,OBLIGATORY_ANNOTATION};
+   
     
     public static final Generator GENERTATOR_TOOLS = new ToolGenerator();
     public static final String PATH_TOOLS_LIST = "CONFIG/Tools.yaml";

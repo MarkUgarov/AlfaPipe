@@ -31,7 +31,7 @@ public class ComparisonParameterFabric {
         
         String[] endings = {".fa", ".fq"};
         String[] outputEnding = new String[]{".fa"};
-        ParseableProgram readsVsContigs = new ParseableProgram( ParameterPool.NAME_DEFAULT_READS_VS_CONTIGS,
+        ParseableProgram readsVsContigs = new ParseableProgram( "Reads vs Contigs",
                                                                 null, 
                                                                 "-in something",
                                                                 -1,
