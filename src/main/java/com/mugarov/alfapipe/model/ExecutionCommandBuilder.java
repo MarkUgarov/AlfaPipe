@@ -227,7 +227,6 @@ public class ExecutionCommandBuilder {
     
     public String getExecutionCommand(){
         if(this.builder.length()==0){
-            
             return null;
         }
         else{
@@ -327,8 +326,14 @@ public class ExecutionCommandBuilder {
         return ret;
     }
     
-    public ArrayList<File> getAllIfNotSpecificFor(ProgramSet following, File originalFile){
-        // return null if there is specific output for following
+    /**
+     * Get all output files if no specific output was defined.
+     * @param following should be the fProgramSet of the program you want to use next
+     * @param originalFile should be the file you used as input in the very first place (most likely any *.fastq.gz)
+     * @return an ArrayList of files which will be empty if there are specified outputs for following or includes all output files else.
+     */
+    public ArrayList<File> getAllIfNotSpecified(ProgramSet following, File originalFile){
+        // return empty if there is specific output for following
         for(NameField field:this.set.getParsedParameters().getEssentialOutputs()){
             if(field.getEssentialFor() == null || field.getEssentialFor().equals(following.getName())){
                 return new ArrayList<File>();            
@@ -395,8 +400,15 @@ public class ExecutionCommandBuilder {
         else{
             up = splitname.length-field.getUpperbound();
         }
-        for(int i= low; i<up; low++){
+        
+        if(field.getPrefix() != null){
+            newName.append(field.getPrefix());
+        }
+        for(int i= low; i<up; i++){
             newName.append(splitname[i]);
+        }
+        if(field.getPostfix() != null){
+            newName.append(field.getPostfix());
         }
         return new File(parentDir, newName.toString());
     }

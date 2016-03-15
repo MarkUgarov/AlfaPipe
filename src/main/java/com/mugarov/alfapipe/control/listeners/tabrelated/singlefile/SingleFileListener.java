@@ -6,6 +6,7 @@
  */
 package com.mugarov.alfapipe.control.listeners.tabrelated.singlefile;
 
+import com.mugarov.alfapipe.model.ComponentPool;
 import com.mugarov.alfapipe.model.datatypes.InputFile;
 import com.mugarov.alfapipe.model.ParameterPool;
 import com.mugarov.alfapipe.model.datatypes.SetOfFiles;
@@ -47,7 +48,7 @@ public class SingleFileListener implements ActionListener, ItemListener{
     public void itemStateChanged(ItemEvent ie) {
        JCheckBox box =((JCheckBox) ie.getItemSelectable());
 //       System.out.println(ie.getStateChange() == ItemEvent.SELECTED ? "was selected" : "was unselected");
-       ParseableProgram tool= ParameterPool.GENERTATOR_TOOLS.get(box.getText());
+       ParseableProgram tool= ComponentPool.GENERTATOR_TOOLS.get(box.getText());
        
        if(ie.getStateChange() == ItemEvent.SELECTED){
 //           System.out.println(box.getText()+" was selected;");

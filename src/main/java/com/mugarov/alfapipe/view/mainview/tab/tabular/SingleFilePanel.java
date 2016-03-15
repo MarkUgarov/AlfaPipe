@@ -6,6 +6,7 @@
 package com.mugarov.alfapipe.view.mainview.tab.tabular;
 
 import com.mugarov.alfapipe.control.listeners.tabrelated.singlefile.SingleFileListener;
+import com.mugarov.alfapipe.model.ComponentPool;
 import com.mugarov.alfapipe.model.ParameterPool;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -41,6 +42,7 @@ import javax.swing.BorderFactory;
          * 
          * @param id should be the path
          * @param name should be the filename
+        * @param listener should be the listener for the corresponding file
          */
         
         public SingleFilePanel(String id, String name,  SingleFileListener listener){
@@ -99,7 +101,7 @@ import javax.swing.BorderFactory;
         private void creatRightPanel(){
             this.rightPanel = new JPanel();
             
-            for(String tool: ParameterPool.GENERTATOR_TOOLS.getAvailableNames()){
+            for(String tool: ComponentPool.GENERTATOR_TOOLS.getAvailableNames()){
                 JCheckBox toolBox= new JCheckBox(tool);
                 toolBox.addItemListener(this.fileListener);
                 toolBox.setSelected(true);

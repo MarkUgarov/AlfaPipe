@@ -5,6 +5,7 @@
  */
 package com.mugarov.alfapipe.model.datatypes;
 
+import com.mugarov.alfapipe.model.ComponentPool;
 import com.mugarov.alfapipe.model.ExecutionCommandBuilder;
 import com.mugarov.alfapipe.model.LogFileManager;
 import com.mugarov.alfapipe.model.ParameterPool;
@@ -89,8 +90,8 @@ public class InputFile extends File implements Executable{
         this.assemblerParameters = null;
         this.readsVsContigsParameters = null;
         this.prodigalParameters = null;
-        for(String tool:ParameterPool.GENERTATOR_TOOLS.getAvailableNames()){
-            this.tools.add(new ProgramSet(ParameterPool.GENERTATOR_TOOLS.get(tool)));
+        for(String tool:ComponentPool.GENERTATOR_TOOLS.getAvailableNames()){
+            this.tools.add(new ProgramSet(ComponentPool.GENERTATOR_TOOLS.get(tool)));
         }
         this.toolSelected = new boolean[this.tools.size()];
         this.log = logManager;
@@ -465,8 +466,8 @@ public class InputFile extends File implements Executable{
     
     public ArrayList<String> getValidTools(){
         ArrayList<String> valids = new ArrayList<>();
-        for(String pName:ParameterPool.GENERTATOR_TOOLS.getAvailableNames()){
-            if(this.toolIsValid(ParameterPool.GENERTATOR_TOOLS.get(pName))){
+        for(String pName:ComponentPool.GENERTATOR_TOOLS.getAvailableNames()){
+            if(this.toolIsValid(ComponentPool.GENERTATOR_TOOLS.get(pName))){
                 valids.add(pName);
             }
         }
@@ -548,7 +549,7 @@ public class InputFile extends File implements Executable{
             }
             if(addMore && !this.lastCommand.useOnlyThisOutput(this.currentParameters)){ // && lastCommand != null
                 this.log.appendLine("No has specific outputs where found for "+this.getName()+","+this.currentParameters.getName()+".", InputFile.class.getName());
-                this.lastRelevantOutputFiles.addAll(this.lastCommand.getAllIfNotSpecificFor(this.currentParameters, this));
+                this.lastRelevantOutputFiles.addAll(this.lastCommand.getAllIfNotSpecified(this.currentParameters, this));
                           
             }
         }

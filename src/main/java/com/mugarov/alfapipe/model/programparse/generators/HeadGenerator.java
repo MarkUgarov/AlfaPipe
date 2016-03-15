@@ -92,11 +92,16 @@ public class HeadGenerator{
     /**
      * Parses in all config-files which exist.
      */
-    public void parseIn() {
+    public final void parseIn() {
         File[] files = this.configDir.listFiles(new YamlFilter());
         for(File f:files){           
-            this.cores.add(new ExtendedCore(f.getPath(), null,  -1));
-            this.usedIndices.add(this.cores.get(this.cores.size()-1).getList().getIndex());
+            if(!f.getName().equals(ParameterPool.NAME_TOOLS_LIST)){
+                System.out.println("Creating core of "+f.getName());
+                this.cores.add(new ExtendedCore(f.getPath(), null,  -1));
+                
+                this.usedIndices.add(this.cores.get(this.cores.size()-1).getList().getIndex());
+            }
+            
         }
        
     }
@@ -104,7 +109,7 @@ public class HeadGenerator{
     /**
      * Creates all config-files which are non-existent, but obligatory. 
      */
-    public void parseOut() {
+    public final void parseOut() {
         File[] files = this.configDir.listFiles(new YamlFilter());
         ArrayList<String> fileNames = new ArrayList<>(files.length);
         for(File f:files){
@@ -132,7 +137,7 @@ public class HeadGenerator{
         }
     }
     
-    public void sortProgramLists(){
+    public final void sortProgramLists(){
         ProgramSorter sorter = new ProgramSorter(this.cores);
         this.cores = sorter.sort();
         

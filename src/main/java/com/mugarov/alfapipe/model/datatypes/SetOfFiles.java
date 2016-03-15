@@ -64,8 +64,8 @@ public class SetOfFiles implements Executable, Runnable{
         this.usedPrograms = new ArrayList<>();
         this.availableTools = new ArrayList<>();
         this.useCluster = new boolean[ComponentPool.PROGRAM_GENERATOR.getAll().size()];
-        for(String toolName: ParameterPool.GENERTATOR_TOOLS.getAvailableNames()){
-            this.availableTools.add(new ProgramSet(ParameterPool.GENERTATOR_TOOLS.get(toolName)));
+        for(String toolName: ComponentPool.GENERTATOR_TOOLS.getAvailableNames()){
+            this.availableTools.add(new ProgramSet(ComponentPool.GENERTATOR_TOOLS.get(toolName)));
         }
        
         for(ProgramSet par:this.availableTools){
