@@ -53,6 +53,9 @@ public class FileLister {
                     return this.outputFile.getParentFile();
                 }
             }
+            else if(field.getName().equals(ParameterPool.PROGRAM_FILE_VALUE)){
+                return this.outputFile;
+            }
             else if(this.outputIsDirectory){
                 ret =  new File(this.outputFile.getAbsolutePath()+File.separatorChar+field.getName());
             }
