@@ -24,7 +24,8 @@ public class LogFileManager {
     
     public LogFileManager(String parentDirectory){
         File parent = new File(parentDirectory);
-        this.logfile = new File(parent, ParameterPool.FILE_LOGFILE_NAME);
+        this.logfile = this.makeNewLog(parent);
+        String oldRenamed = "";
         if( !this.logfile.getParentFile().exists() || !this.logfile.getParentFile().isDirectory() ){
             System.out.println("Trying to create directory "+parent.getAbsolutePath());
             parent.mkdirs();
@@ -39,8 +40,9 @@ public class LogFileManager {
             }
         }
         else {
-            this.logfile.delete();
+            oldRenamed = this.renameOld(logfile);
             isOverwritten=true;
+            this.logfile = this.makeNewLog(parent);
             try {
                 this.logfile.createNewFile();
             } catch (IOException ex) {
@@ -48,8 +50,34 @@ public class LogFileManager {
             }
         }
         if(isOverwritten){
-            this.appendLine(ParameterPool.LOG_OVERWRITTEN_HINT, LogFileManager.class.getName());
+            this.appendLine(ParameterPool.LOG_RENAMED_HINT + " to "+oldRenamed, LogFileManager.class.getName());
         }
+    }
+    
+    private final File makeNewLog(File parent){
+        return new File(parent, ParameterPool.FILE_LOGFILE_NAME);
+    }
+    
+    private String renameOld(File file){
+        System.out.println("Trying to rename "+file.getPath());
+        int index = 1;
+        boolean found = false;
+        String newName = null;
+        File newFile;
+        while(!found){
+            newName= "old"+file.getName()+index;
+            newFile = new File(file.getParent(), newName);
+            if(!newFile.exists()){
+                file.renameTo(newFile);
+                found = true;
+            }
+            else{
+                System.out.println("File "+newFile.getName()+" exists in "+newFile.getParent());
+                index++;
+            }
+        }
+        return newName;
+        
     }
     
     public void appendLine(String args, String source){
@@ -111,7 +139,7 @@ public class LogFileManager {
         }
         this.appendLine(ParameterPool.LOG_CHANGED_FROM+old, LogFileManager.class.getName());
         if(isOverwritten){
-            this.appendLine(ParameterPool.LOG_OVERWRITTEN_HINT, LogFileManager.class.getName());
+            this.appendLine(ParameterPool.LOG_RENAMED_HINT, LogFileManager.class.getName());
         }
     }
     

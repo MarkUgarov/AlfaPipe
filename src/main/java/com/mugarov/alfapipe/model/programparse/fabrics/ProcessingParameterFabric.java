@@ -39,7 +39,7 @@ public class ProcessingParameterFabric {
                                                                 2,
                                                                 endings,
                                                                 outputEnding);
-        miseq.setOnlyOutputDirectorySetable(false);
+        miseq.setOutputSettings(false, true);
         
         ParseableProgram splitMiseq = new ParseableProgram( "split_MiSeq_MP_nextera",
                                                                 "SCRITPS/split_MiSeq_MP_nextera_OutputOnArgs1.pl", 
@@ -49,7 +49,7 @@ public class ProcessingParameterFabric {
                                                                 2,
                                                                 endings,
                                                                 outputEnding);
-        splitMiseq.setOnlyOutputDirectorySetable(false);
+        splitMiseq.setOutputSettings(false, true);
         
         ParseableProgram nullProcessor= new ParseableProgram( "Skip", 
                                                                 null, 

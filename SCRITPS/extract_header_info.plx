@@ -7,7 +7,7 @@
 ##### Modules used #####
 # always be strict!
 use strict;
-use lib "/vol/assembly454/bin/";
+use lib "/vol/biotools/share/scripts/Statistics/";
 use Statistics::Descriptive;
 use Getopt::Std;
 

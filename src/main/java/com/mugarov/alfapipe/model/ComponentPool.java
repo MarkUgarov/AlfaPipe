@@ -16,7 +16,7 @@ import com.mugarov.alfapipe.view.MainViewButtonPool;
  *
  * @author mugarov
  */
-public class ComponentPool {
+public abstract class ComponentPool {
     
     // listeners for the main content - the components (Button, Menu....) will add them by themselves 
     public static final MainViewButtonListener LISTENER_BUTTON = new MainViewButtonListener();

@@ -6,6 +6,8 @@
 package com.mugarov.alfapipe.model;
 
 import com.mugarov.alfapipe.model.datatypes.ProgramSet;
+import com.mugarov.alfapipe.model.filetools.FileLister;
+import com.mugarov.alfapipe.model.filetools.FileNaming;
 import com.mugarov.alfapipe.model.programparse.datatypes.NameField;
 import com.mugarov.alfapipe.model.programparse.datatypes.ParameterField;
 import java.io.File;
@@ -24,11 +26,14 @@ public class ExecutionCommandBuilder {
     private boolean outputIsDirectory;
     private StringBuilder builder;
     
+    private FileLister fileLister;
+    
     public ExecutionCommandBuilder(LogFileManager logManager){
         this.outputFile = null;
         this.outputIsDirectory = false;
         this.builder = null;
         this.log = logManager;
+        this.fileLister = null;
     }
     
     
@@ -53,26 +58,31 @@ public class ExecutionCommandBuilder {
          * output-command or if it needs a special filepath for the output
          */
         this.log.appendLine("Building command for "+parameterSet.getName()+" with inputFile "+inputFile.getName(), ExecutionCommandBuilder.class.getName());
-        if(parameterSet.getParsedParameters().isOnlyOutputDirectorySetable()){
+        if(parameterSet.getParsedParameters().getOutputSettings().isDirectory()){
             this.outputFile = new File(parentOutputDirectory, this.getClearName(parameterSet.getParsedParameters().getName())
                                                               +"_"
                                                               +this.getClearName(originalFile));
-            this.outputFile.mkdirs();
+            
+            if(parameterSet.getParsedParameters().getOutputSettings().isMakeDirectory()){
+                this.outputFile.mkdirs();
+            } 
             this.outputIsDirectory = true;
         }
         else{
             this.outputFile = new File(parentOutputDirectory, this.getClearName(parameterSet.getName())
                                                         + File.separatorChar
-                                                        + parameterSet.getParsedParameters().getName()
+                                                        + this.getClearName(parameterSet.getParsedParameters().getName())
                                                         + "_"
                                                         + this.getClearName(originalFile)
                                                         + parameterSet.getParsedParameters().getOutputEndings()[0]);
             File outputDirectory = new File(this.outputFile.getParent());
-            if(!outputDirectory.exists()){
+            if(!outputDirectory.exists() && parameterSet.getParsedParameters().getOutputSettings().isMakeDirectory()){
                 outputDirectory.mkdirs();
             }
+
             this.outputIsDirectory = false;
         }
+        this.fileLister = new FileLister(this.log, this.outputFile, this.outputIsDirectory, originalFile, this.set);
         if(parameterSet.getParsedParameters().getStartCommand() != null){
             if(parameterSet.getParsedParameters().getEnterCommand() != null){
                 builder.append(parameterSet.getParsedParameters().getEnterCommand());
@@ -161,16 +171,16 @@ public class ExecutionCommandBuilder {
                                     }
                                     if(writeValue){
                                         String value = parameterSet.getInputParameters().get(i).getValue();
-                                        if(value.contains(ParameterPool.PROGRAM_DIRECTORY_VALUE)){
+                                        if(value.contains(ParameterPool.PROGRAM_PATH_VALUE)){
                                             if(this.outputIsDirectory){
-                                                value.replaceAll(ParameterPool.PROGRAM_DIRECTORY_VALUE, outputFile.getPath());
+                                                value = value.replaceAll(ParameterPool.PROGRAM_PATH_VALUE, outputFile.getPath());
                                             }
                                             else{
-                                                value.replaceAll(ParameterPool.PROGRAM_DIRECTORY_VALUE, outputFile.getParent());
+                                                value = value.replaceAll(ParameterPool.PROGRAM_PATH_VALUE, outputFile.getParent());
                                             }
                                         }
                                         if(value.contains(ParameterPool.PROGRAM_NAME_VALUE)){
-                                            value.replaceAll(ParameterPool.PROGRAM_NAME_VALUE, this.getClearName(originalFile));
+                                            value = value.replaceAll(ParameterPool.PROGRAM_NAME_VALUE, this.getClearName(originalFile));
                                         }
                                         builder.append(value);
                                         builder.append(" ");  
@@ -201,7 +211,7 @@ public class ExecutionCommandBuilder {
      * returns "No_valid_name" if the filename could not be cleared
      */
     private String getClearName(File file){
-        return this.getClearName(file.getName());
+        return FileNaming.getClearName(file);
     }
     
     /**
@@ -212,17 +222,7 @@ public class ExecutionCommandBuilder {
      * returns "No_valid_name" if the String could not be cleared
      */
     private String getClearName(String name){
-        String[] splitname = name.split("\\.",2);
-        if(splitname.length== 0){
-            return "No_valid_name";
-        }
-        else{
-            String spln = splitname[0];
-            for(String reg:ParameterPool.REPLACE_REGEX){
-                spln.replaceAll(reg, ParameterPool.REPLACE_REPLACEMENT);
-            }
-            return name;
-        }
+        return FileNaming.getClearName(name);
     }
     
     public String getExecutionCommand(){
@@ -299,31 +299,8 @@ public class ExecutionCommandBuilder {
         return ret;
     }
     
-    public ArrayList<File> getSpecifiFilesFor(ProgramSet following, File originalFile){
-        ArrayList<File> ret;
-        ret = new ArrayList<>(this.set.getParsedParameters().getEssentialOutputs().size());
-        if(following.getName() == null){
-            this.log.appendLine("No name for following. Returning all files.", ExecutionCommandBuilder.class.getName());
-            return this.getAllFiles();
-        }
-        for(NameField field:this.set.getParsedParameters().getEssentialOutputs()){
-            if(field.getEssentialFor() == null || field.getEssentialFor().equals(following.getName())){
-                if(field.getName() ==  null){
-                    this.log.appendLine("Return empty file list as specific files for "+following.getName()+" - NameField was null.", ExecutionCommandBuilder.class.getName());
-                    return new ArrayList<File>();
-                }
-                this.log.appendLine("Found: "+this.set.getName()+" has specific file(s) for "+following.getName(), ExecutionCommandBuilder.class.getName());
-                if(field.isUseAll()){
-                    this.log.appendLine("Returning all.(UseAll is true)", ExecutionCommandBuilder.class.getName());
-                    return this.getAllFiles();
-                }
-                File spec = this.getFileFor(field, originalFile);
-                if(spec!= null){
-                   ret.add(this.getFileFor(field, originalFile));
-                }
-            }
-        }   
-        return ret;
+    public ArrayList<File> getSpecifiFilesFor(ProgramSet following){
+        return this.fileLister.getSpecifiFilesFor(this.set, following);
     }
     
     /**
@@ -332,85 +309,20 @@ public class ExecutionCommandBuilder {
      * @param originalFile should be the file you used as input in the very first place (most likely any *.fastq.gz)
      * @return an ArrayList of files which will be empty if there are specified outputs for following or includes all output files else.
      */
-    public ArrayList<File> getAllIfNotSpecified(ProgramSet following, File originalFile){
-        // return empty if there is specific output for following
-        for(NameField field:this.set.getParsedParameters().getEssentialOutputs()){
-            if(field.getEssentialFor() == null || field.getEssentialFor().equals(following.getName())){
-                return new ArrayList<File>();            
-            }
-        }   
-        // return all datas if there is no specific output
-        return this.getAllFiles();
+    public ArrayList<File> getAllIfNotSpecified(ProgramSet following){
+        return this.fileLister.getAllIfNotSpecified(this.set, following);
     }
     
     private ArrayList<File> getAllFiles(){
-        ArrayList<File> ret = new ArrayList<>();
-           if(this.outputIsDirectory){
-               for(File f:this.outputFile.listFiles()){
-                   ret.add(f);
-               }
-           } 
-           else{
-               ret.add(this.outputFile);
-           }
-           return ret;
+        return this.fileLister.getAllFiles();
     }
     
     private File getFileFor(NameField field, File originalFile){
-        File ret=null;
-        if(field.isDynamic()){
-            if(this.outputIsDirectory){
-                ret = this.getDynamicNameOf(this.outputFile.getPath(),field, originalFile);
-            } 
-            else{
-                ret = this.getDynamicNameOf(this.outputFile.getParent(), field,originalFile);
-            }
-        }
-        else{
-            if(field.getName().equals(ParameterPool.PROGRAM_DIRECTORY_VALUE)){
-                if(this.outputIsDirectory){
-                    return this.outputFile;
-                }
-                else{
-                    return this.outputFile.getParentFile();
-                }
-            }
-            else if(this.outputIsDirectory){
-                ret =  new File(this.outputFile.getAbsolutePath()+File.separatorChar+field.getName());
-            }
-            else{
-                ret= new File(this.outputFile.getParent()+File.separatorChar+field.getName());
-            }
-        }
-        if(!ret.exists()){
-            this.log.appendLine(ParameterPool.LOG_WARNING+"File: "+ret.getName()+" does not exist but will be used further!", ExecutionCommandBuilder.class.getName());
-        }
-        this.log.appendLine("Returning "+ret.getName(), ExecutionCommandBuilder.class.getName());
-        return ret;
+        return this.fileLister.getFileFor(field);
     }
     
-    private File getDynamicNameOf(String parentDir, NameField field, File originalFile){
-        String[] splitname = originalFile.getName().split(field.getRegex());
-        StringBuilder newName = new StringBuilder();
-        int low = field.getLowerbound();
-        int up;
-        if(field.getUpperbound()>0){
-            up = field.getUpperbound();
-        }
-        else{
-            up = splitname.length-field.getUpperbound();
-        }
-        
-        if(field.getPrefix() != null){
-            newName.append(field.getPrefix());
-        }
-        for(int i= low; i<up; i++){
-            newName.append(splitname[i]);
-        }
-        if(field.getPostfix() != null){
-            newName.append(field.getPostfix());
-        }
-        return new File(parentDir, newName.toString());
+    private File getDynamicNamedFileOf(String parentDir, NameField field, File originalFile){
+        return new File(parentDir, FileNaming.getDynamicNameOf(field, originalFile));
     }
     
     public boolean useOnlyThisOutput(ProgramSet following){
@@ -432,5 +344,8 @@ public class ExecutionCommandBuilder {
         }
     }
     
+    public FileLister getFileLister(){
+        return this.fileLister;
+    }
     
 }

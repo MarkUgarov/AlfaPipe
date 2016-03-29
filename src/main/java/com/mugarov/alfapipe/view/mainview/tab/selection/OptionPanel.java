@@ -32,7 +32,6 @@ public class OptionPanel extends JPanel{
 
     private final JLabel toolLabel;
     private final JPanel toolOptionsPanel;
-//    private ProgramParameterPanel assemblerParamPanel;
     
     private ArrayList<ProgramParameterPanel> toolParamPanels;
   
@@ -44,15 +43,19 @@ public class OptionPanel extends JPanel{
         
         this.toolParamPanels = new ArrayList<>();
         
-        this.add(this.getDistinguishBar());
+
+        if(ParameterPool.CLUSTER_ENABLE){
+            this.add(this.getDistinguishBar());
         
-        this.clusterLabel = new JLabel(ParameterPool.LABEL_CLUSTER);
-        this.clusterLabel.setPreferredSize(ParameterPool.LABEL_DIMENSION);
-        this.clusterLabel.setForeground(ParameterPool.LABEL_IMPORTANCE_COLOR);
-        this.add(this.clusterLabel);
+            this.clusterLabel = new JLabel(ParameterPool.LABEL_CLUSTER);
+            this.clusterLabel.setPreferredSize(ParameterPool.LABEL_DIMENSION);
+            this.clusterLabel.setForeground(ParameterPool.LABEL_IMPORTANCE_COLOR);
+            this.add(this.clusterLabel);
+
+            this.clusterPanel = new ClusterPanel();
+            this.add(this.clusterPanel);
+        }
         
-        this.clusterPanel = new ClusterPanel();
-        this.add(this.clusterPanel);
         
         this.add(this.getDistinguishBar());
         

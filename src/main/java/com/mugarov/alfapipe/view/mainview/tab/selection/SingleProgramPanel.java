@@ -40,6 +40,10 @@ public class SingleProgramPanel extends JPanel{
        this.checkBoxPanel.setLayout(new BorderLayout());
        this.clusterBox = new ClusterCheckBox(index);
        this.checkBoxPanel.add(this.clusterBox, BorderLayout.CENTER);
+       /**
+        * TODO: make visible again
+        */
+       this.checkBoxPanel.setVisible(ParameterPool.CLUSTER_ENABLE);
        
        
        

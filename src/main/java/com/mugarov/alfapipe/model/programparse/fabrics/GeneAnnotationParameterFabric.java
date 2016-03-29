@@ -41,9 +41,9 @@ public class GeneAnnotationParameterFabric {
                                                                 outputEnding);
         prodigal.addParameter("write protein translations to","-a" , ParameterPool.PROGRAM_PATH_VALUE+File.separator+"protein_translation.fa", 1, true);
         prodigal.addParameter("write nucleotide sequence to", "-d", ParameterPool.PROGRAM_PATH_VALUE+File.separator+"nucleotide_sequence.fa", 2, true);
-        prodigal.setOnlyOutputDirectorySetable(false);
+        prodigal.setOutputSettings(false, true);
         
-        ParseableProgram nullProdigal= new ParseableProgram( "Choose non", 
+        ParseableProgram nullProdigal= new ParseableProgram( "Skip", 
                                                                 null, 
                                                                 null,
                                                                 0,
@@ -51,9 +51,9 @@ public class GeneAnnotationParameterFabric {
                                                                 0,
                                                                 null,
                                                                 null); 
-       
-        this.defaultList.add(prodigal);
         this.defaultList.add(nullProdigal);
+        this.defaultList.add(prodigal);
+        
         
         this.parameterList = new ParseableProgramList();
         this.parameterList.setIndex(this.index);

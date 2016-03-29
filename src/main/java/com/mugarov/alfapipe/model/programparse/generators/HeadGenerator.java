@@ -96,7 +96,7 @@ public class HeadGenerator{
         File[] files = this.configDir.listFiles(new YamlFilter());
         for(File f:files){           
             if(!f.getName().equals(ParameterPool.NAME_TOOLS_LIST)){
-                System.out.println("Creating core of "+f.getName());
+                //System.out.println("Creating core of "+f.getName());
                 this.cores.add(new ExtendedCore(f.getPath(), null,  -1));
                 
                 this.usedIndices.add(this.cores.get(this.cores.size()-1).getList().getIndex());

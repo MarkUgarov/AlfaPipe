@@ -6,6 +6,7 @@
 package com.mugarov.alfapipe.view.mainview.tab.selection;
 
 import com.mugarov.alfapipe.control.listeners.tabrelated.parameters.ParameterListener;
+import com.mugarov.alfapipe.model.ParameterPool;
 import com.mugarov.alfapipe.model.datatypes.InputParameter;
 import com.mugarov.alfapipe.view.mainview.tab.parameters.ProgramParameterPanel;
 import java.awt.BorderLayout;
@@ -26,6 +27,7 @@ public class ClusterPanel extends JPanel{
         this.parameterParentPanel = new JPanel();
         this.parameterParentPanel.setLayout(new BorderLayout());
         this.add(this.parameterParentPanel);
+        this.setVisible(ParameterPool.CLUSTER_ENABLE);
 
     }
     

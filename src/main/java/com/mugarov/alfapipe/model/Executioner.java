@@ -20,7 +20,6 @@ public class Executioner {
 
     private LogFileManager log;
     private File workfile;
-    
 
     public Executioner(LogFileManager logManager) {
         this.log = logManager;
@@ -29,13 +28,17 @@ public class Executioner {
             this.workfile.mkdirs();
         }
     }
+            
     /**
      * You can give any string, but it should be executable on unix. 
      * Commands will be separated by newline ("\n").
-     * @param input
+     * @param precommand can be any string which will be arranged in front of the 
+     * first line of the input command - useful to run on Cluster
+     * @param input can be any number of unix-command lines
      * @return 
      */
-    public boolean execute(String input){
+    public boolean execute(String precommand, String input){
+        boolean precommandUsed = false;
         
         if(input == null || input.length() == 0){
             this.log.appendLine("Null has been seen selected. Waiting for the next input.", Executioner.class.getName());
@@ -44,6 +47,11 @@ public class Executioner {
         boolean success=true;
         
         for(String step:input.split("\n")){
+            if(!precommandUsed && precommand != null){
+                step = precommand + " " + step;
+                this.log.appendLine("This step will be run on cluster ", Executioner.class.getName());
+                precommandUsed = true;
+            }
             String[] commandsArray = step.split(" ");
             ArrayList<String> commandList = new ArrayList<>(commandsArray.length);
             for(String command:commandsArray){
@@ -74,6 +82,7 @@ public class Executioner {
                 log.appendLine("Exit Value:"+process.exitValue(), Executioner.class.getName());
                 success = (success&&(process.exitValue()==0));
             } catch (InterruptedException ex) {
+                success=false;
                 Logger.getLogger(Executioner.class.getName()).log(Level.SEVERE, null, ex);
             }
             

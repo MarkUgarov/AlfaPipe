@@ -39,11 +39,11 @@ public class ComparisonParameterFabric {
                                                                 0,
                                                                 endings,
                                                                 outputEnding);
-        readsVsContigs.setOnlyOutputDirectorySetable(false);
+        readsVsContigs.setOutputSettings(true, false);
         readsVsContigs.setEnterCommand("reads vs contigs enter command");
         readsVsContigs.setExitCommand(" reads vs contigs exit command");
         
-        ParseableProgram nullReadsVsContigs= new ParseableProgram( "Choose non", 
+        ParseableProgram nullReadsVsContigs= new ParseableProgram( "Skip", 
                                                                 null, 
                                                                 null,
                                                                 0,

@@ -6,9 +6,6 @@
 package com.mugarov.alfapipe.model;
 
 
-import com.mugarov.alfapipe.model.programparse.generators.Generator;
-
-import com.mugarov.alfapipe.model.programparse.generators.ToolGenerator;
 import java.awt.Color;
 import java.awt.Dimension;
 
@@ -18,6 +15,8 @@ import java.awt.Dimension;
  */
 public abstract class ParameterPool {
     
+    // cluster
+    public static final boolean CLUSTER_ENABLE = true;
     
     
     // general optical parameters
@@ -51,6 +50,7 @@ public abstract class ParameterPool {
     public static final Color LABEL_IMPORTANCE_COLOR = Color.MAGENTA;
     public static final String LABEL_CLUSTER = "Cluster settings";
     public static final String LABEL_PROGRAMS = "Programs:";
+        // labels for the default programs
     public static final String LABEL_PREPROCESSING = "Preprocessing";
     public static final String LABEL_PROCESSING = "Processing";
     public static final String LABEL_ASSEMBLER = "Assembler";
@@ -113,9 +113,10 @@ public abstract class ParameterPool {
     public static final String PATH_TOOLS_LIST = "CONFIG/"+NAME_TOOLS_LIST;
     
     public static final String PROGRAM_DIRECTORY_VALUE = "//.";
+    public static final String PROGRAM_FILE_VALUE = "//this";
     public static final String PROGRAM_EMPTY_PARAMETER_VALUE = "/empty";
-    public static final String PROGRAM_PATH_VALUE = "[path]";
-    public static final String PROGRAM_NAME_VALUE = "[name]";
+    public static final String PROGRAM_PATH_VALUE = "PATH";
+    public static final String PROGRAM_NAME_VALUE = "NAME";
     public static final String PROGRAM_INPUT_PATH_SET_PARAMETER_NAME = "inputPathCommand";
     public static final String PROGRAM_OUTPUT_PATH_SET_PARAMETER_NAME = "outputPathCommand";
     public static final String PROGRAM_PAIRED_PARAMETER_NAME = "pairedCommand";
@@ -129,6 +130,9 @@ public abstract class ParameterPool {
     
     //standard messegas
     public static final String MESSAGE_PREFIX = "echo ";
+    public static final String MESSAGE_OUT_OF_INDEX = "Tried to get a command with index out of bounds.";
+    public static final String MESSAGE_PROGRAM_EMPTY = "Tried to execute an empty command";
+    public static final String MESSAGE_PROGRAM_COMMAND_NULL = "Program command was null.";
     public static final String MESSAGE_PREPROCESSING_IS_NULL ="Null preprocessing was selected.";
     public static final String MESSAGE_PROCESSING_IS_NULL ="Null processing was selected.";
     public static final String MESSAGE_ASSEMBLER_IS_NULL ="Null assembler was selected.";
@@ -140,16 +144,16 @@ public abstract class ParameterPool {
     
     //Logfile standard strings
     public static final String LOG_LINE_PREFIX = "<>< ";
-    public static final String LOG_LINE_POSTFIX = "|°|";
+    public static final String LOG_LINE_POSTFIX = "|:|";
     public static final String LOG_COMMAND_PREFIX = "EXECUTE: ";
     public static final String LOG_WARNING = "ATTENTION: ";
     public static final String LOG_SOURCE_HINT = "  <- Message from ";
-    public static final String LOG_OVERWRITTEN_HINT = "Old logfile was overwritten";
+    public static final String LOG_RENAMED_HINT = "Old logfile was renamed.";
     public static final String LOG_CHANGE_TO = "Trying to change directory to ";
     public static final String LOG_CHANGED_FROM = "Changed to this logfile from ";
     
     // Standard substitutions
-    public static final String[] REPLACE_REGEX = {"-", "/", ":"};
+    public static final String[] REPLACE_REGEX = {"\\s+","-", "/", ":"};
     public static final String REPLACE_REPLACEMENT = "_";
     
 }

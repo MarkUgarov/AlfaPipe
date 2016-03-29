@@ -8,6 +8,7 @@ package com.mugarov.alfapipe.model.datatypes;
 import com.mugarov.alfapipe.control.listeners.tabrelated.parameters.ParameterListener;
 import com.mugarov.alfapipe.control.listeners.tabrelated.singlefile.SingleFileListener;
 import com.mugarov.alfapipe.model.ComponentPool;
+import com.mugarov.alfapipe.model.ExecutionCommandBuilder;
 import com.mugarov.alfapipe.model.Executioner;
 import com.mugarov.alfapipe.model.LogFileManager;
 import com.mugarov.alfapipe.model.ParameterPool;
@@ -35,13 +36,9 @@ public class SetOfFiles implements Executable, Runnable{
     
     private File outputDirectory;
     private final LogFileManager log;
-    private ArrayList<ProgramSet> usedPrograms;
+    private final ArrayList<ProgramSet> usedPrograms;
     private final boolean[] useCluster;
-    private ProgramSet usePreprocessing;
-    private ProgramSet useProcessing;
-    private ProgramSet useAssembler;
-    private ProgramSet useReadsVsContigs;
-    private ProgramSet useProdigal;
+
     private final ArrayList<ProgramSet> availableTools;
     
     private final Tab tab;
@@ -94,14 +91,9 @@ public class SetOfFiles implements Executable, Runnable{
             }
             if(add){
                 InputFile inFile = new InputFile(file.getPath(), this.availableTools, this.log);
-                for(ProgramSet progSet:this.usedPrograms){
-                    // TODO
+                for(int j = 0; j<this.usedPrograms.size(); j++){
+                    inFile.addProgram(this.usedPrograms.get(j));
                 }
-                inFile.selectPreprocessing(this.usePreprocessing, false);
-                inFile.selectProcessing(this.useProcessing,false); 
-                inFile.selectAssembler(this.useAssembler,false); 
-                inFile.selectReadsVsContigs(this.useReadsVsContigs, false);
-                inFile.selectProdigal(this.useProdigal, false);
                 this.files.add(inFile);
                 this.tab.addFile(file.getAbsolutePath(),file.getName(), new SingleFileListener(inFile, this));
                 this.tab.setValidation(inFile.getAbsolutePath(), inFile.validateFile(), inFile.getValidTools());
@@ -145,84 +137,12 @@ public class SetOfFiles implements Executable, Runnable{
         ParameterListener paramListener = new ParameterListener(set.getInputParameters());
         
         this.tab.selectProgram(index, set.getName(), set.getInputParameters(), paramListener);
-//        /**
-//         * TODO: rewrite as soon as 
-//         * tab.set(int index, ArrayList<InputParameter> parameters, ParameterListener listener) 
-//         * is implemented
-//         */
-//        switch(index){
-//            case 0: this.setPreprocessing(proc);
-//                    break;
-//            case 1: this.setProcessing(proc);
-//                    break;
-//            case 2: this.setAssembler(proc);
-//                    break;
-//            case 3: this.setReadsVsContigs(proc);
-//                    break;
-//            case 4: this.setProdigal(proc);
-//                    break;
-//            default:System.err.println("Index "+index+" is not available for this old program structure.");
-//        }
-//        
-//        /**
-//         * end rewrite
-//         */
         for(InputFile file:this.files){
             file.selectProgram(index, set, true);
             this.tab.setValidation(file.getAbsolutePath(), file.isValid(), file.getValidTools());
         }
     }
     
-//    public void setPreprocessing(ParseableProgram proc){
-//        this.usePreprocessing = new ProgramSet(proc);
-//        ParameterListener paramListener = new ParameterListener(this.usePreprocessing.getInputParameters());
-//        this.tab.setPreprocessing(this.usePreprocessing.getName(), this.usePreprocessing.getInputParameters(), paramListener);
-//        for(InputFile file: this.files){
-//            file.selectPreprocessing(this.usePreprocessing,true);
-//            this.tab.setValidation(file.getAbsolutePath(), file.isValid(), file.getValidTools());
-//        }
-//    }
-//    
-//    public void setProcessing(ParseableProgram proc){
-//        this.useProcessing = new ProgramSet(proc);
-//        ParameterListener paramListener = new ParameterListener(this.useProcessing.getInputParameters());
-//        this.tab.setProcessing(this.useProcessing.getName(), this.useProcessing.getInputParameters(), paramListener);
-//        for(InputFile file: this.files){
-//            file.selectProcessing(this.useProcessing,true);
-//            this.tab.setValidation(file.getAbsolutePath(), file.isValid(), file.getValidTools());
-//        }
-//    }
-//    
-//    public void setAssembler(ParseableProgram ass){
-//        this.useAssembler = new ProgramSet(ass);
-//        ParameterListener paramListener = new ParameterListener(this.useAssembler.getInputParameters());
-//        this.tab.setAssembler(this.useAssembler.getName(),this.useAssembler.getInputParameters(), paramListener);
-//        for(InputFile file: files){
-//            file.selectAssembler(this.useAssembler,true);
-//            this.tab.setValidation(file.getAbsolutePath(), file.isValid(), file.getValidTools());
-//        }
-//    }
-//    
-//    public void setReadsVsContigs(ParseableProgram proc){
-//       this.useReadsVsContigs = new ProgramSet(proc);
-//       ParameterListener paramListener = new ParameterListener(this.useReadsVsContigs.getInputParameters());
-//       this.tab.setReadsVsContigs(this.useReadsVsContigs.getName(),this.useReadsVsContigs.getInputParameters(), paramListener);
-//       for(InputFile file: this.files){
-//           file.selectReadsVsContigs(this.useReadsVsContigs,true);
-//           this.tab.setValidation(file.getAbsolutePath(), file.isValid(), file.getValidTools());
-//       }
-//    }
-//    
-//    public void setProdigal(ParseableProgram proc){
-//      this.useProdigal = new ProgramSet(proc);
-//      ParameterListener paramListener = new ParameterListener(this.useProdigal.getInputParameters());
-//      this.tab.setProdigal(this.useProdigal.getName(),this.useProdigal.getInputParameters(), paramListener);
-//      for(InputFile file: this.files){
-//          file.selectProdigal(this.useProdigal,true);
-//          this.tab.setValidation(file.getAbsolutePath(), file.isValid(), file.getValidTools());
-//      }
-//    }
-
     public void deleteAll(){
         for(File f:this.files){
             this.tab.deleteFile(f.getAbsolutePath());
@@ -281,106 +201,21 @@ public class SetOfFiles implements Executable, Runnable{
         return this.outputDirectory.getAbsolutePath();
     }
     
-     /**
-     * This method only returns commands; to execute you may prefer to start this Runnable.
-     * @param parentOutputDir
-     * @return 
-     */
     @Override
-    public String getPreprocessingCommand(String parentOutputDir) {
+    public String getProgramCommand(int index, String parentOutputDir){
         StringBuilder builder = new StringBuilder();
          for(InputFile file: this.files){
-            if(file.getPreprocessingCommand(parentOutputDir) == null){
+            if(file.getProgramCommand(index, parentOutputDir) == null){
                 builder.append("echo Null");
             }
             else{
-                builder.append(file.getPreprocessingCommand(parentOutputDir));
+                builder.append(file.getProgramCommand(index, parentOutputDir));
             }
             builder.append("\n");
         }
         return builder.toString();
     }
     
-
-    /**
-     * This method only returns commands; to execute you may prefer to start this Runnable.
-     * @param parentOutputDir
-     * @return 
-     */
-    @Override
-    public String getProcessingCommand(String parentOutputDir) {
-        StringBuilder builder = new StringBuilder();
-         for(InputFile file: this.files){
-            if(file.getProcessingCommand(parentOutputDir) == null){
-                builder.append("echo Null");
-            }
-            else{
-                builder.append(file.getProcessingCommand(parentOutputDir));
-            }
-            builder.append("\n");
-        }
-        return builder.toString();
-    }
-
-    /**
-     * This method only returns commands; to execute you may prefer to start this Runnable.
-     * @param parentOutputDir
-     * @return 
-     */
-    @Override
-    public String getAssemblerCommand(String parentOutputDir) {
-        StringBuilder builder = new StringBuilder();
-         for(InputFile file: this.files){  
-            if(file.getAssemblerCommand(parentOutputDir) == null){
-                builder.append("echo Null");
-            }
-            else{
-                builder.append(file.getAssemblerCommand(parentOutputDir));
-            }
-            builder.append("\n");
-        }
-        return builder.toString();
-    }
-
-    /**
-     * This method only returns commands; to execute you may prefer to start this Runnable.
-     * @param parentOutputDir
-     * @return 
-     */
-    @Override
-    public String getReadsVsContigsCommand(String parentOutputDir) {
-        StringBuilder builder = new StringBuilder();
-         for(InputFile file: this.files){
-            if(file.getReadsVsContigsCommand(parentOutputDir) == null){
-                builder.append("echo Null");
-            }
-            else{
-                builder.append(file.getReadsVsContigsCommand(parentOutputDir));
-            }
-            builder.append("\n");
-        }
-        return builder.toString();
-    }
-
-    /**
-     * This method only returns commands; to execute you may prefer to start this Runnable.
-     * @param parentOutputDir
-     * @return 
-     */
-    @Override
-    public String getProdigalCommand(String parentOutputDir) {
-        StringBuilder builder = new StringBuilder();
-         for(InputFile file: this.files){
-            if(file.getProdigalCommand(parentOutputDir) == null){
-                builder.append("echo Null");
-            }
-            else{
-                builder.append(file.getProdigalCommand(parentOutputDir));
-            }
-            builder.append("\n");
-        }
-        return builder.toString();
-    }
 
     /**
      * This method only returns commands; to execute you may prefer to start this Runnable.
@@ -416,38 +251,35 @@ public class SetOfFiles implements Executable, Runnable{
             System.out.println("Set "+this.name+ " has started.");
             this.tab.disableEditing();
             Executioner execution = new Executioner(this.log);
+            ExecutionCommandBuilder clusterCommandBuilder = new ExecutionCommandBuilder(this.log);
+            String clusterCommand;
+            if(ParameterPool.CLUSTER_ENABLE){
+                clusterCommandBuilder.buildString(this.clusterParameters, this.outputDirectory, this.outputDirectory.getPath(), null, this.outputDirectory);
+                clusterCommand = clusterCommandBuilder.getExecutionCommand();
+            }
+            
             for(InputFile file:this.files){
-                
-                boolean filePassed;
-                filePassed = execution.execute(file.getPreprocessingCommand(this.outputDirectory.getPath()));
-                if(filePassed){
-                    filePassed = execution.execute(file.getProcessingCommand(this.outputDirectory.getPath()));
+                boolean filePassed=true;
+                boolean essentialFilesExist = true;
+                for(int i = 0; (i<this.usedPrograms.size() && filePassed); i++){
+                    if(this.useCluster[i]){
+                         filePassed = execution.execute(clusterCommand, file.getProgramCommand(i, this.outputDirectory.getPath()));
+                    }
+                    else{
+                        filePassed = execution.execute(null, file.getProgramCommand(i, this.outputDirectory.getPath()));
+                    }
+                    essentialFilesExist = (essentialFilesExist && file.checkLastCommandFiles());
+                    if(!filePassed){
+                        String error= "File did not pass! Stopped at program "+this.usedPrograms.get(i).getName()+" with index "+i;
+                        System.err.println(error);
+                        this.log.appendLine(error, SetOfFiles.class.getName());
+                        
+                    }
                 }
-                else{
-                    System.out.println("Fail at preprocessing");
-                }
-                if(filePassed){
-                    filePassed = execution.execute(file.getAssemblerCommand(this.outputDirectory.getPath()));
-                }
-                else{
-                    System.out.println("Fail at processing");
-                }
-                if(!filePassed){
-                    System.out.println("Fail at assembly");
-                }
-                
-                if(filePassed){
-                    filePassed = execution.execute(file.getReadsVsContigsCommand(this.outputDirectory.getPath()));
-                }
-                if(filePassed){
-                    filePassed = execution.execute(file.getProdigalCommand(this.outputDirectory.getPath()));
-                }
-                
-                this.tab.setFileProgressed(file.getAbsolutePath(), filePassed);
+                this.tab.setFileProgressed(file.getAbsolutePath(), filePassed&essentialFilesExist);
                 ArrayList<Boolean> toolBools = new ArrayList<>(file.getValidTools().size());
                 for(String p:file.getToolCommands(this.outputDirectory.getPath())){
-                    toolBools.add(execution.execute(p));
-                    toolBools.add(true);
+                    toolBools.add(execution.execute(null, p));
                 }
                 this.tab.setToolProgressed(file.getAbsolutePath(), file.getValidTools(), toolBools);
             }
@@ -460,23 +292,18 @@ public class SetOfFiles implements Executable, Runnable{
     }
     
     private void checkInputFormat(){
-        if (this.usePreprocessing != null && this.usePreprocessing.getParsedParameters().getStartCommand() != null){
-            this.inputChooser.setInputFilter("Preprocessing input", this.usePreprocessing.getParsedParameters().getValidInputEndings());
+        boolean defined = false;
+        ProgramSet set;
+        for(int i = 0; (i<this.usedPrograms.size() && !defined); i++){
+            set = this.usedPrograms.get(i);
+            if(set.getParsedParameters().getStartCommand() != null){
+                this.inputChooser.setInputfilter(set.getName(), set.getParsedParameters().getValidInputEndings());
+                defined = true;
+            }
         }
-        else if (this.useProcessing != null && this.useProcessing.getParsedParameters().getStartCommand() != null){
-            this.inputChooser.setInputFilter("Processing input", this.useProcessing.getParsedParameters().getValidInputEndings());
-        }
-        else if (this.useAssembler != null && this.useAssembler.getParsedParameters().getStartCommand() != null){
-            this.inputChooser.setInputFilter("Assembler input", this.useAssembler.getParsedParameters().getValidInputEndings());
-        }
-        else if (this.useReadsVsContigs != null && this.useReadsVsContigs.getParsedParameters().getStartCommand() != null){
-            this.inputChooser.setInputFilter("ReadsVsContigs input", this.useAssembler.getParsedParameters().getValidInputEndings());
-        }
-        else if (this.useProdigal != null && this.useProdigal.getParsedParameters().getStartCommand() != null){
-            this.inputChooser.setInputFilter("Prodigal input", this.useProdigal.getParsedParameters().getValidInputEndings());
-        }
-        else{
-            this.inputChooser.setInputFilter("All", null);
+        if(!defined){
+            this.inputChooser.setInputfilter("All", null);
+            defined = true;
         }
     }
 

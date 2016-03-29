@@ -22,21 +22,6 @@ public class ToolGenerator implements Generator{
      public ToolGenerator(){
         this.defaultList = new ArrayList<>();
         this.localFilePath = ParameterPool.PATH_TOOLS_LIST;
-
-//        String[] endings = {".fa"};
-//        String[] outputEnding = new String[]{".fa"};
-//        ParseableProgram Test1 = new ParseableProgram( "Example Tool 1", 
-//                                                    "start Tool 1", 
-//                                                    "apply inputCommand Tool 1",
-//                                                    0,
-//                                                    "apply outputCommand Tool 1",
-//                                                    -1,
-//                                                    endings,
-//                                                    outputEnding);  
-//        Test1.addParameter("Test Boolean", "boolean value", ParameterPool.PROGRAM_EMPTY_PARAMETER_VALUE, 1, true);
-//        Test1.addParameter("Test optional", "optional value", "Test optional default", 2, true);
-//        Test1.addParameter("Test obligatory", "obligatory value", "Test obligatory default", 3, false);
-//        this.defaultList.add(Test1);
         
         String[] endings = {".fna"};
         String[] outputEnding = new String[]{".fa", ".fna"};
@@ -48,32 +33,34 @@ public class ToolGenerator implements Generator{
                                                     0,
                                                     endings,
                                                     outputEnding);  
-        prokka.setOnlyOutputDirectorySetable(true);
+        prokka.setOutputSettings(true, false);
         prokka.addParameter("Force", "--force", ParameterPool.PROGRAM_EMPTY_PARAMETER_VALUE, 1, false);
         this.defaultList.add(prokka);
         
         String[] outputEndings2 = new String[]{".txt"};
         ParseableProgram extractHeader = new ParseableProgram( "Extract Header Info", 
-                                                    "SCRITPS/extract_header_info.plx", 
+                                                    "sh SCRITPS/writeToFile.sh SCRITPS/extract_header_info.plx", 
                                                     null,
                                                     2,
-                                                    "|tee",
+                                                    null,
                                                     3,
                                                     endings,
                                                     outputEndings2);  
         extractHeader.addParameter("prepare Excel", "-E", ParameterPool.PROGRAM_EMPTY_PARAMETER_VALUE, 1, true);
+        extractHeader.setOutputSettings(false, true);
         this.defaultList.add(extractHeader);
         
         String[] endingsB = {".txt"};
         ParseableProgram assemblyStatistics = new ParseableProgram( "Assembly Statistics", 
-                                                    "SCRITPS/assembly_statistics.plx", 
+                                                    "sh SCRITPS/writeToFile.sh SCRITPS/assembly_statistics.plx ", 
                                                     null,
                                                     2,
-                                                    "|tee",
+                                                    null,
                                                     3,
                                                     endingsB,
                                                     outputEndings2);  
         assemblyStatistics.addParameter("Skip listprint", "-l", ParameterPool.PROGRAM_EMPTY_PARAMETER_VALUE, 1, true);
+        assemblyStatistics.setOutputSettings(false, true);
         this.defaultList.add(assemblyStatistics);
         
         this.core = new GeneratorCore(this.localFilePath, this.defaultList);

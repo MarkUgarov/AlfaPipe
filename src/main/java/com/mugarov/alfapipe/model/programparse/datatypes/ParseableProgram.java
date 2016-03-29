@@ -20,7 +20,7 @@ public class ParseableProgram{
     private String startCommand;
     private String[] validEndings;
     private String[] outputEndings;
-    private boolean onlyOutputDirectorySetable;
+    private OutputField outputSettings;
     private String enterCommand;
     private String exitCommand;
     
@@ -47,7 +47,7 @@ public class ParseableProgram{
         this.outputEndings = null;
         this.enterCommand = null;
         this.exitCommand = null;
-        this.onlyOutputDirectorySetable = false;
+        this.outputSettings = new OutputField();
         this.essentialOutputs = new ArrayList<>();
         this.sorter = new ParameterSorter(this);
         
@@ -70,7 +70,7 @@ public class ParseableProgram{
         this.pairedCommand = null;
         this.validEndings = validEndings;
         this.outputEndings = outputEnding;
-        this.onlyOutputDirectorySetable = false;
+        this.outputSettings = new OutputField();
         this.essentialOutputs = new ArrayList<>();
         
         this.enterCommand = null;
@@ -257,14 +257,12 @@ public class ParseableProgram{
             this.sorter.sort();
     }
     
-    public boolean isOnlyOutputDirectorySetable(){
-        return this.onlyOutputDirectorySetable;
+    @JsonIgnore
+    public void setOutputSettings(boolean isDir, boolean makeDir){
+        this.outputSettings.setDirectory(isDir);
+        this.outputSettings.setMakeDirectory(makeDir);
     }
     
-    public void setOnlyOutputDirectorySetable(boolean setable){
-        this.onlyOutputDirectorySetable = setable;
-    }
-
     /**
      * @return the essentialOutputs
      */
@@ -301,12 +299,11 @@ public class ParseableProgram{
             this.essentialOutputs = new ArrayList<>();
         }
         else{
-            int i= 0;
-            while(i<this.essentialOutputs.size()){
-                if(this.essentialOutputs.get(i).getName().equals(field.getName())){
+            for(int i =0; i<this.essentialOutputs.size();i++){
+                if(this.essentialOutputs.get(i).getEssentialFor().equals(field.getEssentialFor())){
+                    System.out.println("Remove "+this.essentialOutputs.get(i).getEssentialFor()+" because it equals "+field.getEssentialFor());
                     this.essentialOutputs.remove(i);
                 }
-                i++;
             } 
         }
         this.essentialOutputs.add(field);
@@ -351,5 +348,19 @@ public class ParseableProgram{
      */
     public void setPairedConditions(PairedInputConditions pairedConditions) {
         this.pairedConditions = pairedConditions;
+    }
+
+    /**
+     * @return the outputSettings
+     */
+    public OutputField getOutputSettings() {
+        return outputSettings;
+    }
+
+    /**
+     * @param outputSettings the outputSettings to set
+     */
+    public void setOutputSettings(OutputField outputSettings) {
+        this.outputSettings = outputSettings;
     }
 }

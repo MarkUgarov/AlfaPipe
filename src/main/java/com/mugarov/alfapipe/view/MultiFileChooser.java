@@ -32,21 +32,26 @@ public class MultiFileChooser extends JFileChooser{
         return super.getSelectedFiles();
     }
     
-    public void setInputFilter(String name, String[] valids){
-//        System.out.println("Set file filter to "+name);
-        if(valids == null){
+
+    /**
+     * Sets a Filter with the chosen name which the chosen file endings.
+     * @param name can be any String (should not be null) which will be shown in a drop-down-menu
+     * @param validInputEndings can be an Array of any Strings, can be null so every file will be accepted
+     */
+    public void setInputfilter(String name, String[] validInputEndings) {
+        if(validInputEndings == null){
             this.filter = new InputFilter();
             this.setFileFilter(filter);
-            this.filter.setName("Fuck you");
+            this.filter.setName(name);
         }
-        else if(valids.length == 1 && valids[0].equals(ParameterPool.PROGRAM_DIRECTORY_VALUE)){
+        else if(validInputEndings.length == 1 && validInputEndings[0].equals(ParameterPool.PROGRAM_DIRECTORY_VALUE)){
             this.filter.setName(name);
             this.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         }
         else{
             this.filter.setName(name);
             boolean dirFound=false;
-            for(String v:valids){
+            for(String v:validInputEndings){
                 if(v.equals(ParameterPool.PROGRAM_DIRECTORY_VALUE)){
                     dirFound=true;
                 }
@@ -57,9 +62,8 @@ public class MultiFileChooser extends JFileChooser{
             else{
                 this.setFileSelectionMode(JFileChooser.FILES_ONLY);
             }
-            this.filter.setValid(valids);
+            this.filter.setValid(validInputEndings);
         }
-        
     }
 
     private static class InputFilter extends FileFilter {

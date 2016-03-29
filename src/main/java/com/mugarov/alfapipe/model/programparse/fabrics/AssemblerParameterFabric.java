@@ -27,7 +27,7 @@ public class AssemblerParameterFabric {
         this.name = ParameterPool.LABEL_ASSEMBLER;
         this.index = 2;
         
-        String[] endings = {".fa", ".fastq"};
+        String[] endings = {".fastq"};
         String[] outputEnding = new String[]{".fna", ".fa", ".txt"};
         ParseableProgram newbler = new ParseableProgram( "Newbler",
                                                                 "/vol/454/.old/2.8/bin/runAssembly", 
@@ -37,7 +37,7 @@ public class AssemblerParameterFabric {
                                                                 0,
                                                                 endings,
                                                                 outputEnding);
-        newbler.setOnlyOutputDirectorySetable(true);
+        newbler.setOutputSettings(true, true);
         newbler.addParameter("large", "-large", ParameterPool.PROGRAM_EMPTY_PARAMETER_VALUE, 1, true);
         newbler.addParameter("CPU", "-cpu", "10", 2, true);
         newbler.addParameter("Force", "-force", ParameterPool.PROGRAM_EMPTY_PARAMETER_VALUE, 3, false);

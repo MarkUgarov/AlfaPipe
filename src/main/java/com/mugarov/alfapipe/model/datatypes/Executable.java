@@ -5,7 +5,6 @@
  */
 package com.mugarov.alfapipe.model.datatypes;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.ArrayList;
 
 /**
@@ -14,15 +13,7 @@ import java.util.ArrayList;
  */
 public interface Executable {
 
-    public abstract String getPreprocessingCommand(String parentOutputDir);
-
-    public abstract String getProcessingCommand(String parentOutputDir);
-    
-    public abstract String getAssemblerCommand(String parentOutputDir);
-    
-    public abstract String getReadsVsContigsCommand(String parentOutputDir);
-    
-    public abstract String getProdigalCommand(String parentOutputDir);
+    public abstract String getProgramCommand(int index, String parentOutputDir);
     
     public abstract ArrayList<String> getToolCommands(String parentOutputDir);
     
