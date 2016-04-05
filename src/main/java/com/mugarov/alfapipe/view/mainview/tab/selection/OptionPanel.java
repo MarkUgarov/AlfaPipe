@@ -129,13 +129,11 @@ public class OptionPanel extends JPanel{
         }
     }
 
-
-    
-    
     public void addTool(String name, ArrayList<InputParameter> parameters, ParameterListener listener){
         ProgramParameterPanel tool = new ProgramParameterPanel(name, parameters, listener);
         this.toolParamPanels.add(tool);
         this.toolOptionsPanel.add(tool);
+        tool.addClusterBox(this.bagOfListeners.getClusterSelectionListener(), this.toolParamPanels.size()-1);
         this.updateUI();
     }
 

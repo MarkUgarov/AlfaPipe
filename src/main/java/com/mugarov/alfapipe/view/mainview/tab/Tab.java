@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
 /**
@@ -40,15 +41,17 @@ public class Tab extends JPanel{
     private final BorderLayout layout;
     
     private final JPanel northPanel;
+    private final JPanel configPanel;
+    private final JScrollPane configScrollPane;
     private final JPanel centerPanel;
-    private final FileSetPanel centerScrollPanel;
+    private final FileSetPanel fileScrollPanel;
     private final JPanel southPanel;
     
     private final String id;
     private final TabListenerBag listenerBag;
     
     private final JLabel outputPath;
-    
+    private SplittedPane mainPanel;
     
     
     public Tab(String id, TabListenerBag bag){
@@ -78,8 +81,11 @@ public class Tab extends JPanel{
         this.outputPanel = new JPanel();
         
         this.northPanel = new JPanel(new BorderLayout());
+
+        this.configPanel = new JPanel(new BorderLayout());
+        this.configScrollPane = new JScrollPane(this.configPanel);
         this.centerPanel = new JPanel(new BorderLayout());
-        this.centerScrollPanel = new FileSetPanel(this.listenerBag);
+        this.fileScrollPanel = new FileSetPanel(this.listenerBag);
         this.southPanel = new JPanel(new BorderLayout());
         
         
@@ -105,12 +111,15 @@ public class Tab extends JPanel{
         this.northPanel.add(this.fileChooser, BorderLayout.WEST);
         this.northPanel.add(this.namePanel, BorderLayout.CENTER);
         this.northPanel.add(this.deleteSet, BorderLayout.EAST);
-        this.northPanel.add(this.optionPanel, BorderLayout.SOUTH);
         
-        this.centerPanel.add(this.centerScrollPanel, BorderLayout.CENTER);
+        this.configPanel.add(this.optionPanel, BorderLayout.SOUTH);
+        
+        this.mainPanel = new SplittedPane(this.configScrollPane, this.fileScrollPanel);
+        
+        this.centerPanel.add(this.mainPanel, BorderLayout.CENTER);
         
         this.add(this.northPanel, BorderLayout.NORTH);
-        this.add(this.centerPanel, BorderLayout.CENTER);
+        this.add(this.mainPanel, BorderLayout.CENTER);
         this.add(this.southPanel, BorderLayout.SOUTH);
         this.setVisible(true);
     }
@@ -126,29 +135,6 @@ public class Tab extends JPanel{
     public void selectProgram(int index, String name, ArrayList<InputParameter> parameters, ParameterListener listener){
         this.optionPanel.selectProgram(index, name, parameters, listener, true);
     }
-//    
-//    public void setPreprocessing(String name, ArrayList<InputParameter> parameters, ParameterListener listener){
-//        this.optionPanel.selectProgram(0, name, parameters, listener, true);
-//    }
-//    
-//    public void setProcessing(String name, ArrayList<InputParameter> parameters, ParameterListener listener){
-////        this.optionPanel.setProcessing(name, parameters, listener);
-//        this.optionPanel.selectProgram(1, name, parameters, listener, true);
-//    }
-//    
-//    public void setAssembler(String name, ArrayList<InputParameter> parameters, ParameterListener listener){
-//        this.optionPanel.selectProgram(2, name, parameters, listener, true);
-//    }
-//    
-//    public void setReadsVsContigs(String name, ArrayList<InputParameter> parameters, ParameterListener listener){
-////        this.optionPanel.setReadsVsContigs(name, parameters, listener);
-//        this.optionPanel.selectProgram(3, name, parameters, listener, true);
-//    }
-//    
-//    public void setProdigal(String name, ArrayList<InputParameter> parameters, ParameterListener listener){
-////        this.optionPanel.setProdigal(name, parameters, listener);
-//        this.optionPanel.selectProgram(4, name, parameters, listener, true);
-//    }
     
     
     public void addTool(String name, ArrayList<InputParameter> parameters, ParameterListener listener){
@@ -156,23 +142,23 @@ public class Tab extends JPanel{
     }
     
     public void addFile(String id, String name, SingleFileListener listener){
-        this.centerScrollPanel.addFile(id, name, listener);
+        this.fileScrollPanel.addFile(id, name, listener);
     }
     
     public void addPaired(String mainFileID, String pairedName){
-        this.centerScrollPanel.addPaired(mainFileID, pairedName);
+        this.fileScrollPanel.addPaired(mainFileID, pairedName);
     }
     
     public void deleteFile(String id){
-        this.centerScrollPanel.deleteFile(id);
+        this.fileScrollPanel.deleteFile(id);
     }
     
     public void selectToolForAll(String toolName){
-        this.centerScrollPanel.selectToolForAll(toolName);
+        this.fileScrollPanel.selectToolForAll(toolName);
     }
     
     public void unselectToolForAll(String toolName){
-        this.centerScrollPanel.unselectToolForAll(toolName);
+        this.fileScrollPanel.unselectToolForAll(toolName);
     }
     
     public void setOutputPath(String path){
@@ -180,12 +166,12 @@ public class Tab extends JPanel{
     }
     
     public void setValidation(String id, boolean fileValid, ArrayList<String> validTools){
-        this.centerScrollPanel.setValidation(id, fileValid, validTools);
+        this.fileScrollPanel.setValidation(id, fileValid, validTools);
     }
 
     public void disableEditing() {
         this.optionPanel.disableEditing();
-        this.centerScrollPanel.disableEditing();
+        this.fileScrollPanel.disableEditing();
         this.fileChooser.setEnabled(false);
         this.applyName.setEnabled(false);
         this.choosePath.setEnabled(false);
@@ -198,15 +184,15 @@ public class Tab extends JPanel{
     }
     
     public void setFileProgressed(String id, boolean success){
-        this.centerScrollPanel.setProgressed(id, success);
+        this.fileScrollPanel.setProgressed(id, success);
     }
 
     public void setToolProgressed(String fileID, ArrayList<String> toolIDs, ArrayList<Boolean> toolSuccess){
-        this.centerScrollPanel.setToolProgressed(fileID, toolIDs, toolSuccess);
+        this.fileScrollPanel.setToolProgressed(fileID, toolIDs, toolSuccess);
     }
     
     public void setAllProgressed(boolean success){
-        this.centerScrollPanel.setAllProgressed(success);
+        this.fileScrollPanel.setAllProgressed(success);
     }
     
 }

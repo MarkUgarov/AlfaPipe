@@ -46,7 +46,11 @@ public class ClusterParameterFabric{
         this.outputPathPosition = 0;
         this.validEndings = null;
         this.outputEndings = null;
-        this.cluster = new ParseableProgram(this.clusterName, this.startCommand, this.inputPathCommand, this.inputPathPosition, this.outputPathCommand, this.outputPathPosition, this.validEndings, this.outputEndings);
+        
+        this.cluster = new ParseableProgram();
+        this.cluster.setName(this.clusterName);
+        this.cluster.setStartCommand(this.startCommand);
+       
         
         this.standardLogfile = new ParameterField("Standard Output Log", "-o",  ParameterPool.PROGRAM_PATH_VALUE+"/clusterlog.txt",1,true);
         this.errorLogfile = new ParameterField("Error Output Log", "-e", ParameterPool.PROGRAM_PATH_VALUE+"/clusterlog.txt", 2, true);
@@ -62,7 +66,7 @@ public class ClusterParameterFabric{
         this.cluster.addParameter(this.numberOfThreads);
         this.cluster.addParameter(this.ramPerThread);
         this.cluster.addParameter(this.platform);
-        this.cluster.setOutputSettings(true, false);
+        this.cluster.setOutputSettings(true, true);
         
         this.clusterProgramSet = new ProgramSet(this.cluster);
 

@@ -239,6 +239,29 @@ public class ParseableProgram{
         }
         this.parameters.add(new ParameterField(name, command, defaultValue, position, optional));
     }
+    
+    /**
+     * Add a parameter
+     * @param name the shown label 
+     * @param command the executed command
+     * @param defaultValue can be empty or ParameterPool.PROGRAM_EMPTY_PARAMETER_VALUE if you want a boolean
+     * @param position can be positive (count 0->position-> end ) or negative (count 0<-position<-X)
+     * @param optional if this parameter does not need a value but it can be set
+     * @param tooltip can be any String which can be a tooltip for this parameter
+     */
+    @JsonIgnore
+    public void addParameter(String name, String command, String defaultValue, int position, boolean optional, String tooltip) {
+        int i= 0; 
+        while(i<this.parameters.size()){
+            if(this.parameters.get(i).getName().equals(name)){
+                this.parameters.remove(i);
+            }
+            else{
+                i++;
+            }
+        }
+        this.parameters.add(new ParameterField(name, command, defaultValue, position, optional, tooltip));
+    }
 
     @JsonIgnore
     public void addParameter(ParameterField parameter) {

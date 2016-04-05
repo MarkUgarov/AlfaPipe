@@ -5,6 +5,8 @@
  */
 package com.mugarov.alfapipe.model.programparse.datatypes;
 
+import com.mugarov.alfapipe.model.ParameterPool;
+
 /**
  *
  * @author Mark
@@ -15,6 +17,7 @@ public class ParameterField{
     private String defaultValue;
     private int position;
     private boolean optional;
+    private String toolTip;
     private boolean avoidLeadingSpace;
     
     public ParameterField(){
@@ -46,9 +49,35 @@ public class ParameterField{
         this.defaultValue = defaultValue;
         this.position = pos;
         this.optional = optional;
+        this.toolTip = ParameterPool.TOOLTIP_PARAMETER_DEFAULT;
         this.avoidLeadingSpace = false;
-        
     }
+    
+    /**
+     * 
+     * @param name should not be null 
+     * @param command can be null if there is no command (e.g. only the position
+     * matters)
+     * @param defaultValue can be Pool.PROGRAM_EMPTY_PARAMETER_VALUE if no  
+     * values are allowed or null if there is just no default value
+     * @param pos should be 0 if it does not matter, positive +X if it should be
+     * on a position X counted from the head of the array or negative -X if 
+     * should be on a position X counted from the tail of the array on the
+     * command line
+     * (the startCommand is only on position in the commandline)
+     * @param optional if the parameter is optional 
+     */
+    public ParameterField(String name, String command, String defaultValue, int pos, boolean optional, String tooltip){
+        this.name = name;
+        this.command = command;
+        this.defaultValue = defaultValue;
+        this.position = pos;
+        this.optional = optional;
+        this.toolTip = tooltip;
+        this.avoidLeadingSpace = false;
+    }
+    
+    
 
     public String getName() {
         return name;
@@ -112,6 +141,20 @@ public class ParameterField{
      */
     public void setAvoidLeadingSpace(boolean avoidLeadingSpace) {
         this.avoidLeadingSpace = avoidLeadingSpace;
+    }
+
+    /**
+     * @return the toolTip
+     */
+    public String getToolTip() {
+        return toolTip;
+    }
+
+    /**
+     * @param toolTip the toolTip to set
+     */
+    public void setToolTip(String toolTip) {
+        this.toolTip = toolTip;
     }
     
 

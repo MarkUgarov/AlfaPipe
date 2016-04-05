@@ -38,9 +38,9 @@ public class AssemblerParameterFabric {
                                                                 endings,
                                                                 outputEnding);
         newbler.setOutputSettings(true, true);
-        newbler.addParameter("large", "-large", ParameterPool.PROGRAM_EMPTY_PARAMETER_VALUE, 1, true);
-        newbler.addParameter("CPU", "-cpu", "10", 2, true);
-        newbler.addParameter("Force", "-force", ParameterPool.PROGRAM_EMPTY_PARAMETER_VALUE, 3, false);
+        newbler.addParameter("large", "-large", ParameterPool.PROGRAM_EMPTY_PARAMETER_VALUE, 1, true, "For large files.");
+        newbler.addParameter("CPU", "-cpu", "10", 2, true, "Number of used cores. Set 0 if you want to use as many as possible (may cause to slow down the whole System).");
+        newbler.addParameter("Force", "-force", ParameterPool.PROGRAM_EMPTY_PARAMETER_VALUE, 3, false, "Forces to overwrite old data.");
         
         NameField  essential1 = new NameField();
         essential1.setName("454AllContigs.fna");

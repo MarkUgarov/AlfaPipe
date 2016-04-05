@@ -26,7 +26,7 @@ public class ToolGenerator implements Generator{
         String[] endings = {".fna"};
         String[] outputEnding = new String[]{".fa", ".fna"};
         ParseableProgram prokka = new ParseableProgram( "Prokka", 
-                                                    "prokka", 
+                                                    "SCRITPS/executeOnShell.sh prokka", 
                                                     null,
                                                     -1,
                                                     "--outdir",
@@ -34,12 +34,14 @@ public class ToolGenerator implements Generator{
                                                     endings,
                                                     outputEnding);  
         prokka.setOutputSettings(true, false);
+        //prokka.setEnterCommand("lqxterm -l vf=128G -cwd ");
+        //prokka.setExitCommand("exit");
         prokka.addParameter("Force", "--force", ParameterPool.PROGRAM_EMPTY_PARAMETER_VALUE, 1, false);
         this.defaultList.add(prokka);
         
         String[] outputEndings2 = new String[]{".txt"};
         ParseableProgram extractHeader = new ParseableProgram( "Extract Header Info", 
-                                                    "sh SCRITPS/writeToFile.sh SCRITPS/extract_header_info.plx", 
+                                                    "SCRITPS/writeToFile.sh SCRITPS/extract_header_info.plx", 
                                                     null,
                                                     2,
                                                     null,
@@ -52,7 +54,7 @@ public class ToolGenerator implements Generator{
         
         String[] endingsB = {".txt"};
         ParseableProgram assemblyStatistics = new ParseableProgram( "Assembly Statistics", 
-                                                    "sh SCRITPS/writeToFile.sh SCRITPS/assembly_statistics.plx ", 
+                                                    "SCRITPS/writeToFile.sh SCRITPS/assembly_statistics.plx ", 
                                                     null,
                                                     2,
                                                     null,

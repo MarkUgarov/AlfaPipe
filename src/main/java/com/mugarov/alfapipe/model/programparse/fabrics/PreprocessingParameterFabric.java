@@ -31,7 +31,7 @@ public class PreprocessingParameterFabric {
         String[] endings = {".fastq.gz"};
         String[] outputEnding = new String[]{".fastq"};
         ParseableProgram mainProcessor = new ParseableProgram("gzip",
-                                                                "sh SCRITPS/gzipPaired.sh", 
+                                                                "SCRITPS/gzipPaired.sh", 
                                                                 null,
                                                                 0,
                                                                 null,

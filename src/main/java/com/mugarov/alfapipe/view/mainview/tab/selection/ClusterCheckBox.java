@@ -17,12 +17,23 @@ public class ClusterCheckBox extends JCheckBox {
     private final int index;
     private final String onSelected;
     private final String onNotSelected;
+    private final boolean isTool;
     
     public ClusterCheckBox(int index){
         super();
         this.index = index;
         this.onSelected = ParameterPool.TOOLTIP_CLUSTER_CHECKBOX_SELECTED;
         this.onNotSelected = ParameterPool.TOOLTIP_CLUSTER_CHECKBOX_UNSELECTED;
+        this.isTool = false;
+        this.setToolTipText(this.onNotSelected);
+    }
+    
+    public ClusterCheckBox(int index, boolean isTool){
+        super();
+        this.index = index;
+        this.onSelected = ParameterPool.TOOLTIP_CLUSTER_CHECKBOX_SELECTED;
+        this.onNotSelected = ParameterPool.TOOLTIP_CLUSTER_CHECKBOX_UNSELECTED;
+        this.isTool = isTool;
         this.setToolTipText(this.onNotSelected);
     }
     
@@ -30,9 +41,12 @@ public class ClusterCheckBox extends JCheckBox {
         return this.index;
     }
     
+    public boolean isTool(){
+        return this.isTool;
+    }
+    
     public void  setTooltipFor(boolean selected){
          String setto = selected ? onSelected : onNotSelected;
          this.setToolTipText(setto);
     }
-    
 }

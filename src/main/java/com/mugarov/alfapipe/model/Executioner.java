@@ -5,6 +5,7 @@
  */
 package com.mugarov.alfapipe.model;
 
+import com.mugarov.alfapipe.model.cluster.ClusterJobWatcher;
 import java.io.File;
 import java.io.IOException;
 import java.lang.ProcessBuilder.Redirect;
@@ -18,8 +19,10 @@ import java.util.logging.Logger;
  */
 public class Executioner {
 
-    private LogFileManager log;
-    private File workfile;
+    private final LogFileManager log;
+    private final File workfile;
+    
+    private final ClusterJobWatcher watcher;
 
     public Executioner(LogFileManager logManager) {
         this.log = logManager;
@@ -27,6 +30,7 @@ public class Executioner {
         if(!this.workfile.exists() || !this.workfile.isDirectory()){
             this.workfile.mkdirs();
         }
+        this.watcher = new ClusterJobWatcher();
     }
             
     /**
@@ -73,18 +77,34 @@ public class Executioner {
             try {
                 process = pb.start();
             } catch (IOException ex) {
+                if(process != null){
+                    process.destroy();
+                }
+                
                 this.log.appendLine("Error while executing.", Executioner.class.getName());
                 Logger.getLogger(Executioner.class.getName()).log(Level.SEVERE, null, ex);
                 return false;
             }
             try {
                 process.waitFor();
-                log.appendLine("Exit Value:"+process.exitValue(), Executioner.class.getName());
-                success = (success&&(process.exitValue()==0));
             } catch (InterruptedException ex) {
-                success=false;
+                if(process != null){
+                    process.destroy();
+                }
                 Logger.getLogger(Executioner.class.getName()).log(Level.SEVERE, null, ex);
+                return false;
             }
+            if(precommand != null){
+                try {
+                    this.watcher.run();
+                } catch (InterruptedException ex) {
+                    this.log.appendLine("Error while executing on Clusters.", Executioner.class.getName());
+                    Logger.getLogger(Executioner.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
+            }
+            log.appendLine("Exit Value:"+process.exitValue(), Executioner.class.getName());
+            success = (process.exitValue()==0);
             
         }
 

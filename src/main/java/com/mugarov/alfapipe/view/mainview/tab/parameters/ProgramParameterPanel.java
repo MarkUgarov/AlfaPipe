@@ -5,9 +5,11 @@
  */
 package com.mugarov.alfapipe.view.mainview.tab.parameters;
 
+import com.mugarov.alfapipe.control.listeners.tabrelated.cluster.ClusterSelectionListener;
 import com.mugarov.alfapipe.control.listeners.tabrelated.parameters.ParameterListener;
 import com.mugarov.alfapipe.model.datatypes.InputParameter;
 import com.mugarov.alfapipe.model.ParameterPool;
+import com.mugarov.alfapipe.view.mainview.tab.selection.ClusterCheckBox;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
@@ -29,7 +31,7 @@ public class ProgramParameterPanel extends JPanel{
     private final int maxColumns;
     private final ParameterListener listener;
     
-    private final JPanel emptyPanel;
+    private final JPanel offsetPanel;
     
     private final JPanel namePanel;
     private final JLabel nameLabel;
@@ -41,6 +43,8 @@ public class ProgramParameterPanel extends JPanel{
     private final ArrayList<ProgramParameterTextField> textFields;
     private final ArrayList<JPanel> singeParameters;
     
+    private ClusterCheckBox clusterBox;
+    
     
     
     public ProgramParameterPanel(String name, ArrayList<InputParameter> parameters, ParameterListener listener){
@@ -50,8 +54,8 @@ public class ProgramParameterPanel extends JPanel{
         this.setDoubleBuffered(true);
         this.setLayout(new BorderLayout());
         
-        this.emptyPanel = new JPanel();
-        this.emptyPanel.setPreferredSize(ParameterPool.LABEL_OFFSET);
+        this.offsetPanel = new JPanel();
+        this.offsetPanel.setPreferredSize(ParameterPool.LABEL_OFFSET);
 
         this.namePanel = new JPanel();
         if(this.name != null){
@@ -59,7 +63,7 @@ public class ProgramParameterPanel extends JPanel{
             this.nameLabel = new JLabel(this.name);
             this.nameLabel.setPreferredSize(ParameterPool.LABEL_DIMENSION);
 
-            this.namePanel.add(this.emptyPanel);
+            this.namePanel.add(this.offsetPanel);
             this.namePanel.add(this.nameLabel);
             this.add(this.namePanel, BorderLayout.WEST);
         }
@@ -86,7 +90,14 @@ public class ProgramParameterPanel extends JPanel{
         this.scrollable.add(this.parameterPanel);
         this.scrollable.setViewportView(this.parameterPanel);
         this.add(this.scrollable, BorderLayout.CENTER);
-        
+        this.clusterBox = null;
+    }
+    
+ 
+    public void addClusterBox(ClusterSelectionListener clusterSelectionListener, int index) {
+        this.clusterBox = new ClusterCheckBox(index, true);
+        this.clusterBox.addItemListener(clusterSelectionListener);
+        this.offsetPanel.add(this.clusterBox);
     }
     
     private void addParameter(InputParameter parameter){
@@ -96,6 +107,7 @@ public class ProgramParameterPanel extends JPanel{
         
         if(parameter.isOptional()){
             JCheckBox toolBox= new JCheckBox(parameter.getName());
+            toolBox.setToolTipText(parameter.getToolTip());
             toolBox.addItemListener(this.listener);
             toolBox.setSelected(parameter.getBoolean());
             this.boxes.add(toolBox);
@@ -104,6 +116,7 @@ public class ProgramParameterPanel extends JPanel{
         }
         else{
             JLabel parName = new JLabel(parameter.getName());
+            parName.setToolTipText(parameter.getToolTip());
             parPan.add(parName);
         }
  
@@ -146,8 +159,8 @@ public class ProgramParameterPanel extends JPanel{
         if(this.nameLabel != null){
             this.nameLabel.setBackground(bg);
         }
-        if(this.emptyPanel != null){
-            this.emptyPanel.setBackground(bg);
+        if(this.offsetPanel != null){
+            this.offsetPanel.setBackground(bg);
         }
         if(this.parameterPanel != null){
             this.parameterPanel.setBackground(bg);
@@ -167,5 +180,7 @@ public class ProgramParameterPanel extends JPanel{
         }
         
     }
+
+   
    
 }

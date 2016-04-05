@@ -19,6 +19,7 @@ public class ClusterSelectionListener implements ItemListener{
     private SetOfFiles fileSet;
     
     public ClusterSelectionListener(SetOfFiles set){
+//        System.out.println("Created ClusterSelectionListener for set "+set.getName());
         this.fileSet = set;
     }
     
@@ -29,6 +30,7 @@ public class ClusterSelectionListener implements ItemListener{
     
     public void setFileSet(SetOfFiles fileSet){
         this.fileSet = fileSet;
+//        System.out.println("Set FileSet "+fileSet.getName()+ " to ClusterSelectionListener");
     }
 
     @Override
@@ -39,13 +41,13 @@ public class ClusterSelectionListener implements ItemListener{
        
         if(ie.getStateChange() == ItemEvent.SELECTED){
            if(this.fileSet != null){
-               this.fileSet.selectClusterFor(index);
+               this.fileSet.selectClusterFor(index, box.isTool());
            }
            box.setTooltipFor(true);
         }
        else{
            if(this.fileSet != null){
-               this.fileSet.unselectClusterFor(index);
+               this.fileSet.unselectClusterFor(index, box.isTool());
            }
            box.setTooltipFor(false);
        }

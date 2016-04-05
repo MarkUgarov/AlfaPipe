@@ -17,6 +17,7 @@ public abstract class ParameterPool {
     
     // cluster
     public static final boolean CLUSTER_ENABLE = true;
+    public static final int CLUSTER_WAITING_TIME = 5000;
     
     
     // general optical parameters
@@ -92,8 +93,9 @@ public abstract class ParameterPool {
     
     
     // standard Tooltips
-    public static final String TOOLTIP_CLUSTER_CHECKBOX_SELECTED = "The selected program will run on the Cluster.";
-    public static final String TOOLTIP_CLUSTER_CHECKBOX_UNSELECTED = "The selected program will run on you local machine.";
+    public static final String TOOLTIP_CLUSTER_CHECKBOX_SELECTED = "The selected program will run on the cluster.";
+    public static final String TOOLTIP_CLUSTER_CHECKBOX_UNSELECTED = "The selected program will run on your local machine.";
+    public static final String TOOLTIP_PARAMETER_DEFAULT = "No information about this parameter.";
     
     // available Tools and Assemblers
     

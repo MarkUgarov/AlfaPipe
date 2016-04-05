@@ -21,6 +21,7 @@ public class InputParameter {
     private final boolean isBoolean;
     private boolean booleanValue;
     private final boolean isOptional;
+    private String toolTip;
     private final boolean avoidLeadingSpace;
     
     public InputParameter(ParameterField field, boolean shown){
@@ -36,6 +37,7 @@ public class InputParameter {
         this.booleanValue = true;
         this.isOptional = field.isOptional();
         this.shown = shown;
+        this.toolTip = field.getToolTip();
         this.avoidLeadingSpace = field.isAvoidLeadingSpace();
     }
 
@@ -46,6 +48,7 @@ public class InputParameter {
         this.booleanValue = (this.isBoolean && booleanValue);
         this.isOptional = optional;
         this.shown = shown;
+        this.toolTip = ParameterPool.TOOLTIP_PARAMETER_DEFAULT;
         this.avoidLeadingSpace = avoidLeadingSpace;
     }
     
@@ -104,5 +107,19 @@ public class InputParameter {
      */
     public boolean isAvoidLeadingSpace() {
         return avoidLeadingSpace;
+    }
+
+    /**
+     * @return the toolTip
+     */
+    public String getToolTip() {
+        return toolTip;
+    }
+
+    /**
+     * @param toolTip the toolTip to set
+     */
+    public void setToolTip(String toolTip) {
+        this.toolTip = toolTip;
     }
 }

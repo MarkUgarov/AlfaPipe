@@ -38,6 +38,7 @@ public class SetOfFiles implements Executable, Runnable{
     private final LogFileManager log;
     private final ArrayList<ProgramSet> usedPrograms;
     private final boolean[] useCluster;
+    private final boolean[] useClusterOnTool;
 
     private final ArrayList<ProgramSet> availableTools;
     
@@ -61,6 +62,7 @@ public class SetOfFiles implements Executable, Runnable{
         this.usedPrograms = new ArrayList<>();
         this.availableTools = new ArrayList<>();
         this.useCluster = new boolean[ComponentPool.PROGRAM_GENERATOR.getAll().size()];
+        this.useClusterOnTool = new boolean[ComponentPool.GENERTATOR_TOOLS.getAvailableNames().length];
         for(String toolName: ComponentPool.GENERTATOR_TOOLS.getAvailableNames()){
             this.availableTools.add(new ProgramSet(ComponentPool.GENERTATOR_TOOLS.get(toolName)));
         }
@@ -261,14 +263,19 @@ public class SetOfFiles implements Executable, Runnable{
             for(InputFile file:this.files){
                 boolean filePassed=true;
                 boolean essentialFilesExist = true;
+                String command;
                 for(int i = 0; (i<this.usedPrograms.size() && filePassed); i++){
-                    if(this.useCluster[i]){
-                         filePassed = execution.execute(clusterCommand, file.getProgramCommand(i, this.outputDirectory.getPath()));
+                    command =  file.getProgramCommand(i, this.outputDirectory.getPath());
+                    if(ParameterPool.CLUSTER_ENABLE && this.useCluster[i]){
+//                        System.out.println("Use program "+i+" on Cluster!");
+                         filePassed = execution.execute(clusterCommand,command);
                     }
                     else{
-                        filePassed = execution.execute(null, file.getProgramCommand(i, this.outputDirectory.getPath()));
+                        filePassed = execution.execute(null, command);
                     }
-                    essentialFilesExist = (essentialFilesExist && file.checkLastCommandFiles());
+                    if(command != null){
+                        essentialFilesExist = (essentialFilesExist && file.checkLastCommandFiles());
+                    }
                     if(!filePassed){
                         String error= "File did not pass! Stopped at program "+this.usedPrograms.get(i).getName()+" with index "+i;
                         System.err.println(error);
@@ -278,8 +285,16 @@ public class SetOfFiles implements Executable, Runnable{
                 }
                 this.tab.setFileProgressed(file.getAbsolutePath(), filePassed&essentialFilesExist);
                 ArrayList<Boolean> toolBools = new ArrayList<>(file.getValidTools().size());
+                int toolIndex = 0;
                 for(String p:file.getToolCommands(this.outputDirectory.getPath())){
-                    toolBools.add(execution.execute(null, p));
+                    if(ParameterPool.CLUSTER_ENABLE && this.useClusterOnTool[toolIndex]){
+                        toolBools.add(execution.execute(clusterCommand, p));
+                    }
+                    else{
+                        toolBools.add(execution.execute(null, p));
+                    }
+                    
+                    toolIndex++;
                 }
                 this.tab.setToolProgressed(file.getAbsolutePath(), file.getValidTools(), toolBools);
             }
@@ -307,13 +322,33 @@ public class SetOfFiles implements Executable, Runnable{
         }
     }
 
-    public void selectClusterFor(int index) {
-        this.useCluster[index] = true;
+    public void selectClusterFor(int index, boolean forTool) {
+        if(forTool){
+            System.out.println("Select Cluster for tool "+index);
+            this.log.appendLine("Select Cluster for tool "+index, SetOfFiles.class.getName());
+            this.useClusterOnTool[index] = true;
+        }
+        else{
+            System.out.println("Select Cluster for program "+index);
+            this.log.appendLine("Select Cluster for program "+index, SetOfFiles.class.getName());
+            this.useCluster[index] = true;
+        }
+        
     }
 
-    public void unselectClusterFor(int index) {
-        this.useCluster[index] = false;
+    public void unselectClusterFor(int index, boolean forTool) {
+        if(forTool){
+            System.out.println("Unselect Cluster for tool "+index);
+            this.log.appendLine("Unselect Cluster for tool "+index, SetOfFiles.class.getName());
+            this.useClusterOnTool[index] = false;
+        }
+        else{
+            System.out.println("Unselect Cluster for program "+index);
+            this.log.appendLine("Unselect Cluster for program "+index, SetOfFiles.class.getName());
+            this.useCluster[index] = false;
+        }
     }
+    
     
     
 }

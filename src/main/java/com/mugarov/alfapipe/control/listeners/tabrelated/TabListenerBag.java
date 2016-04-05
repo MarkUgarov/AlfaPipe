@@ -59,6 +59,7 @@ public class TabListenerBag {
         }
         this.toolListener.setFileSet(this.fileSet);
         this.clusterParameterListener.setFileSet(this.fileSet);
+        this.clusterSelectionListener.setFileSet(this.fileSet);
     }
     
     public void setFileManager(FileSetManager man){
