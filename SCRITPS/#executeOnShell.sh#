@@ -1,0 +1,9 @@
+#!/bin/bash
+
+
+COMMAND=$@
+
+echo "Command is ${COMMAND}"
+
+
+lqxterm -cwd "${COMMAND}" 

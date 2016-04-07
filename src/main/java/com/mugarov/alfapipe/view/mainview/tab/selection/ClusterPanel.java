@@ -8,23 +8,23 @@ package com.mugarov.alfapipe.view.mainview.tab.selection;
 import com.mugarov.alfapipe.control.listeners.tabrelated.parameters.ParameterListener;
 import com.mugarov.alfapipe.model.ParameterPool;
 import com.mugarov.alfapipe.model.datatypes.InputParameter;
+import com.mugarov.alfapipe.view.optics.OpticPane;
 import com.mugarov.alfapipe.view.mainview.tab.parameters.ProgramParameterPanel;
 import java.awt.BorderLayout;
 import java.util.ArrayList;
-import javax.swing.JPanel;
 
 /**
  *
  * @author mugarov
  */
-public class ClusterPanel extends JPanel{
+public class ClusterPanel extends OpticPane{
     
-    private final JPanel parameterParentPanel;
+    private final OpticPane parameterParentPanel;
     private ProgramParameterPanel parameterPanel;
     
     public ClusterPanel(){
         this.setLayout(new BorderLayout());
-        this.parameterParentPanel = new JPanel();
+        this.parameterParentPanel = new OpticPane();
         this.parameterParentPanel.setLayout(new BorderLayout());
         this.add(this.parameterParentPanel);
         this.setVisible(ParameterPool.CLUSTER_ENABLE);

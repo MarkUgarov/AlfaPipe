@@ -6,6 +6,8 @@
 package com.mugarov.alfapipe.view.mainview.tab.selection;
 
 import com.mugarov.alfapipe.model.ParameterPool;
+import com.mugarov.alfapipe.view.optics.OpticPane;
+import com.mugarov.alfapipe.view.optics.OpticScrollPane;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
@@ -16,19 +18,18 @@ import javax.swing.ButtonGroup;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import javax.swing.JScrollPane;
 
 /**
  *
  * @author mugarov
  */
-public class ProgramSelectionPanel extends JPanel{
+public class ProgramSelectionPanel extends OpticPane{
     private final ButtonGroup group;
     private final ActionListener listener;
     // needed to select only the first button
     private boolean isFirst;
     
-    private final JScrollPane scrollable;
+    private final OpticScrollPane scrollable;
     private final JPanel buttonPanel;
     
     private final JPanel namePanel;
@@ -48,7 +49,7 @@ public class ProgramSelectionPanel extends JPanel{
         this.namePanel.add(this.nameLabel);
         this.add(this.namePanel, BorderLayout.WEST);
         
-        this.scrollable = new JScrollPane();
+        this.scrollable = new OpticScrollPane();
         this.buttonPanel = new JPanel();
         this.buttonPanel.setLayout(new FlowLayout());
         this.scrollable.add(this.buttonPanel);

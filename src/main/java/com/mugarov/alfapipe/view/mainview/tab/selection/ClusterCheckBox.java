@@ -26,6 +26,7 @@ public class ClusterCheckBox extends JCheckBox {
         this.onNotSelected = ParameterPool.TOOLTIP_CLUSTER_CHECKBOX_UNSELECTED;
         this.isTool = false;
         this.setToolTipText(this.onNotSelected);
+        this.setOpaque(false);
     }
     
     public ClusterCheckBox(int index, boolean isTool){
@@ -35,6 +36,7 @@ public class ClusterCheckBox extends JCheckBox {
         this.onNotSelected = ParameterPool.TOOLTIP_CLUSTER_CHECKBOX_UNSELECTED;
         this.isTool = isTool;
         this.setToolTipText(this.onNotSelected);
+        this.setOpaque(false);
     }
     
     public int getIndex(){

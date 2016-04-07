@@ -10,17 +10,17 @@ import com.mugarov.alfapipe.control.listeners.tabrelated.parameters.ParameterLis
 import com.mugarov.alfapipe.control.listeners.tabrelated.radiobuttons.ProgramListener;
 import com.mugarov.alfapipe.model.ParameterPool;
 import com.mugarov.alfapipe.model.datatypes.InputParameter;
+import com.mugarov.alfapipe.view.optics.OpticPane;
 import com.mugarov.alfapipe.view.mainview.tab.parameters.ProgramParameterPanel;
 import java.util.ArrayList;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 
 /**
  *
  * @author Mark
  */
-public class OptionPanel extends JPanel{
+public class OptionPanel extends OpticPane{
     
     private final JLabel programLabel;
     private final ArrayList<SingleProgramPanel> programPanels;
@@ -31,13 +31,13 @@ public class OptionPanel extends JPanel{
     private final TabListenerBag bagOfListeners;
 
     private final JLabel toolLabel;
-    private final JPanel toolOptionsPanel;
+    private final OpticPane toolOptionsPanel;
     
     private ArrayList<ProgramParameterPanel> toolParamPanels;
   
     public OptionPanel(int required, TabListenerBag bagOfListeners){
-        super();
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        this.setTransparent();
         this.programPanels = new ArrayList<>(required);
         this.bagOfListeners = bagOfListeners;
         
@@ -77,7 +77,7 @@ public class OptionPanel extends JPanel{
         this.toolLabel.setPreferredSize(ParameterPool.LABEL_DIMENSION);
         this.add(this.toolLabel);
         
-        this.toolOptionsPanel = new JPanel();
+        this.toolOptionsPanel = new OpticPane();
         this.toolOptionsPanel.setLayout(new BoxLayout(toolOptionsPanel, BoxLayout.Y_AXIS));
         
         this.add(this.toolOptionsPanel);
@@ -86,8 +86,9 @@ public class OptionPanel extends JPanel{
 
     }
     
-    private JPanel getDistinguishBar(){
-        JPanel bar = new JPanel();
+    private OpticPane getDistinguishBar(){
+        OpticPane bar = new OpticPane(false);
+        bar.drawBackgroundImaage(false);
         bar.setPreferredSize(ParameterPool.DISTINGUISH_BAR_DIMENSION);
         bar.setBackground(ParameterPool.DISTINGUISH_BAR_COLOR);
         return bar;
@@ -104,8 +105,8 @@ public class OptionPanel extends JPanel{
         else{
             this.programPanels.get(index).initSelection(name, listener);
             this.programPanels.get(index).initClusterSelection(this.bagOfListeners.getClusterSelectionListener());
-            this.updateUI();
         }
+        this.updateUI();
     }
     
     

@@ -21,7 +21,11 @@ public class ClusterJobWatcher {
     private Timer timer;
     
     
-    
+    /**
+     * TODO:
+     * 
+     * 
+     */
     public ClusterJobWatcher(){
 
         
@@ -44,6 +48,13 @@ public class ClusterJobWatcher {
     
     public boolean isDone(){
         return this.tick.isDone();
+    }
+    
+    /**
+     * TODO: Cancel all Jobs with qdel "jobid"
+     */
+    public void cancelAll(){
+        
     }
 
     private static class Ticker extends TimerTask{

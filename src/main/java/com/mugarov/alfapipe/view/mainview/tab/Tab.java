@@ -14,25 +14,25 @@ import com.mugarov.alfapipe.control.listeners.tabrelated.singlefile.SingleFileLi
 import com.mugarov.alfapipe.model.ParameterPool;
 import com.mugarov.alfapipe.model.datatypes.InputParameter;
 import com.mugarov.alfapipe.view.Button;
+import com.mugarov.alfapipe.view.optics.OpticPane;
+import com.mugarov.alfapipe.view.optics.OpticScrollPane;
 import java.awt.BorderLayout;
 import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
 /**
  *
  * @author Mark
  */
-public class Tab extends JPanel{
+public class Tab extends OpticPane{
     private final JButton fileChooser;
     private final JButton deleteSet;
     private final JButton choosePath;
-    private final JPanel outputPanel;
+    private final OpticPane outputPanel;
     
-    private final JPanel namePanel;
+    private final OpticPane namePanel;
     private final JLabel nameLabel;
     private final JTextField nameField;
     private final JButton applyName;
@@ -40,12 +40,12 @@ public class Tab extends JPanel{
     
     private final BorderLayout layout;
     
-    private final JPanel northPanel;
-    private final JPanel configPanel;
-    private final JScrollPane configScrollPane;
-    private final JPanel centerPanel;
+    private final OpticPane northPanel;
+    private final OpticPane configPanel;
+    private final OpticScrollPane configScrollPane;
+    private final OpticPane centerPanel;
     private final FileSetPanel fileScrollPanel;
-    private final JPanel southPanel;
+    private final OpticPane southPanel;
     
     private final String id;
     private final TabListenerBag listenerBag;
@@ -55,7 +55,7 @@ public class Tab extends JPanel{
     
     
     public Tab(String id, TabListenerBag bag){
-        
+        super.setOpaque();
         this.id = id;
         this.listenerBag = bag;
         this.layout = new BorderLayout();
@@ -64,7 +64,7 @@ public class Tab extends JPanel{
         this.deleteSet = new Button(ParameterPool.BUTTON_DELETE_SET_TEXT, ParameterPool.BUTTON_DELETE_SET_COMMAND);
         this.choosePath = new Button(ParameterPool.BUTTON_CHOOOSE_OUTPUT_TEXT, ParameterPool.BUTTON_CHOOSE_OUTPUT_COMMAND);
         
-        this.namePanel = new JPanel(new BorderLayout());
+        this.namePanel = new OpticPane(new BorderLayout());
         this.nameLabel = new JLabel("Name:");
         this.nameField = new JTextField(this.id);
         this.applyName = new Button(ParameterPool.BUTTON_APPLY_NAME_TEXT, ParameterPool.BUTTON_APPLY_NAME_COMMAND);
@@ -78,15 +78,15 @@ public class Tab extends JPanel{
         this.optionPanel.initCluster(this.listenerBag.getClusterParameterListener());
         
         this.outputPath = new JLabel();
-        this.outputPanel = new JPanel();
+        this.outputPanel = new OpticPane();
         
-        this.northPanel = new JPanel(new BorderLayout());
+        this.northPanel = new OpticPane(new BorderLayout());
 
-        this.configPanel = new JPanel(new BorderLayout());
-        this.configScrollPane = new JScrollPane(this.configPanel);
-        this.centerPanel = new JPanel(new BorderLayout());
+        this.configPanel = new OpticPane(new BorderLayout());
+        this.configScrollPane = new OpticScrollPane(this.configPanel);
+        this.centerPanel = new OpticPane(new BorderLayout());
         this.fileScrollPanel = new FileSetPanel(this.listenerBag);
-        this.southPanel = new JPanel(new BorderLayout());
+        this.southPanel = new OpticPane(new BorderLayout());
         
         
         this.init();
@@ -115,6 +115,7 @@ public class Tab extends JPanel{
         this.configPanel.add(this.optionPanel, BorderLayout.SOUTH);
         
         this.mainPanel = new SplittedPane(this.configScrollPane, this.fileScrollPanel);
+//        this.mainPanel = new SplittedPane(new OpticScrollPane(), new OpticScrollPane());
         
         this.centerPanel.add(this.mainPanel, BorderLayout.CENTER);
         
@@ -194,5 +195,7 @@ public class Tab extends JPanel{
     public void setAllProgressed(boolean success){
         this.fileScrollPanel.setAllProgressed(success);
     }
+    
+     
     
 }

@@ -24,6 +24,9 @@ public abstract class ParameterPool {
     public static final String TITLE = "Alfa - Pipe: A likely functional assembler Pipe.";
     public static final boolean FULLSCREAN = true;
     public static final Dimension FRAMESIZE = new Dimension(400,600);
+    public static final Color COLOR_BACKGROUND_STANDARD = new Color(128, 255 , 0);
+    public static final Color COLOR_BACKGROUND_SECOND = new Color(160,160,160,125);
+    
     // text for menu
     public static final String MENU_MAIN = "Menu";
     public static final String MENU_EXIT = "Close";
@@ -70,8 +73,8 @@ public abstract class ParameterPool {
                 (int)(java.awt.Toolkit.getDefaultToolkit().getScreenSize().width*0.05),
                 (int)(java.awt.Toolkit.getDefaultToolkit().getScreenSize().height*0.005)
                 );
-    public static final Color DISTINGUISH_PROGRAM_COLOR_1 = Color.LIGHT_GRAY;
-    public static final Color DISTINGUISH_PROGRAM_COLOR_0 = Color.WHITE;
+    public static final Color DISTINGUISH_PROGRAM_COLOR_1 = new Color(51,255,255,125);
+    public static final Color DISTINGUISH_PROGRAM_COLOR_0 = new Color(160,160,160,125);
     public static final Color DISTINGUISH_BAR_COLOR = Color.gray;
     
     // texts and parameters for the SingleFilePanels in the tabs

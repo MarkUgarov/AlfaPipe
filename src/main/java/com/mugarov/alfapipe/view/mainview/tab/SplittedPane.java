@@ -5,6 +5,8 @@
  */
 package com.mugarov.alfapipe.view.mainview.tab;
 
+import com.mugarov.alfapipe.model.ParameterPool;
+import java.awt.Color;
 import java.awt.Component;
 import javax.swing.JSplitPane;
 
@@ -22,6 +24,10 @@ public class SplittedPane extends JSplitPane{
         this.north = north;
         this.south = south;
         super.setOneTouchExpandable(true);
+        this.setOpaque(false);
+//        this.north.setBackground(ParameterPool.COLOR_BACKGROUND_STANDARD);
+//        this.south.setBackground(ParameterPool.COLOR_BACKGROUND_STANDARD);
+//        this.setBackground(ParameterPool.COLOR_BACKGROUND_STANDARD);
     }
 
     

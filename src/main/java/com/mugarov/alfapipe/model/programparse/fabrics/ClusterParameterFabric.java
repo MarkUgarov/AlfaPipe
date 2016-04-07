@@ -34,6 +34,7 @@ public class ClusterParameterFabric{
     private final ParameterField numberOfThreads;
     private final ParameterField ramPerThread;
     private final ParameterField platform;
+    private final ParameterField waitPar;
     
     private final ProgramSet clusterProgramSet;
     
@@ -58,7 +59,9 @@ public class ClusterParameterFabric{
         this.numberOfThreads = new ParameterField("Number of threads", "-pe multislot", "8", 4, true);
         this.ramPerThread = new ParameterField("RAM per thread", "-l vf=", "1G", 5, true);
         this.ramPerThread.setAvoidLeadingSpace(true);
-        this.platform = new ParameterField("Platform", "-l arch=lx24-amd64", ParameterPool.PROGRAM_EMPTY_PARAMETER_VALUE, 6, true);
+        this.platform = new ParameterField("Platform", "-l arch=", "lx24-amd64", 6, true);
+        this.platform.setAvoidLeadingSpace(true);
+        this.waitPar = new ParameterField("wait", "-sync=y", ParameterPool.PROGRAM_EMPTY_PARAMETER_VALUE, 7, true, "Wait before continue with the next step.");
         
         this.cluster.addParameter(this.standardLogfile);
         this.cluster.addParameter(this.errorLogfile);
@@ -66,6 +69,7 @@ public class ClusterParameterFabric{
         this.cluster.addParameter(this.numberOfThreads);
         this.cluster.addParameter(this.ramPerThread);
         this.cluster.addParameter(this.platform);
+        this.cluster.addParameter(this.waitPar);
         this.cluster.setOutputSettings(true, true);
         
         this.clusterProgramSet = new ProgramSet(this.cluster);

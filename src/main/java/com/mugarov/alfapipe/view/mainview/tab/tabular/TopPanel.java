@@ -7,26 +7,24 @@ package com.mugarov.alfapipe.view.mainview.tab.tabular;
 
 import com.mugarov.alfapipe.control.listeners.tabrelated.TabListenerBag;
 import com.mugarov.alfapipe.model.ComponentPool;
-import com.mugarov.alfapipe.model.ParameterPool;
+import com.mugarov.alfapipe.view.optics.OpticPane;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.util.ArrayList;
-import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 
 /**
  *
  * @author Mark
  */
-public class TopPanel extends JPanel{
+public class TopPanel extends OpticPane{
     
     private final TabListenerBag listenerBag;
 
-    private JPanel leftPanel ;
+    private OpticPane leftPanel ;
     private JLabel filename;
-    private JPanel rightPanel;
+    private OpticPane rightPanel;
     private final BorderLayout  layout;
     private final ArrayList<JCheckBox> boxes;
     
@@ -51,14 +49,14 @@ public class TopPanel extends JPanel{
     }
     
     private void createLeftPanel(){
-            this.leftPanel = new JPanel();
+            this.leftPanel = new OpticPane();
             this.leftPanel.setLayout(new BorderLayout());
             this.filename = new JLabel("Selected Files:");
             this.leftPanel.add(filename, BorderLayout.EAST);
         }
     
      private void creatRightPanel(){
-            this.rightPanel = new JPanel();
+            this.rightPanel = new OpticPane();
              for(String tool: ComponentPool.GENERTATOR_TOOLS.getAvailableNames()){
                 JCheckBox toolBox= new JCheckBox(tool);
                 toolBox.addItemListener(this.listenerBag.getToolListener());

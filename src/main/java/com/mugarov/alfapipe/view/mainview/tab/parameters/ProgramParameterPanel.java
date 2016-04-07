@@ -9,7 +9,9 @@ import com.mugarov.alfapipe.control.listeners.tabrelated.cluster.ClusterSelectio
 import com.mugarov.alfapipe.control.listeners.tabrelated.parameters.ParameterListener;
 import com.mugarov.alfapipe.model.datatypes.InputParameter;
 import com.mugarov.alfapipe.model.ParameterPool;
+import com.mugarov.alfapipe.view.optics.OpticPane;
 import com.mugarov.alfapipe.view.mainview.tab.selection.ClusterCheckBox;
+import com.mugarov.alfapipe.view.optics.OpticScrollPane;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
@@ -18,8 +20,6 @@ import java.util.ArrayList;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextField;
 
 /**
  *
@@ -31,33 +31,32 @@ public class ProgramParameterPanel extends JPanel{
     private final int maxColumns;
     private final ParameterListener listener;
     
-    private final JPanel offsetPanel;
+    private final OpticPane offsetPanel;
     
-    private final JPanel namePanel;
+    private final OpticPane namePanel;
     private final JLabel nameLabel;
     
-    private final JScrollPane scrollable;
-    private final JPanel parameterPanel;
+    private final OpticScrollPane scrollable;
+    private final OpticPane parameterPanel;
     
     private final ArrayList<JCheckBox> boxes;
     private final ArrayList<ProgramParameterTextField> textFields;
-    private final ArrayList<JPanel> singeParameters;
+    private final ArrayList<JPanel> singleParameters;
     
     private ClusterCheckBox clusterBox;
     
     
     
     public ProgramParameterPanel(String name, ArrayList<InputParameter> parameters, ParameterListener listener){
-        super();
         this.setDoubleBuffered(true);
         this.name = name;
         this.setDoubleBuffered(true);
         this.setLayout(new BorderLayout());
         
-        this.offsetPanel = new JPanel();
+        this.offsetPanel = new OpticPane(new BorderLayout());
         this.offsetPanel.setPreferredSize(ParameterPool.LABEL_OFFSET);
 
-        this.namePanel = new JPanel();
+        this.namePanel = new OpticPane();
         if(this.name != null){
             this.namePanel.setLayout(new FlowLayout());
             this.nameLabel = new JLabel(this.name);
@@ -72,15 +71,25 @@ public class ProgramParameterPanel extends JPanel{
         }
         
         this.maxColumns = ParameterPool.PARAMETERS_IN_ONE_ROW;
-        this.maxRows = parameters.size()/this.maxColumns;
+        
+        //count parameters
+        int shown = 0;
+        for(InputParameter par:parameters){
+            if(par.isShown()){
+                shown++;
+            }
+        }
+        
+        this.maxRows = (int) Math.ceil((((double)shown)/(double)this.maxColumns));
+        //System.out.println(name+" Parameters:"+parameters.size()+", max Columns:"+this.maxColumns+", max Rows:"+this.maxRows+ "= "+(float)(((double)parameters.size())/(double)this.maxColumns));
         this.listener = listener;
         
         this.boxes = new ArrayList<>();
         this.textFields = new ArrayList<>();
-        this.singeParameters = new ArrayList<>();
+        this.singleParameters = new ArrayList<>();
                 
-        this.scrollable = new JScrollPane();
-        this.parameterPanel = new JPanel();   
+        this.scrollable = new OpticScrollPane();
+        this.parameterPanel = new OpticPane();   
         this.parameterPanel.setLayout(new GridLayout(this.maxRows,this.maxColumns));
         for(InputParameter par:parameters){
             if(par.isShown()){
@@ -91,18 +100,19 @@ public class ProgramParameterPanel extends JPanel{
         this.scrollable.setViewportView(this.parameterPanel);
         this.add(this.scrollable, BorderLayout.CENTER);
         this.clusterBox = null;
+        this.setBackground(ParameterPool.COLOR_BACKGROUND_SECOND);
     }
     
  
     public void addClusterBox(ClusterSelectionListener clusterSelectionListener, int index) {
         this.clusterBox = new ClusterCheckBox(index, true);
         this.clusterBox.addItemListener(clusterSelectionListener);
-        this.offsetPanel.add(this.clusterBox);
+        this.offsetPanel.add(this.clusterBox, BorderLayout.CENTER);
     }
     
     private void addParameter(InputParameter parameter){
 //        System.out.println("\t Add parameter "+parameter.getName());
-        JPanel parPan = new JPanel();
+        OpticPane parPan = new OpticPane();
         parPan.setLayout(new FlowLayout());
         
         if(parameter.isOptional()){
@@ -133,7 +143,7 @@ public class ProgramParameterPanel extends JPanel{
        
         
         this.parameterPanel.add(parPan);
-        this.singeParameters.add(parPan);
+        this.singleParameters.add(parPan);
         this.updateUI();
     }
     
@@ -156,6 +166,9 @@ public class ProgramParameterPanel extends JPanel{
         if(this.namePanel != null){
             this.namePanel.setBackground(bg);
         }
+        if(this.clusterBox != null){
+            this.clusterBox.setBackground(bg);
+        }
         if(this.nameLabel != null){
             this.nameLabel.setBackground(bg);
         }
@@ -165,8 +178,8 @@ public class ProgramParameterPanel extends JPanel{
         if(this.parameterPanel != null){
             this.parameterPanel.setBackground(bg);
         }
-        if(this.singeParameters != null){
-            for(JPanel parPan:this.singeParameters){
+        if(this.singleParameters != null){
+            for(JPanel parPan:this.singleParameters){
                 parPan.setBackground(bg);
             }
         }
