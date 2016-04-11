@@ -30,7 +30,7 @@ public class ProgramSelectionPanel extends OpticPane{
     private boolean isFirst;
     
     private final OpticScrollPane scrollable;
-    private final JPanel buttonPanel;
+    private final JPanel radioButtonPanel;
     
     private final JPanel namePanel;
     private final JLabel nameLabel;
@@ -50,16 +50,19 @@ public class ProgramSelectionPanel extends OpticPane{
         this.add(this.namePanel, BorderLayout.WEST);
         
         this.scrollable = new OpticScrollPane();
-        this.buttonPanel = new JPanel();
-        this.buttonPanel.setLayout(new FlowLayout());
-        this.scrollable.add(this.buttonPanel);
-        this.scrollable.setViewportView(this.buttonPanel);
+        this.radioButtonPanel = new JPanel();
+        this.radioButtonPanel.setLayout(new FlowLayout());
+        this.radioButtonPanel.setDoubleBuffered(true);
+        this.scrollable.add(this.radioButtonPanel);
+        this.scrollable.setViewportView(this.radioButtonPanel);
         this.add(this.scrollable, BorderLayout.CENTER);
         
         for(String a:values){
-            this.addButton(a);
+            this.addRadioButton(a);
         }
         this.group.setSelected(null, true);
+        this.radioButtonPanel.setDoubleBuffered(true);
+        this.namePanel.setDoubleBuffered(true);
     }
     
     /**
@@ -73,14 +76,15 @@ public class ProgramSelectionPanel extends OpticPane{
         this.scrollable = null;
         this.nameLabel = null;
         this.namePanel = null;
-        this.buttonPanel = null;
+        this.radioButtonPanel = null;
     }
     
-    private void addButton(String content){
+    private void addRadioButton(String content){
         JRadioButton b = new JRadioButton(content);
         b.addActionListener(this.listener);
+        b.setDoubleBuffered(true);
         this.group.add(b);
-        this.buttonPanel.add(b);
+        this.radioButtonPanel.add(b);
         if(this.isFirst){
             b.setSelected(true);
             this.isFirst = false;
@@ -107,8 +111,8 @@ public class ProgramSelectionPanel extends OpticPane{
         if(this.nameLabel != null){
             this.nameLabel.setBackground(bg);
         }
-        if(this.buttonPanel != null){
-            this.buttonPanel.setBackground(bg);
+        if(this.radioButtonPanel != null){
+            this.radioButtonPanel.setBackground(bg);
         }
         if(this.scrollable != null){
             this.scrollable.setBackground(bg);

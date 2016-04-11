@@ -5,6 +5,7 @@
  */
 package com.mugarov.alfapipe.model;
 
+import com.mugarov.alfapipe.model.datatypes.InputParameter;
 import com.mugarov.alfapipe.model.datatypes.ProgramSet;
 import com.mugarov.alfapipe.model.filetools.FileLister;
 import com.mugarov.alfapipe.model.filetools.FileNaming;
@@ -25,6 +26,7 @@ public class ExecutionCommandBuilder {
     private File outputFile;
     private boolean outputIsDirectory;
     private StringBuilder builder;
+    private boolean useClusterParameters;
     
     private FileLister fileLister;
     
@@ -34,6 +36,11 @@ public class ExecutionCommandBuilder {
         this.builder = null;
         this.log = logManager;
         this.fileLister = null;
+        this.useClusterParameters = false;
+    }
+    
+    public void useClusterParameters(boolean use){
+        this.useClusterParameters = use;
     }
     
     
@@ -84,6 +91,13 @@ public class ExecutionCommandBuilder {
         }
         this.fileLister = new FileLister(this.log, this.outputFile, this.outputIsDirectory, originalFile, this.set);
         if(parameterSet.getParsedParameters().getStartCommand() != null){
+            if(this.useClusterParameters){
+                System.out.println("BUILD PROGRAM FOR CLUSTER");
+                for(ParameterField cP:parameterSet.getParsedParameters().getAdditionalClusterParameters()){
+                    this.buildParameterCommand(cP, null, null, parameterSet.getClusterParameters(), originalFile);
+                }
+            }
+            
             if(parameterSet.getParsedParameters().getEnterCommand() != null){
                 builder.append(parameterSet.getParsedParameters().getEnterCommand());
                 builder.append("\n");
@@ -91,114 +105,118 @@ public class ExecutionCommandBuilder {
             builder.append(parameterSet.getParsedParameters().getStartCommand());
             builder.append(" ");
             for(ParameterField pf:parameterSet.getParsedParameters().getParameters() ){
-                boolean writeCommand =true;
-                if(pf.getCommand() == null || pf.getCommand().length() == 0 || pf.getCommand().equals(ParameterPool.PROGRAM_EMPTY_PARAMETER_VALUE)){
-                    writeCommand=false;
-                }
-
-                boolean writeValue = true;
-                if(pf.getDefaultValue() != null && pf.getDefaultValue().equals(ParameterPool.PROGRAM_EMPTY_PARAMETER_VALUE)){
-                    writeValue = false;
-                }
-
-
-                if(pf.getName().equals(ParameterPool.PROGRAM_INPUT_PATH_SET_PARAMETER_NAME)){
-                    if(writeCommand){
-                        builder.append(pf.getCommand()); 
-                        if(!pf.isAvoidLeadingSpace()){
-                            builder.append(" ");
-                        }
-                        
-                    }
-                    
-
-                    builder.append(inputFile.getAbsolutePath());
-                    if(!pf.isAvoidLeadingSpace()){
-                        builder.append(" ");
-                    }
-                    if(pairedFiles != null && parameterSet.getParsedParameters().getPairedCommand() == null){
-                        for(File file:pairedFiles){
-                            builder.append(file.getAbsolutePath());
-                            builder.append(" ");
-                        }
-                    }
-                }
-                else if(pf.getName().equals(ParameterPool.PROGRAM_OUTPUT_PATH_SET_PARAMETER_NAME)){
-                    if(writeCommand){
-                        builder.append(pf.getCommand()); 
-                        if(!pf.isAvoidLeadingSpace()){
-                            builder.append(" ");
-                        }
-                    }
-                    builder.append(outputFile.getAbsolutePath());
-                    builder.append(" ");
-                    
-                }
-                else if(pf.getName().equals(ParameterPool.PROGRAM_PAIRED_PARAMETER_NAME)){
-                    if(writeCommand){
-                        builder.append(pf.getCommand()); 
-                        if(!pf.isAvoidLeadingSpace()){
-                            builder.append(" ");
-                        }
-                    }
-                    if(pairedFiles != null){
-                        for(File file:pairedFiles){
-                            builder.append(file.getAbsolutePath());
-                            builder.append(" ");
-                        }
-                    }
-                }
-                else{
-                    int i = 0;
-                    boolean found = false;
-                    while(!found && i<parameterSet.getInputParameters().size()){
-                        if(parameterSet.getInputParameters().get(i).getName().equals(pf.getName())){
-                            if(parameterSet.getInputParameters().get(i).isBoolean()){
-                                // Hint for UI: Make sure that optional parameters are NOT selectable in the GUI.
-                                if((writeCommand && parameterSet.getInputParameters().get(i).getBoolean())||!parameterSet.getInputParameters().get(i).isOptional()){
-                                    builder.append(pf.getCommand()); 
-                                    builder.append(" ");
-                                }
-                            }
-                            else{
-                                // Hint for UI: Make sure that optional parameters are NOT selectable in the GUI.
-                                if(parameterSet.getInputParameters().get(i).getBoolean()||!parameterSet.getInputParameters().get(i).isOptional()){
-                                    if(writeCommand){
-                                        builder.append(pf.getCommand()); 
-                                        if(!pf.isAvoidLeadingSpace() || !writeValue){
-                                            builder.append(" ");
-                                        }
-                                    }
-                                    if(writeValue){
-                                        String value = parameterSet.getInputParameters().get(i).getValue();
-                                        if(value.contains(ParameterPool.PROGRAM_PATH_VALUE)){
-                                            if(this.outputIsDirectory){
-                                                value = value.replaceAll(ParameterPool.PROGRAM_PATH_VALUE, outputFile.getPath());
-                                            }
-                                            else{
-                                                value = value.replaceAll(ParameterPool.PROGRAM_PATH_VALUE, outputFile.getParent());
-                                            }
-                                        }
-                                        if(value.contains(ParameterPool.PROGRAM_NAME_VALUE)){
-                                            value = value.replaceAll(ParameterPool.PROGRAM_NAME_VALUE, this.getClearName(originalFile));
-                                        }
-                                        builder.append(value);
-                                        builder.append(" ");  
-                                    }
-                                }
-                            }
-                            found = true;
-                        }
-                        i++;
-                    }
-                    if(!found){
-                        this.log.appendLine(ParameterPool.LOG_WARNING+"NO InputFileParameter was found for "+pf.getName(), ExecutionCommandBuilder.class.getName());
-                    }
-                }
+                this.buildParameterCommand(pf, parameterSet.getParsedParameters().getPairedCommand(), pairedFiles, parameterSet.getInputParameters(), originalFile);
             }
             if(parameterSet.getParsedParameters().getExitCommand()!= null){
                 builder.append("\n");
                 builder.append(parameterSet.getParsedParameters().getExitCommand());
+            }
+        }
+    }
+    
+    public void buildParameterCommand(ParameterField pf, ParameterField pairedCommand, ArrayList<File> pairedFiles, ArrayList<InputParameter> parameters, File originalFile){
+        boolean writeCommand =true;
+        if(pf.getCommand() == null || pf.getCommand().length() == 0 || pf.getCommand().equals(ParameterPool.PROGRAM_EMPTY_PARAMETER_VALUE)){
+            writeCommand=false;
+        }
+
+        boolean writeValue = true;
+        if(pf.getDefaultValue() != null && pf.getDefaultValue().equals(ParameterPool.PROGRAM_EMPTY_PARAMETER_VALUE)){
+            writeValue = false;
+        }
+
+
+        if(pf.getName().equals(ParameterPool.PROGRAM_INPUT_PATH_SET_PARAMETER_NAME)){
+            if(writeCommand){
+                builder.append(pf.getCommand()); 
+                if(!pf.isAvoidLeadingSpace()){
+                    builder.append(" ");
+                }
+
+            }
+
+
+            builder.append(inputFile.getAbsolutePath());
+            if(!pf.isAvoidLeadingSpace()){
+                builder.append(" ");
+            }
+            if(pairedFiles != null && pairedCommand == null){
+                for(File file:pairedFiles){
+                    builder.append(file.getAbsolutePath());
+                    builder.append(" ");
+                }
+            }
+        }
+        else if(pf.getName().equals(ParameterPool.PROGRAM_OUTPUT_PATH_SET_PARAMETER_NAME)){
+            if(writeCommand){
+                builder.append(pf.getCommand()); 
+                if(!pf.isAvoidLeadingSpace()){
+                    builder.append(" ");
+                }
+            }
+            builder.append(outputFile.getAbsolutePath());
+            builder.append(" ");
+
+        }
+        else if(pf.getName().equals(ParameterPool.PROGRAM_PAIRED_PARAMETER_NAME)){
+            if(writeCommand){
+                builder.append(pf.getCommand()); 
+                if(!pf.isAvoidLeadingSpace()){
+                    builder.append(" ");
+                }
+            }
+            if(pairedFiles != null){
+                for(File file:pairedFiles){
+                    builder.append(file.getAbsolutePath());
+                    builder.append(" ");
+                }
+            }
+        }
+        else{
+            int i = 0;
+            boolean found = false;
+            while(!found && i<parameters.size()){
+                if(parameters.get(i).getName().equals(pf.getName())){
+                    if(parameters.get(i).isBoolean()){
+                        // Hint for UI: Make sure that optional parameters are NOT selectable in the GUI.
+                        if((writeCommand && parameters.get(i).getBoolean())||!parameters.get(i).isOptional()){
+                            builder.append(pf.getCommand()); 
+                            builder.append(" ");
+                        }
+                    }
+                    else{
+                        // Hint for UI: Make sure that optional parameters are NOT selectable in the GUI.
+                        if(parameters.get(i).getBoolean()||!parameters.get(i).isOptional()){
+                            if(writeCommand){
+                                builder.append(pf.getCommand()); 
+                                if(!pf.isAvoidLeadingSpace() || !writeValue){
+                                    builder.append(" ");
+                                }
+                            }
+                            if(writeValue){
+                                String value = parameters.get(i).getValue();
+                                if(value.contains(ParameterPool.PROGRAM_PATH_VALUE)){
+                                    if(this.outputIsDirectory){
+                                        value = value.replaceAll(ParameterPool.PROGRAM_PATH_VALUE, outputFile.getPath());
+                                    }
+                                    else{
+                                        value = value.replaceAll(ParameterPool.PROGRAM_PATH_VALUE, outputFile.getParent());
+                                    }
+                                }
+                                if(value.contains(ParameterPool.PROGRAM_NAME_VALUE)){
+                                    value = value.replaceAll(ParameterPool.PROGRAM_NAME_VALUE, this.getClearName(originalFile));
+                                }
+                                builder.append(value);
+                                builder.append(" ");  
+                            }
+                        }
+                    }
+                    found = true;
+                }
+                i++;
+            }
+            if(!found){
+                this.log.appendLine(ParameterPool.LOG_WARNING+"NO InputFileParameter was found for "+pf.getName(), ExecutionCommandBuilder.class.getName());
             }
         }
     }

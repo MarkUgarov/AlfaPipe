@@ -26,7 +26,7 @@ public class ToolGenerator implements Generator{
         String[] endings = {".fna"};
         String[] outputEnding = new String[]{".fa", ".fna"};
         ParseableProgram prokka = new ParseableProgram( "Prokka", 
-                                                    "SCRITPS/executeOnShell.sh prokka", 
+                                                    "prokka", 
                                                     null,
                                                     -1,
                                                     "--outdir",
@@ -41,7 +41,7 @@ public class ToolGenerator implements Generator{
         
         String[] outputEndings2 = new String[]{".txt"};
         ParseableProgram extractHeader = new ParseableProgram( "Extract Header Info", 
-                                                    "SCRITPS/writeToFile.sh SCRITPS/extract_header_info.plx", 
+                                                    "SCRIPTS/writeToFile.sh SCRIPTS/extract_header_info.plx", 
                                                     null,
                                                     2,
                                                     null,
@@ -54,7 +54,7 @@ public class ToolGenerator implements Generator{
         
         String[] endingsB = {".txt"};
         ParseableProgram assemblyStatistics = new ParseableProgram( "Assembly Statistics", 
-                                                    "SCRITPS/writeToFile.sh SCRITPS/assembly_statistics.plx ", 
+                                                    "SCRIPTS/writeToFile.sh SCRIPTS/assembly_statistics.plx ", 
                                                     null,
                                                     2,
                                                     null,

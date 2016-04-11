@@ -38,17 +38,18 @@ public class SingleProgramPanel extends JPanel{
        
        this.checkBoxPanel = new JPanel();
        this.checkBoxPanel.setLayout(new BorderLayout());
+       this.checkBoxPanel.setDoubleBuffered(true);
        this.clusterBox = new ClusterCheckBox(index);
        this.checkBoxPanel.add(this.clusterBox, BorderLayout.CENTER);
-       /**
-        * TODO: make visible again
-        */
+       this.checkBoxPanel.setOpaque(false);
        this.checkBoxPanel.setVisible(ParameterPool.CLUSTER_ENABLE);
+       this.checkBoxPanel.setDoubleBuffered(true);
        
        
        
        this.rightPanel = new JPanel();
        this.rightPanel.setLayout(new BorderLayout());
+       this.rightPanel.setDoubleBuffered(true);
        this.add(this.rightPanel, BorderLayout.CENTER);
        
        if(index%2 ==0){
@@ -107,6 +108,9 @@ public class SingleProgramPanel extends JPanel{
         }
         if(this.parameters != null && !this.isEmpty){
             this.parameters.disableEditing();
+        }
+        if(this.clusterBox != null){
+            this.clusterBox.disableEditing();
         }
         this.updateUI();
     }

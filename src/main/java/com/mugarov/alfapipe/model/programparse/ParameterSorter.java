@@ -25,9 +25,14 @@ public class ParameterSorter implements Comparator<ParameterField> {
     
     public void sort(){
         ArrayList<ParameterField> parameters = this.program.getParameters();
+        ArrayList<ParameterField> clusterParameters = this.program.getAdditionalClusterParameters();
         if(!parameters.isEmpty()){
              Collections.sort(parameters, this);
             this.program.setParameters(parameters);
+        }
+        if(!clusterParameters.isEmpty()){
+            Collections.sort(clusterParameters, this);
+            this.program.setAdditionalClusterParameters(clusterParameters);
         }
     }
     

@@ -5,6 +5,7 @@
  */
 package com.mugarov.alfapipe.view.mainview.tab;
 
+import com.mugarov.alfapipe.view.optics.OpticSplitPane;
 import com.mugarov.alfapipe.view.mainview.tab.selection.OptionPanel;
 import com.mugarov.alfapipe.view.mainview.tab.tabular.FileSetPanel;
 import com.mugarov.alfapipe.control.listeners.tabrelated.TabListenerBag;
@@ -13,12 +14,11 @@ import com.mugarov.alfapipe.control.listeners.tabrelated.radiobuttons.ProgramPan
 import com.mugarov.alfapipe.control.listeners.tabrelated.singlefile.SingleFileListener;
 import com.mugarov.alfapipe.model.ParameterPool;
 import com.mugarov.alfapipe.model.datatypes.InputParameter;
-import com.mugarov.alfapipe.view.Button;
+import com.mugarov.alfapipe.view.optics.OpticButton;
 import com.mugarov.alfapipe.view.optics.OpticPane;
 import com.mugarov.alfapipe.view.optics.OpticScrollPane;
 import java.awt.BorderLayout;
 import java.util.ArrayList;
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
@@ -27,15 +27,15 @@ import javax.swing.JTextField;
  * @author Mark
  */
 public class Tab extends OpticPane{
-    private final JButton fileChooser;
-    private final JButton deleteSet;
-    private final JButton choosePath;
+    private final OpticButton fileChooser;
+    private final OpticButton deleteSet;
+    private final OpticButton choosePath;
     private final OpticPane outputPanel;
     
     private final OpticPane namePanel;
     private final JLabel nameLabel;
     private final JTextField nameField;
-    private final JButton applyName;
+    private final OpticButton applyName;
     private final OptionPanel optionPanel;
     
     private final BorderLayout layout;
@@ -51,7 +51,7 @@ public class Tab extends OpticPane{
     private final TabListenerBag listenerBag;
     
     private final JLabel outputPath;
-    private SplittedPane mainPanel;
+    private OpticSplitPane mainPanel;
     
     
     public Tab(String id, TabListenerBag bag){
@@ -60,14 +60,14 @@ public class Tab extends OpticPane{
         this.listenerBag = bag;
         this.layout = new BorderLayout();
         this.setLayout(this.layout);
-        this.fileChooser = new Button(ParameterPool.BUTTON_CHOOSE_RAW_FILE_TEXT, ParameterPool.BUTTON_CHOOSE_RAW_FILE_COMMAND);
-        this.deleteSet = new Button(ParameterPool.BUTTON_DELETE_SET_TEXT, ParameterPool.BUTTON_DELETE_SET_COMMAND);
-        this.choosePath = new Button(ParameterPool.BUTTON_CHOOOSE_OUTPUT_TEXT, ParameterPool.BUTTON_CHOOSE_OUTPUT_COMMAND);
+        this.fileChooser = new OpticButton(ParameterPool.BUTTON_CHOOSE_RAW_FILE_TEXT, ParameterPool.BUTTON_CHOOSE_RAW_FILE_COMMAND);
+        this.deleteSet = new OpticButton(ParameterPool.BUTTON_DELETE_SET_TEXT, ParameterPool.BUTTON_DELETE_SET_COMMAND);
+        this.choosePath = new OpticButton(ParameterPool.BUTTON_CHOOOSE_OUTPUT_TEXT, ParameterPool.BUTTON_CHOOSE_OUTPUT_COMMAND);
         
         this.namePanel = new OpticPane(new BorderLayout());
         this.nameLabel = new JLabel("Name:");
         this.nameField = new JTextField(this.id);
-        this.applyName = new Button(ParameterPool.BUTTON_APPLY_NAME_TEXT, ParameterPool.BUTTON_APPLY_NAME_COMMAND);
+        this.applyName = new OpticButton(ParameterPool.BUTTON_APPLY_NAME_TEXT, ParameterPool.BUTTON_APPLY_NAME_COMMAND);
         
         ArrayList<ProgramPanelListener> programListeners = this.listenerBag.getProgramListeners();
         this.optionPanel = new OptionPanel(programListeners.size(), this.listenerBag);
@@ -100,21 +100,21 @@ public class Tab extends OpticPane{
         this.applyName.addActionListener(this.listenerBag.getButtonListener());
         
         this.outputPanel.setLayout(new BorderLayout());
-        this.outputPanel.add(this.choosePath, BorderLayout.WEST);
+        this.outputPanel.add(this.choosePath.inTransparentPanel(), BorderLayout.WEST);
         this.outputPanel.add(this.outputPath, BorderLayout.CENTER);
         
         this.namePanel.add(this.nameLabel, BorderLayout.WEST);
         this.namePanel.add(this.nameField, BorderLayout.CENTER);
-        this.namePanel.add(this.applyName, BorderLayout.EAST);
+        this.namePanel.add(this.applyName.inTransparentPanel(), BorderLayout.EAST);
         
         this.northPanel.add(this.outputPanel, BorderLayout.NORTH);
-        this.northPanel.add(this.fileChooser, BorderLayout.WEST);
+        this.northPanel.add(this.fileChooser.inTransparentPanel(), BorderLayout.WEST);
         this.northPanel.add(this.namePanel, BorderLayout.CENTER);
-        this.northPanel.add(this.deleteSet, BorderLayout.EAST);
+        this.northPanel.add(this.deleteSet.inTransparentPanel(), BorderLayout.EAST);
         
         this.configPanel.add(this.optionPanel, BorderLayout.SOUTH);
         
-        this.mainPanel = new SplittedPane(this.configScrollPane, this.fileScrollPanel);
+        this.mainPanel = new OpticSplitPane(this.configScrollPane, this.fileScrollPanel);
 //        this.mainPanel = new SplittedPane(new OpticScrollPane(), new OpticScrollPane());
         
         this.centerPanel.add(this.mainPanel, BorderLayout.CENTER);

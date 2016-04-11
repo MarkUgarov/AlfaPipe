@@ -6,36 +6,35 @@
 package com.mugarov.alfapipe.view.mainview;
 
 import com.mugarov.alfapipe.model.ComponentPool;
-import com.mugarov.alfapipe.model.ParameterPool;
 import com.mugarov.alfapipe.view.mainview.tab.DataTabbedPane;
+import com.mugarov.alfapipe.view.optics.OpticButton;
+import com.mugarov.alfapipe.view.optics.OpticPane;
 import java.awt.BorderLayout;
-import java.awt.Panel;
-import javax.swing.JButton;
+import javax.swing.JPanel;
+
 
 /**
  *
  * @author Mark
  */
-public class MainContentPane extends Panel{
+public class MainContentPane extends JPanel{
     
-    private final BorderLayout layout;
     private final DataTabbedPane  tabs;
     
-    private final Panel southPanel;
-    private final JButton addSet;
-    private final JButton start;
+    private final OpticPane southPanel;
+    private final OpticButton addSet;
+    private final OpticButton start;
     
     
     
     public MainContentPane(){
         
-        this.layout = new BorderLayout();
-        this.setLayout(layout);
+        super(new BorderLayout());
         
         
         this.tabs = new DataTabbedPane();
         
-        this.southPanel = new Panel(new BorderLayout());
+        this.southPanel = new OpticPane(new BorderLayout());
        
         this.addSet = ComponentPool.MAIN_BUTTON_POOL.getNewSetButton();
         this.start = ComponentPool.MAIN_BUTTON_POOL.getStartButton();
@@ -47,8 +46,8 @@ public class MainContentPane extends Panel{
     private void init(){
         
         this.add(this.tabs, BorderLayout.CENTER);
-        this.southPanel.add(this.addSet, BorderLayout.WEST);
-        this.southPanel.add(this.start, BorderLayout.EAST);
+        this.southPanel.add(this.addSet.inTransparentPanel(), BorderLayout.WEST);
+        this.southPanel.add(this.start.inTransparentPanel(), BorderLayout.EAST);
         this.add(this.southPanel, BorderLayout.SOUTH);
         
         

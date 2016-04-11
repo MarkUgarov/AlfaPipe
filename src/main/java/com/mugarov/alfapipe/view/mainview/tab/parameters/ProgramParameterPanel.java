@@ -50,7 +50,6 @@ public class ProgramParameterPanel extends JPanel{
     public ProgramParameterPanel(String name, ArrayList<InputParameter> parameters, ParameterListener listener){
         this.setDoubleBuffered(true);
         this.name = name;
-        this.setDoubleBuffered(true);
         this.setLayout(new BorderLayout());
         
         this.offsetPanel = new OpticPane(new BorderLayout());
@@ -64,6 +63,7 @@ public class ProgramParameterPanel extends JPanel{
 
             this.namePanel.add(this.offsetPanel);
             this.namePanel.add(this.nameLabel);
+            this.namePanel.setDoubleBuffered(true);
             this.add(this.namePanel, BorderLayout.WEST);
         }
         else{
@@ -120,6 +120,7 @@ public class ProgramParameterPanel extends JPanel{
             toolBox.setToolTipText(parameter.getToolTip());
             toolBox.addItemListener(this.listener);
             toolBox.setSelected(parameter.getBoolean());
+            toolBox.setDoubleBuffered(true);
             this.boxes.add(toolBox);
             parPan.add(toolBox);
 //            System.out.println("\t \t Added checkbox "+parameter.getName());
@@ -157,6 +158,9 @@ public class ProgramParameterPanel extends JPanel{
         }
         for(ProgramParameterTextField field:this.textFields){
             field.setEditable(false);
+        }
+        if(this.clusterBox != null){
+            this.clusterBox.disableEditing();
         }
     }
     

@@ -301,7 +301,7 @@ public class InputFile extends File implements Executable{
         return this.log.toString();
     }
     
-    private String getCurrentCommandString(String parentOutputDir){
+    private String getCurrentCommandString(String parentOutputDir, boolean onCluster){
         this.currentParameters.getParsedParameters().sortParameters();
         StringBuilder currentStringBuilder = new StringBuilder();
        
@@ -357,6 +357,7 @@ public class InputFile extends File implements Executable{
                 currentPaired=null;
             }
             this.currentCommand = new ExecutionCommandBuilder(this.log);
+            this.currentCommand.useClusterParameters(onCluster);
             this.currentCommand.buildString(this.currentParameters, file, parentOutputDir, currentPaired, this);
             if(this.currentCommand.getExecutionCommand() == null){
                 currentStringBuilder.append(ParameterPool.MESSAGE_PREFIX+"no program was selected for "+file.getName()+"\n");
@@ -387,7 +388,28 @@ public class InputFile extends File implements Executable{
         }
         else{
             this.currentParameters = this.programParameters.get(index);
-            ret = this.getCurrentCommandString(parentOutputDir);
+            ret = this.getCurrentCommandString(parentOutputDir,false);
+            this.addCommandBuilder(this.currentCommand);
+            this.lastProgramCommand = this.getCommand(this.commandBuilders.size()-1);
+        }
+        this.setProgramXBuilt(index, true);
+        return ret;
+    }
+    
+    public String getProgramCommand(int index, String parentOutputDir, boolean onCluster){
+        String ret;
+        if(index>=this.programParameters.size()){
+            ret = ParameterPool.MESSAGE_PREFIX+ParameterPool.MESSAGE_OUT_OF_INDEX+":"+index;
+        }
+        else if(this.programParameters.get(index).isEmpty()){
+            ret = ParameterPool.MESSAGE_PREFIX+ParameterPool.MESSAGE_PROGRAM_EMPTY+", Index:"+index;
+        }
+        else if(this.programParameters.get(index).getParsedParameters().getStartCommand() == null){
+            ret = ParameterPool.MESSAGE_PREFIX+ParameterPool.MESSAGE_PROGRAM_COMMAND_NULL+", Name: "+this.programParameters.get(index).getParsedParameters().getName()+"Index: "+index;
+        }
+        else{
+            this.currentParameters = this.programParameters.get(index);
+            ret = this.getCurrentCommandString(parentOutputDir,true);
             this.addCommandBuilder(this.currentCommand);
             this.lastProgramCommand = this.getCommand(this.commandBuilders.size()-1);
         }
@@ -423,8 +445,6 @@ public class InputFile extends File implements Executable{
         }
     }
     
-    
-    
     /**
      * TODO
      * @param parentOutputDir
@@ -433,11 +453,11 @@ public class InputFile extends File implements Executable{
     @Override
     public ArrayList<String> getToolCommands(String parentOutputDir){
         ArrayList<String> ret = new ArrayList<>();
-        ArrayList<ExecutionCommandBuilder> toolCommands = new ArrayList<>(this.tools.size());
+        this.toolCommands = new ArrayList<>(this.tools.size());
         for(int i = 0; i<this.tools.size(); i++){
             ProgramSet tp =this.tools.get(i);
             if(this.toolSelected[i]){
-                ret.add(this.getSingleToolCommand(parentOutputDir, tp));
+                ret.add(this.getSingleToolCommand(parentOutputDir, tp,false));
             }
             else{
                 ret.add(null);
@@ -452,10 +472,36 @@ public class InputFile extends File implements Executable{
         return ret;
     }
     
-    private String getSingleToolCommand(String parentOutputDir, ProgramSet tool){
+
+    public ArrayList<String> getToolCommands(String parentOutputDir, boolean[] onCluster){
+        ArrayList<String> ret = new ArrayList<>();
+        this.toolCommands = new ArrayList<>(this.tools.size());
+        for(int i = 0; i<this.tools.size(); i++){
+            ProgramSet tp =this.tools.get(i);
+            if(this.toolSelected[i]){
+                ret.add(this.getSingleToolCommand(parentOutputDir, tp, onCluster[i]));
+            }
+            else{
+                ret.add(null);
+            }
+        }
+        if(ret.size() == 0){
+            this.log.appendLine(ParameterPool.LOG_WARNING+"Input file "+this.getName() +" has no tool to execute.", InputFile.class.getName());
+            ret.add(ParameterPool.MESSAGE_PREFIX+ParameterPool.MESSAGE_TOOL_IS_NULL);
+
+        }
+        this.toolsBuilt = true;
+        return ret;
+    }
+    
+    public boolean checkToolFiles(int index){
+        return (index>=this.toolCommands.size() ||this.toolCommands.get(index) == null) ? false: this.toolCommands.get(index).getFileLister().checkEssentialFiles();
+    }
+    
+    private String getSingleToolCommand(String parentOutputDir, ProgramSet tool, boolean onCluster){
         String ret;
         this.currentParameters = tool;
-        ret = this.getCurrentCommandString(parentOutputDir);
+        ret = this.getCurrentCommandString(parentOutputDir, onCluster);
         if(ret == null){
             this.log.appendLine("Tool command of "+tool.getName()+" is null.", InputFile.class.getName());
         }

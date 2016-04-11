@@ -21,6 +21,7 @@ public class ProgramSet {
     
     private final ParseableProgram program;
     private final ArrayList<InputParameter> parameters;
+    private final ArrayList<InputParameter> additionalClusterParameters;
     private boolean isSelected;
     private boolean isEmpty;
     
@@ -30,11 +31,16 @@ public class ProgramSet {
             this.name = this.program.getName();
             this.isSelected = (program.getStartCommand() != null);
             this.parameters = new ArrayList<>();
+            this.additionalClusterParameters = new ArrayList<>();
             this.isEmpty = false;
 
             for(ParameterField pF: program.getParameters()){
                 boolean shown = !(pF.getName().equals(ParameterPool.PROGRAM_INPUT_PATH_SET_PARAMETER_NAME)||pF.getName().equals(ParameterPool.PROGRAM_OUTPUT_PATH_SET_PARAMETER_NAME));
                 this.parameters.add(new InputParameter(pF, shown));
+            }
+            for(ParameterField pF: program.getAdditionalClusterParameters()){
+                boolean shown = !(pF.getName().equals(ParameterPool.PROGRAM_INPUT_PATH_SET_PARAMETER_NAME)||pF.getName().equals(ParameterPool.PROGRAM_OUTPUT_PATH_SET_PARAMETER_NAME));
+                this.additionalClusterParameters.add(new InputParameter(pF, shown));
             }
         }
         else{
@@ -43,6 +49,7 @@ public class ProgramSet {
             this.isSelected = false;
             this.isEmpty = true;
             this.parameters = new ArrayList<>();
+            this.additionalClusterParameters = new ArrayList<>();
         }
     }
     
@@ -51,6 +58,7 @@ public class ProgramSet {
         this.name = null;
         this.isSelected = false;
         this.parameters = new ArrayList<>();
+        this.additionalClusterParameters = new ArrayList<>();
     }
     
     public void select(){
@@ -75,6 +83,9 @@ public class ProgramSet {
     
     public ArrayList<InputParameter> getInputParameters(){
         return this.parameters;
+    }
+    public ArrayList<InputParameter> getClusterParameters(){
+        return this.additionalClusterParameters;
     }
     
     public ParseableProgram getParsedParameters(){

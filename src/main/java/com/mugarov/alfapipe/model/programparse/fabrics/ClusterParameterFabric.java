@@ -61,7 +61,7 @@ public class ClusterParameterFabric{
         this.ramPerThread.setAvoidLeadingSpace(true);
         this.platform = new ParameterField("Platform", "-l arch=", "lx24-amd64", 6, true);
         this.platform.setAvoidLeadingSpace(true);
-        this.waitPar = new ParameterField("wait", "-sync=y", ParameterPool.PROGRAM_EMPTY_PARAMETER_VALUE, 7, true, "Wait before continue with the next step.");
+        this.waitPar = new ParameterField("wait", "-sync", "y", 7, true, "Wait before continue with the next step. (y for yes, n for no)");
         
         this.cluster.addParameter(this.standardLogfile);
         this.cluster.addParameter(this.errorLogfile);

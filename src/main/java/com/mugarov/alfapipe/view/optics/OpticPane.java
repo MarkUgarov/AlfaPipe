@@ -26,6 +26,7 @@ public class OpticPane extends JPanel implements Optic{
     
     public OpticPane(){
         super();
+        this.setDoubleBuffered(true);
         this.drawImage = true;
         this.setBackground(ParameterPool.COLOR_BACKGROUND_STANDARD);
         this.setTransparent();
@@ -33,6 +34,7 @@ public class OpticPane extends JPanel implements Optic{
     
     public OpticPane(boolean transparent){
         super();
+        this.setDoubleBuffered(true);
         this.drawImage = true;
         this.setBackground(ParameterPool.COLOR_BACKGROUND_STANDARD);
         if(transparent){
@@ -42,6 +44,7 @@ public class OpticPane extends JPanel implements Optic{
 
     public OpticPane(BorderLayout borderLayout) {
         super(borderLayout);
+        this.setDoubleBuffered(true);
         this.drawImage = true;
         this.setBackground(ParameterPool.COLOR_BACKGROUND_STANDARD);
         this.setTransparent();
@@ -49,6 +52,7 @@ public class OpticPane extends JPanel implements Optic{
     
     public OpticPane(BorderLayout borderLayout, boolean transparent) {
         super(borderLayout);
+        this.setDoubleBuffered(true);
         this.drawImage = true;
         this.setBackground(ParameterPool.COLOR_BACKGROUND_STANDARD);
         if(transparent){

@@ -23,6 +23,7 @@ public class OpticScrollPane extends JScrollPane implements Optic{
     private boolean drawImage;
     
     public OpticScrollPane(){
+        this.setDoubleBuffered(true);
         this.setBackground(ParameterPool.COLOR_BACKGROUND_STANDARD);
         this.drawImage = true;
         this.setTransparent();
@@ -30,6 +31,7 @@ public class OpticScrollPane extends JScrollPane implements Optic{
 
     public OpticScrollPane(OpticPane panel) {
         super(panel);
+        this.setDoubleBuffered(true);
         this.drawImage = true;
         this.setBackground(ParameterPool.COLOR_BACKGROUND_STANDARD);
         this.setTransparent();

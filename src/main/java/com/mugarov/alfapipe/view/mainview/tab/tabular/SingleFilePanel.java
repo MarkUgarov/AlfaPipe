@@ -62,6 +62,9 @@ import javax.swing.BorderFactory;
             this.tools = new ArrayList<>();
             this.creatRightPanel();
             
+            this.leftPanel.setDoubleBuffered(true);
+            this.rightPanel.setDoubleBuffered(true);
+            
             this.add(this.leftPanel, BorderLayout.WEST); 
             this.add(this.rightPanel, BorderLayout.EAST);  
             

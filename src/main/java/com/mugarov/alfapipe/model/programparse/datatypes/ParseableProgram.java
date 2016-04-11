@@ -24,6 +24,7 @@ public class ParseableProgram{
     private String enterCommand;
     private String exitCommand;
     
+    private ArrayList<ParameterField> additionalClusterParameters;
     private ArrayList<ParameterField> parameters;
     private ParameterField inputPathCommand;
     private ParameterField outputPathCommand;
@@ -49,6 +50,7 @@ public class ParseableProgram{
         this.exitCommand = null;
         this.outputSettings = new OutputField();
         this.essentialOutputs = new ArrayList<>();
+        this.additionalClusterParameters = new ArrayList<>();
         this.sorter = new ParameterSorter(this);
         
     }
@@ -75,6 +77,7 @@ public class ParseableProgram{
         
         this.enterCommand = null;
         this.exitCommand = null;
+        this.additionalClusterParameters = new ArrayList<>();
         this.sorter = new ParameterSorter(this);
         this.sorter.sort();
     }
@@ -262,6 +265,8 @@ public class ParseableProgram{
         }
         this.parameters.add(new ParameterField(name, command, defaultValue, position, optional, tooltip));
     }
+    
+    
 
     @JsonIgnore
     public void addParameter(ParameterField parameter) {
@@ -385,5 +390,33 @@ public class ParseableProgram{
      */
     public void setOutputSettings(OutputField outputSettings) {
         this.outputSettings = outputSettings;
+    }
+
+    /**
+     * @return the additionalClusterParameters
+     */
+    public ArrayList<ParameterField> getAdditionalClusterParameters() {
+        return additionalClusterParameters;
+    }
+
+    /**
+     * @param additionalClusterParameters the additionalClusterParameters to set
+     */
+    public void setAdditionalClusterParameters(ArrayList<ParameterField> additionalClusterParameters) {
+        this.additionalClusterParameters = additionalClusterParameters;
+    }
+    
+    @JsonIgnore
+    public void addAdditionalClusterParameter(String name, String command, String defaultValue, int position, boolean optional, String tooltip){
+        int i= 0; 
+        while(i<this.additionalClusterParameters.size()){
+            if(this.additionalClusterParameters.get(i).getName().equals(name)){
+                this.additionalClusterParameters.remove(i);
+            }
+            else{
+                i++;
+            }
+        }
+        this.additionalClusterParameters.add(new ParameterField(name, command, defaultValue, position, optional, tooltip));
     }
 }

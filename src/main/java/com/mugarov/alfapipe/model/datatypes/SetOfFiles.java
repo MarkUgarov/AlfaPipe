@@ -265,12 +265,14 @@ public class SetOfFiles implements Executable, Runnable{
                 boolean essentialFilesExist = true;
                 String command;
                 for(int i = 0; (i<this.usedPrograms.size() && filePassed); i++){
-                    command =  file.getProgramCommand(i, this.outputDirectory.getPath());
+                   
                     if(ParameterPool.CLUSTER_ENABLE && this.useCluster[i]){
 //                        System.out.println("Use program "+i+" on Cluster!");
-                         filePassed = execution.execute(clusterCommand,command);
+                        command =  file.getProgramCommand(i, this.outputDirectory.getPath(),true);
+                        filePassed = execution.execute(clusterCommand,command);
                     }
                     else{
+                        command =  file.getProgramCommand(i, this.outputDirectory.getPath(),false);
                         filePassed = execution.execute(null, command);
                     }
                     if(command != null){
@@ -283,15 +285,18 @@ public class SetOfFiles implements Executable, Runnable{
                         
                     }
                 }
-                this.tab.setFileProgressed(file.getAbsolutePath(), filePassed&essentialFilesExist);
+                this.tab.setFileProgressed(file.getAbsolutePath(), filePassed && essentialFilesExist);
                 ArrayList<Boolean> toolBools = new ArrayList<>(file.getValidTools().size());
                 int toolIndex = 0;
-                for(String p:file.getToolCommands(this.outputDirectory.getPath())){
+                for(String p:file.getToolCommands(this.outputDirectory.getPath(),this.useClusterOnTool)){
+                    if(p == null){
+                        toolBools.add(true);
+                    }
                     if(ParameterPool.CLUSTER_ENABLE && this.useClusterOnTool[toolIndex]){
-                        toolBools.add(execution.execute(clusterCommand, p));
+                        toolBools.add(execution.execute(clusterCommand, p) && file.checkToolFiles(toolIndex));
                     }
                     else{
-                        toolBools.add(execution.execute(null, p));
+                        toolBools.add(execution.execute(null, p) && file.checkToolFiles(toolIndex));
                     }
                     
                     toolIndex++;

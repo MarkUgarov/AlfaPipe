@@ -126,6 +126,9 @@ public abstract class ParameterPool {
     public static final String PROGRAM_OUTPUT_PATH_SET_PARAMETER_NAME = "outputPathCommand";
     public static final String PROGRAM_PAIRED_PARAMETER_NAME = "pairedCommand";
     
+    public static final String PROGRAM_BINARY_COMMAND = "-b";
+    public static final String PROGRAM_BINARY_CONFIRM = "y";
+    
      
     
     // file management

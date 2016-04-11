@@ -23,6 +23,7 @@ public class ClusterPanel extends OpticPane{
     private ProgramParameterPanel parameterPanel;
     
     public ClusterPanel(){
+        this.setDoubleBuffered(true);
         this.setLayout(new BorderLayout());
         this.parameterParentPanel = new OpticPane();
         this.parameterParentPanel.setLayout(new BorderLayout());
