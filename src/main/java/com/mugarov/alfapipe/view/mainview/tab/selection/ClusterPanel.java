@@ -11,6 +11,7 @@ import com.mugarov.alfapipe.model.datatypes.InputParameter;
 import com.mugarov.alfapipe.view.optics.OpticPane;
 import com.mugarov.alfapipe.view.mainview.tab.parameters.ProgramParameterPanel;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.util.ArrayList;
 
 /**
@@ -28,16 +29,22 @@ public class ClusterPanel extends OpticPane{
         this.parameterParentPanel = new OpticPane();
         this.parameterParentPanel.setLayout(new BorderLayout());
         this.add(this.parameterParentPanel);
+        this.setOpaque();
+        this.drawBackgroundImage(false);
+        this.setBackground(ParameterPool.COLOR_BACKGROUND_CLUSTER);
         this.setVisible(ParameterPool.CLUSTER_ENABLE);
-
     }
     
     public void setParameters(ArrayList<InputParameter> parameters, ParameterListener listener){
         this.parameterParentPanel.removeAll();
         this.parameterPanel = new ProgramParameterPanel("Cluster", parameters, listener);
         this.parameterParentPanel.add(this.parameterPanel, BorderLayout.CENTER);
+       
         this.updateUI();
     }
+    
+    
+    
     
     
 }

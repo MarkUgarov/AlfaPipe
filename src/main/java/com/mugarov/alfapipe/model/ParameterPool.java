@@ -6,6 +6,7 @@
 package com.mugarov.alfapipe.model;
 
 
+import com.mugarov.alfapipe.model.programparse.datatypes.ParameterField;
 import java.awt.Color;
 import java.awt.Dimension;
 
@@ -19,13 +20,13 @@ public abstract class ParameterPool {
     public static final boolean CLUSTER_ENABLE = true;
     public static final int CLUSTER_WAITING_TIME = 5000;
     
-    
     // general optical parameters
     public static final String TITLE = "Alfa - Pipe: A likely functional assembler Pipe.";
     public static final boolean FULLSCREAN = true;
     public static final Dimension FRAMESIZE = new Dimension(400,600);
     public static final Color COLOR_BACKGROUND_STANDARD = new Color(128, 255 , 0);
     public static final Color COLOR_BACKGROUND_SECOND = new Color(160,160,160,125);
+    public static final Color COLOR_BACKGROUND_CLUSTER = new Color(0, 0, 255, 80);
     
     // text for menu
     public static final String MENU_MAIN = "Menu";
@@ -35,18 +36,25 @@ public abstract class ParameterPool {
     public static final String BUTTON_START_TEXT = "Start";
     public static final String BUTTON_START_COMMAND = "Start";
     
+    public static final String BUTTON_ADD_DATA_SET_TEXT = "add set";
+    public static final String BUTTON_ADD_DATA_SET_COMMAND = "addDataSet";
+    
+    public static final String BUTTON_CANCEL_ALL_TEXT = "cancel all sets";
+    public static final String BUTTON_CANCEL_ALL_COMMAND = "cancelAll";
+    
     // texts for tabs content in the main content
     public static final String BUTTON_CHOOSE_RAW_FILE_TEXT = "Add files";
     public static final String BUTTON_CHOOSE_RAW_FILE_COMMAND = "chooseFile";
-    
-    public static final String BUTTON_ADD_DATA_SET_TEXT = "add set";
-    public static final String BUTTON_ADD_DATA_SET_COMMAND = "addDataSet";
     
     public static final String BUTTON_DELETE_SET_TEXT = "remove this set";
     public static final String BUTTON_DELETE_SET_COMMAND = "removeSet";
     
     public static final String BUTTON_CHOOOSE_OUTPUT_TEXT = "choose output";
     public static final String BUTTON_CHOOSE_OUTPUT_COMMAND = "outputChoose";
+    
+    public static final String BUTTON_CANCEL_SET_TEXT = "Cancel set";
+    public static final String BUTTON_CANCEL_SET_COMMAND = "cancelSet";
+            
     
     public static final int PARAMETERS_IN_ONE_ROW = 3;
     
@@ -126,8 +134,16 @@ public abstract class ParameterPool {
     public static final String PROGRAM_OUTPUT_PATH_SET_PARAMETER_NAME = "outputPathCommand";
     public static final String PROGRAM_PAIRED_PARAMETER_NAME = "pairedCommand";
     
+    
+    
+    // more complex parameters
+    public static final String PROGRAM_BINARAY_NAME = "Binary";
     public static final String PROGRAM_BINARY_COMMAND = "-b";
     public static final String PROGRAM_BINARY_CONFIRM = "y";
+    public static final int PROGRAM_BINARY_POSITION = 0;
+    public static final boolean PROGRAM_BINARY_OPTIONAL = false;
+    public static final String PROGRAM_BINARY_DESCRIPTION = "Is a binary (not a shell script).";
+            
     
      
     

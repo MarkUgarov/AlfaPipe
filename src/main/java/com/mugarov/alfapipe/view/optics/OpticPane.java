@@ -24,6 +24,8 @@ public class OpticPane extends JPanel implements Optic{
     private boolean transparent;
     private boolean drawImage;
     
+    private Color background;
+    
     public OpticPane(){
         super();
         this.setDoubleBuffered(true);
@@ -102,8 +104,20 @@ public class OpticPane extends JPanel implements Optic{
     }
 
     @Override
-    public void drawBackgroundImaage(boolean draw) {
+    public void drawBackgroundImage(boolean draw) {
         this.drawImage = draw;
     }
+
+    @Override
+    public void mouseEntered() {
+        // do nothing
+    }
+
+    @Override
+    public void mouseExit() {
+        // do nothing
+    }
+    
+    
     
 }

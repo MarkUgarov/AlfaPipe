@@ -6,7 +6,7 @@
 package com.mugarov.alfapipe.control.listeners.tabrelated.cluster;
 
 import com.mugarov.alfapipe.model.datatypes.SetOfFiles;
-import com.mugarov.alfapipe.view.mainview.tab.selection.ClusterCheckBox;
+import com.mugarov.alfapipe.view.optics.ClusterCheckBox;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 

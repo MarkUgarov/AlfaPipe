@@ -16,12 +16,15 @@ import com.mugarov.alfapipe.model.ParameterPool;
 public class MainViewButtonPool {
     private final OpticButton start;
     private final OpticButton addSet;
+    private final OpticButton cancelAll;
     
     public MainViewButtonPool(){
         this.start = new OpticButton(ParameterPool.BUTTON_START_TEXT, ParameterPool.BUTTON_START_COMMAND);
         this.addSet = new OpticButton(ParameterPool.BUTTON_ADD_DATA_SET_TEXT, ParameterPool.BUTTON_ADD_DATA_SET_COMMAND);
+        this.cancelAll = new OpticButton(ParameterPool.BUTTON_CANCEL_ALL_TEXT, ParameterPool.BUTTON_CANCEL_ALL_COMMAND);
         this.start.addActionListener(ComponentPool.LISTENER_BUTTON);
         this.addSet.addActionListener(ComponentPool.LISTENER_BUTTON);
+        this.cancelAll.addActionListener(ComponentPool.LISTENER_BUTTON);
          
     }
     
@@ -30,6 +33,10 @@ public class MainViewButtonPool {
     }
     public OpticButton getNewSetButton(){
         return this.addSet;
+    }
+    
+    public OpticButton getCancelButton(){
+        return this.cancelAll;
     }
 
  

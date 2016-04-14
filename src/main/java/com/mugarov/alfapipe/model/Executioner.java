@@ -5,7 +5,6 @@
  */
 package com.mugarov.alfapipe.model;
 
-import com.mugarov.alfapipe.model.cluster.ClusterJobWatcher;
 import java.io.File;
 import java.io.IOException;
 import java.lang.ProcessBuilder.Redirect;
@@ -21,6 +20,8 @@ public class Executioner {
 
     private final LogFileManager log;
     private final File workfile;
+    
+    private Process process;
     
 
     public Executioner(LogFileManager logManager) {
@@ -71,12 +72,12 @@ public class Executioner {
             pb.directory(this.workfile);
 
             
-            Process process=null;
+            this.process=null;
             try {
-                process = pb.start();
+                this.process = pb.start();
             } catch (IOException ex) {
-                if(process != null){
-                    process.destroy();
+                if(this.process != null){
+                    this.process.destroy();
                 }
                 
                 this.log.appendLine("Error while executing.", Executioner.class.getName());
@@ -84,20 +85,25 @@ public class Executioner {
                 return false;
             }
             try {
-                process.waitFor();
+                this.process.waitFor();
             } catch (InterruptedException ex) {
-                if(process != null){
-                    process.destroy();
+                if(this.process != null){
+                    this.process.destroy();
                 }
                 Logger.getLogger(Executioner.class.getName()).log(Level.SEVERE, null, ex);
                 return false;
             }
             log.appendLine("Exit Value:"+process.exitValue(), Executioner.class.getName());
-            success = (process.exitValue()==0);
+            success = (this.process.exitValue()==0);
             
         }
 
         return success;
     }
     
+    public void interrupt(){
+        if(this.process != null){
+            this.process.destroyForcibly();
+        }
+    }
 }

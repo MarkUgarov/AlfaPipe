@@ -7,7 +7,6 @@ package com.mugarov.alfapipe.control
 ;
 
 import com.mugarov.alfapipe.control.listeners.tabrelated.TabListenerBag;
-import com.mugarov.alfapipe.control.listeners.tabrelated.parameters.ParameterListener;
 import com.mugarov.alfapipe.model.ComponentPool;
 import com.mugarov.alfapipe.model.datatypes.ProgramSet;
 import com.mugarov.alfapipe.model.datatypes.SetOfFiles;
@@ -22,14 +21,16 @@ import java.util.ArrayList;
  */
 public class FileSetManager {
     
-    private ArrayList<SetOfFiles> sets;
+    private final ArrayList<SetOfFiles> sets;
     private int lastIndex;
     private final MainJFrame frame;
+    private ArrayList<Thread> startedThreads;
     
     public FileSetManager(MainJFrame frame){
         this.sets = new ArrayList<>();
         this.lastIndex = 0;
         this.frame = frame;
+        this.startedThreads = new ArrayList<>();
         ComponentPool.LISTENER_BUTTON.setFileManager(this);
         this.add();
     }
@@ -39,15 +40,13 @@ public class FileSetManager {
     }
     
     public void add(){
-//        System.out.println("Adding Set(FileSetManger ready)");
-        // looking for a name
+        // determine the name
         String name = "data"+lastIndex;
         int i = this.sets.size()-1;
         while (i>=0&& !this.sets.isEmpty()){
-//            System.out.println("\t Searching "+name +" found on index "+i);
             
             if(this.sets.get(i).getID().equals(name) || this.sets.get(i).getName().equals(name) ){
-//                System.out.println("\t"+name+ " was not valid.");
+               // name was not valid
                 lastIndex++;
                 name = "data"+lastIndex;
                 i = this.sets.size()-1;
@@ -64,14 +63,7 @@ public class FileSetManager {
         bag.setFileSet(set);
         bag.setFileManager(this);
         this.sets.add(set);
-//        System.out.println("Available sets now: ");
-//        for(SetOfFiles s:this.sets){
-//            System.out.println("\t Set "+s.getID()+" with name "+s.getName());
-//        }
-//        System.out.println("Available Tabs now: ");
-//        for (int j = 0; i<this.frame.getTabPane().getComponents().length; i++){
-//            System.out.println("\t Tab "+ ((Tab)this.frame.getTabPane().getComponentAt(j)).getID());
-//        }
+
     }
     
     public void remove(String id){
@@ -80,40 +72,36 @@ public class FileSetManager {
         boolean foundTab = false;
         while ((!foundSet || !foundTab) && i<this.sets.size()){
             if(this.sets.get(i).getID().equals(id)){
-//                System.out.println("Remove set "+id);
                 this.sets.remove(i);
                 foundSet = true;
             }
             if(((Tab)this.frame.getTabPane().getComponentAt(i)).getID().equals(id)){
-//                System.out.println("Remove tab "+id);
                 this.frame.getTabPane().remove(i);
                 foundTab= true;
             }
             i++;
         }
-//        for(SetOfFiles s:this.sets){
-//            System.out.println("\t Set "+s.getID()+" with name "+s.getName());
-//        }
+
         if(this.sets.isEmpty()){
             this.add();
         }
     }
     
     public void rename(String id){
-        System.out.println("Try to rename "+id+"  with tab count ");
+//        System.out.println("Try to rename "+id+"  with tab count ");
         boolean foundSet = false;
         boolean foundTab = false;
         int i = 0;
         while ((!foundSet || !foundTab) && i<this.sets.size()){
             if(this.sets.get(i).getID().equals(id)){
-                System.out.println("Rename set "+id);
+//                System.out.println("Rename set "+id);
                 this.sets.get(i).applyName();
                 foundSet = true;
             }
             if(((Tab)this.frame.getTabPane().getComponentAt(i)).getID().equals(id)){
                 
                 String name = ((Tab)this.frame.getTabPane().getComponentAt(i)).getCustumName();
-                System.out.println("Rename tab "+id+ " to "+name);
+//                System.out.println("Rename tab "+id+ " to "+name);
                 this.frame.getTabPane().setTitleAt(i, name);
                 foundTab= true;
             }
@@ -123,28 +111,45 @@ public class FileSetManager {
     
     public void run(){
         System.out.println("STARTED with "+this.sets.size()+" sets.");
-        /*
-        TODO: 
-        execute instead of just writing
-        */
         for (SetOfFiles sof: this.sets){
-            (new Thread(sof)).start();
-//            System.out.println(sof.getPreprocessingCommand(sof.getOutputPath()));
-//            System.out.println(sof.getProcessingCommand(sof.getOutputPath()));
-//            System.out.println(sof.getAssemblerCommand(sof.getOutputPath()));
-//            System.out.println(sof.getReadsVsContigsCommand(sof.getOutputPath()));
-//            System.out.println(sof.getProdigalCommand(sof.getOutputPath()));
-//            for(String s:sof.getToolCommands(sof.getOutputPath())){
-//                System.out.println(s);
-//            }
+            if(!sof.runs()){
+                this.startedThreads.add( new Thread(sof, sof.getID()));
+                this.startedThreads.get(this.startedThreads.size()-1).start();
+            }
         }
-
     }
     
+    public void cancel(String ID){
+        Thread t;
+        int i = 0;
+        for(SetOfFiles sof:this.sets){
+            if(sof.getID().equals(ID)){
+                sof.interrupt();
+            }
+        }
+        while(i<this.startedThreads.size()){
+            t= this.startedThreads.get(i);
+            if(t.isDaemon() || t.isInterrupted()){
+                this.startedThreads.remove(i);
+            }
+            else if(t.getName().equals(ID)){
+                t.interrupt();
+                this.startedThreads.remove(i);
+            }
+            else{
+                i++;
+            }
+        }
+    }
     
-    
-    
-    
-    
+    public void cancelAll(){
+        for(SetOfFiles sof: this.sets){
+            sof.interrupt();
+        }
+        for(Thread t: this.startedThreads){
+            t.interrupt();
+        }
+        this.startedThreads = new ArrayList<>();
+    }
     
 }

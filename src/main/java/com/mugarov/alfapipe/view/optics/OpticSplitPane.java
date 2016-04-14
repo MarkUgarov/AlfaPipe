@@ -5,8 +5,6 @@
  */
 package com.mugarov.alfapipe.view.optics;
 
-import com.mugarov.alfapipe.model.ParameterPool;
-import java.awt.Color;
 import java.awt.Component;
 import javax.swing.JSplitPane;
 
@@ -28,9 +26,6 @@ public class OpticSplitPane extends JSplitPane implements Optic{
         this.south = south;
         super.setOneTouchExpandable(true);
         this.setTransparent();
-//        this.north.setBackground(ParameterPool.COLOR_BACKGROUND_STANDARD);
-//        this.south.setBackground(ParameterPool.COLOR_BACKGROUND_STANDARD);
-//        this.setBackground(ParameterPool.COLOR_BACKGROUND_STANDARD);
     }
 
     @Override
@@ -50,8 +45,18 @@ public class OpticSplitPane extends JSplitPane implements Optic{
      * @param draw 
      */
     @Override
-    public void drawBackgroundImaage(boolean draw) {
+    public void drawBackgroundImage(boolean draw) {
         this.drawImage=draw;
+    }
+
+    @Override
+    public void mouseEntered() {
+        // do nothing
+    }
+
+    @Override
+    public void mouseExit() {
+        // do nothing
     }
 
     

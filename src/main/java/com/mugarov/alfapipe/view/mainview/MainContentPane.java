@@ -24,6 +24,7 @@ public class MainContentPane extends JPanel{
     private final OpticPane southPanel;
     private final OpticButton addSet;
     private final OpticButton start;
+    private final OpticButton cancelAll;
     
     
     
@@ -38,19 +39,18 @@ public class MainContentPane extends JPanel{
        
         this.addSet = ComponentPool.MAIN_BUTTON_POOL.getNewSetButton();
         this.start = ComponentPool.MAIN_BUTTON_POOL.getStartButton();
+        this.cancelAll = ComponentPool.MAIN_BUTTON_POOL.getCancelButton();
         
         this.init();
 
     }
     
     private void init(){
-        
         this.add(this.tabs, BorderLayout.CENTER);
         this.southPanel.add(this.addSet.inTransparentPanel(), BorderLayout.WEST);
         this.southPanel.add(this.start.inTransparentPanel(), BorderLayout.EAST);
+        this.southPanel.add(this.cancelAll.inTransparentPanel(), BorderLayout.CENTER);
         this.add(this.southPanel, BorderLayout.SOUTH);
-        
-        
     }
     
     public DataTabbedPane getTabs(){

@@ -5,11 +5,11 @@
  */
 package com.mugarov.alfapipe.view.optics;
 
+import com.mugarov.alfapipe.control.listeners.MouseOver;
 import com.mugarov.alfapipe.model.ParameterPool;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.font.FontRenderContext;
 import java.awt.geom.Rectangle2D;
 import javax.swing.JButton;
@@ -28,14 +28,24 @@ public class OpticButton extends JButton implements Optic{
     int marginWidth=15;
     int marginHeight=15;
     
+    private final Color onNotMouseOver = ParameterPool.COLOR_BACKGROUND_STANDARD;
+    private final Color onMouseOver = ParameterPool.COLOR_BACKGROUND_SECOND;
+    private boolean isMouseOver;
+    
+    
     public OpticButton(String text, String command){
         super(text);
-        this.setDoubleBuffered(true);
-        this.setOpaque();
         this.setActionCommand(command);
         
-        this.setBackground(ParameterPool.COLOR_BACKGROUND_SECOND);
-        this.setBorder(null);
+        this.setDoubleBuffered(true);
+        this.setTransparent();
+        this.setBorderPainted(false);
+        this.setContentAreaFilled(false);
+        
+        this.setBackground(this.onNotMouseOver);
+        this.isMouseOver = false;
+        
+        this.addMouseListener(new MouseOver(this));
         
         this.width = (int) this.getPreferredSize().getWidth()+marginWidth;
         this.height = (int) this.getPreferredSize().getHeight()+marginHeight;
@@ -60,27 +70,23 @@ public class OpticButton extends JButton implements Optic{
     
     @Override
     protected void paintComponent(Graphics g){
-// Take advantage of Graphics2D to position string 
-        Graphics2D g2d = (Graphics2D)g; 
-// Make it grey #DDDDDD, and make it round with // 1px black border. 
-// Use an HTML color guide to find a desired color. 
-// Last color is alpha, with max 0xFF to make 
-// completely opaque. 
-        g2d.setColor(ParameterPool.COLOR_BACKGROUND_SECOND); 
-// Draw rectangle with rounded corners on top of 
-// button 
-        g2d.fillRoundRect(0,0,width,height,18,18); 
-// I'm just drawing a border 
-        g2d.setColor(Color.darkGray); 
-        g2d.drawRoundRect(0,0,width, height,18,18); 
-// Finding size of text so can position in center.
-        FontRenderContext frc = new FontRenderContext(null, false, false); 
-        Rectangle2D r = getFont().getStringBounds(getText(), frc);
-        float xMargin = (float)(width-r.getWidth())/2; 
-        float yMargin = (float)(height-getFont().getSize())/2; 
-// Draw the text in the center 
-        g2d.drawString(getText(), xMargin, (float)getFont().getSize() + yMargin); 
-        this.setSize(width, height);
+        super.paintComponent(g);
+        // draw rectangle with rounded corners on top of button 
+        g.setColor(super.getBackground());
+        g.fillRoundRect(0,0,width,height,this.marginWidth, this.marginHeight); 
+        // draw a border 
+        g.setColor(super.getForeground());
+        g.drawRoundRect(0,0,width, height, this.marginWidth, this.marginHeight); 
+        if(!this.isMouseOver){
+            // find size text to position in center.
+            FontRenderContext frc = new FontRenderContext(null, false, false); 
+            Rectangle2D r = getFont().getStringBounds(this.getText(), frc);
+            int xMargin = (int)(this.width-r.getWidth())/2; 
+            int yMargin = (int)(this.height-this.getFont().getSize())/2; 
+            // draw text in the center 
+            g.drawString(this.getText(), xMargin, this.getFont().getSize() + yMargin); 
+        }
+
     }
 
     /**
@@ -89,7 +95,7 @@ public class OpticButton extends JButton implements Optic{
      * @param draw 
      */
     @Override
-    public void drawBackgroundImaage(boolean draw) {
+    public void drawBackgroundImage(boolean draw) {
         this.drawImage = draw;
     }
     
@@ -101,6 +107,15 @@ public class OpticButton extends JButton implements Optic{
         return ret;
     }
     
+    public void mouseEntered(){
+        this.setBackground(onMouseOver);
+        this.isMouseOver = true;
+    }
+    
+    public void mouseExit(){
+        this.setBackground(onNotMouseOver);
+        this.isMouseOver = false;
+    }
  
 
 }

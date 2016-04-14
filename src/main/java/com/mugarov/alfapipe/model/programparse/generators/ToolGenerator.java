@@ -5,6 +5,7 @@
  */
 package com.mugarov.alfapipe.model.programparse.generators;
 
+import com.mugarov.alfapipe.model.ComponentPool;
 import com.mugarov.alfapipe.model.ParameterPool;
 import com.mugarov.alfapipe.model.programparse.datatypes.ParseableProgram;
 import java.util.ArrayList;
@@ -37,11 +38,12 @@ public class ToolGenerator implements Generator{
         //prokka.setEnterCommand("lqxterm -l vf=128G -cwd ");
         //prokka.setExitCommand("exit");
         prokka.addParameter("Force", "--force", ParameterPool.PROGRAM_EMPTY_PARAMETER_VALUE, 1, false);
+        prokka.addAdditionalClusterParameter(ParameterPool.PROGRAM_BINARAY_NAME, ParameterPool.PROGRAM_BINARY_COMMAND, ParameterPool.PROGRAM_BINARY_CONFIRM, ParameterPool.PROGRAM_BINARY_POSITION, ParameterPool.PROGRAM_BINARY_OPTIONAL, ParameterPool.PROGRAM_BINARY_DESCRIPTION);
         this.defaultList.add(prokka);
         
         String[] outputEndings2 = new String[]{".txt"};
         ParseableProgram extractHeader = new ParseableProgram( "Extract Header Info", 
-                                                    "SCRIPTS/writeToFile.sh SCRIPTS/extract_header_info.plx", 
+                                                    "sh SCRIPTS/writeToFile.sh SCRIPTS/extract_header_info.plx", 
                                                     null,
                                                     2,
                                                     null,
@@ -54,7 +56,7 @@ public class ToolGenerator implements Generator{
         
         String[] endingsB = {".txt"};
         ParseableProgram assemblyStatistics = new ParseableProgram( "Assembly Statistics", 
-                                                    "SCRIPTS/writeToFile.sh SCRIPTS/assembly_statistics.plx ", 
+                                                    "sh SCRIPTS/writeToFile.sh SCRIPTS/assembly_statistics.plx ", 
                                                     null,
                                                     2,
                                                     null,

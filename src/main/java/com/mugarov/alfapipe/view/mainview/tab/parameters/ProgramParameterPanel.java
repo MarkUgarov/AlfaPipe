@@ -10,22 +10,23 @@ import com.mugarov.alfapipe.control.listeners.tabrelated.parameters.ParameterLis
 import com.mugarov.alfapipe.model.datatypes.InputParameter;
 import com.mugarov.alfapipe.model.ParameterPool;
 import com.mugarov.alfapipe.view.optics.OpticPane;
-import com.mugarov.alfapipe.view.mainview.tab.selection.ClusterCheckBox;
+import com.mugarov.alfapipe.view.optics.ClusterCheckBox;
 import com.mugarov.alfapipe.view.optics.OpticScrollPane;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.util.ArrayList;
+import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
+
 
 /**
  *
  * @author Mark
  */
-public class ProgramParameterPanel extends JPanel{
+public class ProgramParameterPanel extends OpticPane{
     private final String name;
     private final int maxRows;
     private final int maxColumns;
@@ -41,7 +42,7 @@ public class ProgramParameterPanel extends JPanel{
     
     private final ArrayList<JCheckBox> boxes;
     private final ArrayList<ProgramParameterTextField> textFields;
-    private final ArrayList<JPanel> singleParameters;
+    private final ArrayList<OpticPane> singleParameters;
     
     private ClusterCheckBox clusterBox;
     
@@ -51,16 +52,18 @@ public class ProgramParameterPanel extends JPanel{
         this.setDoubleBuffered(true);
         this.name = name;
         this.setLayout(new BorderLayout());
+        this.setBorder(BorderFactory.createEtchedBorder());
         
         this.offsetPanel = new OpticPane(new BorderLayout());
         this.offsetPanel.setPreferredSize(ParameterPool.LABEL_OFFSET);
+       
 
         this.namePanel = new OpticPane();
         if(this.name != null){
             this.namePanel.setLayout(new FlowLayout());
             this.nameLabel = new JLabel(this.name);
             this.nameLabel.setPreferredSize(ParameterPool.LABEL_DIMENSION);
-
+            this.nameLabel.setOpaque(true);
             this.namePanel.add(this.offsetPanel);
             this.namePanel.add(this.nameLabel);
             this.namePanel.setDoubleBuffered(true);
@@ -107,7 +110,7 @@ public class ProgramParameterPanel extends JPanel{
     public void addClusterBox(ClusterSelectionListener clusterSelectionListener, int index) {
         this.clusterBox = new ClusterCheckBox(index, true);
         this.clusterBox.addItemListener(clusterSelectionListener);
-        this.offsetPanel.add(this.clusterBox, BorderLayout.CENTER);
+        this.offsetPanel.add(this.clusterBox, BorderLayout.WEST);
     }
     
     private void addParameter(InputParameter parameter){
@@ -121,12 +124,14 @@ public class ProgramParameterPanel extends JPanel{
             toolBox.addItemListener(this.listener);
             toolBox.setSelected(parameter.getBoolean());
             toolBox.setDoubleBuffered(true);
+            toolBox.setOpaque(true);
             this.boxes.add(toolBox);
             parPan.add(toolBox);
 //            System.out.println("\t \t Added checkbox "+parameter.getName());
         }
         else{
             JLabel parName = new JLabel(parameter.getName());
+            parName.setOpaque(true);
             parName.setToolTipText(parameter.getToolTip());
             parPan.add(parName);
         }
@@ -163,41 +168,5 @@ public class ProgramParameterPanel extends JPanel{
             this.clusterBox.disableEditing();
         }
     }
-    
-    @Override
-    public void setBackground(Color bg){
-        super.setBackground(bg);
-        if(this.namePanel != null){
-            this.namePanel.setBackground(bg);
-        }
-        if(this.clusterBox != null){
-            this.clusterBox.setBackground(bg);
-        }
-        if(this.nameLabel != null){
-            this.nameLabel.setBackground(bg);
-        }
-        if(this.offsetPanel != null){
-            this.offsetPanel.setBackground(bg);
-        }
-        if(this.parameterPanel != null){
-            this.parameterPanel.setBackground(bg);
-        }
-        if(this.singleParameters != null){
-            for(JPanel parPan:this.singleParameters){
-                parPan.setBackground(bg);
-            }
-        }
-        if(this.boxes != null){
-            for(JCheckBox box:this.boxes){
-                box.setBackground(bg);
-            }
-        }
-        if(this.scrollable != null){
-            this.scrollable.setBackground(bg);
-        }
-        
-    }
-
-   
    
 }

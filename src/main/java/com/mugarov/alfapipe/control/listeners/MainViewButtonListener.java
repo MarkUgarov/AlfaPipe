@@ -18,11 +18,10 @@ import java.awt.event.ActionListener;
 public class MainViewButtonListener implements ActionListener{
     
     private FileSetManager setManager;
-    private int counter;
     
     public MainViewButtonListener(){
         this.setManager = null;
-        this.counter = 0;
+
     }
 
     @Override
@@ -33,10 +32,11 @@ public class MainViewButtonListener implements ActionListener{
             this.setManager.run();
         }
         else if(ae.getActionCommand().equals(ParameterPool.BUTTON_ADD_DATA_SET_COMMAND)){
-            this.counter ++;
-//            System.out.println("Adding Set - activated for the "+counter+ "th time (ActionListener ready)");
+
             this.setManager.add();
-            
+        }
+        else if(ae.getActionCommand().equals(ParameterPool.BUTTON_CANCEL_ALL_COMMAND)){
+            this.setManager.cancelAll();
         }
         else{
             System.out.println(ae.getActionCommand()+ " has been performed. Not detected");

@@ -88,7 +88,7 @@ public class OptionPanel extends OpticPane{
     
     private OpticPane getDistinguishBar(){
         OpticPane bar = new OpticPane(false);
-        bar.drawBackgroundImaage(false);
+        bar.drawBackgroundImage(false);
         bar.setPreferredSize(ParameterPool.DISTINGUISH_BAR_DIMENSION);
         bar.setBackground(ParameterPool.DISTINGUISH_BAR_COLOR);
         return bar;

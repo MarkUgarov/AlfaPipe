@@ -3,21 +3,24 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mugarov.alfapipe.view.mainview.tab.selection;
+package com.mugarov.alfapipe.view.optics;
 
+import com.mugarov.alfapipe.control.listeners.MouseOver;
 import com.mugarov.alfapipe.model.ParameterPool;
+import java.awt.Dimension;
 import javax.swing.JCheckBox;
+import javax.swing.SwingConstants;
 
 /**
  *
  * @author mugarov
  */
-public class ClusterCheckBox extends JCheckBox {
+public class ClusterCheckBox extends JCheckBox implements Optic{
     
     private final int index;
     private final String onSelected;
     private final String onNotSelected;
-    private final boolean isTool;
+    private boolean isTool;
     
     public ClusterCheckBox(int index){
         super();
@@ -27,18 +30,16 @@ public class ClusterCheckBox extends JCheckBox {
         this.onNotSelected = ParameterPool.TOOLTIP_CLUSTER_CHECKBOX_UNSELECTED;
         this.isTool = false;
         this.setToolTipText(this.onNotSelected);
-        this.setOpaque(false);
+        this.setOpaque(true);
+        this.setBackground(ParameterPool.COLOR_BACKGROUND_CLUSTER);
+        this.addMouseListener(new MouseOver(this));
+        Dimension size = new Dimension(10,10);
+        this.setHorizontalAlignment(SwingConstants.CENTER);
     }
     
     public ClusterCheckBox(int index, boolean isTool){
-        super();
-        this.setDoubleBuffered(true);
-        this.index = index;
-        this.onSelected = ParameterPool.TOOLTIP_CLUSTER_CHECKBOX_SELECTED;
-        this.onNotSelected = ParameterPool.TOOLTIP_CLUSTER_CHECKBOX_UNSELECTED;
+        this(index);
         this.isTool = isTool;
-        this.setToolTipText(this.onNotSelected);
-        this.setOpaque(false);
     }
     
     public int getIndex(){
@@ -49,7 +50,7 @@ public class ClusterCheckBox extends JCheckBox {
         return this.isTool;
     }
     
-    public void  setTooltipFor(boolean selected){
+    public void setTooltipFor(boolean selected){
          String setto = selected ? onSelected : onNotSelected;
          this.setToolTipText(setto);
     }
@@ -57,4 +58,35 @@ public class ClusterCheckBox extends JCheckBox {
     public void disableEditing(){
         this.setEnabled(false);
     }
+    
+    public void mouseOver(){
+        
+    }
+
+    @Override
+    public void setTransparent() {
+        super.setOpaque(false);
+    }
+
+    @Override
+    public void setOpaque() {
+        super.setOpaque(true);
+    }
+
+    @Override
+    public void drawBackgroundImage(boolean draw) {
+        // do nothing
+    }
+
+    @Override
+    public void mouseEntered() {
+        // do nothing
+    }
+
+    @Override
+    public void mouseExit() {
+        // do nothing
+    }
+    
+
 }

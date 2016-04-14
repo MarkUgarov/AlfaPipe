@@ -41,16 +41,16 @@ public class TabButtonListener implements ActionListener{
        else if(ae.getActionCommand().equals(ParameterPool.BUTTON_APPLY_NAME_COMMAND)){
 //           System.out.println("Name should change");
            this.fileManager.rename(this.fileSet.getID());
-
-           
        }
-       
        else if(ae.getActionCommand().equals(ParameterPool.BUTTON_DELETE_SET_COMMAND)){
            System.out.println("Delete should happen");
            this.fileManager.remove(this.fileSet.getID());
        }
+       else if(ae.getActionCommand().equals(ParameterPool.BUTTON_CANCEL_SET_COMMAND)){
+           this.fileManager.cancel(this.fileSet.getID());
+       }
        else{
-            System.out.println(ae.getActionCommand()+ " has been performed. Not detected");
+            System.err.println(ae.getActionCommand()+ " has been performed. Not detected");
         }
     }
     

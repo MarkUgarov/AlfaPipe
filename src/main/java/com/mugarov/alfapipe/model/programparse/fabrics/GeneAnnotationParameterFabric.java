@@ -42,7 +42,7 @@ public class GeneAnnotationParameterFabric {
         prodigal.addParameter("write protein translations to","-a" , ParameterPool.PROGRAM_PATH_VALUE+File.separator+"protein_translation.fa", 1, true);
         prodigal.addParameter("write nucleotide sequence to", "-d", ParameterPool.PROGRAM_PATH_VALUE+File.separator+"nucleotide_sequence.fa", 2, true);
         prodigal.setOutputSettings(false, true);
-        prodigal.addAdditionalClusterParameter("Binary", ParameterPool.PROGRAM_BINARY_COMMAND, ParameterPool.PROGRAM_BINARY_CONFIRM, 0, false, "Is binary (not a shell skript");
+        prodigal.addAdditionalClusterParameter(ParameterPool.PROGRAM_BINARAY_NAME, ParameterPool.PROGRAM_BINARY_COMMAND, ParameterPool.PROGRAM_BINARY_CONFIRM, ParameterPool.PROGRAM_BINARY_POSITION, ParameterPool.PROGRAM_BINARY_OPTIONAL, ParameterPool.PROGRAM_BINARY_DESCRIPTION);
         
         ParseableProgram nullProdigal= new ParseableProgram( "Skip", 
                                                                 null, 

@@ -5,28 +5,30 @@
  */
 package com.mugarov.alfapipe.view.mainview.tab.selection;
 
+import com.mugarov.alfapipe.view.optics.ClusterCheckBox;
 import com.mugarov.alfapipe.control.listeners.tabrelated.cluster.ClusterSelectionListener;
 import com.mugarov.alfapipe.control.listeners.tabrelated.parameters.ParameterListener;
 import com.mugarov.alfapipe.control.listeners.tabrelated.radiobuttons.ProgramListener;
 import com.mugarov.alfapipe.model.ParameterPool;
 import com.mugarov.alfapipe.model.datatypes.InputParameter;
 import com.mugarov.alfapipe.view.mainview.tab.parameters.ProgramParameterPanel;
+import com.mugarov.alfapipe.view.optics.OpticPane;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.util.ArrayList;
-import javax.swing.JPanel;
+import javax.swing.BorderFactory;
 
 /**
  *
  * @author mugarov
  */
-public class SingleProgramPanel extends JPanel{
+public class SingleProgramPanel extends OpticPane{
     
     private final ClusterCheckBox clusterBox;
-    private final JPanel checkBoxPanel;
+    private final OpticPane checkBoxPanel;
     private final Color background;
     
-    private final JPanel rightPanel;
+    private final OpticPane rightPanel;
     private ProgramSelectionPanel selection;
     private ProgramParameterPanel parameters;
     private boolean isEmpty;
@@ -36,7 +38,7 @@ public class SingleProgramPanel extends JPanel{
        this.setDoubleBuffered(true);
        this.setLayout(new BorderLayout());
        
-       this.checkBoxPanel = new JPanel();
+       this.checkBoxPanel = new OpticPane();
        this.checkBoxPanel.setLayout(new BorderLayout());
        this.checkBoxPanel.setDoubleBuffered(true);
        this.clusterBox = new ClusterCheckBox(index);
@@ -47,7 +49,7 @@ public class SingleProgramPanel extends JPanel{
        
        
        
-       this.rightPanel = new JPanel();
+       this.rightPanel = new OpticPane();
        this.rightPanel.setLayout(new BorderLayout());
        this.rightPanel.setDoubleBuffered(true);
        this.add(this.rightPanel, BorderLayout.CENTER);
@@ -59,10 +61,11 @@ public class SingleProgramPanel extends JPanel{
        else{
            this.background = ParameterPool.DISTINGUISH_PROGRAM_COLOR_1;
        }
-       this.setBackground(background);
-       this.clusterBox.setBackground(background);
-       this.checkBoxPanel.setBackground(this.background);
-       this.rightPanel.setBackground(this.background);
+       this.setOpaque();
+       this.drawBackgroundImage(false);
+       this.setBackground(this.background);
+       this.checkBoxPanel.setBorder(BorderFactory.createEtchedBorder());
+ 
        
        this.selection = null;
        this.parameters = null;
@@ -74,7 +77,6 @@ public class SingleProgramPanel extends JPanel{
        if(listener.getValidSelections().length>0){
            this.add(this.checkBoxPanel, BorderLayout.WEST);
            this.selection = new ProgramSelectionPanel(name,listener,listener.getValidSelections());
-           this.selection.setBackground(this.background);
            this.isEmpty = false;
        }
        else{
@@ -94,7 +96,6 @@ public class SingleProgramPanel extends JPanel{
             this.rightPanel.removeAll();
             this.rightPanel.add(this.selection, BorderLayout.NORTH);
             this.parameters = new ProgramParameterPanel(name, parameters, listener);
-            this.parameters.setBackground(this.background);
             if(!this.parameters.isEmpty()){
                 this.rightPanel.add(this.parameters, BorderLayout.SOUTH);
             }

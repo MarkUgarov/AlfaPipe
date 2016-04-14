@@ -82,8 +82,18 @@ public class OpticScrollPane extends JScrollPane implements Optic{
     }
 
     @Override
-    public void drawBackgroundImaage(boolean draw) {
+    public void drawBackgroundImage(boolean draw) {
         this.drawImage = draw;
+    }
+
+    @Override
+    public void mouseEntered() {
+        // do nothing
+    }
+
+    @Override
+    public void mouseExit() {
+        // do nothing
     }
     
 }

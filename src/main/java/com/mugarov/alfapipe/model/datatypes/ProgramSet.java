@@ -34,13 +34,26 @@ public class ProgramSet {
             this.additionalClusterParameters = new ArrayList<>();
             this.isEmpty = false;
 
+            boolean shown = true;
             for(ParameterField pF: program.getParameters()){
-                boolean shown = !(pF.getName().equals(ParameterPool.PROGRAM_INPUT_PATH_SET_PARAMETER_NAME)||pF.getName().equals(ParameterPool.PROGRAM_OUTPUT_PATH_SET_PARAMETER_NAME));
-                this.parameters.add(new InputParameter(pF, shown));
+                if(pF == null){
+                    System.err.println("Program Parameter was null in "+this.name);
+                }
+                else{
+                    shown = !(pF.getName().equals(ParameterPool.PROGRAM_INPUT_PATH_SET_PARAMETER_NAME)||pF.getName().equals(ParameterPool.PROGRAM_OUTPUT_PATH_SET_PARAMETER_NAME));
+                    this.parameters.add(new InputParameter(pF, shown));
+                }
+                
             }
             for(ParameterField pF: program.getAdditionalClusterParameters()){
-                boolean shown = !(pF.getName().equals(ParameterPool.PROGRAM_INPUT_PATH_SET_PARAMETER_NAME)||pF.getName().equals(ParameterPool.PROGRAM_OUTPUT_PATH_SET_PARAMETER_NAME));
-                this.additionalClusterParameters.add(new InputParameter(pF, shown));
+                if(pF == null){
+                    System.err.println("Cluster Parameter was null in "+this.name);
+                }
+                else{
+                    shown = !(pF.getName().equals(ParameterPool.PROGRAM_INPUT_PATH_SET_PARAMETER_NAME)||pF.getName().equals(ParameterPool.PROGRAM_OUTPUT_PATH_SET_PARAMETER_NAME));
+                    this.additionalClusterParameters.add(new InputParameter(pF, shown));
+                }
+                
             }
         }
         else{

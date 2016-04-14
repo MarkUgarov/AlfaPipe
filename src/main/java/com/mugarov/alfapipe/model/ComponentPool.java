@@ -7,6 +7,7 @@ package com.mugarov.alfapipe.model;
 
 import com.mugarov.alfapipe.control.listeners.MainViewButtonListener;
 import com.mugarov.alfapipe.control.listeners.MenuListener;
+import com.mugarov.alfapipe.model.programparse.datatypes.ParameterField;
 import com.mugarov.alfapipe.model.programparse.generators.Generator;
 import com.mugarov.alfapipe.model.programparse.generators.HeadGenerator;
 import com.mugarov.alfapipe.model.programparse.generators.ToolGenerator;
@@ -26,6 +27,8 @@ public abstract class ComponentPool {
     
     // view components
     public static MainViewButtonPool MAIN_BUTTON_POOL = new MainViewButtonPool();
+    
+    
     
     
 }

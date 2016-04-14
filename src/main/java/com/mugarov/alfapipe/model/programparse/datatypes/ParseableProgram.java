@@ -419,4 +419,21 @@ public class ParseableProgram{
         }
         this.additionalClusterParameters.add(new ParameterField(name, command, defaultValue, position, optional, tooltip));
     }
+    
+    public void addAdditionalClusterParameter(ParameterField parameter){
+        if(parameter == null){
+            System.err.println("Trying to add null as additional cluster parameter.");
+            return;
+        }
+        int i= 0; 
+        while(i<this.additionalClusterParameters.size()){
+            if(this.additionalClusterParameters.get(i).getName().equals(parameter.getName())){
+                this.additionalClusterParameters.remove(i);
+            }
+            else{
+                i++;
+            }
+        }
+        this.additionalClusterParameters.add(parameter);
+    }
 }

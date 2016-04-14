@@ -18,6 +18,10 @@ public interface Optic {
     
     public abstract void setOpaque(); 
 
-    public abstract void drawBackgroundImaage(boolean draw);
+    public abstract void drawBackgroundImage(boolean draw);
+
+    public abstract void mouseEntered();
+
+    public abstract void mouseExit();
     
 }

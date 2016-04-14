@@ -34,7 +34,7 @@ public class InputFile extends File implements Executable{
     private boolean[] toolSelected;
     
     
-    private final ArrayList<ExecutionCommandBuilder> commandBuilders;
+    private final ArrayList<ExecutionCommandBuilder> programCommandBuilder;
     private ArrayList<ExecutionCommandBuilder> toolCommands;
     private ArrayList<File> toolOutputDirectories;
     
@@ -55,7 +55,7 @@ public class InputFile extends File implements Executable{
         this.programParameters = new ArrayList<>();
         this.tools = tools;
         this.toolSelected = new boolean[this.tools.size()];
-        this.commandBuilders = new ArrayList<>();
+        this.programCommandBuilder = new ArrayList<>();
         this.programXBuilt = new ArrayList<>();
         this.log = logManager;
         this.log.appendLine("File added : "+this.getName(), InputFile.class.getName());
@@ -71,7 +71,7 @@ public class InputFile extends File implements Executable{
             this.tools.add(new ProgramSet(ComponentPool.GENERTATOR_TOOLS.get(tool)));
         }
         this.toolSelected = new boolean[this.tools.size()];
-        this.commandBuilders = new ArrayList<>();
+        this.programCommandBuilder = new ArrayList<>();
         this.programXBuilt = new ArrayList<>();
         this.log = logManager;
         this.log.appendLine("File added : "+this.getName(), InputFile.class.getName());
@@ -314,7 +314,7 @@ public class InputFile extends File implements Executable{
         else{
             boolean addMore = true;
             int index = 0 ;
-            for(ExecutionCommandBuilder command:this.commandBuilders){
+            for(ExecutionCommandBuilder command:this.programCommandBuilder){
                 if(command != null && addMore){
                     if(command.useOnlyThisOutput(this.currentParameters)){
                         this.log.appendLine("Program with index "+index+" has specific outputs for " +this.getName()+" for parameters "+this.currentParameters.getName()+" without allowing other inputs.", InputFile.class.getName());
@@ -376,24 +376,25 @@ public class InputFile extends File implements Executable{
     
     @Override
     public String getProgramCommand(int index, String parentOutputDir){
-        String ret;
-        if(index>=this.programParameters.size()){
-            ret = ParameterPool.MESSAGE_PREFIX+ParameterPool.MESSAGE_OUT_OF_INDEX+":"+index;
-        }
-        else if(this.programParameters.get(index).isEmpty()){
-            ret = ParameterPool.MESSAGE_PREFIX+ParameterPool.MESSAGE_PROGRAM_EMPTY+", Index:"+index;
-        }
-        else if(this.programParameters.get(index).getParsedParameters().getStartCommand() == null){
-            ret = ParameterPool.MESSAGE_PREFIX+ParameterPool.MESSAGE_PROGRAM_COMMAND_NULL+", Name: "+this.programParameters.get(index).getParsedParameters().getName()+"Index: "+index;
-        }
-        else{
-            this.currentParameters = this.programParameters.get(index);
-            ret = this.getCurrentCommandString(parentOutputDir,false);
-            this.addCommandBuilder(this.currentCommand);
-            this.lastProgramCommand = this.getCommand(this.commandBuilders.size()-1);
-        }
-        this.setProgramXBuilt(index, true);
-        return ret;
+        return this.getProgramCommand(index, parentOutputDir, false);
+//        String ret;
+//        if(index>=this.programParameters.size()){
+//            ret = ParameterPool.MESSAGE_PREFIX+ParameterPool.MESSAGE_OUT_OF_INDEX+":"+index;
+//        }
+//        else if(this.programParameters.get(index).isEmpty()){
+//            ret = ParameterPool.MESSAGE_PREFIX+ParameterPool.MESSAGE_PROGRAM_EMPTY+", Index:"+index;
+//        }
+//        else if(this.programParameters.get(index).getParsedParameters().getStartCommand() == null){
+//            ret = ParameterPool.MESSAGE_PREFIX+ParameterPool.MESSAGE_PROGRAM_COMMAND_NULL+", Name: "+this.programParameters.get(index).getParsedParameters().getName()+"Index: "+index;
+//        }
+//        else{
+//            this.currentParameters = this.programParameters.get(index);
+//            ret = this.getCurrentCommandString(parentOutputDir,false);
+//            this.addCommandBuilder(this.currentCommand);
+//            this.lastProgramCommand = this.getCommand(this.commandBuilders.size()-1);
+//        }
+//        this.setProgramXBuilt(index, true);
+//        return ret;
     }
     
     public String getProgramCommand(int index, String parentOutputDir, boolean onCluster){
@@ -409,9 +410,9 @@ public class InputFile extends File implements Executable{
         }
         else{
             this.currentParameters = this.programParameters.get(index);
-            ret = this.getCurrentCommandString(parentOutputDir,true);
+            ret = this.getCurrentCommandString(parentOutputDir,onCluster);
             this.addCommandBuilder(this.currentCommand);
-            this.lastProgramCommand = this.getCommand(this.commandBuilders.size()-1);
+            this.lastProgramCommand = this.getCommand(this.programCommandBuilder.size()-1);
         }
         this.setProgramXBuilt(index, true);
         return ret;
@@ -422,16 +423,16 @@ public class InputFile extends File implements Executable{
     }
     
     private void addCommandBuilder( ExecutionCommandBuilder command){
-        this.commandBuilders.add(command);
+        this.programCommandBuilder.add(command);
     }
     
     private ExecutionCommandBuilder getCommand(int index){
-        if(index >= this.commandBuilders.size()){
+        if(index >= this.programCommandBuilder.size()){
             this.log.appendLine(ParameterPool.LOG_WARNING+"Not yet constructed: CommandBuilder on index "+index+", returning null.", InputFile.class.getName());
             return null;
         }
         else{
-            return this.commandBuilders.get(index);
+            return this.programCommandBuilder.get(index);
         }
     }
     
@@ -452,24 +453,29 @@ public class InputFile extends File implements Executable{
      */
     @Override
     public ArrayList<String> getToolCommands(String parentOutputDir){
-        ArrayList<String> ret = new ArrayList<>();
-        this.toolCommands = new ArrayList<>(this.tools.size());
-        for(int i = 0; i<this.tools.size(); i++){
-            ProgramSet tp =this.tools.get(i);
-            if(this.toolSelected[i]){
-                ret.add(this.getSingleToolCommand(parentOutputDir, tp,false));
-            }
-            else{
-                ret.add(null);
-            }
+        boolean[] all = new boolean[this.tools.size()];
+        for(int i = 0; i<all.length; i++){
+            all[i]=false;
         }
-        if(ret.size() == 0){
-            this.log.appendLine(ParameterPool.LOG_WARNING+"Input file "+this.getName() +" has no tool to execute.", InputFile.class.getName());
-            ret.add(ParameterPool.MESSAGE_PREFIX+ParameterPool.MESSAGE_TOOL_IS_NULL);
-
-        }
-        this.toolsBuilt = true;
-        return ret;
+        return this.getToolCommands(parentOutputDir, all);
+//        ArrayList<String> ret = new ArrayList<>();
+//        this.toolCommands = new ArrayList<>(this.tools.size());
+//        for(int i = 0; i<this.tools.size(); i++){
+//            ProgramSet tp =this.tools.get(i);
+//            if(this.toolSelected[i]){
+//                ret.add(this.getSingleToolCommand(parentOutputDir, tp,false));
+//            }
+//            else{
+//                ret.add(null);
+//            }
+//        }
+//        if(ret.size() == 0){
+//            this.log.appendLine(ParameterPool.LOG_WARNING+"Input file "+this.getName() +" has no tool to execute.", InputFile.class.getName());
+//            ret.add(ParameterPool.MESSAGE_PREFIX+ParameterPool.MESSAGE_TOOL_IS_NULL);
+//
+//        }
+//        this.toolsBuilt = true;
+//        return ret;
     }
     
 
@@ -480,9 +486,11 @@ public class InputFile extends File implements Executable{
             ProgramSet tp =this.tools.get(i);
             if(this.toolSelected[i]){
                 ret.add(this.getSingleToolCommand(parentOutputDir, tp, onCluster[i]));
+                this.toolCommands.add(this.currentCommand);
             }
             else{
                 ret.add(null);
+                this.toolCommands.add(null);
             }
         }
         if(ret.size() == 0){
@@ -495,7 +503,18 @@ public class InputFile extends File implements Executable{
     }
     
     public boolean checkToolFiles(int index){
-        return (index>=this.toolCommands.size() ||this.toolCommands.get(index) == null) ? false: this.toolCommands.get(index).getFileLister().checkEssentialFiles();
+        if(index>=this.toolCommands.size()){
+            System.err.println("Tried check Tool with index out of size.");
+            return false;
+        }
+        else if(this.toolCommands.get(index) ==  null){
+            System.err.println("Tried to check null - Tool.");
+            return true;
+        }
+        else{
+            return this.toolCommands.get(index).getFileLister().checkEssentialFiles();
+        }
+//        return (index>=this.toolCommands.size() ||this.toolCommands.get(index) == null) ? false: this.toolCommands.get(index).getFileLister().checkEssentialFiles();
     }
     
     private String getSingleToolCommand(String parentOutputDir, ProgramSet tool, boolean onCluster){

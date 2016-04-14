@@ -31,7 +31,7 @@ public class ProcessingParameterFabric {
 
         String[] endings = {".fastq"};
         String[] outputEnding = new String[]{".fa"};
-        ParseableProgram miseq = new ParseableProgram( "MiSeqFASTQ4Newbler_v2.8b",
+        ParseableProgram miseq = new ParseableProgram( "MiSeqFASTQ for Newbler",
                                                                 "SCRIPTS/MiSeqFASTQ4Newbler_v2.8b_OutputOnArgs1.pl", 
                                                                 null,
                                                                 1,
@@ -41,7 +41,7 @@ public class ProcessingParameterFabric {
                                                                 outputEnding);
         miseq.setOutputSettings(false, true);
         
-        ParseableProgram splitMiseq = new ParseableProgram( "split_MiSeq_MP_nextera",
+        ParseableProgram splitMiseq = new ParseableProgram( "split MiSeq MP nextera",
                                                                 "SCRIPTS/split_MiSeq_MP_nextera_OutputOnArgs1.pl", 
                                                                 null,
                                                                 1,

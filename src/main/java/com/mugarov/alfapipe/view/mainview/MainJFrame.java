@@ -5,11 +5,8 @@
  */
 package com.mugarov.alfapipe.view.mainview;
 
-import com.mugarov.alfapipe.control.listeners.tabrelated.TabListenerBag;
 import com.mugarov.alfapipe.model.ParameterPool;
 import com.mugarov.alfapipe.view.mainview.tab.DataTabbedPane;
-import com.mugarov.alfapipe.view.mainview.tab.Tab;
-import java.awt.Container;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
