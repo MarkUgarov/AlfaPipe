@@ -3,19 +3,22 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mugarov.alfapipe.view.optics;
+package com.mugarov.alfapipe.view.mainview.tab.selection;
 
 import com.mugarov.alfapipe.control.listeners.MouseOver;
 import com.mugarov.alfapipe.model.ParameterPool;
+import com.mugarov.alfapipe.view.optics.Optic;
+import com.mugarov.alfapipe.view.optics.OpticCheckBox;
 import java.awt.Dimension;
 import javax.swing.JCheckBox;
+import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 /**
  *
  * @author mugarov
  */
-public class ClusterCheckBox extends JCheckBox implements Optic{
+public class ClusterCheckBox extends OpticCheckBox {
     
     private final int index;
     private final String onSelected;
@@ -30,11 +33,13 @@ public class ClusterCheckBox extends JCheckBox implements Optic{
         this.onNotSelected = ParameterPool.TOOLTIP_CLUSTER_CHECKBOX_UNSELECTED;
         this.isTool = false;
         this.setToolTipText(this.onNotSelected);
-        this.setOpaque(true);
+        super.setOpaque(true);
+        super.drawBackgroundImage(false);
         this.setBackground(ParameterPool.COLOR_BACKGROUND_CLUSTER);
         this.addMouseListener(new MouseOver(this));
         Dimension size = new Dimension(10,10);
         this.setHorizontalAlignment(SwingConstants.CENTER);
+
     }
     
     public ClusterCheckBox(int index, boolean isTool){
@@ -59,34 +64,13 @@ public class ClusterCheckBox extends JCheckBox implements Optic{
         this.setEnabled(false);
     }
     
-    public void mouseOver(){
-        
+    public JPanel inOpaquePanel(){
+        JPanel ret = new JPanel();
+        ret.setOpaque(true);
+        ret.setBackground(this.getBackground());
+        ret.setDoubleBuffered(true);
+        ret.add(this);
+        return ret;
     }
-
-    @Override
-    public void setTransparent() {
-        super.setOpaque(false);
-    }
-
-    @Override
-    public void setOpaque() {
-        super.setOpaque(true);
-    }
-
-    @Override
-    public void drawBackgroundImage(boolean draw) {
-        // do nothing
-    }
-
-    @Override
-    public void mouseEntered() {
-        // do nothing
-    }
-
-    @Override
-    public void mouseExit() {
-        // do nothing
-    }
-    
 
 }

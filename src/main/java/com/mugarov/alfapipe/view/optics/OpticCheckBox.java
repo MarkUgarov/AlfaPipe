@@ -5,49 +5,49 @@
  */
 package com.mugarov.alfapipe.view.optics;
 
-import java.awt.Component;
+import javax.swing.JCheckBox;
 import javax.swing.JPanel;
-import javax.swing.JSplitPane;
 
 /**
  *
  * @author mugarov
  */
-public class OpticSplitPane extends JSplitPane implements Optic{
+public class OpticCheckBox extends JCheckBox implements Optic{
     
-    private final Component north;
-    private final Component south;
     private boolean transparent;
-    private boolean drawImage;
+    private boolean drawBackground;
     
-    public OpticSplitPane(Component north, Component south){
-        super(JSplitPane.VERTICAL_SPLIT, north, south);
+    public OpticCheckBox(String content){
+        super(content);
         this.setDoubleBuffered(true);
-        this.north = north;
-        this.south = south;
-        super.setOneTouchExpandable(true);
         this.setTransparent();
+        this.drawBackground = false;
+        this.setRolloverEnabled(false);
+    }
+    
+    public OpticCheckBox(){
+        this("");
     }
 
     @Override
     public void setTransparent() {
+        super.setOpaque(false);
         this.transparent = true;
-        this.setOpaque(false);
     }
 
     @Override
     public void setOpaque() {
+        super.setOpaque(true);
         this.transparent = false;
-        this.setOpaque(true);
     }
 
     /**
-     * Not functional yet. Overdraw the paint-method to draw background picture.
+     * There is no effect yet. 
      * @param draw 
      */
     @Override
     public void drawBackgroundImage(boolean draw) {
-        this.drawImage=draw;
+        this.drawBackground = draw;
     }
 
     @Override
@@ -68,6 +68,5 @@ public class OpticSplitPane extends JSplitPane implements Optic{
         ret.add(this);
         return ret;
     }
-
     
 }

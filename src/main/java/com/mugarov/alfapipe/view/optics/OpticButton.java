@@ -99,6 +99,7 @@ public class OpticButton extends JButton implements Optic{
         this.drawImage = draw;
     }
     
+    @Override
     public JPanel inTransparentPanel(){
         JPanel ret = new JPanel();
         ret.setOpaque(false);

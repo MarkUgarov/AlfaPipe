@@ -117,6 +117,15 @@ public class OpticPane extends JPanel implements Optic{
     public void mouseExit() {
         // do nothing
     }
+
+    @Override
+    public JPanel inTransparentPanel(){
+        JPanel ret = new JPanel();
+        ret.setOpaque(false);
+        ret.setDoubleBuffered(true);
+        ret.add(this);
+        return ret;
+    }
     
     
     

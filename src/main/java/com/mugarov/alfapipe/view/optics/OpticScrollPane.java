@@ -11,6 +11,7 @@ import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 /**
@@ -94,6 +95,15 @@ public class OpticScrollPane extends JScrollPane implements Optic{
     @Override
     public void mouseExit() {
         // do nothing
+    }
+
+    @Override
+    public JPanel inTransparentPanel(){
+        JPanel ret = new JPanel();
+        ret.setOpaque(false);
+        ret.setDoubleBuffered(true);
+        ret.add(this);
+        return ret;
     }
     
 }

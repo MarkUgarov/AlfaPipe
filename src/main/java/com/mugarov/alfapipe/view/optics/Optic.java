@@ -5,7 +5,7 @@
  */
 package com.mugarov.alfapipe.view.optics;
 
-import java.awt.Graphics;
+import javax.swing.JPanel;
 
 /**
  *
@@ -23,5 +23,7 @@ public interface Optic {
     public abstract void mouseEntered();
 
     public abstract void mouseExit();
+    
+    public abstract JPanel inTransparentPanel();
     
 }

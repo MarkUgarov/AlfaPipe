@@ -5,7 +5,6 @@
  */
 package com.mugarov.alfapipe.view.mainview.tab.selection;
 
-import com.mugarov.alfapipe.view.optics.ClusterCheckBox;
 import com.mugarov.alfapipe.control.listeners.tabrelated.cluster.ClusterSelectionListener;
 import com.mugarov.alfapipe.control.listeners.tabrelated.parameters.ParameterListener;
 import com.mugarov.alfapipe.control.listeners.tabrelated.radiobuttons.ProgramListener;
@@ -42,7 +41,7 @@ public class SingleProgramPanel extends OpticPane{
        this.checkBoxPanel.setLayout(new BorderLayout());
        this.checkBoxPanel.setDoubleBuffered(true);
        this.clusterBox = new ClusterCheckBox(index);
-       this.checkBoxPanel.add(this.clusterBox, BorderLayout.CENTER);
+       this.checkBoxPanel.add(this.clusterBox.inOpaquePanel(), BorderLayout.CENTER);
        this.checkBoxPanel.setOpaque(false);
        this.checkBoxPanel.setVisible(ParameterPool.CLUSTER_ENABLE);
        this.checkBoxPanel.setDoubleBuffered(true);

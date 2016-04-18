@@ -10,7 +10,8 @@ import com.mugarov.alfapipe.control.listeners.tabrelated.parameters.ParameterLis
 import com.mugarov.alfapipe.model.datatypes.InputParameter;
 import com.mugarov.alfapipe.model.ParameterPool;
 import com.mugarov.alfapipe.view.optics.OpticPane;
-import com.mugarov.alfapipe.view.optics.ClusterCheckBox;
+import com.mugarov.alfapipe.view.mainview.tab.selection.ClusterCheckBox;
+import com.mugarov.alfapipe.view.optics.OpticCheckBox;
 import com.mugarov.alfapipe.view.optics.OpticScrollPane;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -63,7 +64,7 @@ public class ProgramParameterPanel extends OpticPane{
             this.namePanel.setLayout(new FlowLayout());
             this.nameLabel = new JLabel(this.name);
             this.nameLabel.setPreferredSize(ParameterPool.LABEL_DIMENSION);
-            this.nameLabel.setOpaque(true);
+            this.nameLabel.setOpaque(false);
             this.namePanel.add(this.offsetPanel);
             this.namePanel.add(this.nameLabel);
             this.namePanel.setDoubleBuffered(true);
@@ -110,7 +111,7 @@ public class ProgramParameterPanel extends OpticPane{
     public void addClusterBox(ClusterSelectionListener clusterSelectionListener, int index) {
         this.clusterBox = new ClusterCheckBox(index, true);
         this.clusterBox.addItemListener(clusterSelectionListener);
-        this.offsetPanel.add(this.clusterBox, BorderLayout.WEST);
+        this.offsetPanel.add(this.clusterBox.inOpaquePanel(), BorderLayout.WEST);
     }
     
     private void addParameter(InputParameter parameter){
@@ -119,14 +120,14 @@ public class ProgramParameterPanel extends OpticPane{
         parPan.setLayout(new FlowLayout());
         
         if(parameter.isOptional()){
-            JCheckBox toolBox= new JCheckBox(parameter.getName());
+            OpticCheckBox toolBox= new OpticCheckBox(parameter.getName());
             toolBox.setToolTipText(parameter.getToolTip());
             toolBox.addItemListener(this.listener);
             toolBox.setSelected(parameter.getBoolean());
             toolBox.setDoubleBuffered(true);
             toolBox.setOpaque(true);
             this.boxes.add(toolBox);
-            parPan.add(toolBox);
+            parPan.add(toolBox.inTransparentPanel());
 //            System.out.println("\t \t Added checkbox "+parameter.getName());
         }
         else{
