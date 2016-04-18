@@ -139,6 +139,10 @@ public class OptionPanel extends OpticPane{
     }
 
     public void disableEditing() {
+        if(this.clusterPanel != null){
+            this.clusterPanel.disableEditing();
+        }
+        
         for(SingleProgramPanel progPan:this.programPanels){
             progPan.disableEditing();
         }

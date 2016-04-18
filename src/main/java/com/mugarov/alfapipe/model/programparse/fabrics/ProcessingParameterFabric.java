@@ -8,7 +8,6 @@ package com.mugarov.alfapipe.model.programparse.fabrics;
 import com.mugarov.alfapipe.model.ParameterPool;
 import com.mugarov.alfapipe.model.programparse.datatypes.ParseableProgramList;
 import com.mugarov.alfapipe.model.programparse.datatypes.ParseableProgram;
-import com.mugarov.alfapipe.model.programparse.generators.GeneratorCore;
 import java.util.ArrayList;
 
 /**

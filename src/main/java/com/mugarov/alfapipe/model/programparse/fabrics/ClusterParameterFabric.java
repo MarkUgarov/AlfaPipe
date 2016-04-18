@@ -6,11 +6,9 @@
 package com.mugarov.alfapipe.model.programparse.fabrics;
 
 import com.mugarov.alfapipe.model.ParameterPool;
-import com.mugarov.alfapipe.model.datatypes.InputParameter;
 import com.mugarov.alfapipe.model.datatypes.ProgramSet;
 import com.mugarov.alfapipe.model.programparse.datatypes.ParameterField;
 import com.mugarov.alfapipe.model.programparse.datatypes.ParseableProgram;
-import java.util.ArrayList;
 
 /**
  *

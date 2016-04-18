@@ -5,7 +5,6 @@
  */
 package com.mugarov.alfapipe.model.programparse.fabrics;
 
-import com.mugarov.alfapipe.model.ComponentPool;
 import com.mugarov.alfapipe.model.ParameterPool;
 import com.mugarov.alfapipe.model.programparse.datatypes.NameField;
 import com.mugarov.alfapipe.model.programparse.datatypes.ParseableProgramList;

@@ -43,6 +43,11 @@ public class ClusterPanel extends OpticPane{
         this.updateUI();
     }
     
+    public void disableEditing(){
+        if(this.parameterPanel != null){
+            this.parameterPanel.disableEditing();
+        }
+    }
     
     
     
