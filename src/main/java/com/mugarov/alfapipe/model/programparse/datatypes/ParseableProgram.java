@@ -24,6 +24,8 @@ public class ParseableProgram{
     private String enterCommand;
     private String exitCommand;
     
+    private boolean disableCluster;
+    
     private ArrayList<ParameterField> additionalClusterParameters;
     private ArrayList<ParameterField> parameters;
     private ParameterField inputPathCommand;
@@ -51,7 +53,9 @@ public class ParseableProgram{
         this.outputSettings = new OutputField();
         this.essentialOutputs = new ArrayList<>();
         this.additionalClusterParameters = new ArrayList<>();
+        this.disableCluster = false;
         this.sorter = new ParameterSorter(this);
+       
         
     }
     
@@ -74,7 +78,7 @@ public class ParseableProgram{
         this.outputEndings = outputEnding;
         this.outputSettings = new OutputField();
         this.essentialOutputs = new ArrayList<>();
-        
+        this.disableCluster = false;
         this.enterCommand = null;
         this.exitCommand = null;
         this.additionalClusterParameters = new ArrayList<>();
@@ -435,5 +439,19 @@ public class ParseableProgram{
             }
         }
         this.additionalClusterParameters.add(parameter);
+    }
+
+    /**
+     * @return the disableCluster
+     */
+    public boolean isDisableCluster() {
+        return disableCluster;
+    }
+
+    /**
+     * @param disableCluster the disableCluster to set
+     */
+    public void setDisableCluster(boolean disableCluster) {
+        this.disableCluster = disableCluster;
     }
 }

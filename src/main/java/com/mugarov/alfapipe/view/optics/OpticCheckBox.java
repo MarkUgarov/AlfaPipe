@@ -5,6 +5,8 @@
  */
 package com.mugarov.alfapipe.view.optics;
 
+import com.mugarov.alfapipe.model.ParameterPool;
+import java.awt.Color;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 
@@ -16,10 +18,14 @@ public class OpticCheckBox extends JCheckBox implements Optic{
     
     private boolean transparent;
     private boolean drawBackground;
+    private JPanel surroundingPanel;
+    private Color enabledColor;
+    private final Color disabledColor = ParameterPool.COLOR_BACKGROUND_DISABLED;
     
     public OpticCheckBox(String content){
         super(content);
         this.setDoubleBuffered(true);
+        this.enabledColor = super.getBackground();
         this.setTransparent();
         this.drawBackground = false;
         this.setRolloverEnabled(false);
@@ -62,11 +68,45 @@ public class OpticCheckBox extends JCheckBox implements Optic{
 
     @Override
     public JPanel inTransparentPanel(){
-        JPanel ret = new JPanel();
-        ret.setOpaque(false);
-        ret.setDoubleBuffered(true);
-        ret.add(this);
-        return ret;
+        if(this.surroundingPanel == null){
+            this.surroundingPanel = new JPanel();
+            this.surroundingPanel.setOpaque(false);
+            this.surroundingPanel.setDoubleBuffered(true);
+            this.surroundingPanel.add(this);
+        }
+        
+        return this.surroundingPanel;
     }
+    
+    @Override
+    public void setBackground(Color bg){
+        super.setBackground(bg);
+        this.enabledColor = bg;
+    }
+    
+    public void disableByPresetting(){
+        this.setEnabled(false);
+        this.setSelected(false);
+        super.setBackground(this.disabledColor);
+        if(this.surroundingPanel != null){
+            this.surroundingPanel.setBackground(this.disabledColor);
+        }
+        
+        
+    }
+    
+    public void reenable(){
+        if(this.isEnabled()){
+            return;
+        }
+        this.setEnabled(true);
+        this.setSelected(false);
+        super.setBackground(this.enabledColor);
+        if(this.surroundingPanel != null){
+            this.surroundingPanel.setBackground(this.enabledColor);
+        }
+        
+    }
+    
     
 }

@@ -150,6 +150,24 @@ public class OptionPanel extends OpticPane{
             tool.disableEditing();
         }
     }
+
+    public void disableCluster(int index, boolean isTool) {
+        if(isTool && index<this.toolParamPanels.size()){
+            this.toolParamPanels.get(index).disableClusterByPresettings();
+        }
+        else if(index<this.programPanels.size()){
+            this.programPanels.get(index).disableClusterByPresettings();
+        }
+    }
+    
+    public void reenableCluster(int index, boolean isTool){
+        if(isTool && index<this.toolParamPanels.size()){
+            this.toolParamPanels.get(index).reenableCluster();
+        }
+        else if(index<this.programPanels.size()){
+            this.programPanels.get(index).reenableCluster();
+        }
+    }
     
     
     

@@ -27,6 +27,7 @@ public abstract class ParameterPool {
     public static final Color COLOR_BACKGROUND_STANDARD = new Color(128, 255 , 0);
     public static final Color COLOR_BACKGROUND_SECOND = new Color(160,160,160,125);
     public static final Color COLOR_BACKGROUND_CLUSTER = new Color(0, 0, 255, 80);
+    public static final Color COLOR_BACKGROUND_DISABLED = Color.yellow;
     
     // text for menu
     public static final String MENU_MAIN = "Menu";
@@ -106,6 +107,7 @@ public abstract class ParameterPool {
     // standard Tooltips
     public static final String TOOLTIP_CLUSTER_CHECKBOX_SELECTED = "The selected program will run on the cluster.";
     public static final String TOOLTIP_CLUSTER_CHECKBOX_UNSELECTED = "The selected program will run on your local machine.";
+    public static final String TOOLTIP_DISABLED = "Cluster is disabled. The selected program will run on your local machine.";
     public static final String TOOLTIP_PARAMETER_DEFAULT = "No information about this parameter.";
     
     // available Tools and Assemblers

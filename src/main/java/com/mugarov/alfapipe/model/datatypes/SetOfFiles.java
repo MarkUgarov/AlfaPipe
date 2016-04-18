@@ -73,6 +73,9 @@ public class SetOfFiles implements Executable, Runnable{
         for(ProgramSet par:this.availableTools){
             ParameterListener paramListener = new ParameterListener(par.getInputParameters());
             this.tab.addTool(par.getName(), par.getInputParameters(), paramListener);
+            if(par.getParsedParameters().isDisableCluster()){
+                this.tab.disableCluster(i, true);
+            }
             this.useClusterOnTool[i]=false;
             i++;
         }
@@ -148,6 +151,13 @@ public class SetOfFiles implements Executable, Runnable{
         for(InputFile file:this.files){
             file.selectProgram(index, set, true);
             this.tab.setValidation(file.getAbsolutePath(), file.isValid(), file.getValidTools());
+        }
+        
+        if(proc.isDisableCluster()){
+            this.tab.disableCluster(index, false);
+        }
+        else{
+            this.tab.reenableCluster(index, false);
         }
     }
     

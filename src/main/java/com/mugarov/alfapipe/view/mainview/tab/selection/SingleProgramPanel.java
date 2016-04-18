@@ -89,7 +89,15 @@ public class SingleProgramPanel extends OpticPane{
    public void initClusterSelection(ClusterSelectionListener listener){
        this.clusterBox.addItemListener(listener);
    }
-    
+   
+   public void disableClusterByPresettings(){
+       this.clusterBox.disableByPresetting();
+   }
+   
+   public void reenableCluster(){
+       this.clusterBox.reenable();
+   }
+   
     public void setParameters(String name, ArrayList<InputParameter> parameters, ParameterListener listener){
         if(!this.isEmpty){
             this.rightPanel.removeAll();

@@ -145,6 +145,14 @@ public class Tab extends OpticPane{
         this.optionPanel.selectProgram(index, name, parameters, listener, true);
     }
     
+    public void disableCluster(int index, boolean isTool) {
+        this.optionPanel.disableCluster(index, isTool);
+    }
+    
+    public void reenableCluster(int inded, boolean isTool){
+        this.optionPanel.reenableCluster(inded, isTool);
+    }
+    
     
     public void addTool(String name, ArrayList<InputParameter> parameters, ParameterListener listener){
         this.optionPanel.addTool(name, parameters,listener);
@@ -210,6 +218,8 @@ public class Tab extends OpticPane{
     public void recalculateSize(){
         this.mainPanel.resetToPreferredSizes();
     }
+
+    
      
     
 }

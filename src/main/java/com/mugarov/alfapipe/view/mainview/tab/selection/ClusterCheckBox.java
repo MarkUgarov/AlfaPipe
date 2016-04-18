@@ -7,10 +7,9 @@ package com.mugarov.alfapipe.view.mainview.tab.selection;
 
 import com.mugarov.alfapipe.control.listeners.MouseOver;
 import com.mugarov.alfapipe.model.ParameterPool;
-import com.mugarov.alfapipe.view.optics.Optic;
 import com.mugarov.alfapipe.view.optics.OpticCheckBox;
+import java.awt.Color;
 import java.awt.Dimension;
-import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
@@ -23,7 +22,10 @@ public class ClusterCheckBox extends OpticCheckBox {
     private final int index;
     private final String onSelected;
     private final String onNotSelected;
+    private final String onDisabled;
     private boolean isTool;
+    private Color enabledColor;
+    private JPanel surroundingPanel;
     
     public ClusterCheckBox(int index){
         super();
@@ -31,6 +33,7 @@ public class ClusterCheckBox extends OpticCheckBox {
         this.index = index;
         this.onSelected = ParameterPool.TOOLTIP_CLUSTER_CHECKBOX_SELECTED;
         this.onNotSelected = ParameterPool.TOOLTIP_CLUSTER_CHECKBOX_UNSELECTED;
+        this.onDisabled = ParameterPool.TOOLTIP_DISABLED;
         this.isTool = false;
         this.setToolTipText(this.onNotSelected);
         super.setOpaque(true);
@@ -64,13 +67,28 @@ public class ClusterCheckBox extends OpticCheckBox {
         this.setEnabled(false);
     }
     
-    public JPanel inOpaquePanel(){
-        JPanel ret = new JPanel();
-        ret.setOpaque(true);
-        ret.setBackground(this.getBackground());
-        ret.setDoubleBuffered(true);
-        ret.add(this);
-        return ret;
+    @Override
+    public void disableByPresetting(){
+        super.disableByPresetting();
+        this.setToolTipText(this.onDisabled);
     }
+    
+    @Override
+    public void reenable(){
+        super.reenable();
+        this.setTooltipFor(this.isSelected());
+    }
+    
+    public JPanel inOpaquePanel(){
+        if(this.surroundingPanel == null){
+            this.surroundingPanel = new JPanel();
+            this.surroundingPanel.setOpaque(true);
+            this.surroundingPanel.setBackground(this.getBackground());
+            this.surroundingPanel.setDoubleBuffered(true);
+            this.surroundingPanel.add(this);
+        }
+        return this.surroundingPanel;
+    }
+    
 
 }

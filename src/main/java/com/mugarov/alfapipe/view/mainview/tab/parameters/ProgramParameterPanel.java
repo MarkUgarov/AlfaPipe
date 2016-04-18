@@ -114,6 +114,18 @@ public class ProgramParameterPanel extends OpticPane{
         this.offsetPanel.add(this.clusterBox.inOpaquePanel(), BorderLayout.WEST);
     }
     
+    public void disableClusterByPresettings(){
+        if(this.clusterBox != null){
+            this.clusterBox.disableByPresetting();
+        }
+    }
+    
+    public void reenableCluster(){
+        if(this.clusterBox != null){
+            this.clusterBox.reenable();
+        }
+    }
+    
     private void addParameter(InputParameter parameter){
 //        System.out.println("\t Add parameter "+parameter.getName());
         OpticPane parPan = new OpticPane();
