@@ -42,7 +42,7 @@ public class SingleProgramPanel extends OpticPane{
        this.checkBoxPanel.setDoubleBuffered(true);
        this.clusterBox = new ClusterCheckBox(index);
        this.checkBoxPanel.add(this.clusterBox.inOpaquePanel(), BorderLayout.CENTER);
-       this.checkBoxPanel.setOpaque(false);
+       this.checkBoxPanel.setOpaque(true);
        this.checkBoxPanel.setVisible(ParameterPool.CLUSTER_ENABLE);
        this.checkBoxPanel.setDoubleBuffered(true);
        

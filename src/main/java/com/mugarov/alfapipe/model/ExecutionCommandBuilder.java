@@ -92,7 +92,7 @@ public class ExecutionCommandBuilder {
         this.fileLister = new FileLister(this.log, this.outputFile, this.outputIsDirectory, originalFile, this.set);
         if(parameterSet.getParsedParameters().getStartCommand() != null){
             if(this.useClusterParameters){
-                System.out.println("BUILD PROGRAM FOR CLUSTER");
+               // System.out.println("BUILD PROGRAM FOR CLUSTER: "+this.set.getName());
                 for(ParameterField cP:parameterSet.getParsedParameters().getAdditionalClusterParameters()){
                     this.buildParameterCommand(cP, null, null, parameterSet.getClusterParameters(), originalFile);
                 }

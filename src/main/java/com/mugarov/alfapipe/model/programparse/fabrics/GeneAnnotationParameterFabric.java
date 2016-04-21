@@ -44,6 +44,7 @@ public class GeneAnnotationParameterFabric {
         prodigal.setOutputSettings(false, true);
         prodigal.setDisableCluster(true);
         prodigal.addAdditionalClusterParameter(ParameterPool.PROGRAM_BINARAY_NAME, ParameterPool.PROGRAM_BINARY_COMMAND, ParameterPool.PROGRAM_BINARY_CONFIRM, ParameterPool.PROGRAM_BINARY_POSITION, ParameterPool.PROGRAM_BINARY_OPTIONAL, ParameterPool.PROGRAM_BINARY_DESCRIPTION);
+        prodigal.addAdditionalClusterParameter("Export environment variables", "-V", ParameterPool.PROGRAM_EMPTY_PARAMETER_VALUE, 1, false, "Specifies that all environment variables active within the  qsub utility be exported to the context of the job.");
         
         ParseableProgram nullProdigal= new ParseableProgram( "Skip", 
                                                                 null, 

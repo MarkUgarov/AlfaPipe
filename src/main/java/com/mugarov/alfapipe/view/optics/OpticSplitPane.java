@@ -5,6 +5,7 @@
  */
 package com.mugarov.alfapipe.view.optics;
 
+import java.awt.Color;
 import java.awt.Component;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
@@ -19,6 +20,7 @@ public class OpticSplitPane extends JSplitPane implements Optic{
     private final Component south;
     private boolean transparent;
     private boolean drawImage;
+    private OpticerWrap surroundingPanel;
     
     public OpticSplitPane(Component north, Component south){
         super(JSplitPane.VERTICAL_SPLIT, north, south);
@@ -32,13 +34,43 @@ public class OpticSplitPane extends JSplitPane implements Optic{
     @Override
     public void setTransparent() {
         this.transparent = true;
-        this.setOpaque(false);
+        if(this.surroundingPanel == null){
+            super.setOpaque(false);
+        }
+        else{
+            this.surroundingPanel.setOpaque(false);
+        }
     }
 
     @Override
     public void setOpaque() {
         this.transparent = false;
-        this.setOpaque(true);
+        if(this.surroundingPanel == null){
+            super.setOpaque(true);
+        }
+        else{
+            this.surroundingPanel.setOpaque(true);
+        }
+    }
+    
+    @Override
+    public void setBackground(Color bg){
+         if(this.surroundingPanel == null){
+            super.setBackground(bg);
+        }
+        else{
+            this.surroundingPanel.setBackground(bg);
+        }
+    }
+    
+    @Override 
+    public Color getBackground(){
+        if(this.surroundingPanel == null){
+            return super.getBackground();
+        }
+        else{
+            return this.surroundingPanel.getBackground();
+        }
     }
 
     /**
@@ -60,13 +92,13 @@ public class OpticSplitPane extends JSplitPane implements Optic{
         // do nothing
     }
 
-    @Override
-    public JPanel inTransparentPanel(){
-        JPanel ret = new JPanel();
-        ret.setOpaque(false);
-        ret.setDoubleBuffered(true);
-        ret.add(this);
-        return ret;
+     @Override
+    public OpticerWrap inTransparentPanel(){
+        if(this.surroundingPanel == null){
+            this.surroundingPanel = new OpticerWrap(this);
+            this.surroundingPanel.setBackground(super.getBackground());
+        }
+        return this.surroundingPanel;
     }
 
     

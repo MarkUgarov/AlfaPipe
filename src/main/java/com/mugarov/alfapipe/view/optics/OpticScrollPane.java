@@ -6,6 +6,7 @@
 package com.mugarov.alfapipe.view.optics;
 
 import com.mugarov.alfapipe.model.ParameterPool;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.io.File;
@@ -21,6 +22,7 @@ import javax.swing.JScrollPane;
 public class OpticScrollPane extends JScrollPane implements Optic{
     
     private boolean transparent;
+    private OpticerWrap surroundingPanel;
     private boolean drawImage;
     
     public OpticScrollPane(){
@@ -42,16 +44,46 @@ public class OpticScrollPane extends JScrollPane implements Optic{
      public void setTransparent(){
         this.transparent = true;
         this.drawImage = true;
-        this.setOpaque(false);
-        this.getViewport().setOpaque(false);
+         if(this.surroundingPanel == null){
+            super.setOpaque(false);
+            this.getViewport().setOpaque(false);
+        }
+        else{
+            this.surroundingPanel.setOpaque(false);
+        }
     }
     
     @Override
     public void setOpaque(){
         this.transparent = false;
         this.drawImage = true;
-        this.setOpaque(true);
-        this.getViewport().setOpaque(true);
+        if(this.surroundingPanel == null){
+            super.setOpaque(true);
+            this.getViewport().setOpaque(true);
+        }
+        else{
+            this.surroundingPanel.setOpaque(true);
+        }
+    }
+
+    @Override
+    public void setBackground(Color bg){
+         if(this.surroundingPanel == null){
+            super.setBackground(bg);
+        }
+        else{
+            this.surroundingPanel.setBackground(bg);
+        }
+    }
+    
+     @Override 
+    public Color getBackground(){
+        if(this.surroundingPanel == null){
+            return super.getBackground();
+        }
+        else{
+            return this.surroundingPanel.getBackground();
+        }
     }
     
     private Image getBackgroundImage() {
@@ -97,13 +129,13 @@ public class OpticScrollPane extends JScrollPane implements Optic{
         // do nothing
     }
 
-    @Override
-    public JPanel inTransparentPanel(){
-        JPanel ret = new JPanel();
-        ret.setOpaque(false);
-        ret.setDoubleBuffered(true);
-        ret.add(this);
-        return ret;
+     @Override
+    public OpticerWrap inTransparentPanel(){
+        if(this.surroundingPanel == null){
+            this.surroundingPanel = new OpticerWrap(this);
+            this.surroundingPanel.setBackground(super.getBackground());
+        }
+        return this.surroundingPanel;
     }
     
 }

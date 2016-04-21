@@ -8,6 +8,7 @@ package com.mugarov.alfapipe.view.mainview.tab.selection;
 import com.mugarov.alfapipe.control.listeners.MouseOver;
 import com.mugarov.alfapipe.model.ParameterPool;
 import com.mugarov.alfapipe.view.optics.OpticCheckBox;
+import com.mugarov.alfapipe.view.optics.OpticerWrap;
 import java.awt.Color;
 import java.awt.Dimension;
 import javax.swing.JPanel;
@@ -24,7 +25,7 @@ public class ClusterCheckBox extends OpticCheckBox {
     private final String onNotSelected;
     private final String onDisabled;
     private boolean isTool;
-    private Color enabledColor;
+    private Color currentColor;
     private JPanel surroundingPanel;
     
     public ClusterCheckBox(int index){
@@ -79,15 +80,18 @@ public class ClusterCheckBox extends OpticCheckBox {
         this.setTooltipFor(this.isSelected());
     }
     
-    public JPanel inOpaquePanel(){
-        if(this.surroundingPanel == null){
-            this.surroundingPanel = new JPanel();
-            this.surroundingPanel.setOpaque(true);
-            this.surroundingPanel.setBackground(this.getBackground());
-            this.surroundingPanel.setDoubleBuffered(true);
-            this.surroundingPanel.add(this);
-        }
-        return this.surroundingPanel;
+    @Override
+    public void setBackground(Color bg){
+        super.setBackground(bg);
+        this.currentColor = bg;
+    }
+    
+    public OpticerWrap inOpaquePanel(){
+        OpticerWrap  ret = super.inTransparentPanel();
+        ret.setOpaque(true);
+        ret.setBackground(this.currentColor);
+        ret.forceRepaint();
+        return ret;
     }
     
 

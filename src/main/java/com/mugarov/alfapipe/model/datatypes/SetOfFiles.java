@@ -154,6 +154,7 @@ public class SetOfFiles implements Executable, Runnable{
         }
         
         if(proc.isDisableCluster()){
+            this.useCluster[index]= false;
             this.tab.disableCluster(index, false);
         }
         else{

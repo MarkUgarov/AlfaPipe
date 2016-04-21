@@ -23,7 +23,7 @@ public class OpticPane extends JPanel implements Optic{
     
     private boolean transparent;
     private boolean drawImage;
-    
+    private OpticerWrap surroundingPanel;
     private Color background;
     
     public OpticPane(){
@@ -64,16 +64,47 @@ public class OpticPane extends JPanel implements Optic{
     
     
     @Override
-    public void setTransparent(){
+    public void setTransparent() {
         this.transparent = true;
-        this.setOpaque(false);
+        if(this.surroundingPanel == null){
+            super.setOpaque(false);
+        }
+        else{
+            this.surroundingPanel.setOpaque(false);
+        }
+    }
+
+    @Override
+    public void setOpaque() {
+        this.transparent = false;
+        if(this.surroundingPanel == null){
+            super.setOpaque(true);
+        }
+        else{
+            this.surroundingPanel.setOpaque(true);
+        }
     }
     
     @Override
-    public void setOpaque(){
-        this.transparent = false;
-        this.setOpaque(true);
+    public void setBackground(Color bg){
+         if(this.surroundingPanel == null){
+            super.setBackground(bg);
+        }
+        else{
+            this.surroundingPanel.setBackground(bg);
+        }
     }
+    
+    @Override 
+    public Color getBackground(){
+        if(this.surroundingPanel == null){
+            return super.getBackground();
+        }
+        else{
+            return this.surroundingPanel.getBackground();
+        }
+    }
+
     
     private Image getBackgroundImage() {
         File imgFile = new File("graphic/LogoCut.png");
@@ -118,13 +149,13 @@ public class OpticPane extends JPanel implements Optic{
         // do nothing
     }
 
-    @Override
-    public JPanel inTransparentPanel(){
-        JPanel ret = new JPanel();
-        ret.setOpaque(false);
-        ret.setDoubleBuffered(true);
-        ret.add(this);
-        return ret;
+     @Override
+    public OpticerWrap inTransparentPanel(){
+        if(this.surroundingPanel == null){
+            this.surroundingPanel = new OpticerWrap(this);
+            this.surroundingPanel.setBackground(super.getBackground());
+        }
+        return this.surroundingPanel;
     }
     
     

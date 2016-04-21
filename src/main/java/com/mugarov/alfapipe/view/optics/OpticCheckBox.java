@@ -18,7 +18,7 @@ public class OpticCheckBox extends JCheckBox implements Optic{
     
     private boolean transparent;
     private boolean drawBackground;
-    private JPanel surroundingPanel;
+    private OpticerWrap surroundingPanel;
     private Color enabledColor;
     private final Color disabledColor = ParameterPool.COLOR_BACKGROUND_DISABLED;
     
@@ -28,7 +28,6 @@ public class OpticCheckBox extends JCheckBox implements Optic{
         this.enabledColor = super.getBackground();
         this.setTransparent();
         this.drawBackground = false;
-        this.setRolloverEnabled(false);
     }
     
     public OpticCheckBox(){
@@ -37,14 +36,59 @@ public class OpticCheckBox extends JCheckBox implements Optic{
 
     @Override
     public void setTransparent() {
-        super.setOpaque(false);
         this.transparent = true;
+        if(this.surroundingPanel == null){
+            super.setOpaque(false);
+        }
+        else{
+            this.surroundingPanel.setOpaque(false);
+        }
     }
 
     @Override
     public void setOpaque() {
-        super.setOpaque(true);
         this.transparent = false;
+        if(this.surroundingPanel == null){
+            super.setOpaque(true);
+        }
+        else{
+            this.surroundingPanel.setOpaque(true);
+        }
+    }
+    
+    @Override
+    public void setOpaque(boolean opaque) {
+        this.transparent = opaque;
+        if(this.surroundingPanel == null){
+            super.setOpaque(opaque);
+        }
+        else{
+            this.surroundingPanel.setOpaque(opaque);
+        }
+    }
+    
+    
+    @Override
+    public void setBackground(Color bg){
+         if(this.surroundingPanel == null){
+//            System.out.println("Setting this to "+bg);
+            super.setBackground(bg);
+        }
+        else{
+//             System.out.println("Setting surrounding on "+bg);
+            this.surroundingPanel.setBackground(bg);
+        }
+        this.enabledColor = bg;
+    }
+    
+    @Override 
+    public Color getBackground(){
+        if(this.surroundingPanel == null){
+            return super.getBackground();
+        }
+        else{
+            return this.surroundingPanel.getBackground();
+        }
     }
 
     /**
@@ -67,29 +111,24 @@ public class OpticCheckBox extends JCheckBox implements Optic{
     }
 
     @Override
-    public JPanel inTransparentPanel(){
+    public OpticerWrap inTransparentPanel(){
         if(this.surroundingPanel == null){
-            this.surroundingPanel = new JPanel();
-            this.surroundingPanel.setOpaque(false);
-            this.surroundingPanel.setDoubleBuffered(true);
-            this.surroundingPanel.add(this);
+            this.surroundingPanel = new OpticerWrap(this);
+            this.surroundingPanel.setBackground(super.getBackground());
         }
-        
         return this.surroundingPanel;
     }
     
-    @Override
-    public void setBackground(Color bg){
-        super.setBackground(bg);
-        this.enabledColor = bg;
-    }
+    
     
     public void disableByPresetting(){
         this.setEnabled(false);
         this.setSelected(false);
-        super.setBackground(this.disabledColor);
         if(this.surroundingPanel != null){
             this.surroundingPanel.setBackground(this.disabledColor);
+        }
+        else{
+            super.setBackground(this.disabledColor);
         }
         
         
@@ -101,10 +140,7 @@ public class OpticCheckBox extends JCheckBox implements Optic{
         }
         this.setEnabled(true);
         this.setSelected(false);
-        super.setBackground(this.enabledColor);
-        if(this.surroundingPanel != null){
-            this.surroundingPanel.setBackground(this.enabledColor);
-        }
+        this.setBackground(this.enabledColor);
         
     }
     

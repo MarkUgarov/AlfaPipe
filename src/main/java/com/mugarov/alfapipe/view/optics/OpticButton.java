@@ -100,12 +100,12 @@ public class OpticButton extends JButton implements Optic{
     }
     
     @Override
-    public JPanel inTransparentPanel(){
+    public OpticerWrap inTransparentPanel(){
         JPanel ret = new JPanel();
         ret.setOpaque(false);
         ret.setDoubleBuffered(true);
         ret.add(this);
-        return ret;
+        return new OpticerWrap(ret);
     }
     
     public void mouseEntered(){

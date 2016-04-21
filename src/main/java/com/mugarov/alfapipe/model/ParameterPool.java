@@ -26,7 +26,7 @@ public abstract class ParameterPool {
     public static final Dimension FRAMESIZE = new Dimension(400,600);
     public static final Color COLOR_BACKGROUND_STANDARD = new Color(128, 255 , 0);
     public static final Color COLOR_BACKGROUND_SECOND = new Color(160,160,160,125);
-    public static final Color COLOR_BACKGROUND_CLUSTER = new Color(0, 0, 255, 80);
+    public static final Color COLOR_BACKGROUND_CLUSTER = new Color(0, 0, 255, 125);
     public static final Color COLOR_BACKGROUND_DISABLED = Color.yellow;
     
     // text for menu
