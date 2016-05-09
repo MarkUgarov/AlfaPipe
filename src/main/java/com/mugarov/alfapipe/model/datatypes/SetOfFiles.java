@@ -32,7 +32,7 @@ public class SetOfFiles implements Executable, Runnable{
     private final MultiFileChooser inputChooser;
     private final OutputDirectoryChooser outputChooser;
     
-    private final ProgramSet clusterParameters;
+    private ProgramSet clusterParameters;
     
     private File outputDirectory;
     private final LogFileManager log;
@@ -47,10 +47,9 @@ public class SetOfFiles implements Executable, Runnable{
     private Executioner execution;
     private boolean started;
     
-    public SetOfFiles(String id, Tab tab, ProgramSet clusterSet){
+    public SetOfFiles(String id, Tab tab){
         this.id = id;
         this.name = id;
-        this.clusterParameters = clusterSet;
         this.outputDirectory = new File(ParameterPool.FILE_ORIGIN_DEFAULT, id);
         this.files = new ArrayList<>();
         this.tab = tab;
@@ -62,7 +61,7 @@ public class SetOfFiles implements Executable, Runnable{
         this.usedPrograms = new ArrayList<>();
         this.availableTools = new ArrayList<>();
         int i=0;
-        this.useCluster = new boolean[ComponentPool.PROGRAM_GENERATOR.getAll().size()];
+        this.useCluster = new boolean[ComponentPool.PROGRAM_GENERATOR.getAllPrograms().size()];
         this.useClusterOnTool = new boolean[ComponentPool.GENERTATOR_TOOLS.getAvailableNames().length];
         for(String toolName: ComponentPool.GENERTATOR_TOOLS.getAvailableNames()){
             this.availableTools.add(new ProgramSet(ComponentPool.GENERTATOR_TOOLS.get(toolName)));
@@ -275,8 +274,8 @@ public class SetOfFiles implements Executable, Runnable{
             this.tab.disableEditing();
             execution = new Executioner(this.log);
             ExecutionCommandBuilder clusterCommandBuilder = new ExecutionCommandBuilder(this.log);
-            String clusterCommand;
-            if(ParameterPool.CLUSTER_ENABLE){
+            String clusterCommand = null;
+            if(ParameterPool.CLUSTER_ENABLE && this.clusterParameters != null){
                 clusterCommandBuilder.buildString(this.clusterParameters, this.outputDirectory, this.outputDirectory.getPath(), null, this.outputDirectory);
                 clusterCommand = clusterCommandBuilder.getExecutionCommand();
             }
@@ -287,7 +286,7 @@ public class SetOfFiles implements Executable, Runnable{
                 String command;
                 for(int i = 0; (i<this.usedPrograms.size() && filePassed); i++){
                    
-                    if(ParameterPool.CLUSTER_ENABLE && this.useCluster[i]){
+                    if(ParameterPool.CLUSTER_ENABLE && this.useCluster[i] && clusterCommand != null && this.usedPrograms.get(i).getParsedParameters().getStartCommand() != null){
 //                        System.out.println("Use program "+i+" on Cluster!");
                         command =  file.getProgramCommand(i, this.outputDirectory.getPath(),true);
                         filePassed = execution.execute(clusterCommand,command);
@@ -313,7 +312,7 @@ public class SetOfFiles implements Executable, Runnable{
                     if(p == null){
                         toolBools.add(true);
                     }
-                    if(ParameterPool.CLUSTER_ENABLE && this.useClusterOnTool[toolIndex]){
+                    if(ParameterPool.CLUSTER_ENABLE && this.useClusterOnTool[toolIndex] && clusterCommand != null){
                         toolBools.add(execution.execute(clusterCommand, p) && file.checkToolFiles(toolIndex));
                     }
                     else{
@@ -347,6 +346,10 @@ public class SetOfFiles implements Executable, Runnable{
             this.inputChooser.setInputfilter("All", null);
             defined = true;
         }
+    }
+    
+    public void setClusterParameters(ProgramSet set){
+        this.clusterParameters = set;
     }
 
     public void selectClusterFor(int index, boolean forTool) {

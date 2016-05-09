@@ -13,6 +13,7 @@ import com.mugarov.alfapipe.model.ComponentPool;
 import com.mugarov.alfapipe.model.datatypes.ProgramSet;
 import com.mugarov.alfapipe.model.datatypes.ProgramSetList;
 import com.mugarov.alfapipe.model.datatypes.SetOfFiles;
+import com.mugarov.alfapipe.model.programparse.fabrics.ClusterParameterFabric;
 import java.util.ArrayList;
 
 /**
@@ -23,6 +24,7 @@ public class TabListenerBag {
     private final ArrayList<ProgramPanelListener> programListeners;
     
     private final ParameterListener clusterParameterListener;
+    private final ProgramSet clusterParSet;
     private final ClusterSelectionListener clusterSelectionListener;
     
     private final TabButtonListener  buttonListener;
@@ -34,15 +36,16 @@ public class TabListenerBag {
     private int maxLength;
     
     
-    public TabListenerBag(ProgramSet clusterSet){
-        ArrayList<ProgramSetList> available = ComponentPool.PROGRAM_GENERATOR.getAll();
+    public TabListenerBag(){
+        ArrayList<ProgramSetList> available = ComponentPool.PROGRAM_GENERATOR.getAllPrograms();
         this.programListeners = new ArrayList<>(available.size());
         
         for(int i = 0; i<available.size(); i++){
             this.programListeners.add(new ProgramPanelListener(i));
         }
         
-        this.clusterParameterListener = new ParameterListener(clusterSet.getInputParameters());
+        this.clusterParSet = new ProgramSet(ComponentPool.PROGRAM_GENERATOR.getClusterSet());
+        this.clusterParameterListener = new ParameterListener(this.clusterParSet.getInputParameters());
         this.clusterSelectionListener = new ClusterSelectionListener();
         
         this.buttonListener = new TabButtonListener();
@@ -60,6 +63,7 @@ public class TabListenerBag {
         this.toolListener.setFileSet(this.fileSet);
         this.clusterParameterListener.setFileSet(this.fileSet);
         this.clusterSelectionListener.setFileSet(this.fileSet);
+        this.fileSet.setClusterParameters(this.clusterParSet);
     }
     
     public void setFileManager(FileSetManager man){

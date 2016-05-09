@@ -22,9 +22,9 @@ public class ToolGenerator implements Generator{
     
      public ToolGenerator(){
         this.defaultList = new ArrayList<>();
-        this.localFilePath = ParameterPool.PATH_TOOLS_LIST;
+        this.localFilePath = ParameterPool.PATH_OBLIGATORY_TOOLS;
         
-        String[] endings = {".fna"};
+        String[] endings =  ParameterPool.ENDINGS_FASTA;
         String[] outputEnding = new String[]{".fa", ".fna"};
         ParseableProgram prokka = new ParseableProgram( "Prokka", 
                                                     "prokka", 
@@ -57,7 +57,7 @@ public class ToolGenerator implements Generator{
         extractHeader.setOutputSettings(false, true);
         this.defaultList.add(extractHeader);
         
-        String[] endingsB = {".txt"};
+        String[] endingsB = ParameterPool.ENDINGS_FASTA;
         ParseableProgram assemblyStatistics = new ParseableProgram( "Assembly Statistics", 
                                                     "sh SCRIPTS/writeToFile.sh SCRIPTS/assembly_statistics.plx ", 
                                                     null,

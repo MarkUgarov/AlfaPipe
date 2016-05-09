@@ -81,7 +81,33 @@ public class LogFileManager {
     }
     
     public void appendLine(String args, String source){
+        this.appendLine(args, source, true);
+    }
+    
+    public void appendLine(String args, String source, boolean check){
         //  System.out.println("Trying to write "+args+" to "+this.logfile.getAbsolutePath());
+        if(check){
+            boolean madeDir = false;
+            boolean madeFile = false;
+            if( !this.logfile.getParentFile().exists() || !this.logfile.getParentFile().isDirectory() ){ 
+                this.logfile.getParentFile().mkdirs();
+                madeDir = true;
+            }
+            if( !this.logfile.exists() || this.logfile.isDirectory()){
+                try {
+                    this.logfile.createNewFile();
+                    madeFile = true;
+                } catch (IOException ex) {
+                    Logger.getLogger(LogFileManager.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            if(madeDir){
+                this.appendLine(ParameterPool.LOG_WARNING+" Deletion of directory while running! "+this.logfile.getParent(), LogFileManager.class.getName(), false);
+            }
+            if(madeFile){
+                this.appendLine(ParameterPool.LOG_WARNING+" Deletion of logfile while running! "+this.logfile.getPath(), LogFileManager.class.getName(), false);
+            }
+        }
         try {
             this.writer = new FileWriter(this.logfile.getAbsoluteFile(), true);
             this.bufferedWriter = new BufferedWriter(this.writer);
@@ -98,6 +124,7 @@ public class LogFileManager {
             this.bufferedWriter.flush();
             this.bufferedWriter.close();
         } catch (IOException ex) {
+            System.err.println("Could not write to Logfile to path "+this.logfile.getAbsolutePath()+". Please check access.");
             Logger.getLogger(LogFileManager.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

@@ -38,9 +38,10 @@ public class OpticButton extends JButton implements Optic{
         this.setActionCommand(command);
         
         this.setDoubleBuffered(true);
+        
+        super.setBorderPainted(false);
+        super.setContentAreaFilled(false);
         this.setTransparent();
-        this.setBorderPainted(false);
-        this.setContentAreaFilled(false);
         
         this.setBackground(this.onNotMouseOver);
         this.isMouseOver = false;
@@ -59,13 +60,13 @@ public class OpticButton extends JButton implements Optic{
     @Override
     public void setTransparent() {
         this.transparent = true;
-        this.setOpaque(false);
+        super.setOpaque(false);
     }
 
     @Override
     public void setOpaque() {
        this.transparent = false;
-       this.setOpaque(true);
+       super.setOpaque(true);
     }
     
     @Override
@@ -103,16 +104,19 @@ public class OpticButton extends JButton implements Optic{
     public OpticerWrap inTransparentPanel(){
         JPanel ret = new JPanel();
         ret.setOpaque(false);
+//        ret.setBackground(Color.BLACK);
         ret.setDoubleBuffered(true);
         ret.add(this);
         return new OpticerWrap(ret);
     }
     
+    @Override
     public void mouseEntered(){
         this.setBackground(onMouseOver);
         this.isMouseOver = true;
     }
     
+    @Override
     public void mouseExit(){
         this.setBackground(onNotMouseOver);
         this.isMouseOver = false;

@@ -55,11 +55,10 @@ public class FileSetManager {
                 i--;
             }
         }
-        ProgramSet clusterSet = (new ClusterParameterFabric()).getSet();
-        TabListenerBag bag = new TabListenerBag(clusterSet);
+        TabListenerBag bag = new TabListenerBag();
         
         Tab tab = this.frame.getTabPane().newTab(name,bag);
-        SetOfFiles set = new SetOfFiles(name, tab, clusterSet);
+        SetOfFiles set = new SetOfFiles(name, tab);
         bag.setFileSet(set);
         bag.setFileManager(this);
         this.sets.add(set);

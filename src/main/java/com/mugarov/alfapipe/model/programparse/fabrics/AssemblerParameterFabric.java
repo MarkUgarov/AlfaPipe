@@ -28,7 +28,7 @@ public class AssemblerParameterFabric {
         this.index = 2;
         
         String[] endings = {".fastq"};
-        String[] outputEnding = new String[]{".fna", ".fa", ".txt"};
+        String[] outputEnding =  ParameterPool.ENDINGS_FASTA;
         ParseableProgram newbler = new ParseableProgram( "Newbler",
                                                                 "/vol/454/.old/2.8/bin/runAssembly", 
                                                                 null,

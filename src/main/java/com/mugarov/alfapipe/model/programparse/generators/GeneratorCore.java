@@ -29,7 +29,7 @@ public class GeneratorCore {
      
     public GeneratorCore(String path, ArrayList<ParseableProgram> defaultList){
         this.available = new ArrayList<>();
-        this.path = ParameterPool.CONFIG_PREFIX + System.getProperty("user.name")+ File.separatorChar  + path;
+        this.path = ParameterPool.CONFIG_PREFIX + System.getProperty("user.name")+ File.separatorChar+ParameterPool.CONFIG_INFIX+File.separatorChar  + path;
    
 
         this.localFile = new File(this.path);

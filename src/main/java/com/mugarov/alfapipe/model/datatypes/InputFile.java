@@ -313,17 +313,20 @@ public class InputFile extends File implements Executable{
         }
         else{
             boolean addMore = true;
-            int index = 0 ;
-            for(ExecutionCommandBuilder command:this.programCommandBuilder){
+            ExecutionCommandBuilder command;
+            ArrayList<File> specificFiles;
+            for(int index = this.programCommandBuilder.size()-1; index >= 0; index--){
+                command = this.programCommandBuilder.get(index);
+                specificFiles = command.getSpecifiFilesFor(this.currentParameters);
                 if(command != null && addMore){
                     if(command.useOnlyThisOutput(this.currentParameters)){
                         this.log.appendLine("Program with index "+index+" has specific outputs for " +this.getName()+" for parameters "+this.currentParameters.getName()+" without allowing other inputs.", InputFile.class.getName());
-                        this.lastRelevantOutputFiles = command.getSpecifiFilesFor(this.currentParameters);
+                        this.lastRelevantOutputFiles = specificFiles;
                         addMore =false;
                     }
-                    else if(command.getSpecifiFilesFor(this.currentParameters) != null && command.getSpecifiFilesFor(this.currentParameters).size()>0){
+                    else if(specificFiles != null && specificFiles.size()>0){
                         this.log.appendLine("Program with index "+index+" has specific outputs for "+this.getName()+","+this.currentParameters.getName()+" but still allows other inputs.", InputFile.class.getName());
-                        this.lastRelevantOutputFiles.addAll(command.getSpecifiFilesFor(this.currentParameters)); 
+                        this.lastRelevantOutputFiles.addAll(specificFiles); 
                     }
                     else{
                          this.log.appendLine("Program with index "+index+" has no outputs for "+this.getName()+","+this.currentParameters.getName()+".", InputFile.class.getName());
@@ -335,12 +338,17 @@ public class InputFile extends File implements Executable{
                 else{
                     this.log.appendLine("Trying to get informations of a null-entity of "+ExecutionCommandBuilder.class.getName(), InputFile.class.getName());
                 }
-                index++;
             }
            
-            if(addMore){ // && lastCommand != null
-                this.log.appendLine("No program has specific outputs where found for "+this.getName()+","+this.currentParameters.getName()+". Appending all files from the previous.", InputFile.class.getName());
-                this.lastRelevantOutputFiles.addAll(this.lastProgramCommand.getAllIfNotSpecified(this.currentParameters));
+            if(this.lastRelevantOutputFiles.size() == 0){ // && lastCommand != null
+
+                this.log.appendLine("No program with specific outputs where found for "+this.getName()+" and Program "+this.currentParameters.getName()+". Using original input.", InputFile.class.getName());
+                this.lastRelevantOutputFiles.add(this);
+                this.lastRelevantOutputFiles.addAll(this.pairedWith);
+                
+                //old ("more pipe like")
+//                this.log.appendLine("No program has specific outputs where found for "+this.getName()+","+this.currentParameters.getName()+". Appending all files from the previous.", InputFile.class.getName());
+//                this.lastRelevantOutputFiles.addAll(this.lastProgramCommand.getAllIfNotSpecified(this.currentParameters));
                           
             }
 
@@ -377,24 +385,6 @@ public class InputFile extends File implements Executable{
     @Override
     public String getProgramCommand(int index, String parentOutputDir){
         return this.getProgramCommand(index, parentOutputDir, false);
-//        String ret;
-//        if(index>=this.programParameters.size()){
-//            ret = ParameterPool.MESSAGE_PREFIX+ParameterPool.MESSAGE_OUT_OF_INDEX+":"+index;
-//        }
-//        else if(this.programParameters.get(index).isEmpty()){
-//            ret = ParameterPool.MESSAGE_PREFIX+ParameterPool.MESSAGE_PROGRAM_EMPTY+", Index:"+index;
-//        }
-//        else if(this.programParameters.get(index).getParsedParameters().getStartCommand() == null){
-//            ret = ParameterPool.MESSAGE_PREFIX+ParameterPool.MESSAGE_PROGRAM_COMMAND_NULL+", Name: "+this.programParameters.get(index).getParsedParameters().getName()+"Index: "+index;
-//        }
-//        else{
-//            this.currentParameters = this.programParameters.get(index);
-//            ret = this.getCurrentCommandString(parentOutputDir,false);
-//            this.addCommandBuilder(this.currentCommand);
-//            this.lastProgramCommand = this.getCommand(this.commandBuilders.size()-1);
-//        }
-//        this.setProgramXBuilt(index, true);
-//        return ret;
     }
     
     public String getProgramCommand(int index, String parentOutputDir, boolean onCluster){

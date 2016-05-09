@@ -24,19 +24,26 @@ import java.util.ArrayList;
  */
 public class HeadGenerator{
     
-    private ArrayList<ExtendedCore> cores;
-    private final File configDir;
+    private ArrayList<ExtendedCore> programCores;
+    private ExtendedCore clusterCore;
+    private final File programConfigDir;
+    private final File clusterFile;
     private final ArrayList<Integer> usedIndices;
     
     public HeadGenerator(){
-        this.cores = new ArrayList<>();
+        this.programCores = new ArrayList<>();
         this.usedIndices = new ArrayList<>();
 //        this.configDir = new File(ParameterPool.CONFIG_PREFIX+System.getProperty("user.name")+File.separator+"TestExtendedCore"); 
-        this.configDir = new File(ParameterPool.CONFIG_PREFIX+System.getProperty("user.name")+File.separator+ParameterPool.CONFIG_PATH); 
-        if(!this.configDir.exists() || this.configDir.isDirectory()){
-            this.configDir.mkdirs();
+        this.programConfigDir = new File(ParameterPool.CONFIG_PREFIX+System.getProperty("user.name")+File.separator+ParameterPool.CONFIG_INFIX+File.separator+ParameterPool.PATH_PREFIX_OBLIGATORY_PROGRAMS); 
+        this.clusterFile = new File(ParameterPool.CONFIG_PREFIX+System.getProperty("user.name")+File.separator+ParameterPool.CONFIG_INFIX+File.separator+ParameterPool.PATH_CLUSTER); 
+        if(!this.programConfigDir.exists() || !this.programConfigDir.isDirectory()){
+            this.programConfigDir.mkdirs();
         }
-        this.parseIn();
+        if(!this.clusterFile.exists() || this.clusterFile.isDirectory()){
+            this.clusterFile.getParentFile().mkdirs();
+        }
+        this.parseInPrograms();
+        this.parseInCluster();
         this.parseOut();
         this.sortProgramLists();
     }
@@ -44,7 +51,7 @@ public class HeadGenerator{
 
 
     public String[] getAvailableNames(int listID) {
-        return this.cores.get(listID).getAvailableNames();
+        return this.programCores.get(listID).getAvailableNames();
     }
 
 
@@ -58,15 +65,15 @@ public class HeadGenerator{
  requested name does not exist in that list
      */
     public ParseableProgram get(String name, int listID) {
-        if(this.cores != null && !this.cores.isEmpty() && listID<this.cores.size()){
-            return this.cores.get(listID).get(name);
+        if(this.programCores != null && !this.programCores.isEmpty() && listID<this.programCores.size()){
+            return this.programCores.get(listID).get(name);
         }
-        else if(this.cores != null && !this.cores.isEmpty() && listID<0){
+        else if(this.programCores != null && !this.programCores.isEmpty() && listID<0){
             int i = listID;
             while(i<0){
-                i= this.cores.size() + i;
+                i= this.programCores.size() + i;
             }
-            return this.cores.get(i).get(name);
+            return this.programCores.get(i).get(name);
         }
         else{
             return null;
@@ -74,15 +81,15 @@ public class HeadGenerator{
     }
     
     public ParseableProgramList getParseableProgramList(int listID){
-        if(this.cores != null && !this.cores.isEmpty() && listID<this.cores.size()){
-            return this.cores.get(listID).getList();
+        if(this.programCores != null && !this.programCores.isEmpty() && listID<this.programCores.size()){
+            return this.programCores.get(listID).getList();
         }
-        else if(this.cores != null && !this.cores.isEmpty() && listID<0){
+        else if(this.programCores != null && !this.programCores.isEmpty() && listID<0){
             int i = listID;
             while(i<0){
-                i= this.cores.size() + i;
+                i= this.programCores.size() + i;
             }
-            return this.cores.get(i).getList();
+            return this.programCores.get(i).getList();
         }
          else{
              return null;
@@ -92,25 +99,31 @@ public class HeadGenerator{
     /**
      * Parses in all config-files which exist.
      */
-    public final void parseIn() {
-        File[] files = this.configDir.listFiles(new YamlFilter());
+    public final void parseInPrograms() {
+        File[] files = this.programConfigDir.listFiles(new YamlFilter());
         for(File f:files){           
             if(!f.getName().equals(ParameterPool.NAME_TOOLS_LIST)){
                 //System.out.println("Creating core of "+f.getName());
-                this.cores.add(new ExtendedCore(f.getPath(), null,  -1));
+                this.programCores.add(new ExtendedCore(f.getPath(), null,  -1));
                 
-                this.usedIndices.add(this.cores.get(this.cores.size()-1).getList().getIndex());
+                this.usedIndices.add(this.programCores.get(this.programCores.size()-1).getList().getIndex());
             }
             
         }
-       
+    }
+    
+    public final void parseInCluster(){
+        if(this.clusterFile.exists()){
+            this.clusterCore = new ExtendedCore(this.clusterFile.getPath(), null, 0);
+        }
+        
     }
 
     /**
      * Creates all config-files which are non-existent, but obligatory. 
      */
     public final void parseOut() {
-        File[] files = this.configDir.listFiles(new YamlFilter());
+        File[] files = this.programConfigDir.listFiles(new YamlFilter());
         ArrayList<String> fileNames = new ArrayList<>(files.length);
         for(File f:files){
             fileNames.add(f.getName());
@@ -128,35 +141,42 @@ public class HeadGenerator{
                     while(this.usedIndices.contains(index)){
                         index++;
                     }
-                    this.cores.add(new ExtendedCore((new File(this.configDir, obl)).getPath(), params, index));
+                    this.programCores.add(new ExtendedCore((new File(this.programConfigDir, obl)).getPath(), params, index));
                     this.usedIndices.add(index);
                 }
                 
             }
-
+        }
+        if(!this.clusterFile.exists()){
+            System.err.println("Cluster Parameters could not be found!");
+            this.clusterCore = new ExtendedCore(this.clusterFile.getPath(), this.generateDefaultCluster(),0);
         }
     }
     
     public final void sortProgramLists(){
-        ProgramSorter sorter = new ProgramSorter(this.cores);
-        this.cores = sorter.sort();
+        ProgramSorter sorter = new ProgramSorter(this.programCores);
+        this.programCores = sorter.sort();
         
     }
     
     public ProgramSetList getProgramSetList(int index){
-        return this.getAll().get(index);
+        return this.getAllPrograms().get(index);
     }
     
-    public ArrayList<ProgramSetList> getAll(){
-        ArrayList<ProgramSetList> ret = new ArrayList<>(this.cores.size());
-        for(ExtendedCore core:this.cores){
+    public ArrayList<ProgramSetList> getAllPrograms(){
+        ArrayList<ProgramSetList> ret = new ArrayList<>(this.programCores.size());
+        for(ExtendedCore core:this.programCores){
             ret.add(new ProgramSetList(core.getList()));
         }
         ret = this.sortProgramSetLists(ret);
-        for(int i = 0; i<this.cores.size(); i++){
+        for(int i = 0; i<this.programCores.size(); i++){
             ret.get(i).setIndex(i);
         }
         return ret;
+    }
+    
+    public ParseableProgram getClusterSet(){
+        return this.clusterCore.getList().getPrograms().get(0);
     }
     
     private ArrayList<ProgramSetList> sortProgramSetLists(ArrayList<ProgramSetList> list){
@@ -174,7 +194,10 @@ public class HeadGenerator{
             case ParameterPool.OBLIGATORY_ANNOTATION: return (new GeneAnnotationParameterFabric()).getList();
             default: return null;
         }
-
+    }
+    
+    private ParseableProgramList generateDefaultCluster(){
+        return (new ClusterParameterFabric()).getList();
     }
 
     private static class YamlFilter implements FilenameFilter {

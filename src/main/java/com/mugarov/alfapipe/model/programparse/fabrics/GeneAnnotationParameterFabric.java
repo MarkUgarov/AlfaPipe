@@ -39,10 +39,9 @@ public class GeneAnnotationParameterFabric {
                                                                 -1,
                                                                 endings,
                                                                 outputEnding);
-        prodigal.addParameter("write protein translations to","-a" , ParameterPool.PROGRAM_PATH_VALUE+File.separator+"protein_translation.fa", 1, true);
-        prodigal.addParameter("write nucleotide sequence to", "-d", ParameterPool.PROGRAM_PATH_VALUE+File.separator+"nucleotide_sequence.fa", 2, true);
+        prodigal.addParameter("write protein translations to","-a" , ParameterPool.PROGRAM_PATH_VALUE+File.separator+ParameterPool.PROGRAM_NAME_VALUE+"_protein_translation.fa", 1, true);
+        prodigal.addParameter("write nucleotide sequence to", "-d", ParameterPool.PROGRAM_PATH_VALUE+File.separator+ParameterPool.PROGRAM_NAME_VALUE+"_nucleotide_sequence.fa", 2, true);
         prodigal.setOutputSettings(false, true);
-        prodigal.setDisableCluster(true);
         prodigal.addAdditionalClusterParameter(ParameterPool.PROGRAM_BINARAY_NAME, ParameterPool.PROGRAM_BINARY_COMMAND, ParameterPool.PROGRAM_BINARY_CONFIRM, ParameterPool.PROGRAM_BINARY_POSITION, ParameterPool.PROGRAM_BINARY_OPTIONAL, ParameterPool.PROGRAM_BINARY_DESCRIPTION);
         prodigal.addAdditionalClusterParameter("Export environment variables", "-V", ParameterPool.PROGRAM_EMPTY_PARAMETER_VALUE, 1, false, "Specifies that all environment variables active within the  qsub utility be exported to the context of the job.");
         

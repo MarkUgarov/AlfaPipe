@@ -110,10 +110,15 @@ public abstract class ParameterPool {
     public static final String TOOLTIP_DISABLED = "Cluster is disabled. The selected program will run on your local machine.";
     public static final String TOOLTIP_PARAMETER_DEFAULT = "No information about this parameter.";
     
-    // available Tools and Assemblers
+    // available Tools and Programs
     
     public static final String CONFIG_PREFIX = "/vol/ampipe/data/";
-    public static final String CONFIG_PATH = "CONFIG";
+    public static final String CONFIG_INFIX = "CONFIG";
+    
+    public static final String NAME_CLUSTER_FILE = "Cluster.yaml";
+    public static final String PATH_CLUSTER = "CLUSTER/"+NAME_CLUSTER_FILE;
+      
+    public static final String PATH_PREFIX_OBLIGATORY_PROGRAMS = "PROGRAMS";
     
     public static final String OBLIGATORY_PREPROCESSING = "Preprocessing.yaml";
     public static final String OBLIGATORY_PROCESSING = "Processing.yaml";
@@ -121,11 +126,10 @@ public abstract class ParameterPool {
     public static final String OBLIGATORY_COMPARISON = "Comparison.yaml";
     public static final String OBLIGATORY_ANNOTATION = "Annotation.yaml";
     public static final String[] CONFIG_OBLIGATORIES = {OBLIGATORY_PREPROCESSING, OBLIGATORY_PROCESSING, OBLIGATORY_ASSEMBLY,OBLIGATORY_COMPARISON,OBLIGATORY_ANNOTATION};
-   
-    
+  
     
     public static final String NAME_TOOLS_LIST = "Tools.yaml";
-    public static final String PATH_TOOLS_LIST = "CONFIG/"+NAME_TOOLS_LIST;
+    public static final String PATH_OBLIGATORY_TOOLS = "TOOLS/"+NAME_TOOLS_LIST;
     
     public static final String PROGRAM_DIRECTORY_VALUE = "//.";
     public static final String PROGRAM_FILE_VALUE = "//this";
@@ -135,6 +139,8 @@ public abstract class ParameterPool {
     public static final String PROGRAM_INPUT_PATH_SET_PARAMETER_NAME = "inputPathCommand";
     public static final String PROGRAM_OUTPUT_PATH_SET_PARAMETER_NAME = "outputPathCommand";
     public static final String PROGRAM_PAIRED_PARAMETER_NAME = "pairedCommand";
+    
+    public static final String[] ENDINGS_FASTA = {".fna", ".fa", ".fasta"};
     
     
     

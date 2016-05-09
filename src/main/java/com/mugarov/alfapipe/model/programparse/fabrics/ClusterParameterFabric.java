@@ -9,6 +9,8 @@ import com.mugarov.alfapipe.model.ParameterPool;
 import com.mugarov.alfapipe.model.datatypes.ProgramSet;
 import com.mugarov.alfapipe.model.programparse.datatypes.ParameterField;
 import com.mugarov.alfapipe.model.programparse.datatypes.ParseableProgram;
+import com.mugarov.alfapipe.model.programparse.datatypes.ParseableProgramList;
+import java.util.ArrayList;
 
 /**
  *
@@ -77,8 +79,15 @@ public class ClusterParameterFabric{
 
     }
     
-    public ProgramSet getSet(){
-        return this.clusterProgramSet;
+    
+    public ParseableProgramList getList(){
+        ParseableProgramList programList = new ParseableProgramList();
+        programList.setIndex(0);
+        programList.setName("Cluster");
+        ArrayList<ParseableProgram> programs = (new ArrayList<ParseableProgram>(1));
+        programs.add(this.cluster);
+        programList.setPrograms(programs);
+        return programList;
     }
     
     
