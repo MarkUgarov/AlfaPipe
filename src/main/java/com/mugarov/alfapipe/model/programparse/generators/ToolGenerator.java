@@ -46,7 +46,7 @@ public class ToolGenerator implements Generator{
         
         String[] outputEndings2 = new String[]{".txt"};
         ParseableProgram extractHeader = new ParseableProgram( "Extract Header Info", 
-                                                    "sh SCRIPTS/writeToFile.sh SCRIPTS/extract_header_info.plx", 
+                                                    "SCRIPTS/writeToFile.sh SCRIPTS/extract_header_info.plx", 
                                                     null,
                                                     2,
                                                     null,
@@ -54,12 +54,13 @@ public class ToolGenerator implements Generator{
                                                     endings,
                                                     outputEndings2);  
         extractHeader.addParameter("prepare Excel", "-E", ParameterPool.PROGRAM_EMPTY_PARAMETER_VALUE, 1, true);
+        extractHeader.addLocalPrependParameter("Run on Shell", "sh", ParameterPool.PROGRAM_EMPTY_PARAMETER_VALUE, 1, false, "Starts this as a shell script.");
         extractHeader.setOutputSettings(false, true);
         this.defaultList.add(extractHeader);
         
         String[] endingsB = ParameterPool.ENDINGS_FASTA;
         ParseableProgram assemblyStatistics = new ParseableProgram( "Assembly Statistics", 
-                                                    "sh SCRIPTS/writeToFile.sh SCRIPTS/assembly_statistics.plx ", 
+                                                    "SCRIPTS/writeToFile.sh SCRIPTS/assembly_statistics.plx ", 
                                                     null,
                                                     2,
                                                     null,
@@ -67,6 +68,7 @@ public class ToolGenerator implements Generator{
                                                     endingsB,
                                                     outputEndings2);  
         assemblyStatistics.addParameter("Skip listprint", "-l", ParameterPool.PROGRAM_EMPTY_PARAMETER_VALUE, 1, true);
+        assemblyStatistics.addLocalPrependParameter("Run on Shell", "sh", ParameterPool.PROGRAM_EMPTY_PARAMETER_VALUE, 1, false, "Starts this as a shell script.");
         assemblyStatistics.setOutputSettings(false, true);
         this.defaultList.add(assemblyStatistics);
         

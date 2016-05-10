@@ -379,6 +379,7 @@ public class SetOfFiles implements Executable, Runnable{
         if(this.execution != null){
             this.execution.interrupt();
         }
+        this.started = false;
     }
     
     

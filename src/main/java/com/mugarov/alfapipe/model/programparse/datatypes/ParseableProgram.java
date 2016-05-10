@@ -27,6 +27,7 @@ public class ParseableProgram{
     private boolean disableCluster;
     
     private ArrayList<ParameterField> additionalClusterParameters;
+    private ArrayList<ParameterField> localPrependParamters;
     private ArrayList<ParameterField> parameters;
     private ParameterField inputPathCommand;
     private ParameterField outputPathCommand;
@@ -53,6 +54,7 @@ public class ParseableProgram{
         this.outputSettings = new OutputField();
         this.essentialOutputs = new ArrayList<>();
         this.additionalClusterParameters = new ArrayList<>();
+        this.localPrependParamters = new ArrayList<>();
         this.disableCluster = false;
         this.sorter = new ParameterSorter(this);
        
@@ -82,6 +84,7 @@ public class ParseableProgram{
         this.enterCommand = null;
         this.exitCommand = null;
         this.additionalClusterParameters = new ArrayList<>();
+        this.localPrependParamters = new ArrayList<>();
         this.sorter = new ParameterSorter(this);
         this.sorter.sort();
     }
@@ -424,6 +427,7 @@ public class ParseableProgram{
         this.additionalClusterParameters.add(new ParameterField(name, command, defaultValue, position, optional, tooltip));
     }
     
+    @JsonIgnore
     public void addAdditionalClusterParameter(ParameterField parameter){
         if(parameter == null){
             System.err.println("Trying to add null as additional cluster parameter.");
@@ -453,5 +457,51 @@ public class ParseableProgram{
      */
     public void setDisableCluster(boolean disableCluster) {
         this.disableCluster = disableCluster;
+    }
+
+    /**
+     * @return the localPrependParamter
+     */
+    public ArrayList<ParameterField> getLocalPrependParamters() {
+        return localPrependParamters;
+    }
+
+    /**
+     * @param localPrependParamter the localPrependParamter to set
+     */
+    public void setLocalPrependParamters(ArrayList<ParameterField> localPrependParamter) {
+        this.localPrependParamters = localPrependParamter;
+    }
+    
+    @JsonIgnore
+    public void addLocalPrependParameter(String name, String command, String defaultValue, int position, boolean optional, String tooltip){
+        int i= 0; 
+        while(i<this.localPrependParamters.size()){
+            if(this.localPrependParamters.get(i).getName().equals(name)){
+                this.localPrependParamters.remove(i);
+            }
+            else{
+                i++;
+            }
+        }
+        this.localPrependParamters.add(new ParameterField(name, command, defaultValue, position, optional, tooltip));
+    }
+    
+    @JsonIgnore
+    public void addLocalPrependParameter(ParameterField parameter){
+        if(parameter == null){
+            System.err.println("Trying to add null as local prepend parameter.");
+            return;
+        }
+        int i= 0; 
+        while(i<this.localPrependParamters.size()){
+            if(this.localPrependParamters.get(i).getName().equals(parameter.getName())){
+                this.localPrependParamters.remove(i);
+            }
+            else{
+                i++;
+            }
+        }
+        this.localPrependParamters.add(parameter);
     }
 }

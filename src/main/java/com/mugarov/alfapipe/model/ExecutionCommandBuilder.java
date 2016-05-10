@@ -97,6 +97,11 @@ public class ExecutionCommandBuilder {
                     this.buildParameterCommand(cP, null, null, parameterSet.getClusterParameters(), originalFile);
                 }
             }
+            else{
+                for(ParameterField lP:parameterSet.getParsedParameters().getLocalPrependParamters()){
+                    this.buildParameterCommand(lP, null, null, parameterSet.getLocalPrependParamters(), originalFile);
+                }
+            }
             
             if(parameterSet.getParsedParameters().getEnterCommand() != null){
                 builder.append(parameterSet.getParsedParameters().getEnterCommand());

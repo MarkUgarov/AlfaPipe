@@ -133,7 +133,7 @@ public class InputFile extends File implements Executable{
      * @return 
      */
     public boolean selectProgram(int index, ProgramSet param, boolean validate){
-        System.out.println("Trying to set "+param.getName()+" as index "+index+"in file "+this.getName());
+//        System.out.println("Trying to set "+param.getName()+" as index "+index+" in file "+this.getName());
         int i;
         if(index>=this.programParameters.size()){
             this.log.appendLine("Index out of bound. Set "+param.getName()+" as last.", InputFile.class.getName());

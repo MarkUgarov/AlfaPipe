@@ -22,6 +22,7 @@ public class ProgramSet {
     private final ParseableProgram program;
     private final ArrayList<InputParameter> parameters;
     private final ArrayList<InputParameter> additionalClusterParameters;
+    private final ArrayList<InputParameter> localPrependParamters;
     private boolean isSelected;
     private boolean isEmpty;
     
@@ -32,6 +33,7 @@ public class ProgramSet {
             this.isSelected = (program.getStartCommand() != null);
             this.parameters = new ArrayList<>();
             this.additionalClusterParameters = new ArrayList<>();
+            this.localPrependParamters = new ArrayList<>();
             this.isEmpty = false;
 
             boolean shown = true;
@@ -53,7 +55,15 @@ public class ProgramSet {
                     shown = !(pF.getName().equals(ParameterPool.PROGRAM_INPUT_PATH_SET_PARAMETER_NAME)||pF.getName().equals(ParameterPool.PROGRAM_OUTPUT_PATH_SET_PARAMETER_NAME));
                     this.additionalClusterParameters.add(new InputParameter(pF, shown));
                 }
-                
+            }
+            for(ParameterField pF: program.getLocalPrependParamters()){
+                if(pF == null){
+                    System.err.println("Local Prepend Parameter was null in "+this.name);
+                }
+                else{
+                    shown = !(pF.getName().equals(ParameterPool.PROGRAM_INPUT_PATH_SET_PARAMETER_NAME)||pF.getName().equals(ParameterPool.PROGRAM_OUTPUT_PATH_SET_PARAMETER_NAME));
+                    this.localPrependParamters.add(new InputParameter(pF, shown));
+                }
             }
         }
         else{
@@ -63,6 +73,7 @@ public class ProgramSet {
             this.isEmpty = true;
             this.parameters = new ArrayList<>();
             this.additionalClusterParameters = new ArrayList<>();
+            this.localPrependParamters = new ArrayList<>();
         }
     }
     
@@ -72,6 +83,7 @@ public class ProgramSet {
         this.isSelected = false;
         this.parameters = new ArrayList<>();
         this.additionalClusterParameters = new ArrayList<>();
+        this.localPrependParamters = new ArrayList<>();
     }
     
     public void select(){
@@ -97,8 +109,13 @@ public class ProgramSet {
     public ArrayList<InputParameter> getInputParameters(){
         return this.parameters;
     }
+    
     public ArrayList<InputParameter> getClusterParameters(){
         return this.additionalClusterParameters;
+    }
+    
+    public ArrayList<InputParameter> getLocalPrependParamters(){
+        return this.localPrependParamters;
     }
     
     public ParseableProgram getParsedParameters(){
