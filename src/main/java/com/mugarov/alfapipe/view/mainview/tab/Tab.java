@@ -18,6 +18,7 @@ import com.mugarov.alfapipe.view.optics.OpticButton;
 import com.mugarov.alfapipe.view.optics.OpticPane;
 import com.mugarov.alfapipe.view.optics.OpticScrollPane;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.util.ArrayList;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
@@ -103,20 +104,20 @@ public class Tab extends OpticPane{
         this.applyName.addActionListener(this.listenerBag.getButtonListener());
         
         this.outputPanel.setLayout(new BorderLayout());
-        this.outputPanel.add(this.choosePath.inTransparentPanel(), BorderLayout.WEST);
+        this.outputPanel.add(this.choosePath, BorderLayout.WEST);
         this.outputPanel.add(this.outputPath, BorderLayout.CENTER);
         
         this.namePanel.add(this.nameLabel, BorderLayout.WEST);
         this.namePanel.add(this.nameField, BorderLayout.CENTER);
-        this.namePanel.add(this.applyName.inTransparentPanel(), BorderLayout.EAST);
+        this.namePanel.add(this.applyName, BorderLayout.EAST);
         
         this.northPanel.add(this.outputPanel, BorderLayout.NORTH);
-        this.northPanel.add(this.fileChooser.inTransparentPanel(), BorderLayout.WEST);
+        this.northPanel.add(this.fileChooser, BorderLayout.WEST);
         this.northPanel.add(this.namePanel, BorderLayout.CENTER);
         
         OpticPane northWestPane = new OpticPane(new BorderLayout());
-        northWestPane.add(this.deleteSet.inTransparentPanel(), BorderLayout.EAST);
-        northWestPane.add(this.cancelSet.inTransparentPanel(), BorderLayout.CENTER);
+        northWestPane.add(this.deleteSet, BorderLayout.EAST);
+        northWestPane.add(this.cancelSet, BorderLayout.CENTER);
         this.cancelSet.setVisible(false);
         this.northPanel.add(northWestPane, BorderLayout.EAST);
         

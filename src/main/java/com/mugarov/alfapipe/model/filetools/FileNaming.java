@@ -6,6 +6,7 @@
 package com.mugarov.alfapipe.model.filetools;
 
 import com.mugarov.alfapipe.model.ParameterPool;
+import com.mugarov.alfapipe.model.datatypes.ProgramSet;
 import com.mugarov.alfapipe.model.programparse.datatypes.NameField;
 import java.io.File;
 
@@ -48,6 +49,51 @@ public abstract class FileNaming {
             }
             return spln;
         }
+    }
+    
+    public static String getClearName(String name, ProgramSet progSet){
+        String fail = "No_valid_name";
+        String regex;
+        int distinguishPosition;
+        if(progSet == null || progSet.getParsedParameters().getPairedConditions() == null){
+            return fail;
+        }
+        else{
+            regex = progSet.getParsedParameters().getPairedConditions().getRegex();
+            distinguishPosition = progSet.getParsedParameters().getPairedConditions().getUpperIndex();
+        }
+        // cutting endings
+        String[]  splitName1 = name.split("\\.",2);
+        if(splitName1.length<1){
+            return fail;
+        }
+        // split the rest
+        String cut = splitName1[0];       
+        splitName1 = cut.split(regex);
+        int pos1;
+        if(distinguishPosition<0){
+            pos1 = (splitName1.length)+distinguishPosition;
+        }
+        else{
+            pos1 = distinguishPosition;
+        }
+        if(splitName1.length < pos1 || pos1<0){
+            return fail;
+        }
+        StringBuilder clear = new StringBuilder();
+        boolean should = true;
+        for(int i=0; i<pos1; i++){
+            clear.append(splitName1[i]);
+            if(i<pos1-1){
+                clear.append(ParameterPool.REPLACE_REPLACEMENT);
+            }    
+        }
+        String clearName = clear.toString();
+        System.out.println("NAME: "+clearName);
+        for(String reg:ParameterPool.REPLACE_REGEX){
+            clearName = clearName.replaceAll(reg, ParameterPool.REPLACE_REPLACEMENT);
+        }
+        return clearName;
     }
     
     /**

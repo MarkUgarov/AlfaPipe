@@ -5,6 +5,7 @@
  */
 package com.mugarov.alfapipe.model;
 
+import com.mugarov.alfapipe.model.datatypes.InputFile;
 import com.mugarov.alfapipe.model.datatypes.InputParameter;
 import com.mugarov.alfapipe.model.datatypes.ProgramSet;
 import com.mugarov.alfapipe.model.filetools.FileLister;
@@ -44,6 +45,14 @@ public class ExecutionCommandBuilder {
     }
     
     
+    public void buildString(   ProgramSet parameterSet,
+                                File inputFile,
+                                String parentOutputDirectory,
+                                ArrayList<File> pairedFiles,
+                                File originalFile){
+        this.buildString(parameterSet, inputFile, parentOutputDirectory, pairedFiles, originalFile, true);
+    }
+    
     /**
      * Creates directory!!!
      * @param parameterSet
@@ -56,10 +65,19 @@ public class ExecutionCommandBuilder {
                                 File inputFile,
                                 String parentOutputDirectory,
                                 ArrayList<File> pairedFiles,
-                                File originalFile){
+                                File originalFile,
+                                boolean isInputFileType){
         this.builder = new StringBuilder();
         this.set = parameterSet;
         this.inputFile = inputFile;
+        
+        String clearFileName;
+        if(isInputFileType){
+            clearFileName = ((InputFile)originalFile).getClearName();
+        }
+        else{
+            clearFileName = this.getClearName(inputFile);
+        }
         /**
          * create output directory and check if it is the value for the 
          * output-command or if it needs a special filepath for the output
@@ -68,7 +86,7 @@ public class ExecutionCommandBuilder {
         if(parameterSet.getParsedParameters().getOutputSettings().isDirectory()){
             this.outputFile = new File(parentOutputDirectory, this.getClearName(parameterSet.getParsedParameters().getName())
                                                               +"_"
-                                                              +this.getClearName(originalFile));
+                                                              +clearFileName);
             
             if(parameterSet.getParsedParameters().getOutputSettings().isMakeDirectory()){
                 this.outputFile.mkdirs();
@@ -76,12 +94,21 @@ public class ExecutionCommandBuilder {
             this.outputIsDirectory = true;
         }
         else{
-            this.outputFile = new File(parentOutputDirectory, this.getClearName(parameterSet.getName())
-                                                        + File.separatorChar
-                                                        + this.getClearName(parameterSet.getParsedParameters().getName())
-                                                        + "_"
-                                                        + this.getClearName(originalFile)
-                                                        + parameterSet.getParsedParameters().getOutputEndings()[0]);
+            if(parameterSet.getParsedParameters().getOutputEndings() != null && parameterSet.getParsedParameters().getOutputEndings().length>0){
+                this.outputFile = new File(parentOutputDirectory, this.getClearName(parameterSet.getName())
+                                                       + File.separatorChar
+                                                       + this.getClearName(parameterSet.getParsedParameters().getName())
+                                                       + "_"
+                                                       + clearFileName
+                                                       + parameterSet.getParsedParameters().getOutputEndings()[0]);
+            }
+            else{
+                this.outputFile = new File(parentOutputDirectory, this.getClearName(parameterSet.getName())
+                                                       + File.separatorChar
+                                                       + this.getClearName(parameterSet.getParsedParameters().getName())
+                                                       + "_"
+                                                       + clearFileName);
+            }
             File outputDirectory = new File(this.outputFile.getParent());
             if(!outputDirectory.exists() && parameterSet.getParsedParameters().getOutputSettings().isMakeDirectory()){
                 outputDirectory.mkdirs();

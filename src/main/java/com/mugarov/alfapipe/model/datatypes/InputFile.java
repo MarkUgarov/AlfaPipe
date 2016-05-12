@@ -9,6 +9,7 @@ import com.mugarov.alfapipe.model.ComponentPool;
 import com.mugarov.alfapipe.model.ExecutionCommandBuilder;
 import com.mugarov.alfapipe.model.LogFileManager;
 import com.mugarov.alfapipe.model.ParameterPool;
+import com.mugarov.alfapipe.model.filetools.FileNaming;
 import com.mugarov.alfapipe.model.programparse.datatypes.ParseableProgram;
 import java.io.File;
 import java.util.ArrayList;
@@ -448,24 +449,6 @@ public class InputFile extends File implements Executable{
             all[i]=false;
         }
         return this.getToolCommands(parentOutputDir, all);
-//        ArrayList<String> ret = new ArrayList<>();
-//        this.toolCommands = new ArrayList<>(this.tools.size());
-//        for(int i = 0; i<this.tools.size(); i++){
-//            ProgramSet tp =this.tools.get(i);
-//            if(this.toolSelected[i]){
-//                ret.add(this.getSingleToolCommand(parentOutputDir, tp,false));
-//            }
-//            else{
-//                ret.add(null);
-//            }
-//        }
-//        if(ret.size() == 0){
-//            this.log.appendLine(ParameterPool.LOG_WARNING+"Input file "+this.getName() +" has no tool to execute.", InputFile.class.getName());
-//            ret.add(ParameterPool.MESSAGE_PREFIX+ParameterPool.MESSAGE_TOOL_IS_NULL);
-//
-//        }
-//        this.toolsBuilt = true;
-//        return ret;
     }
     
 
@@ -516,6 +499,10 @@ public class InputFile extends File implements Executable{
         }
         return ret;
         
+    }
+    
+    public String getClearName(){
+        return FileNaming.getClearName(this.getName(), this.firstNonNullParameters);
     }
 
    

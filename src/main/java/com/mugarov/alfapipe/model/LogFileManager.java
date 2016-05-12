@@ -9,6 +9,9 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -113,7 +116,7 @@ public class LogFileManager {
             this.bufferedWriter = new BufferedWriter(this.writer);
         
             this.bufferedWriter.write(ParameterPool.LOG_LINE_PREFIX);
-            this.bufferedWriter.append(System.currentTimeMillis()+"");
+            this.bufferedWriter.append(this.getTime());
             this.bufferedWriter.append(":");
             this.bufferedWriter.write(args.trim());
             this.bufferedWriter.write(ParameterPool.LOG_SOURCE_HINT);
@@ -137,6 +140,12 @@ public class LogFileManager {
     
     public File getLogfile(){
         return this.logfile;
+    }
+    
+    private String getTime(){
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        Date date = new Date();
+        return dateFormat.format(date);
     }
     
     public void setParentDirectory(String parentDir){

@@ -21,15 +21,32 @@ public class Executioner {
     private final LogFileManager log;
     private final File workfile;
     
-    private Process process;
+    private Process currentProcess;
+    private ArrayList<Process> processes;
+    private ProcessBuilder currentBuilder;
+    private ArrayList<ProcessBuilder> builders;
     
 
     public Executioner(LogFileManager logManager) {
         this.log = logManager;
+        this.processes = new ArrayList<>();
+        this.builders = new ArrayList<>();
         this.workfile = new File(ParameterPool.WORKING_DIRECTORY);
         if(!this.workfile.exists() || !this.workfile.isDirectory()){
             this.workfile.mkdirs();
         }
+    }
+    
+    /**
+     * You can give any string, but it should be executable on unix. 
+     * Commands will be separated by newline ("\n").
+     * @param precommand can be any string which will be arranged in front of the 
+     * first line of the input command - useful to run on Cluster
+     * @param input can be any number of unix-command lines
+     * @return true if succeeded (ExitCode = 0) or input was empty
+     */
+    public boolean execute(String precommand, String input){
+        return this.execute(precommand, input, true);
     }
             
     /**
@@ -38,9 +55,11 @@ public class Executioner {
      * @param precommand can be any string which will be arranged in front of the 
      * first line of the input command - useful to run on Cluster
      * @param input can be any number of unix-command lines
-     * @return 
+     * @param wait if this should wait for exit code before continuing
+     * @return true if succeeded (ExitCode = 0) or input was empty (does not work
+     * without waiting)
      */
-    public boolean execute(String precommand, String input){
+    public boolean execute(String precommand, String input, boolean wait){
         boolean precommandUsed = false;
         
         if(input == null || input.length() == 0){
@@ -63,47 +82,62 @@ public class Executioner {
                 }
             }
 
-            ProcessBuilder pb = new ProcessBuilder(commandList);
-            log.appendLine(ParameterPool.LOG_COMMAND_PREFIX+step, Executioner.class.getName());
-            pb.redirectErrorStream(true);
-            pb.redirectOutput(Redirect.appendTo(this.log.getLogfile()));
-            
-            
-            pb.directory(this.workfile);
+            this.currentBuilder = this.createBuilder(commandList, step);
 
             
-            this.process=null;
-            try {
-                this.process = pb.start();
-            } catch (IOException ex) {
-                if(this.process != null){
-                    this.process.destroy();
+            this.currentProcess=this.createProcess(this.currentBuilder);
+
+            if(wait){
+                try {
+                    this.currentProcess.waitFor();
+                } catch (InterruptedException ex) {
+                    if(this.currentProcess != null){
+                        this.currentProcess.destroy();
+                    }
+//                    Logger.getLogger(Executioner.class.getName()).log(Level.SEVERE, null, ex);
+                    this.log.appendLine("Interrupted process", Executioner.class.getName());
+                    return false;
                 }
-                
-                this.log.appendLine("Error while executing.", Executioner.class.getName());
-                Logger.getLogger(Executioner.class.getName()).log(Level.SEVERE, null, ex);
-                return false;
+                this.log.appendLine("Exit Value:"+currentProcess.exitValue(), Executioner.class.getName());
+                success = (this.currentProcess.exitValue()==0);
             }
-            try {
-                this.process.waitFor();
-            } catch (InterruptedException ex) {
-                if(this.process != null){
-                    this.process.destroy();
-                }
-                Logger.getLogger(Executioner.class.getName()).log(Level.SEVERE, null, ex);
-                return false;
+            else{
+                this.log.appendLine("Avoid waiting. Continue", Executioner.class.getName());
             }
-            log.appendLine("Exit Value:"+process.exitValue(), Executioner.class.getName());
-            success = (this.process.exitValue()==0);
-            
         }
-
         return success;
     }
     
     public void interrupt(){
-        if(this.process != null){
-            this.process.destroyForcibly();
+        for(Process p:this.processes){
+            if(p != null){
+                p.destroyForcibly();
+            }
         }
+    }
+    
+    private Process createProcess(ProcessBuilder pb ){
+        Process proc = null;
+        try {
+            proc = pb.start();
+        } catch (IOException ex) {
+            if(proc != null){
+                proc.destroy();
+            }
+            this.log.appendLine("Error while creating Process.", Executioner.class.getName());
+            Logger.getLogger(Executioner.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        this.processes.add(proc);
+        return proc;
+    }
+    
+    private ProcessBuilder createBuilder(ArrayList<String> commandList, String step){
+        ProcessBuilder pb = new ProcessBuilder(commandList);
+        this.log.appendLine(ParameterPool.LOG_COMMAND_PREFIX+step, Executioner.class.getName());
+        pb.redirectErrorStream(true);
+        pb.redirectOutput(Redirect.appendTo(this.log.getLogfile()));
+        pb.directory(this.workfile);
+        this.builders.add(pb);
+        return pb;
     }
 }

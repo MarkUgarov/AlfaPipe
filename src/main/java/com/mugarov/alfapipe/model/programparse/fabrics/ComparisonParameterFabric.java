@@ -6,7 +6,6 @@
 package com.mugarov.alfapipe.model.programparse.fabrics;
 
 import com.mugarov.alfapipe.model.ParameterPool;
-import com.mugarov.alfapipe.model.programparse.datatypes.NameField;
 import com.mugarov.alfapipe.model.programparse.datatypes.ParseableProgramList;
 import com.mugarov.alfapipe.model.programparse.datatypes.ParseableProgram;
 import java.util.ArrayList;
@@ -29,19 +28,16 @@ public class ComparisonParameterFabric {
         this.index = 3;
         
         
-        String[] endings = {".fa", ".fq"};
-        String[] outputEnding = new String[]{".fa"};
-        ParseableProgram readsVsContigs = new ParseableProgram( "Reads vs Contigs",
-                                                                null, 
-                                                                "-in something",
-                                                                -1,
-                                                                "-out something",
-                                                                0,
-                                                                endings,
-                                                                outputEnding);
-        readsVsContigs.setOutputSettings(true, false);
-        readsVsContigs.setEnterCommand("reads vs contigs enter command");
-        readsVsContigs.setExitCommand(" reads vs contigs exit command");
+        String[] endings = ParameterPool.ENDINGS_FASTA;
+        ParseableProgram neview = new ParseableProgram();
+        neview.setName("NeView");
+        neview.setDisableCluster(true);
+        neview.setSkipWaiting(true);
+        neview.setValidInputEndings(endings);
+        neview.setStartCommand("java -jar NeView/NeView-0.0.1.jar");
+        neview.setInputPathCommand(null, 1);
+        neview.addParameter("Name", null, ParameterPool.PROGRAM_NAME_VALUE, 0, true, "Sets a name for the chart.");
+        neview.setOutputSettings(false, false);
         
         ParseableProgram nullReadsVsContigs= new ParseableProgram( "Skip", 
                                                                 null, 
@@ -52,7 +48,7 @@ public class ComparisonParameterFabric {
                                                                 null,
                                                                 null); 
        
-        this.defaultList.add(readsVsContigs);
+        this.defaultList.add(neview);
         this.defaultList.add(nullReadsVsContigs);
         
         this.parameterList = new ParseableProgramList();

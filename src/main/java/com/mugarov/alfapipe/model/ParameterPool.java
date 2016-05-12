@@ -28,6 +28,7 @@ public abstract class ParameterPool {
     public static final Color COLOR_BACKGROUND_SECOND = new Color(160,160,160,125);
     public static final Color COLOR_BACKGROUND_CLUSTER = new Color(0, 0, 255, 125);
     public static final Color COLOR_BACKGROUND_DISABLED = Color.yellow;
+    public static final Color COLOR_BACKGROUND_MOUSEOVER = new Color(160,160,160,150);
     
     // text for menu
     public static final String MENU_MAIN = "Menu";

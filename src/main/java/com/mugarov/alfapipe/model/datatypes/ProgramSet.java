@@ -42,7 +42,7 @@ public class ProgramSet {
                     System.err.println("Program Parameter was null in "+this.name);
                 }
                 else{
-                    shown = !(pF.getName().equals(ParameterPool.PROGRAM_INPUT_PATH_SET_PARAMETER_NAME)||pF.getName().equals(ParameterPool.PROGRAM_OUTPUT_PATH_SET_PARAMETER_NAME));
+                    shown = !(pF.getName().equals(ParameterPool.PROGRAM_INPUT_PATH_SET_PARAMETER_NAME)||pF.getName().equals(ParameterPool.PROGRAM_OUTPUT_PATH_SET_PARAMETER_NAME)||pF.isHidden());
                     this.parameters.add(new InputParameter(pF, shown));
                 }
                 
@@ -52,7 +52,7 @@ public class ProgramSet {
                     System.err.println("Cluster Parameter was null in "+this.name);
                 }
                 else{
-                    shown = !(pF.getName().equals(ParameterPool.PROGRAM_INPUT_PATH_SET_PARAMETER_NAME)||pF.getName().equals(ParameterPool.PROGRAM_OUTPUT_PATH_SET_PARAMETER_NAME));
+                    shown = !(pF.getName().equals(ParameterPool.PROGRAM_INPUT_PATH_SET_PARAMETER_NAME)||pF.getName().equals(ParameterPool.PROGRAM_OUTPUT_PATH_SET_PARAMETER_NAME)||pF.isHidden());
                     this.additionalClusterParameters.add(new InputParameter(pF, shown));
                 }
             }
@@ -61,7 +61,7 @@ public class ProgramSet {
                     System.err.println("Local Prepend Parameter was null in "+this.name);
                 }
                 else{
-                    shown = !(pF.getName().equals(ParameterPool.PROGRAM_INPUT_PATH_SET_PARAMETER_NAME)||pF.getName().equals(ParameterPool.PROGRAM_OUTPUT_PATH_SET_PARAMETER_NAME));
+                    shown = !(pF.getName().equals(ParameterPool.PROGRAM_INPUT_PATH_SET_PARAMETER_NAME)||pF.getName().equals(ParameterPool.PROGRAM_OUTPUT_PATH_SET_PARAMETER_NAME)||pF.isHidden());
                     this.localPrependParamters.add(new InputParameter(pF, shown));
                 }
             }

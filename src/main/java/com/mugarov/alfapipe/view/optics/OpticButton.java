@@ -29,7 +29,7 @@ public class OpticButton extends JButton implements Optic{
     int marginHeight=15;
     
     private final Color onNotMouseOver = ParameterPool.COLOR_BACKGROUND_STANDARD;
-    private final Color onMouseOver = ParameterPool.COLOR_BACKGROUND_SECOND;
+    private final Color onMouseOver = ParameterPool.COLOR_BACKGROUND_MOUSEOVER;
     private boolean isMouseOver;
     
     
@@ -104,7 +104,6 @@ public class OpticButton extends JButton implements Optic{
     public OpticerWrap inTransparentPanel(){
         JPanel ret = new JPanel();
         ret.setOpaque(false);
-//        ret.setBackground(Color.BLACK);
         ret.setDoubleBuffered(true);
         ret.add(this);
         return new OpticerWrap(ret);

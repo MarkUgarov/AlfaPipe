@@ -19,6 +19,7 @@ public class ParameterField{
     private boolean optional;
     private String toolTip;
     private boolean avoidLeadingSpace;
+    private boolean hidden;
     
     public ParameterField(){
         this.name= null;
@@ -27,6 +28,7 @@ public class ParameterField{
         this.position = 0;
         this.optional = true;
         this.avoidLeadingSpace = false;
+        this.hidden = false;
     }
     
     /**
@@ -51,6 +53,7 @@ public class ParameterField{
         this.optional = optional;
         this.toolTip = ParameterPool.TOOLTIP_PARAMETER_DEFAULT;
         this.avoidLeadingSpace = false;
+        this.hidden = false;
     }
     
     /**
@@ -155,6 +158,20 @@ public class ParameterField{
      */
     public void setToolTip(String toolTip) {
         this.toolTip = toolTip;
+    }
+
+    /**
+     * @return the hidden
+     */
+    public boolean isHidden() {
+        return hidden;
+    }
+
+    /**
+     * @param hidden the hidden to set
+     */
+    public void setHidden(boolean hidden) {
+        this.hidden = hidden;
     }
     
 

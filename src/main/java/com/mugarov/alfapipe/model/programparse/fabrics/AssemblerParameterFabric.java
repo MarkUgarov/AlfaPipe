@@ -67,6 +67,12 @@ public class AssemblerParameterFabric {
         essential4.setUseOnly(true);
         newbler.addEssentialOutput(essential4);
         
+        NameField essential5 = new NameField();
+        essential5.setName("454AllContigs.fna");
+        essential5.setEssentialFor("NeView");
+        essential5.setUseOnly(true);
+        newbler.addEssentialOutput(essential5);
+        
 
         ParseableProgram nullAss= new ParseableProgram( "Skip", 
                                                                 null, 

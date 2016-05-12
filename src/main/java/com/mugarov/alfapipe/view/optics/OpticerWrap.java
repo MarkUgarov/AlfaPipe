@@ -19,7 +19,7 @@ public class OpticerWrap extends JPanel{
 	{
 		this.component = component;
 		this.setLayout( new BorderLayout() );
-		super.setOpaque( false );
+		this.setOpaque( false );
 		this.component.setOpaque( false );
 		this.add( component );
                 this.painted = false;
@@ -50,7 +50,8 @@ public class OpticerWrap extends JPanel{
         
         @Override
         public void setOpaque(boolean isOpaque){
-            this.opaque = opaque;
+            this.opaque = isOpaque;
+            super.setOpaque(isOpaque);
         }
         
         @Override

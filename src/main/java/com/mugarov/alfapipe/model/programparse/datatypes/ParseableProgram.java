@@ -25,6 +25,7 @@ public class ParseableProgram{
     private String exitCommand;
     
     private boolean disableCluster;
+    private boolean skipWaiting;
     
     private ArrayList<ParameterField> additionalClusterParameters;
     private ArrayList<ParameterField> localPrependParamters;
@@ -32,7 +33,7 @@ public class ParseableProgram{
     private ParameterField inputPathCommand;
     private ParameterField outputPathCommand;
     private ParameterField pairedCommand;
-    private PairedInputConditions  pairedConditions;
+    private PairedInputConditions pairedConditions;
     
     private ArrayList<NameField> essentialOutputs; 
    
@@ -47,8 +48,8 @@ public class ParseableProgram{
         this.inputPathCommand = null;
         this.outputPathCommand = null;
         this.pairedCommand = null;
-        this.validEndings = null;
-        this.outputEndings = null;
+        this.validEndings = new String[0];
+        this.outputEndings = new String[0]; 
         this.enterCommand = null;
         this.exitCommand = null;
         this.outputSettings = new OutputField();
@@ -56,6 +57,7 @@ public class ParseableProgram{
         this.additionalClusterParameters = new ArrayList<>();
         this.localPrependParamters = new ArrayList<>();
         this.disableCluster = false;
+        this.skipWaiting = false;
         this.sorter = new ParameterSorter(this);
        
         
@@ -81,6 +83,7 @@ public class ParseableProgram{
         this.outputSettings = new OutputField();
         this.essentialOutputs = new ArrayList<>();
         this.disableCluster = false;
+        this.skipWaiting = false;
         this.enterCommand = null;
         this.exitCommand = null;
         this.additionalClusterParameters = new ArrayList<>();
@@ -503,5 +506,19 @@ public class ParseableProgram{
             }
         }
         this.localPrependParamters.add(parameter);
+    }
+
+    /**
+     * @return the skipWaiting
+     */
+    public boolean isSkipWaiting() {
+        return skipWaiting;
+    }
+
+    /**
+     * @param skipWaiting the skipWaiting to set
+     */
+    public void setSkipWaiting(boolean skipWaiting) {
+        this.skipWaiting = skipWaiting;
     }
 }

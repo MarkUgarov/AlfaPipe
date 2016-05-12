@@ -276,24 +276,25 @@ public class SetOfFiles implements Executable, Runnable{
             ExecutionCommandBuilder clusterCommandBuilder = new ExecutionCommandBuilder(this.log);
             String clusterCommand = null;
             if(ParameterPool.CLUSTER_ENABLE && this.clusterParameters != null){
-                clusterCommandBuilder.buildString(this.clusterParameters, this.outputDirectory, this.outputDirectory.getPath(), null, this.outputDirectory);
+                clusterCommandBuilder.buildString(this.clusterParameters, this.outputDirectory, this.outputDirectory.getPath(), null, this.outputDirectory, false);
                 clusterCommand = clusterCommandBuilder.getExecutionCommand();
             }
             
             for(InputFile file:this.files){
                 boolean filePassed=true;
                 boolean essentialFilesExist = true;
+                boolean wait;
                 String command;
                 for(int i = 0; (i<this.usedPrograms.size() && filePassed); i++){
-                   
+                   wait = !this.usedPrograms.get(i).getParsedParameters().isSkipWaiting();
                     if(ParameterPool.CLUSTER_ENABLE && this.useCluster[i] && clusterCommand != null && this.usedPrograms.get(i).getParsedParameters().getStartCommand() != null){
 //                        System.out.println("Use program "+i+" on Cluster!");
                         command =  file.getProgramCommand(i, this.outputDirectory.getPath(),true);
-                        filePassed = execution.execute(clusterCommand,command);
+                        filePassed = execution.execute(clusterCommand,command, wait);
                     }
                     else{
                         command =  file.getProgramCommand(i, this.outputDirectory.getPath(),false);
-                        filePassed = execution.execute(null, command);
+                        filePassed = execution.execute(null, command, wait);
                     }
                     if(command != null){
                         essentialFilesExist = (essentialFilesExist && file.checkLastCommandFiles());
@@ -309,14 +310,15 @@ public class SetOfFiles implements Executable, Runnable{
                 ArrayList<Boolean> toolBools = new ArrayList<>(file.getValidTools().size());
                 int toolIndex = 0;
                 for(String p:file.getToolCommands(this.outputDirectory.getPath(),this.useClusterOnTool)){
+                    wait = !this.availableTools.get(toolIndex).getParsedParameters().isSkipWaiting();
                     if(p == null){
                         toolBools.add(true);
                     }
                     if(ParameterPool.CLUSTER_ENABLE && this.useClusterOnTool[toolIndex] && clusterCommand != null){
-                        toolBools.add(execution.execute(clusterCommand, p) && file.checkToolFiles(toolIndex));
+                        toolBools.add(execution.execute(clusterCommand, p,wait) && file.checkToolFiles(toolIndex));
                     }
                     else{
-                        toolBools.add(execution.execute(null, p) && file.checkToolFiles(toolIndex));
+                        toolBools.add(execution.execute(null, p,wait) && file.checkToolFiles(toolIndex));
                     }
                     
                     toolIndex++;
