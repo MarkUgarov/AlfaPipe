@@ -39,6 +39,7 @@ public class PreprocessingParameterFabric {
                                                                 endings,
                                                                 outputEnding);
         mainProcessor.setOutputSettings(true, true);
+        mainProcessor.setRemoveFilesAfterPipeCompletion(true);
         NameField essential = new NameField();
         essential.setDynamic(false);
         essential.setName("Unziped_R1_001.fastq");

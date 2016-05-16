@@ -325,6 +325,10 @@ public class SetOfFiles implements Executable, Runnable{
                 }
                 this.tab.setToolProgressed(file.getAbsolutePath(), file.getValidTools(), toolBools);
             }
+            // deleting unwanted ouput
+            for(InputFile file:this.files){
+                file.clearOutput();
+            }
             this.tab.setAllProgressed(true);
             this.tab.reenableSetRemoval();
         }

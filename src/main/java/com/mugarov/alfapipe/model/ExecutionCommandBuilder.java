@@ -28,6 +28,7 @@ public class ExecutionCommandBuilder {
     private boolean outputIsDirectory;
     private StringBuilder builder;
     private boolean useClusterParameters;
+    private ProgramSet programSet;
     
     private FileLister fileLister;
     
@@ -59,25 +60,21 @@ public class ExecutionCommandBuilder {
      * @param inputFile
      * @param parentOutputDirectory 
      * @param pairedFiles 
-     * @param originalFile 
+     * @param originalFile is for the source for the finding of a proper name
+     * @param originalIsInputFileType is for the specific method of finding for a proper name
      */
     public void buildString(   ProgramSet parameterSet,
                                 File inputFile,
                                 String parentOutputDirectory,
                                 ArrayList<File> pairedFiles,
                                 File originalFile,
-                                boolean isInputFileType){
+                                boolean originalIsInputFileType){
         this.builder = new StringBuilder();
         this.set = parameterSet;
         this.inputFile = inputFile;
+        this.programSet = parameterSet;
         
-        String clearFileName;
-        if(isInputFileType){
-            clearFileName = ((InputFile)originalFile).getClearName();
-        }
-        else{
-            clearFileName = this.getClearName(inputFile);
-        }
+        String clearFileName = this.getClearName(originalFile, originalIsInputFileType);
         /**
          * create output directory and check if it is the value for the 
          * output-command or if it needs a special filepath for the output
@@ -121,12 +118,12 @@ public class ExecutionCommandBuilder {
             if(this.useClusterParameters){
                // System.out.println("BUILD PROGRAM FOR CLUSTER: "+this.set.getName());
                 for(ParameterField cP:parameterSet.getParsedParameters().getAdditionalClusterParameters()){
-                    this.buildParameterCommand(cP, null, null, parameterSet.getClusterParameters(), originalFile);
+                    this.buildParameterCommand(cP, null, null, parameterSet.getClusterParameters(), originalFile, originalIsInputFileType);
                 }
             }
             else{
                 for(ParameterField lP:parameterSet.getParsedParameters().getLocalPrependParamters()){
-                    this.buildParameterCommand(lP, null, null, parameterSet.getLocalPrependParamters(), originalFile);
+                    this.buildParameterCommand(lP, null, null, parameterSet.getLocalPrependParamters(), originalFile, originalIsInputFileType);
                 }
             }
             
@@ -137,7 +134,7 @@ public class ExecutionCommandBuilder {
             builder.append(parameterSet.getParsedParameters().getStartCommand());
             builder.append(" ");
             for(ParameterField pf:parameterSet.getParsedParameters().getParameters() ){
-                this.buildParameterCommand(pf, parameterSet.getParsedParameters().getPairedCommand(), pairedFiles, parameterSet.getInputParameters(), originalFile);
+                this.buildParameterCommand(pf, parameterSet.getParsedParameters().getPairedCommand(), pairedFiles, parameterSet.getInputParameters(), originalFile, originalIsInputFileType);
             }
             if(parameterSet.getParsedParameters().getExitCommand()!= null){
                 builder.append("\n");
@@ -146,7 +143,7 @@ public class ExecutionCommandBuilder {
         }
     }
     
-    public void buildParameterCommand(ParameterField pf, ParameterField pairedCommand, ArrayList<File> pairedFiles, ArrayList<InputParameter> parameters, File originalFile){
+    public void buildParameterCommand(ParameterField pf, ParameterField pairedCommand, ArrayList<File> pairedFiles, ArrayList<InputParameter> parameters, File originalFile, boolean originalIsInputFileType){
         boolean writeCommand =true;
         if(pf.getCommand() == null || pf.getCommand().length() == 0 || pf.getCommand().equals(ParameterPool.PROGRAM_EMPTY_PARAMETER_VALUE)){
             writeCommand=false;
@@ -236,7 +233,10 @@ public class ExecutionCommandBuilder {
                                     }
                                 }
                                 if(value.contains(ParameterPool.PROGRAM_NAME_VALUE)){
-                                    value = value.replaceAll(ParameterPool.PROGRAM_NAME_VALUE, this.getClearName(originalFile));
+                                    value = value.replaceAll(ParameterPool.PROGRAM_NAME_VALUE, this.getClearName(originalFile, originalIsInputFileType));
+                                }
+                                if(value.contains(ParameterPool.PROGRAM_USER_VALUE)){
+                                    value = value.replaceAll(ParameterPool.PROGRAM_USER_VALUE, System.getProperty("user.name"));
                                 }
                                 builder.append(value);
                                 builder.append(" ");  
@@ -260,8 +260,13 @@ public class ExecutionCommandBuilder {
      * special characters,
      * returns "No_valid_name" if the filename could not be cleared
      */
-    private String getClearName(File file){
-        return FileNaming.getClearName(file);
+    private String getClearName(File file, boolean isInputFileType){
+        if(isInputFileType){
+            return ((InputFile) file).getClearName();
+        }
+        else{
+            return FileNaming.getClearName(file);
+        }
     }
     
     /**
@@ -273,6 +278,7 @@ public class ExecutionCommandBuilder {
      */
     private String getClearName(String name){
         return FileNaming.getClearName(name);
+
     }
     
     public String getExecutionCommand(){
@@ -296,6 +302,10 @@ public class ExecutionCommandBuilder {
      */
     public String getOutputPath(){
         return this.outputFile.getAbsolutePath();
+    }
+    
+    public File getOutputFile(){
+        return this.outputFile;
     }
     
     /**
@@ -396,6 +406,10 @@ public class ExecutionCommandBuilder {
     
     public FileLister getFileLister(){
         return this.fileLister;
+    }
+    
+    public ProgramSet getProgramSet(){
+        return this.programSet;
     }
     
 }

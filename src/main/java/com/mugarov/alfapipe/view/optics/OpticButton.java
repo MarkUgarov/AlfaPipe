@@ -30,6 +30,7 @@ public class OpticButton extends JButton implements Optic{
     
     private final Color onNotMouseOver = ParameterPool.COLOR_BACKGROUND_STANDARD;
     private final Color onMouseOver = ParameterPool.COLOR_BACKGROUND_MOUSEOVER;
+    private final Color disabled = ParameterPool.COLOR_BACKGROUND_DISABLED;
     private boolean isMouseOver;
     
     
@@ -111,14 +112,32 @@ public class OpticButton extends JButton implements Optic{
     
     @Override
     public void mouseEntered(){
-        this.setBackground(onMouseOver);
+        if(this.isEnabled()){
+            this.setBackground(onMouseOver);     
+        }
         this.isMouseOver = true;
     }
     
     @Override
     public void mouseExit(){
-        this.setBackground(onNotMouseOver);
+        if(this.isEnabled()){
+            this.setBackground(onNotMouseOver);
+        }
         this.isMouseOver = false;
+    }
+    
+    @Override
+    public void setEnabled(boolean enabled){
+        super.setEnabled(enabled);
+        if(!enabled){
+            this.setBackground(disabled);
+        }
+        else if(this.isMouseOver){
+            this.setBackground(onMouseOver);
+        }
+        else{
+            this.setBackground(onNotMouseOver);
+        }
     }
  
 

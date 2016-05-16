@@ -26,6 +26,7 @@ public class ParseableProgram{
     
     private boolean disableCluster;
     private boolean skipWaiting;
+    private boolean removeFilesAfterPipeCompletion;
     
     private ArrayList<ParameterField> additionalClusterParameters;
     private ArrayList<ParameterField> localPrependParamters;
@@ -37,7 +38,7 @@ public class ParseableProgram{
     
     private ArrayList<NameField> essentialOutputs; 
    
-    private final ParameterSorter sorter;
+    private ParameterSorter sorter;
    
     
     
@@ -58,6 +59,7 @@ public class ParseableProgram{
         this.localPrependParamters = new ArrayList<>();
         this.disableCluster = false;
         this.skipWaiting = false;
+        this.removeFilesAfterPipeCompletion = false;
         this.sorter = new ParameterSorter(this);
        
         
@@ -72,22 +74,14 @@ public class ParseableProgram{
                                 String[] validEndings,
                                 String[] outputEnding
                                 ){
+        this();
         this.parameters = new ArrayList<>();
         this.name = name;
         this.startCommand = startCommand;
         this.setInputPathCommand(inputPathCommand, inputPathPosition);
         this.setOuputPathCommand(outputPathCommand, outputPathPosition);
-        this.pairedCommand = null;
         this.validEndings = validEndings;
         this.outputEndings = outputEnding;
-        this.outputSettings = new OutputField();
-        this.essentialOutputs = new ArrayList<>();
-        this.disableCluster = false;
-        this.skipWaiting = false;
-        this.enterCommand = null;
-        this.exitCommand = null;
-        this.additionalClusterParameters = new ArrayList<>();
-        this.localPrependParamters = new ArrayList<>();
         this.sorter = new ParameterSorter(this);
         this.sorter.sort();
     }
@@ -520,5 +514,19 @@ public class ParseableProgram{
      */
     public void setSkipWaiting(boolean skipWaiting) {
         this.skipWaiting = skipWaiting;
+    }
+
+    /**
+     * @return the removeFilesAfterPipeCompletion
+     */
+    public boolean isRemoveFilesAfterPipeCompletion() {
+        return removeFilesAfterPipeCompletion;
+    }
+
+    /**
+     * @param removeFilesAfterPipeCompletion the removeFilesAfterPipeCompletion to set
+     */
+    public void setRemoveFilesAfterPipeCompletion(boolean removeFilesAfterPipeCompletion) {
+        this.removeFilesAfterPipeCompletion = removeFilesAfterPipeCompletion;
     }
 }

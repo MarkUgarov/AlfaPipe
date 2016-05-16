@@ -135,8 +135,9 @@ public abstract class ParameterPool {
     public static final String PROGRAM_DIRECTORY_VALUE = "//.";
     public static final String PROGRAM_FILE_VALUE = "//this";
     public static final String PROGRAM_EMPTY_PARAMETER_VALUE = "/empty";
-    public static final String PROGRAM_PATH_VALUE = "PATH";
-    public static final String PROGRAM_NAME_VALUE = "NAME";
+    public static final String PROGRAM_PATH_VALUE = "PATH"; // value of the directory (parent if file is not a directory itself)
+    public static final String PROGRAM_NAME_VALUE = "NAME"; // clear name of the file
+    public static final String PROGRAM_USER_VALUE = "USER";
     public static final String PROGRAM_INPUT_PATH_SET_PARAMETER_NAME = "inputPathCommand";
     public static final String PROGRAM_OUTPUT_PATH_SET_PARAMETER_NAME = "outputPathCommand";
     public static final String PROGRAM_PAIRED_PARAMETER_NAME = "pairedCommand";

@@ -12,8 +12,13 @@ import com.mugarov.alfapipe.model.ParameterPool;
 import com.mugarov.alfapipe.model.filetools.FileNaming;
 import com.mugarov.alfapipe.model.programparse.datatypes.ParseableProgram;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -503,6 +508,63 @@ public class InputFile extends File implements Executable{
     
     public String getClearName(){
         return FileNaming.getClearName(this.getName(), this.firstNonNullParameters);
+    }
+    
+    /**
+     * Clears all files (also means directories) created specifically for this input.
+     * Does delete all files (and directories if the output itself is a directory)
+     * declared as output.
+     * Does NOT delete the parent directory, so e.g. does not delete any 
+     * .../data0/ProgrammName directory because in some cases two sets could 
+     * try to access this directory (even AlfaPipe is not meant to be used 
+     * this way). This would cause errors if one set is still in progress while
+     * another one cleared the directory up. 
+     */
+    public void clearOutput(){
+        if(this.clearOutput(this.programCommandBuilder)){
+            this.log.appendLine("Deleted all unwanted program outputs of "+this.getName(), InputFile.class.getName());
+        }
+        else{
+            this.log.appendLine("Could not delete a program output of "+this.getName(), InputFile.class.getName());
+        }
+        if(this.clearOutput(this.toolCommands)){
+             this.log.appendLine("Deleted all unwanted tool outputs of "+this.getName(), InputFile.class.getName());
+        }
+        else{
+             this.log.appendLine("Could not delete a tool output of "+this.getName(), InputFile.class.getName());
+        }
+    }
+    
+    private boolean clearOutput(ArrayList<ExecutionCommandBuilder> builders){
+        boolean ret = true;
+        for(ExecutionCommandBuilder builder:builders){
+            if(builder == null || builder.getProgramSet() == null){
+                // do nothing
+            }
+            else if(builder.getProgramSet().getParsedParameters().isRemoveFilesAfterPipeCompletion()){
+                ret = ret && this.delete(builder.getOutputFile());
+            }
+        }
+        return ret;
+    }
+    
+    private boolean delete(File file) {
+        if(file.exists() && file.isDirectory()){
+            for(File checkFile:file.listFiles()) {
+                if(checkFile.isDirectory()) {
+                    this.delete(checkFile);
+                }
+                else {
+                    try {
+                        Files.delete(checkFile.toPath()); // could also use checkFile.delete(), but we want error-messages
+                    } catch (IOException ex) {
+                        this.log.appendLine("A non-directory file could not been deleted: "+checkFile.getName(), InputFile.class.getName());
+                        Logger.getLogger(InputFile.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        }
+        return(file.delete());
     }
 
    

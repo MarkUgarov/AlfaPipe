@@ -39,6 +39,7 @@ public class ProcessingParameterFabric {
                                                                 endings,
                                                                 outputEnding);
         miseq.addEssentialOutput(ParameterPool.PROGRAM_FILE_VALUE, "Newbler");
+        miseq.setRemoveFilesAfterPipeCompletion(true);
         miseq.addAdditionalClusterParameter(ParameterPool.PROGRAM_BINARAY_NAME, ParameterPool.PROGRAM_BINARY_COMMAND, ParameterPool.PROGRAM_BINARY_CONFIRM, ParameterPool.PROGRAM_BINARY_POSITION, ParameterPool.PROGRAM_BINARY_OPTIONAL, ParameterPool.PROGRAM_BINARY_DESCRIPTION);
         miseq.setOutputSettings(false, true);
         
@@ -51,6 +52,7 @@ public class ProcessingParameterFabric {
                                                                 endings,
                                                                 outputEnding);
         splitMiseq.addEssentialOutput(ParameterPool.PROGRAM_FILE_VALUE, "Newbler");
+        splitMiseq.setRemoveFilesAfterPipeCompletion(true);
         splitMiseq.addAdditionalClusterParameter(ParameterPool.PROGRAM_BINARAY_NAME, ParameterPool.PROGRAM_BINARY_COMMAND, ParameterPool.PROGRAM_BINARY_CONFIRM, ParameterPool.PROGRAM_BINARY_POSITION, ParameterPool.PROGRAM_BINARY_OPTIONAL, ParameterPool.PROGRAM_BINARY_DESCRIPTION);
         splitMiseq.setOutputSettings(false, true);
         
