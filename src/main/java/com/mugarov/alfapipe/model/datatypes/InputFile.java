@@ -323,6 +323,9 @@ public class InputFile extends File implements Executable{
             ArrayList<File> specificFiles;
             for(int index = this.programCommandBuilder.size()-1; index >= 0; index--){
                 command = this.programCommandBuilder.get(index);
+                if(command == null){
+                    continue;
+                }
                 specificFiles = command.getSpecifiFilesFor(this.currentParameters);
                 if(command != null && addMore){
                     if(command.useOnlyThisOutput(this.currentParameters)){
@@ -397,12 +400,15 @@ public class InputFile extends File implements Executable{
         String ret;
         if(index>=this.programParameters.size()){
             ret = ParameterPool.MESSAGE_PREFIX+ParameterPool.MESSAGE_OUT_OF_INDEX+":"+index;
+            this.addCommandBuilder(null);
         }
         else if(this.programParameters.get(index).isEmpty()){
             ret = ParameterPool.MESSAGE_PREFIX+ParameterPool.MESSAGE_PROGRAM_EMPTY+", Index:"+index;
+            this.addCommandBuilder(null);
         }
         else if(this.programParameters.get(index).getParsedParameters().getStartCommand() == null){
             ret = ParameterPool.MESSAGE_PREFIX+ParameterPool.MESSAGE_PROGRAM_COMMAND_NULL+", Name: "+this.programParameters.get(index).getParsedParameters().getName()+"Index: "+index;
+            this.addCommandBuilder(null);
         }
         else{
             this.currentParameters = this.programParameters.get(index);
@@ -412,6 +418,24 @@ public class InputFile extends File implements Executable{
         }
         this.setProgramXBuilt(index, true);
         return ret;
+    }
+    
+    public String getProgramWorkingDirectory(int index){
+        if(index>=this.programParameters.size() || this.programCommandBuilder.get(index) == null){
+            return null;
+        }
+        else{
+            return this.programCommandBuilder.get(index).getWorkingDirectory().getAbsolutePath();
+        }
+    }
+    
+    public File getToolWorkingDirectory(int index){
+        if(index>=this.toolCommands.size() || this.toolCommands.get(index) == null){
+            return null;
+        }
+        else{
+            return this.toolCommands.get(index).getWorkingDirectory();
+        }
     }
     
     public boolean checkLastCommandFiles(){
@@ -541,7 +565,7 @@ public class InputFile extends File implements Executable{
             if(builder == null || builder.getProgramSet() == null){
                 // do nothing
             }
-            else if(builder.getProgramSet().getParsedParameters().isRemoveFilesAfterPipeCompletion()){
+            else if(builder.getProgramSet().getParsedParameters().isRemoveFilesAfterSetCompletion()){
                 ret = ret && this.delete(builder.getOutputFile());
             }
         }

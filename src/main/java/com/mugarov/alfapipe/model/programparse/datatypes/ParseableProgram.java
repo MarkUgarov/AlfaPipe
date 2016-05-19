@@ -26,7 +26,7 @@ public class ParseableProgram{
     
     private boolean disableCluster;
     private boolean skipWaiting;
-    private boolean removeFilesAfterPipeCompletion;
+    private boolean removeFilesAfterSetCompletion;
     
     private ArrayList<ParameterField> additionalClusterParameters;
     private ArrayList<ParameterField> localPrependParamters;
@@ -59,7 +59,7 @@ public class ParseableProgram{
         this.localPrependParamters = new ArrayList<>();
         this.disableCluster = false;
         this.skipWaiting = false;
-        this.removeFilesAfterPipeCompletion = false;
+        this.removeFilesAfterSetCompletion = false;
         this.sorter = new ParameterSorter(this);
        
         
@@ -519,14 +519,14 @@ public class ParseableProgram{
     /**
      * @return the removeFilesAfterPipeCompletion
      */
-    public boolean isRemoveFilesAfterPipeCompletion() {
-        return removeFilesAfterPipeCompletion;
+    public boolean isRemoveFilesAfterSetCompletion() {
+        return removeFilesAfterSetCompletion;
     }
 
     /**
      * @param removeFilesAfterPipeCompletion the removeFilesAfterPipeCompletion to set
      */
-    public void setRemoveFilesAfterPipeCompletion(boolean removeFilesAfterPipeCompletion) {
-        this.removeFilesAfterPipeCompletion = removeFilesAfterPipeCompletion;
+    public void setRemoveFilesAfterSetCompletion(boolean removeFilesAfterPipeCompletion) {
+        this.removeFilesAfterSetCompletion = removeFilesAfterPipeCompletion;
     }
 }

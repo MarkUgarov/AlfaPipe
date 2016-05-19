@@ -38,7 +38,6 @@ public class ToolGenerator implements Generator{
         //prokka.setEnterCommand("lqxterm -l vf=128G -cwd ");
         //prokka.setExitCommand("exit");
         prokka.addParameter("Force", "--force", ParameterPool.PROGRAM_EMPTY_PARAMETER_VALUE, 1, false);
-        prokka.setDisableCluster(true);
         prokka.addAdditionalClusterParameter(ParameterPool.PROGRAM_BINARAY_NAME, ParameterPool.PROGRAM_BINARY_COMMAND, ParameterPool.PROGRAM_BINARY_CONFIRM, ParameterPool.PROGRAM_BINARY_POSITION, ParameterPool.PROGRAM_BINARY_OPTIONAL, ParameterPool.PROGRAM_BINARY_DESCRIPTION);
         prokka.addAdditionalClusterParameter("Export environment variables", "-V", ParameterPool.PROGRAM_EMPTY_PARAMETER_VALUE, 1, false, "Specifies that all environment variables active within the  qsub utility be exported to the context of the job.");
         
@@ -46,7 +45,7 @@ public class ToolGenerator implements Generator{
         
         String[] outputEndings2 = new String[]{".txt"};
         ParseableProgram extractHeader = new ParseableProgram( "Extract Header Info", 
-                                                    "SCRIPTS/writeToFile.sh SCRIPTS/extract_header_info.plx", 
+                                                    ParameterPool.FILE_SCRIPT_PATH+"writeToFile.sh "+ParameterPool.FILE_SCRIPT_PATH+"extract_header_info.plx", 
                                                     null,
                                                     2,
                                                     null,
@@ -55,12 +54,13 @@ public class ToolGenerator implements Generator{
                                                     outputEndings2);  
         extractHeader.addParameter("prepare Excel", "-E", ParameterPool.PROGRAM_EMPTY_PARAMETER_VALUE, 1, true);
         extractHeader.addLocalPrependParameter("Run on Shell", "sh", ParameterPool.PROGRAM_EMPTY_PARAMETER_VALUE, 1, false, "Starts this as a shell script.");
+        extractHeader.setDisableCluster(true);
         extractHeader.setOutputSettings(false, true);
         this.defaultList.add(extractHeader);
         
         String[] endingsB = ParameterPool.ENDINGS_FASTA;
         ParseableProgram assemblyStatistics = new ParseableProgram( "Assembly Statistics", 
-                                                    "SCRIPTS/writeToFile.sh SCRIPTS/assembly_statistics.plx ", 
+                                                    ParameterPool.FILE_SCRIPT_PATH+"writeToFile.sh " + ParameterPool.FILE_SCRIPT_PATH+"assembly_statistics.plx ", 
                                                     null,
                                                     2,
                                                     null,
@@ -68,6 +68,7 @@ public class ToolGenerator implements Generator{
                                                     endingsB,
                                                     outputEndings2);  
         assemblyStatistics.addParameter("Skip listprint", "-l", ParameterPool.PROGRAM_EMPTY_PARAMETER_VALUE, 1, true);
+        assemblyStatistics.setDisableCluster(true);
         assemblyStatistics.addLocalPrependParameter("Run on Shell", "sh", ParameterPool.PROGRAM_EMPTY_PARAMETER_VALUE, 1, false, "Starts this as a shell script.");
         assemblyStatistics.setOutputSettings(false, true);
         this.defaultList.add(assemblyStatistics);

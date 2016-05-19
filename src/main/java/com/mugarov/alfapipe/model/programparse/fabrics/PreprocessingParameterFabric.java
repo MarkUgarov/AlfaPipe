@@ -31,7 +31,7 @@ public class PreprocessingParameterFabric {
         String[] endings = {".fastq.gz"};
         String[] outputEnding = new String[]{".fastq"};
         ParseableProgram mainProcessor = new ParseableProgram("gzip",
-                                                                "SCRIPTS/gzipPaired.sh", 
+                                                                ParameterPool.FILE_SCRIPT_PATH+"gzipPaired.sh", 
                                                                 null,
                                                                 0,
                                                                 null,
@@ -39,7 +39,7 @@ public class PreprocessingParameterFabric {
                                                                 endings,
                                                                 outputEnding);
         mainProcessor.setOutputSettings(true, true);
-        mainProcessor.setRemoveFilesAfterPipeCompletion(true);
+        mainProcessor.setRemoveFilesAfterSetCompletion(true);
         NameField essential = new NameField();
         essential.setDynamic(false);
         essential.setName("Unziped_R1_001.fastq");

@@ -19,19 +19,28 @@ import java.util.logging.Logger;
 public class Executioner {
 
     private final LogFileManager log;
-    private final File workfile;
+    private File workfile;
     
     private Process currentProcess;
-    private ArrayList<Process> processes;
+    private final ArrayList<Process> processes;
     private ProcessBuilder currentBuilder;
-    private ArrayList<ProcessBuilder> builders;
+    private final ArrayList<ProcessBuilder> builders;
     
 
     public Executioner(LogFileManager logManager) {
         this.log = logManager;
         this.processes = new ArrayList<>();
         this.builders = new ArrayList<>();
-        this.workfile = new File(ParameterPool.WORKING_DIRECTORY);
+        this.setWorkFile(null);
+
+    }
+    
+    public void setWorkFile(String path){
+        if(path == null){
+            this.setWorkFile(ParameterPool.WORKING_DIRECTORY+File.separator+System.getProperty("user.name"));
+            return;
+        }
+        this.workfile = new File(path);
         if(!this.workfile.exists() || !this.workfile.isDirectory()){
             this.workfile.mkdirs();
         }

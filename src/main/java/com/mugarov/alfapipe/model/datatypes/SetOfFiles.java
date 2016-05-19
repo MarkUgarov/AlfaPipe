@@ -275,10 +275,7 @@ public class SetOfFiles implements Executable, Runnable{
             execution = new Executioner(this.log);
             ExecutionCommandBuilder clusterCommandBuilder = new ExecutionCommandBuilder(this.log);
             String clusterCommand = null;
-            if(ParameterPool.CLUSTER_ENABLE && this.clusterParameters != null){
-                clusterCommandBuilder.buildString(this.clusterParameters, this.outputDirectory, this.outputDirectory.getPath(), null, this.outputDirectory, false);
-                clusterCommand = clusterCommandBuilder.getExecutionCommand();
-            }
+
             
             for(InputFile file:this.files){
                 boolean filePassed=true;
@@ -286,14 +283,20 @@ public class SetOfFiles implements Executable, Runnable{
                 boolean wait;
                 String command;
                 for(int i = 0; (i<this.usedPrograms.size() && filePassed); i++){
-                   wait = !this.usedPrograms.get(i).getParsedParameters().isSkipWaiting();
-                    if(ParameterPool.CLUSTER_ENABLE && this.useCluster[i] && clusterCommand != null && this.usedPrograms.get(i).getParsedParameters().getStartCommand() != null){
+                    
+                    wait = !this.usedPrograms.get(i).getParsedParameters().isSkipWaiting();
+                    if(ParameterPool.CLUSTER_ENABLE && this.clusterParameters != null && this.useCluster[i]  && this.usedPrograms.get(i).getParsedParameters().getStartCommand() != null){
 //                        System.out.println("Use program "+i+" on Cluster!");
                         command =  file.getProgramCommand(i, this.outputDirectory.getPath(),true);
+                        this.execution.setWorkFile(file.getProgramWorkingDirectory(i));
+                        clusterCommandBuilder.setName(this.usedPrograms.get(i).getName());
+                        clusterCommandBuilder.buildString(this.clusterParameters, this.outputDirectory, this.outputDirectory.getPath(), null, this.outputDirectory, false);
+                        clusterCommand = clusterCommandBuilder.getExecutionCommand();
                         filePassed = execution.execute(clusterCommand,command, wait);
                     }
                     else{
                         command =  file.getProgramCommand(i, this.outputDirectory.getPath(),false);
+                        this.execution.setWorkFile(file.getProgramWorkingDirectory(i));
                         filePassed = execution.execute(null, command, wait);
                     }
                     if(command != null){
@@ -310,6 +313,7 @@ public class SetOfFiles implements Executable, Runnable{
                 ArrayList<Boolean> toolBools = new ArrayList<>(file.getValidTools().size());
                 int toolIndex = 0;
                 for(String p:file.getToolCommands(this.outputDirectory.getPath(),this.useClusterOnTool)){
+                    this.execution.setWorkFile(file.getToolWorkingDirectory(toolIndex).getPath());
                     wait = !this.availableTools.get(toolIndex).getParsedParameters().isSkipWaiting();
                     if(p == null){
                         toolBools.add(true);

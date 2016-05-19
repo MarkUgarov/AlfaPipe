@@ -36,6 +36,8 @@ public class ComparisonParameterFabric {
         neview.setValidInputEndings(endings);
         neview.setStartCommand("java -jar NeView/NeView-0.0.1.jar");
         neview.setInputPathCommand(null, 1);
+        neview.setOutputSettings(true, false);
+        neview.setRemoveFilesAfterSetCompletion(true);
         neview.addParameter("Name", null, ParameterPool.PROGRAM_NAME_VALUE, 0, true, "Sets a name for the chart.");
         neview.setOutputSettings(false, false);
         

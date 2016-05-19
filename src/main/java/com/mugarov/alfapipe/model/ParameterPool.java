@@ -6,7 +6,6 @@
 package com.mugarov.alfapipe.model;
 
 
-import com.mugarov.alfapipe.model.programparse.datatypes.ParameterField;
 import java.awt.Color;
 import java.awt.Dimension;
 
@@ -137,7 +136,8 @@ public abstract class ParameterPool {
     public static final String PROGRAM_EMPTY_PARAMETER_VALUE = "/empty";
     public static final String PROGRAM_PATH_VALUE = "PATH"; // value of the directory (parent if file is not a directory itself)
     public static final String PROGRAM_NAME_VALUE = "NAME"; // clear name of the file
-    public static final String PROGRAM_USER_VALUE = "USER";
+    public static final String PROGRAM_USER_VALUE = "USER"; // the user name
+    public static final String PROGRAM_PROGRAM_NAME_VALUE = "PROGRAM"; // the name of the program
     public static final String PROGRAM_INPUT_PATH_SET_PARAMETER_NAME = "inputPathCommand";
     public static final String PROGRAM_OUTPUT_PATH_SET_PARAMETER_NAME = "outputPathCommand";
     public static final String PROGRAM_PAIRED_PARAMETER_NAME = "pairedCommand";
@@ -161,6 +161,7 @@ public abstract class ParameterPool {
     public static final String FILE_ORIGIN_DEFAULT = "/vol/ampipe/data/"+System.getProperty("user.name")+"/output";
     public static final String FILE_LOGFILE_NAME = "log.txt";
     public static final String WORKING_DIRECTORY = "/vol/ampipe/data";
+    public static final String FILE_SCRIPT_PATH = "/vol/ampipe/data/SCRIPTS/";
     
     //standard messegas
     public static final String MESSAGE_PREFIX = "echo ";

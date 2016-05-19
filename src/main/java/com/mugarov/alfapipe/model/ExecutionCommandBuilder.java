@@ -32,6 +32,8 @@ public class ExecutionCommandBuilder {
     
     private FileLister fileLister;
     
+    private String programName;
+    
     public ExecutionCommandBuilder(LogFileManager logManager){
         this.outputFile = null;
         this.outputIsDirectory = false;
@@ -39,6 +41,11 @@ public class ExecutionCommandBuilder {
         this.log = logManager;
         this.fileLister = null;
         this.useClusterParameters = false;
+        this.programName = null;
+    }
+    
+    public void setName(String name){
+        this.programName = name;
     }
     
     public void useClusterParameters(boolean use){
@@ -73,6 +80,9 @@ public class ExecutionCommandBuilder {
         this.set = parameterSet;
         this.inputFile = inputFile;
         this.programSet = parameterSet;
+        if(this.programName == null){
+            this.programName = parameterSet.getName();
+        }
         
         String clearFileName = this.getClearName(originalFile, originalIsInputFileType);
         /**
@@ -238,6 +248,9 @@ public class ExecutionCommandBuilder {
                                 if(value.contains(ParameterPool.PROGRAM_USER_VALUE)){
                                     value = value.replaceAll(ParameterPool.PROGRAM_USER_VALUE, System.getProperty("user.name"));
                                 }
+                                if(value.contains(ParameterPool.PROGRAM_PROGRAM_NAME_VALUE)){
+                                    value = value.replaceAll(ParameterPool.PROGRAM_PROGRAM_NAME_VALUE,  this.programName);
+                                }
                                 builder.append(value);
                                 builder.append(" ");  
                             }
@@ -293,6 +306,22 @@ public class ExecutionCommandBuilder {
     
     public boolean outputIsDirectory(){
         return this.outputIsDirectory;
+    }
+    
+    /**
+     * 
+     * @return the file itself if the output is a directory or the parent 
+     * directory of the output if it is not a directory
+     */
+    public File getWorkingDirectory(){
+        File ret;
+        if(this.outputIsDirectory){
+            ret = (this.programSet.getParsedParameters().getOutputSettings().isMakeDirectory())?this.outputFile:this.outputFile.getParentFile();
+        }
+        else{
+            ret = (this.programSet.getParsedParameters().getOutputSettings().isMakeDirectory())?this.outputFile.getParentFile():this.outputFile.getParentFile().getParentFile();
+        }
+        return ret;
     }
     
     /**
