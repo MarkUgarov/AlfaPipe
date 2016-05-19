@@ -34,7 +34,7 @@ public class ComparisonParameterFabric {
         neview.setDisableCluster(true);
         neview.setSkipWaiting(true);
         neview.setValidInputEndings(endings);
-        neview.setStartCommand("java -jar NeView/NeView-0.0.1.jar");
+        neview.setStartCommand("java -jar /vol/ampipe/data/NeView/NeView-0.0.1.jar");
         neview.setInputPathCommand(null, 1);
         neview.setOutputSettings(true, false);
         neview.setRemoveFilesAfterSetCompletion(true);
