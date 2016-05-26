@@ -27,6 +27,7 @@ public class ParseableProgram{
     private boolean disableCluster;
     private boolean skipWaiting;
     private boolean removeFilesAfterSetCompletion;
+    private String forceWorkingDirectory;
     
     private ArrayList<ParameterField> additionalClusterParameters;
     private ArrayList<ParameterField> localPrependParamters;
@@ -60,6 +61,7 @@ public class ParseableProgram{
         this.disableCluster = false;
         this.skipWaiting = false;
         this.removeFilesAfterSetCompletion = false;
+        this.forceWorkingDirectory = null;
         this.sorter = new ParameterSorter(this);
        
         
@@ -528,5 +530,19 @@ public class ParseableProgram{
      */
     public void setRemoveFilesAfterSetCompletion(boolean removeFilesAfterPipeCompletion) {
         this.removeFilesAfterSetCompletion = removeFilesAfterPipeCompletion;
+    }
+
+    /**
+     * @return the forceWorkingDirectory
+     */
+    public String getForceWorkingDirectory() {
+        return forceWorkingDirectory;
+    }
+
+    /**
+     * @param forceWorkingDirectory the forceWorkingDirectory to set
+     */
+    public void setForceWorkingDirectory(String forceWorkingDirectory) {
+        this.forceWorkingDirectory = forceWorkingDirectory;
     }
 }

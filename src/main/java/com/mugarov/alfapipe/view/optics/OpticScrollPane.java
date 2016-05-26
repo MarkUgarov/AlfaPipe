@@ -129,7 +129,6 @@ public class OpticScrollPane extends JScrollPane implements Optic{
         // do nothing
     }
 
-     @Override
     public OpticerWrap inTransparentPanel(){
         if(this.surroundingPanel == null){
             this.surroundingPanel = new OpticerWrap(this);

@@ -591,5 +591,11 @@ public class InputFile extends File implements Executable{
         return(file.delete());
     }
 
+    void deleteOutput() {
+        if(this.currentCommand != null){
+            this.delete(this.currentCommand.getOutputFile());
+        }
+    }
+
    
 }

@@ -92,7 +92,6 @@ public class OpticSplitPane extends JSplitPane implements Optic{
         // do nothing
     }
 
-     @Override
     public OpticerWrap inTransparentPanel(){
         if(this.surroundingPanel == null){
             this.surroundingPanel = new OpticerWrap(this);

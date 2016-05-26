@@ -12,6 +12,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.font.FontRenderContext;
 import java.awt.geom.Rectangle2D;
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
@@ -23,10 +24,11 @@ public class OpticButton extends JButton implements Optic{
     
     private boolean transparent;
     private boolean drawImage;
-    private final int width;
-    private final int height;
-    int marginWidth=15;
-    int marginHeight=15;
+    private int width;
+    private int height;
+    int marginWidth=10;
+    int marginHeight=10;
+    int correctionPixel = 5;
     
     private final Color onNotMouseOver = ParameterPool.COLOR_BACKGROUND_STANDARD;
     private final Color onMouseOver = ParameterPool.COLOR_BACKGROUND_MOUSEOVER;
@@ -49,8 +51,9 @@ public class OpticButton extends JButton implements Optic{
         
         this.addMouseListener(new MouseOver(this));
         
-        this.width = (int) this.getPreferredSize().getWidth()+marginWidth;
-        this.height = (int) this.getPreferredSize().getHeight()+marginHeight;
+        
+        this.width = (int) this.getPreferredSize().getWidth()+(marginWidth);
+        this.height = (int) this.getPreferredSize().getHeight()+(marginHeight);
         
         this.setPreferredSize(new Dimension(this.width, this.height));
         
@@ -73,18 +76,19 @@ public class OpticButton extends JButton implements Optic{
     @Override
     protected void paintComponent(Graphics g){
         super.paintComponent(g);
+        
         // draw rectangle with rounded corners on top of button 
         g.setColor(super.getBackground());
-        g.fillRoundRect(0,0,width,height,this.marginWidth, this.marginHeight); 
+        g.fillRoundRect(0,0,width-this.correctionPixel, height-this.correctionPixel,this.marginWidth, this.marginHeight); 
         // draw a border 
         g.setColor(super.getForeground());
-        g.drawRoundRect(0,0,width, height, this.marginWidth, this.marginHeight); 
+        g.drawRoundRect(0,0,width-this.correctionPixel, height-this.correctionPixel, this.marginWidth, this.marginHeight); 
         if(!this.isMouseOver){
             // find size text to position in center.
             FontRenderContext frc = new FontRenderContext(null, false, false); 
             Rectangle2D r = getFont().getStringBounds(this.getText(), frc);
-            int xMargin = (int)(this.width-r.getWidth())/2; 
-            int yMargin = (int)(this.height-this.getFont().getSize())/2; 
+            int xMargin = (int)(this.width-this.correctionPixel-r.getWidth())/2; 
+            int yMargin = (int)(this.height-this.correctionPixel-this.getFont().getSize())/2; 
             // draw text in the center 
             g.drawString(this.getText(), xMargin, this.getFont().getSize() + yMargin); 
         }
@@ -101,13 +105,18 @@ public class OpticButton extends JButton implements Optic{
         this.drawImage = draw;
     }
     
-    @Override
     public OpticerWrap inTransparentPanel(){
-        JPanel ret = new JPanel();
-        ret.setOpaque(false);
-        ret.setDoubleBuffered(true);
-        ret.add(this);
-        return new OpticerWrap(ret);
+        OpticerWrap ret = new OpticerWrap(this);
+        ret.setBorder(BorderFactory.createEtchedBorder());
+        return ret;
+    }
+    
+    public JPanel inSurroundingPanel(){
+        JPanel surr = new JPanel();
+        surr.setBorder( BorderFactory.createEmptyBorder());
+        surr.setOpaque(false);
+        surr.add(this);
+        return surr;
     }
     
     @Override

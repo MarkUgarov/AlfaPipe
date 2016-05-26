@@ -5,6 +5,7 @@
  */
 package com.mugarov.alfapipe.view.mainview.tab.selection;
 
+import com.mugarov.alfapipe.control.listeners.tabrelated.cluster.ClusterSelectionListener;
 import com.mugarov.alfapipe.control.listeners.tabrelated.parameters.ParameterListener;
 import com.mugarov.alfapipe.model.ParameterPool;
 import com.mugarov.alfapipe.model.datatypes.InputParameter;
@@ -35,9 +36,10 @@ public class ClusterPanel extends OpticPane{
         this.setVisible(ParameterPool.CLUSTER_ENABLE);
     }
     
-    public void setParameters(ArrayList<InputParameter> parameters, ParameterListener listener){
+    public void setParameters(ArrayList<InputParameter> parameters, ParameterListener parameterListener, ClusterSelectionListener clusterListener){
         this.parameterParentPanel.removeAll();
-        this.parameterPanel = new ProgramParameterPanel("Cluster", parameters, listener);
+        this.parameterPanel = new ProgramParameterPanel("Cluster", parameters, parameterListener);
+        this.parameterPanel.addClusterBox(clusterListener, -1, true);
         this.parameterParentPanel.add(this.parameterPanel, BorderLayout.CENTER);
        
         this.updateUI();

@@ -16,6 +16,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.util.ArrayList;
 import javax.swing.BorderFactory;
+import javax.swing.JPanel;
 
 /**
  *
@@ -24,7 +25,7 @@ import javax.swing.BorderFactory;
 public class SingleProgramPanel extends OpticPane{
     
     private final ClusterCheckBox clusterBox;
-    private final OpticPane checkBoxPanel;
+    private final JPanel checkBoxPanel;
     private final Color background;
     
     private final OpticPane rightPanel;
@@ -41,13 +42,11 @@ public class SingleProgramPanel extends OpticPane{
        this.checkBoxPanel.setLayout(new BorderLayout());
        this.checkBoxPanel.setDoubleBuffered(true);
        this.clusterBox = new ClusterCheckBox(index);
-       this.checkBoxPanel.add(this.clusterBox.inOpaquePanel(), BorderLayout.CENTER);
-       this.checkBoxPanel.setOpaque(true);
+       this.checkBoxPanel.add(this.clusterBox.inSurroundingPanel(), BorderLayout.CENTER);
+       this.checkBoxPanel.setOpaque(false);
        this.checkBoxPanel.setVisible(ParameterPool.CLUSTER_ENABLE);
        this.checkBoxPanel.setDoubleBuffered(true);
-       
-       
-       
+
        this.rightPanel = new OpticPane();
        this.rightPanel.setLayout(new BorderLayout());
        this.rightPanel.setDoubleBuffered(true);
@@ -94,6 +93,10 @@ public class SingleProgramPanel extends OpticPane{
        this.clusterBox.disableByPresetting();
    }
    
+   public void setClusterSelected(boolean selected){
+       this.clusterBox.setSelected(selected);
+   }
+   
    public void reenableCluster(){
        this.clusterBox.reenable();
    }
@@ -126,5 +129,7 @@ public class SingleProgramPanel extends OpticPane{
     public boolean isEmpty(){
         return this.isEmpty;
     }
+    
+    
     
 }

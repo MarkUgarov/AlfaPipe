@@ -64,7 +64,7 @@ public class ProgramParameterPanel extends OpticPane{
             this.namePanel.setLayout(new FlowLayout());
             this.nameLabel = new JLabel(this.name);
             this.nameLabel.setPreferredSize(ParameterPool.LABEL_DIMENSION);
-            this.nameLabel.setOpaque(false);
+            this.nameLabel.setOpaque(true);
             this.namePanel.add(this.offsetPanel);
             this.namePanel.add(this.nameLabel);
             this.namePanel.setDoubleBuffered(true);
@@ -108,10 +108,17 @@ public class ProgramParameterPanel extends OpticPane{
     }
     
  
-    public void addClusterBox(ClusterSelectionListener clusterSelectionListener, int index) {
+    public void addClusterBox(ClusterSelectionListener clusterSelectionListener, int index, boolean asMaster) {
         this.clusterBox = new ClusterCheckBox(index, true);
         this.clusterBox.addItemListener(clusterSelectionListener);
-        this.offsetPanel.add(this.clusterBox.inOpaquePanel(), BorderLayout.WEST);
+        this.clusterBox.setMaster(asMaster);
+        this.offsetPanel.add(this.clusterBox.inSurroundingPanel(), BorderLayout.WEST);
+    }
+    
+    public void setClusterBoxSelected(boolean selected){
+        if(this.clusterBox!= null){
+            this.clusterBox.setSelected(selected);
+        }
     }
     
     public void disableClusterByPresettings(){
@@ -139,7 +146,7 @@ public class ProgramParameterPanel extends OpticPane{
             toolBox.setDoubleBuffered(true);
             toolBox.setOpaque(true);
             this.boxes.add(toolBox);
-            parPan.add(toolBox.inTransparentPanel());
+            parPan.add(toolBox);
 //            System.out.println("\t \t Added checkbox "+parameter.getName());
         }
         else{

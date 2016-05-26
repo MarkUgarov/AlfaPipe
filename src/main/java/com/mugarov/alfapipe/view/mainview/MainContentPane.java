@@ -47,9 +47,9 @@ public class MainContentPane extends JPanel{
     
     private void init(){
         this.add(this.tabs, BorderLayout.CENTER);
-        this.southPanel.add(this.addSet.inTransparentPanel(), BorderLayout.WEST);
-        this.southPanel.add(this.start.inTransparentPanel(), BorderLayout.EAST);
-        this.southPanel.add(this.cancelAll.inTransparentPanel(), BorderLayout.CENTER);
+        this.southPanel.add(this.addSet.inSurroundingPanel(), BorderLayout.WEST);
+        this.southPanel.add(this.start.inSurroundingPanel(), BorderLayout.EAST);
+        this.southPanel.add(this.cancelAll.inSurroundingPanel(), BorderLayout.CENTER);
         this.add(this.southPanel, BorderLayout.SOUTH);
     }
     

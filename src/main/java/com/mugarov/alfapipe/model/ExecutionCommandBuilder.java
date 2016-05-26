@@ -23,6 +23,8 @@ public class ExecutionCommandBuilder {
     
     private final LogFileManager log;
     private ProgramSet set;
+    private File originalFile;
+    private boolean originalIsInputFileType;
     private File inputFile;
     private File outputFile;
     private boolean outputIsDirectory;
@@ -58,7 +60,7 @@ public class ExecutionCommandBuilder {
                                 String parentOutputDirectory,
                                 ArrayList<File> pairedFiles,
                                 File originalFile){
-        this.buildString(parameterSet, inputFile, parentOutputDirectory, pairedFiles, originalFile, true);
+        this.buildString(parameterSet, inputFile, parentOutputDirectory, pairedFiles, originalFile, (originalFile instanceof InputFile));
     }
     
     /**
@@ -80,6 +82,8 @@ public class ExecutionCommandBuilder {
         this.set = parameterSet;
         this.inputFile = inputFile;
         this.programSet = parameterSet;
+        this.originalFile = originalFile;
+        this.originalIsInputFileType = originalIsInputFileType;
         if(this.programName == null){
             this.programName = parameterSet.getName();
         }
@@ -233,25 +237,7 @@ public class ExecutionCommandBuilder {
                                 }
                             }
                             if(writeValue){
-                                String value = parameters.get(i).getValue();
-                                if(value.contains(ParameterPool.PROGRAM_PATH_VALUE)){
-                                    if(this.outputIsDirectory){
-                                        value = value.replaceAll(ParameterPool.PROGRAM_PATH_VALUE, outputFile.getPath());
-                                    }
-                                    else{
-                                        value = value.replaceAll(ParameterPool.PROGRAM_PATH_VALUE, outputFile.getParent());
-                                    }
-                                }
-                                if(value.contains(ParameterPool.PROGRAM_NAME_VALUE)){
-                                    value = value.replaceAll(ParameterPool.PROGRAM_NAME_VALUE, this.getClearName(originalFile, originalIsInputFileType));
-                                }
-                                if(value.contains(ParameterPool.PROGRAM_USER_VALUE)){
-                                    value = value.replaceAll(ParameterPool.PROGRAM_USER_VALUE, System.getProperty("user.name"));
-                                }
-                                if(value.contains(ParameterPool.PROGRAM_PROGRAM_NAME_VALUE)){
-                                    value = value.replaceAll(ParameterPool.PROGRAM_PROGRAM_NAME_VALUE,  this.programName);
-                                }
-                                builder.append(value);
+                                builder.append(this.getReplacedValue(parameters.get(i).getValue()));
                                 builder.append(" ");  
                             }
                         }
@@ -264,6 +250,28 @@ public class ExecutionCommandBuilder {
                 this.log.appendLine(ParameterPool.LOG_WARNING+"NO InputFileParameter was found for "+pf.getName(), ExecutionCommandBuilder.class.getName());
             }
         }
+    }
+    
+    private String getReplacedValue(String value){
+        String replacedValue = value;
+        if(replacedValue.contains(ParameterPool.PROGRAM_PATH_VALUE)){
+            if(this.outputIsDirectory){
+                replacedValue = replacedValue.replaceAll(ParameterPool.PROGRAM_PATH_VALUE, outputFile.getPath());
+            }
+            else{
+                replacedValue = replacedValue.replaceAll(ParameterPool.PROGRAM_PATH_VALUE, outputFile.getParent());
+            }
+        }
+        if(replacedValue.contains(ParameterPool.PROGRAM_NAME_VALUE)){
+            replacedValue = replacedValue.replaceAll(ParameterPool.PROGRAM_NAME_VALUE, this.getClearName(this.originalFile, this.originalIsInputFileType));
+        }
+        if(replacedValue.contains(ParameterPool.PROGRAM_USER_VALUE)){
+            replacedValue = replacedValue.replaceAll(ParameterPool.PROGRAM_USER_VALUE, System.getProperty("user.name"));
+        }
+        if(replacedValue.contains(ParameterPool.PROGRAM_PROGRAM_NAME_VALUE)){
+            replacedValue = replacedValue.replaceAll(ParameterPool.PROGRAM_PROGRAM_NAME_VALUE,  this.programName);
+        }
+        return replacedValue;
     }
     
     /**
@@ -315,7 +323,11 @@ public class ExecutionCommandBuilder {
      */
     public File getWorkingDirectory(){
         File ret;
-        if(this.outputIsDirectory){
+        
+        if(this.programSet.getParsedParameters().getForceWorkingDirectory() != null){
+            return new File(this.getReplacedValue(this.programSet.getParsedParameters().getForceWorkingDirectory()));
+        }
+        else if(this.outputIsDirectory){
             ret = (this.programSet.getParsedParameters().getOutputSettings().isMakeDirectory())?this.outputFile:this.outputFile.getParentFile();
         }
         else{

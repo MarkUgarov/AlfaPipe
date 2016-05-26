@@ -28,6 +28,7 @@ public class SetOfFiles implements Executable, Runnable{
     private ArrayList<InputFile> files;
     private final String id;
     private String name;
+    private InputFile currentRunningFile;
     
     private final MultiFileChooser inputChooser;
     private final OutputDirectoryChooser outputChooser;
@@ -278,6 +279,7 @@ public class SetOfFiles implements Executable, Runnable{
 
             
             for(InputFile file:this.files){
+                this.currentRunningFile = file;
                 boolean filePassed=true;
                 boolean essentialFilesExist = true;
                 boolean wait;
@@ -362,19 +364,54 @@ public class SetOfFiles implements Executable, Runnable{
         this.clusterParameters = set;
     }
 
-    public void selectClusterFor(int index, boolean forTool) {
-        if(forTool){
-            this.log.appendLine("Select Cluster for tool "+index, SetOfFiles.class.getName());
-            this.useClusterOnTool[index] = true;
-        }
+    
+    
+    public void selectClusterForAll(boolean select){
+        if(select){
+            for(int i = 0; i<this.useCluster.length; i++){
+                this.setClusterSelected(i, false);
+                }
+                for(int j = 0; j<this.useClusterOnTool.length; j++){
+                    this.setClusterSelected(j, true);
+                }
+            }
         else{
-            this.log.appendLine("Select Cluster for program "+index, SetOfFiles.class.getName());
-            this.useCluster[index] = true;
+            for(int i = 0; i<this.useCluster.length; i++){
+                this.setClusterUnselected(i, false);
+            }
+            for(int j = 0; j<this.useClusterOnTool.length; j++){
+                this.setClusterUnselected(j, true);
+            }
         }
         
+        this.tab.selectAllClusterBoxes(select);
+    }
+    
+    public void selectClusterFor(int index, boolean select, boolean isTool){
+        if(select){
+            this.setClusterSelected(index, isTool);
+        }
+        else{
+            this.setClusterUnselected(index, isTool);
+        }
     }
 
-    public void unselectClusterFor(int index, boolean forTool) {
+    public void setClusterSelected(int index, boolean forTool) {
+        if(!forTool){
+            this.log.appendLine("Select Cluster for program "+index, SetOfFiles.class.getName());
+            if(!this.usedPrograms.get(index).getParsedParameters().isDisableCluster()){
+                this.useCluster[index]=true;
+            }
+        }
+        else{
+            this.log.appendLine("Select Cluster for tool "+index, SetOfFiles.class.getName());
+            if(!this.availableTools.get(index).getParsedParameters().isDisableCluster()){
+                this.useClusterOnTool[index] = true;
+            }
+        }
+    }
+    
+    public void setClusterUnselected(int index, boolean forTool) {
         if(forTool){
             this.log.appendLine("Unselect Cluster for tool "+index, SetOfFiles.class.getName());
             this.useClusterOnTool[index] = false;
@@ -389,7 +426,11 @@ public class SetOfFiles implements Executable, Runnable{
         if(this.execution != null){
             this.execution.interrupt();
         }
+        if(this.started && this.currentRunningFile != null){
+            this.currentRunningFile.deleteOutput();
+        }
         this.started = false;
+        this.tab.reenablePartially();
     }
     
     

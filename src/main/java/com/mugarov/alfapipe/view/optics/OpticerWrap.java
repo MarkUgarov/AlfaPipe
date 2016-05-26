@@ -29,9 +29,12 @@ public class OpticerWrap extends JPanel{
         @Override
         public void paintComponent(Graphics g){
             super.paintComponent(g);
-            g.setColor(this.getBackground());
-            g.fillRect(0, 0, getWidth(), getHeight());
-            this.painted = true;
+            if(!this.painted){
+                g.setColor(this.getBackground());
+                g.fillRect(0, 0, getWidth(), getHeight());
+                this.painted = true;
+            }
+            
             
         }
         
@@ -51,7 +54,7 @@ public class OpticerWrap extends JPanel{
         @Override
         public void setOpaque(boolean isOpaque){
             this.opaque = isOpaque;
-            super.setOpaque(isOpaque);
+            super.setOpaque(this.opaque);
         }
         
         @Override

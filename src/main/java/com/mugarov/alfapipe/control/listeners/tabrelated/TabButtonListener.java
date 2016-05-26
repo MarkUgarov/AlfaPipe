@@ -30,7 +30,7 @@ public class TabButtonListener implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent ae) {
 //        System.out.println(ae.getActionCommand()+" was performed from "+this.fileSet.getID());
-       if(ae.getActionCommand().equals(ParameterPool.BUTTON_CHOOSE_RAW_FILE_COMMAND)){
+       if(ae.getActionCommand().equals(ParameterPool.BUTTON_CHOOSE_INPUT_FILE_COMMAND)){
 //            System.out.println("Open-Dialog should be shown");
             this.fileSet.showOpenDialog();
         }

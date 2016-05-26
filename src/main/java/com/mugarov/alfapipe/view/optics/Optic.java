@@ -24,6 +24,5 @@ public interface Optic {
 
     public abstract void mouseExit();
     
-    public abstract OpticerWrap inTransparentPanel();
     
 }

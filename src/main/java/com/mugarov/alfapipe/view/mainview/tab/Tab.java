@@ -62,7 +62,7 @@ public class Tab extends OpticPane{
         this.listenerBag = bag;
         this.layout = new BorderLayout();
         this.setLayout(this.layout);
-        this.fileChooser = new OpticButton(ParameterPool.BUTTON_CHOOSE_RAW_FILE_TEXT, ParameterPool.BUTTON_CHOOSE_RAW_FILE_COMMAND);
+        this.fileChooser = new OpticButton(ParameterPool.BUTTON_CHOOSE_INPUT_FILE_TEXT, ParameterPool.BUTTON_CHOOSE_INPUT_FILE_COMMAND);
         this.deleteSet = new OpticButton(ParameterPool.BUTTON_DELETE_SET_TEXT, ParameterPool.BUTTON_DELETE_SET_COMMAND);
         this.choosePath = new OpticButton(ParameterPool.BUTTON_CHOOOSE_OUTPUT_TEXT, ParameterPool.BUTTON_CHOOSE_OUTPUT_COMMAND);
         this.cancelSet = new OpticButton(ParameterPool.BUTTON_CANCEL_SET_TEXT, ParameterPool.BUTTON_CANCEL_SET_COMMAND);
@@ -78,7 +78,7 @@ public class Tab extends OpticPane{
             this.optionPanel.initSelection(pl.getIndex(), pl.getName(), pl);
         }
 
-        this.optionPanel.initCluster(this.listenerBag.getClusterParameterListener());
+        this.optionPanel.initCluster(this.listenerBag.getClusterParameterListener(), this.listenerBag.getClusterSelectionListener());
         
         this.outputPath = new JLabel();
         this.outputPanel = new OpticPane();
@@ -104,22 +104,22 @@ public class Tab extends OpticPane{
         this.applyName.addActionListener(this.listenerBag.getButtonListener());
         
         this.outputPanel.setLayout(new BorderLayout());
-        this.outputPanel.add(this.choosePath, BorderLayout.WEST);
+        this.outputPanel.add(this.choosePath.inSurroundingPanel(), BorderLayout.WEST);
         this.outputPanel.add(this.outputPath, BorderLayout.CENTER);
         
         this.namePanel.add(this.nameLabel, BorderLayout.WEST);
         this.namePanel.add(this.nameField, BorderLayout.CENTER);
-        this.namePanel.add(this.applyName, BorderLayout.EAST);
+        this.namePanel.add(this.applyName.inSurroundingPanel(), BorderLayout.EAST);
         
-        this.northPanel.add(this.outputPanel, BorderLayout.NORTH);
-        this.northPanel.add(this.fileChooser, BorderLayout.WEST);
+        this.northPanel.add(this.outputPanel, BorderLayout.SOUTH);
+        this.northPanel.add(this.fileChooser.inSurroundingPanel(), BorderLayout.WEST);
         this.northPanel.add(this.namePanel, BorderLayout.CENTER);
         
-        OpticPane northWestPane = new OpticPane(new BorderLayout());
-        northWestPane.add(this.deleteSet, BorderLayout.EAST);
-        northWestPane.add(this.cancelSet, BorderLayout.CENTER);
+        OpticPane northEastPane = new OpticPane(new BorderLayout());
+        northEastPane.add(this.deleteSet.inSurroundingPanel(), BorderLayout.EAST);
+        northEastPane.add(this.cancelSet.inSurroundingPanel(), BorderLayout.CENTER);
         this.cancelSet.setVisible(false);
-        this.northPanel.add(northWestPane, BorderLayout.EAST);
+        this.northPanel.add(northEastPane, BorderLayout.EAST);
         
         this.configPanel.add(this.optionPanel, BorderLayout.SOUTH);
         
@@ -204,6 +204,12 @@ public class Tab extends OpticPane{
         this.updateUI();
     }
     
+    public void reenablePartially(){
+        this.fileChooser.setEnabled(true);
+        this.deleteSet.setEnabled(true);
+        this.cancelSet.setVisible(false);
+    }
+    
     public void setFileProgressed(String id, boolean success){
         this.fileScrollPanel.setProgressed(id, success);
     }
@@ -220,7 +226,9 @@ public class Tab extends OpticPane{
         this.mainPanel.resetToPreferredSizes();
     }
 
-    
+    public void selectAllClusterBoxes(boolean selected){
+        this.optionPanel.selectAllClusterBoxes(selected);
+    }
      
     
 }

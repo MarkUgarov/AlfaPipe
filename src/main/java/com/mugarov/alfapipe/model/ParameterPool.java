@@ -44,8 +44,8 @@ public abstract class ParameterPool {
     public static final String BUTTON_CANCEL_ALL_COMMAND = "cancelAll";
     
     // texts for tabs content in the main content
-    public static final String BUTTON_CHOOSE_RAW_FILE_TEXT = "Add files";
-    public static final String BUTTON_CHOOSE_RAW_FILE_COMMAND = "chooseFile";
+    public static final String BUTTON_CHOOSE_INPUT_FILE_TEXT = "Add files";
+    public static final String BUTTON_CHOOSE_INPUT_FILE_COMMAND = "chooseFile";
     
     public static final String BUTTON_DELETE_SET_TEXT = "remove this set";
     public static final String BUTTON_DELETE_SET_COMMAND = "removeSet";
@@ -62,14 +62,14 @@ public abstract class ParameterPool {
     // texts for the SingleProgramPanels in the tabs
     public static final Color LABEL_IMPORTANCE_COLOR = Color.MAGENTA;
     public static final String LABEL_CLUSTER = "Cluster settings";
-    public static final String LABEL_PROGRAMS = "Programs:";
+    public static final String LABEL_PROGRAMS = "Programs";
         // labels for the default programs
     public static final String LABEL_PREPROCESSING = "Preprocessing";
     public static final String LABEL_PROCESSING = "Processing";
     public static final String LABEL_ASSEMBLER = "Assembler";
     public static final String LABEL_COMPARISON = "Comparison";
     public static final String LABEL_ANNOTATION = "Gene Annotation";
-    public static final String LABEL_TOOLS = "Tools:";
+    public static final String LABEL_TOOLS = "Tools";
     public static final Dimension LABEL_OFFSET = new Dimension(
                 (int)(java.awt.Toolkit.getDefaultToolkit().getScreenSize().width*0.03),
                 (int)(java.awt.Toolkit.getDefaultToolkit().getScreenSize().height*0.02)

@@ -6,6 +6,7 @@
 package com.mugarov.alfapipe.control.listeners.tabrelated.cluster;
 
 import com.mugarov.alfapipe.model.datatypes.SetOfFiles;
+import com.mugarov.alfapipe.view.mainview.tab.Tab;
 import com.mugarov.alfapipe.view.mainview.tab.selection.ClusterCheckBox;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
@@ -36,18 +37,23 @@ public class ClusterSelectionListener implements ItemListener{
     @Override
     public void itemStateChanged(ItemEvent ie) {
         ClusterCheckBox box =((ClusterCheckBox) ie.getItemSelectable());
-
+        
+        if(box.isMaster()){
+            this.fileSet.selectClusterForAll(ie.getStateChange() == ItemEvent.SELECTED);
+            return;
+        }
+        
         int index = box.getIndex();
        
         if(ie.getStateChange() == ItemEvent.SELECTED){
            if(this.fileSet != null){
-               this.fileSet.selectClusterFor(index, box.isTool());
+               this.fileSet.setClusterSelected(index, box.isTool());
            }
            box.setTooltipFor(true);
         }
        else{
            if(this.fileSet != null){
-               this.fileSet.unselectClusterFor(index, box.isTool());
+               this.fileSet.setClusterUnselected(index, box.isTool());
            }
            box.setTooltipFor(false);
        }
