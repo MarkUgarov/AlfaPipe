@@ -14,7 +14,7 @@
     <repositories>
         <repository>
            <id>qancellor-repo</id>
-           <url>https://github.com/MarkUgarov/Qancellor/raw/master/</url>
+           <url>https://github.com/MarkUgarov/Qancellor/raw/master/host/</url>
        </repository>
     </repositories>
 
