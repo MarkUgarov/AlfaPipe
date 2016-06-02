@@ -294,6 +294,7 @@ public class SetOfFiles implements Executable, Runnable{
                         clusterCommandBuilder.setName(this.usedPrograms.get(i).getName());
                         clusterCommandBuilder.buildString(this.clusterParameters, this.outputDirectory, this.outputDirectory.getPath(), null, this.outputDirectory, false);
                         clusterCommand = clusterCommandBuilder.getExecutionCommand();
+                        ComponentPool.QANCELL_CONTROLL.openQancellor();
                         filePassed = execution.execute(clusterCommand,command, wait);
                     }
                     else{

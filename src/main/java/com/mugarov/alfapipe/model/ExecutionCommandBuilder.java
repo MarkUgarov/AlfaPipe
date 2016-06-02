@@ -269,7 +269,7 @@ public class ExecutionCommandBuilder {
             replacedValue = replacedValue.replaceAll(ParameterPool.PROGRAM_USER_VALUE, System.getProperty("user.name"));
         }
         if(replacedValue.contains(ParameterPool.PROGRAM_PROGRAM_NAME_VALUE)){
-            replacedValue = replacedValue.replaceAll(ParameterPool.PROGRAM_PROGRAM_NAME_VALUE,  this.programName);
+            replacedValue = replacedValue.replaceAll(ParameterPool.PROGRAM_PROGRAM_NAME_VALUE,  this.getClearName(this.programName));
         }
         return replacedValue;
     }

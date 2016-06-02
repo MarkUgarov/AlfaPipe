@@ -116,8 +116,11 @@ public class ProgramParameterPanel extends OpticPane{
     }
     
     public void setClusterBoxSelected(boolean selected){
-        if(this.clusterBox!= null){
+        if(this.clusterBox!= null && this.clusterBox.isEnabled()){
             this.clusterBox.setSelected(selected);
+        }
+        else{
+            this.clusterBox.setSelected(false);
         }
     }
     

@@ -55,6 +55,9 @@ public abstract class ParameterPool {
     
     public static final String BUTTON_CANCEL_SET_TEXT = "Cancel set";
     public static final String BUTTON_CANCEL_SET_COMMAND = "cancelSet";
+    
+    public static final String BUTTON_QANCELLOR_TEXT = "Qancellor";
+    public static final String BUTTON_QANCELLOR_COMMAND = "qancellor";
             
     
     public static final int PARAMETERS_IN_ONE_ROW = 3;

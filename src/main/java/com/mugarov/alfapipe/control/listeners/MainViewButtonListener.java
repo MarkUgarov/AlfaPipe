@@ -6,8 +6,9 @@
 package com.mugarov.alfapipe.control.listeners;
 
 import com.mugarov.alfapipe.control.FileSetManager;
+import com.mugarov.alfapipe.control.QancellorControl;
+import com.mugarov.alfapipe.model.ComponentPool;
 import com.mugarov.alfapipe.model.ParameterPool;
-import com.mugarov.alfapipe.view.mainview.MainJFrame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -17,34 +18,41 @@ import java.awt.event.ActionListener;
  */
 public class MainViewButtonListener implements ActionListener{
     
-    private FileSetManager setManager;
+    private FileSetManager fileSetManager;
+    private QancellorControl qancellorControl;
     
     public MainViewButtonListener(){
-        this.setManager = null;
+        this.fileSetManager = null;
+        this.qancellorControl = null;
 
     }
 
     @Override
     public void actionPerformed(ActionEvent ae) {
-        
-        if(ae.getActionCommand().equals(ParameterPool.BUTTON_START_COMMAND)){
-            System.out.println("Here should start");
-            this.setManager.run();
+        if(this.fileSetManager == null){
+            System.err.println("No FileSetManager was set in "+MainViewButtonListener.class.getName());
+        }
+        else if(ae.getActionCommand().equals(ParameterPool.BUTTON_START_COMMAND)){
+            this.fileSetManager.run();
         }
         else if(ae.getActionCommand().equals(ParameterPool.BUTTON_ADD_DATA_SET_COMMAND)){
 
-            this.setManager.add();
+            this.fileSetManager.add();
         }
         else if(ae.getActionCommand().equals(ParameterPool.BUTTON_CANCEL_ALL_COMMAND)){
-            this.setManager.cancelAll();
+            this.fileSetManager.cancelAll();
+        }
+        else if(ae.getActionCommand().equals(ParameterPool.BUTTON_QANCELLOR_COMMAND)){
+            this.qancellorControl.openQancellor();
         }
         else{
             System.out.println(ae.getActionCommand()+ " has been performed. Not detected");
         }
     }
     
-    public void setFileManager(FileSetManager manager){
-        this.setManager = manager;
+    public void setFileSetManager(FileSetManager manager){
+        this.fileSetManager = manager;
+        this.qancellorControl = ComponentPool.QANCELL_CONTROLL;
     }
     
     

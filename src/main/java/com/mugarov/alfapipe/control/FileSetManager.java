@@ -31,7 +31,7 @@ public class FileSetManager {
         this.lastIndex = 0;
         this.frame = frame;
         this.startedThreads = new ArrayList<>();
-        ComponentPool.LISTENER_BUTTON.setFileManager(this);
+        ComponentPool.LISTENER_BUTTON.setFileSetManager(this);
         this.add();
     }
     
