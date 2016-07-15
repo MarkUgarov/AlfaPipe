@@ -136,7 +136,7 @@ public class ExecutionCommandBuilder {
                 }
             }
             else{
-                for(ParameterField lP:parameterSet.getParsedParameters().getLocalPrependParamters()){
+                for(ParameterField lP:parameterSet.getParsedParameters().getLocalPrependParameters()){
                     this.buildParameterCommand(lP, null, null, parameterSet.getLocalPrependParamters(), originalFile, originalIsInputFileType);
                 }
             }

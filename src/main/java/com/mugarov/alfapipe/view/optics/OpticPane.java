@@ -6,11 +6,13 @@
 package com.mugarov.alfapipe.view.optics;
 
 import com.mugarov.alfapipe.model.ParameterPool;
-import java.awt.BorderLayout;
+import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.LayoutManager;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
@@ -28,12 +30,14 @@ public class OpticPane extends JPanel implements Optic{
     private Color background;
     private Image backgroundImage;
     private boolean failedToReadBackgroundImage;
+    private float imageOpacity =  0.5f;
+    private float imageScale = 0.5f;
     
     
      public OpticPane(){
         super();
         this.setDoubleBuffered(true);
-        this.drawImage = true;
+        this.drawImage = false;
         this.setBackground(ParameterPool.COLOR_BACKGROUND_STANDARD);
         this.failedToReadBackgroundImage = false;
         this.setTransparent();
@@ -121,23 +125,39 @@ public class OpticPane extends JPanel implements Optic{
         } catch (IOException e) {
             e.printStackTrace();
         }
+        
         this.failedToReadBackgroundImage = false;
         return image;
+    }
+    
+    public BufferedImage toBufferedImage(Image img){
+        int imageHeight = (int) Math.min(this.getHeight(),(Math.max(this.getHeight(), this.getWidth())*this.imageScale));
+        int imageWidth = (int)  Math.min(this.getWidth(),(Math.max(this.getHeight(), this.getWidth())*this.imageScale));
+        BufferedImage buffImage = new BufferedImage(imageWidth, imageHeight, BufferedImage.TYPE_4BYTE_ABGR);
+        Graphics2D g = buffImage.createGraphics();
+        g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, this.imageOpacity));
+        g.drawImage(img, 0, 0, imageWidth, imageHeight, null);
+        g.dispose();
+        return buffImage;
     }
      
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         if(!this.transparent && this.drawImage && !this.failedToReadBackgroundImage){
+            
             if(this.backgroundImage == null){
                 this.backgroundImage = this.getBackgroundImage();
             }
             if(!this.failedToReadBackgroundImage){
-                g.drawImage(this.backgroundImage, 0, 0, null);
+                g.drawImage(this.toBufferedImage(this.backgroundImage), 0, 0, null);
             }
         }
-        
     }
+    
+    
+    
+    
 
     @Override
     public void drawBackgroundImage(boolean draw) {

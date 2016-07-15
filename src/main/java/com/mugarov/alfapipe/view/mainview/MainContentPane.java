@@ -10,6 +10,7 @@ import com.mugarov.alfapipe.view.mainview.tab.DataTabbedPane;
 import com.mugarov.alfapipe.view.optics.OpticButton;
 import com.mugarov.alfapipe.view.optics.OpticPane;
 import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import javax.swing.JPanel;
 
 
@@ -51,8 +52,10 @@ public class MainContentPane extends JPanel{
         this.add(this.tabs, BorderLayout.CENTER);
         this.southPanel.add(this.addSet.inSurroundingPanel(), BorderLayout.WEST);
         this.southPanel.add(this.start.inSurroundingPanel(), BorderLayout.EAST);
-        this.southPanel.add(this.cancelAll.inSurroundingPanel(), BorderLayout.CENTER);
-        this.southPanel.add(this.qancellorButton.inSurroundingPanel(), BorderLayout.BEFORE_FIRST_LINE);
+        OpticPane southCenterPane = new OpticPane(new FlowLayout());
+        southCenterPane.add(this.qancellorButton.inSurroundingPanel());
+        southCenterPane.add(this.cancelAll.inSurroundingPanel());
+        this.southPanel.add(southCenterPane, BorderLayout.CENTER);
         this.add(this.southPanel, BorderLayout.SOUTH);
     }
     

@@ -16,7 +16,7 @@ public class NameField {
     private boolean useAll;
     private boolean useOnly;
     // for non-dynamic
-    private String name;
+    private String fileName;
     // for dynamic
     private String regex;
     private String prefix;
@@ -29,7 +29,7 @@ public class NameField {
      * no other output will be used for "none".
      */
     public NameField(){
-        this.name = null;
+        this.fileName = null;
         this.essentialFor = null;
         this.dynamic = false;
         this.useAll = false;
@@ -73,17 +73,17 @@ public class NameField {
     }
 
     /**
-     * @return the name
+     * @return the name 
      */
-    public String getName() {
-        return name;
+    public String getFileName() {
+        return fileName;
     }
 
     /**
      * @param name the name to set
      */
-    public void setName(String name) {
-        this.name = name;
+    public void setFileName(String name) {
+        this.fileName = name;
     }
 
     /**

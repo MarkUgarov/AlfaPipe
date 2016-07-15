@@ -1,4 +1,4 @@
-/*
+        /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -30,7 +30,7 @@ public class ParseableProgram{
     private String forceWorkingDirectory;
     
     private ArrayList<ParameterField> additionalClusterParameters;
-    private ArrayList<ParameterField> localPrependParamters;
+    private ArrayList<ParameterField> localPrependParameters;
     private ArrayList<ParameterField> parameters;
     private ParameterField inputPathCommand;
     private ParameterField outputPathCommand;
@@ -57,7 +57,7 @@ public class ParseableProgram{
         this.outputSettings = new OutputField();
         this.essentialOutputs = new ArrayList<>();
         this.additionalClusterParameters = new ArrayList<>();
-        this.localPrependParamters = new ArrayList<>();
+        this.localPrependParameters = new ArrayList<>();
         this.disableCluster = false;
         this.skipWaiting = false;
         this.removeFilesAfterSetCompletion = false;
@@ -322,7 +322,7 @@ public class ParseableProgram{
     public void addEssentialOutput(String name, String targetProgram){
         NameField field = new NameField();
         field.setDynamic(false);
-        field.setName(name);
+        field.setFileName(name);
         field.setEssentialFor(targetProgram);
         this.essentialOutputs.add(field);
     }
@@ -332,14 +332,14 @@ public class ParseableProgram{
         if(this.essentialOutputs == null){
             this.essentialOutputs = new ArrayList<>();
         }
-        else{
-            for(int i =0; i<this.essentialOutputs.size();i++){
-                if(this.essentialOutputs.get(i).getEssentialFor().equals(field.getEssentialFor())){
-                    System.out.println("Remove "+this.essentialOutputs.get(i).getEssentialFor()+" because it equals "+field.getEssentialFor());
-                    this.essentialOutputs.remove(i);
-                }
-            } 
-        }
+//        else{
+//            for(int i =0; i<this.essentialOutputs.size();i++){
+//                if(this.essentialOutputs.get(i).getEssentialFor().equals(field.getEssentialFor())){
+//                    System.out.println("Remove "+this.essentialOutputs.get(i).getEssentialFor()+" because it equals "+field.getEssentialFor());
+//                    this.essentialOutputs.remove(i);
+//                }
+//            } 
+//        }
         this.essentialOutputs.add(field);
     }
     
@@ -461,29 +461,29 @@ public class ParseableProgram{
     /**
      * @return the localPrependParamter
      */
-    public ArrayList<ParameterField> getLocalPrependParamters() {
-        return localPrependParamters;
+    public ArrayList<ParameterField> getLocalPrependParameters() {
+        return localPrependParameters;
     }
 
     /**
      * @param localPrependParamter the localPrependParamter to set
      */
-    public void setLocalPrependParamters(ArrayList<ParameterField> localPrependParamter) {
-        this.localPrependParamters = localPrependParamter;
+    public void setLocalPrependParameters(ArrayList<ParameterField> localPrependParamter) {
+        this.localPrependParameters = localPrependParamter;
     }
     
     @JsonIgnore
     public void addLocalPrependParameter(String name, String command, String defaultValue, int position, boolean optional, String tooltip){
         int i= 0; 
-        while(i<this.localPrependParamters.size()){
-            if(this.localPrependParamters.get(i).getName().equals(name)){
-                this.localPrependParamters.remove(i);
+        while(i<this.localPrependParameters.size()){
+            if(this.localPrependParameters.get(i).getName().equals(name)){
+                this.localPrependParameters.remove(i);
             }
             else{
                 i++;
             }
         }
-        this.localPrependParamters.add(new ParameterField(name, command, defaultValue, position, optional, tooltip));
+        this.localPrependParameters.add(new ParameterField(name, command, defaultValue, position, optional, tooltip));
     }
     
     @JsonIgnore
@@ -493,15 +493,15 @@ public class ParseableProgram{
             return;
         }
         int i= 0; 
-        while(i<this.localPrependParamters.size()){
-            if(this.localPrependParamters.get(i).getName().equals(parameter.getName())){
-                this.localPrependParamters.remove(i);
+        while(i<this.localPrependParameters.size()){
+            if(this.localPrependParameters.get(i).getName().equals(parameter.getName())){
+                this.localPrependParameters.remove(i);
             }
             else{
                 i++;
             }
         }
-        this.localPrependParamters.add(parameter);
+        this.localPrependParameters.add(parameter);
     }
 
     /**

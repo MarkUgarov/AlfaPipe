@@ -55,17 +55,17 @@ public class ClusterParameterFabric{
         this.cluster.setStartCommand(this.startCommand);
        
         
-        this.standardLogfile = new ParameterField("Standard Output Log", "-o",  ParameterPool.PROGRAM_PATH_VALUE+"/clusterlog.txt",1,true);
-        this.errorLogfile = new ParameterField("Error Output Log", "-e", ParameterPool.PROGRAM_PATH_VALUE+"/clusterlog.txt", 2, true);
-        this.basicOutput = new ParameterField("Basic Output Directory", "-cwd", "", 3, true);
-        this.numberOfThreads = new ParameterField("Number of threads", "-pe multislot", "8", 4, true);
-        this.ramPerThread = new ParameterField("RAM per thread", "-l vf=", "1G", 5, true);
+        this.standardLogfile = new ParameterField("Standard Output Log", "-o",  ParameterPool.PROGRAM_PATH_VALUE+"/clusterlog.txt",1,true, "Redirecting the standard output stream to a certain file.");
+        this.errorLogfile = new ParameterField("Error Output Log", "-e", ParameterPool.PROGRAM_PATH_VALUE+"/clusterlog.txt", 2, true, "Redirecting the error stream to a certain file.");
+        this.basicOutput = new ParameterField("Basic Output Directory", "-cwd", "", 3, true, "Defines the basic output directory (leave empty to apply your current working directory).");
+        this.numberOfThreads = new ParameterField("Number of Threads", "-pe multislot", "8", 4, true, "The number of threads per job.");
+        this.ramPerThread = new ParameterField("RAM per Thread", "-l vf=", "1G", 5, true);
         this.ramPerThread.setAvoidLeadingSpace(true);
-        this.platform = new ParameterField("Platform", "-l arch=", "lx24-amd64", 6, true);
+            this.platform = new ParameterField("Platform", "-l arch=", "lx24-amd64", 6, true);
         this.platform.setAvoidLeadingSpace(true);
         this.waitPar = new ParameterField("wait", "-sync", "y", 7, true, "Wait before continue with the next step. (y for yes, n for no)");
         this.rerun = new ParameterField("rerun", "-r", "y", 8, true, "If  the value is  'y',  the  job will be rerun if the job was aborted without leaving a consistent exit state. Type 'n' to avoid.");
-        this.name  = new ParameterField("Job name", "-N", ParameterPool.PROGRAM_NAME_VALUE+"_"+ParameterPool.PROGRAM_PROGRAM_NAME_VALUE, 9, true);
+        this.name  = new ParameterField("Job Name", "-N", ParameterPool.PROGRAM_NAME_VALUE+"_"+ParameterPool.PROGRAM_PROGRAM_NAME_VALUE, 9, true, "Choose a name for the jobs (can be seen in Qancellor).");
         
         this.cluster.addParameter(this.standardLogfile);
         this.cluster.addParameter(this.errorLogfile);

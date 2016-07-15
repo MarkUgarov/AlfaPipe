@@ -56,7 +56,7 @@ public class ProgramSet {
                     this.additionalClusterParameters.add(new InputParameter(pF, shown));
                 }
             }
-            for(ParameterField pF: program.getLocalPrependParamters()){
+            for(ParameterField pF: program.getLocalPrependParameters()){
                 if(pF == null){
                     System.err.println("Local Prepend Parameter was null in "+this.name);
                 }
@@ -124,7 +124,7 @@ public class ProgramSet {
     
     public boolean specificOutputDefinedFor(String followingName){
         for(NameField field:this.program.getEssentialOutputs()){
-            if(field.getName().equals(followingName)){
+            if(field.getFileName().equals(followingName)){
                 return true;
             }
         }

@@ -58,6 +58,7 @@ public class Tab extends OpticPane{
     
     public Tab(String id, TabListenerBag bag){
         super.setOpaque();
+        super.drawBackgroundImage(true);
         this.id = id;
         this.listenerBag = bag;
         this.layout = new BorderLayout();

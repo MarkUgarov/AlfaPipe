@@ -29,7 +29,7 @@ public class ProcessingParameterFabric {
 
 
         String[] endings = {".fastq"};
-        String[] outputEnding = new String[]{".fa"};
+        String[] outputEnding = new String[]{".fastq"};
         ParseableProgram miseq = new ParseableProgram( "MiSeqFASTQ for Newbler",
                                                                 ParameterPool.FILE_SCRIPT_PATH+"MiSeqFASTQ4Newbler_v2.8b_OutputOnArgs1.pl", 
                                                                 null,
@@ -62,10 +62,10 @@ public class ProcessingParameterFabric {
                                                                 0,
                                                                 null,
                                                                 null); 
-       
+        this.defaultList.add(nullProcessor);
         this.defaultList.add(miseq);
         this.defaultList.add(splitMiseq);
-        this.defaultList.add(nullProcessor);
+        
         
         this.parameterList = new ParseableProgramList();
         this.parameterList.setIndex(this.index);

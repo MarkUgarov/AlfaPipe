@@ -9,6 +9,7 @@ import com.mugarov.alfapipe.model.ComponentPool;
 import com.mugarov.alfapipe.model.ExecutionCommandBuilder;
 import com.mugarov.alfapipe.model.LogFileManager;
 import com.mugarov.alfapipe.model.ParameterPool;
+import com.mugarov.alfapipe.model.filetools.FileLister;
 import com.mugarov.alfapipe.model.filetools.FileNaming;
 import com.mugarov.alfapipe.model.programparse.datatypes.ParseableProgram;
 import java.io.File;
@@ -155,7 +156,7 @@ public class InputFile extends File implements Executable{
         }
         this.log.appendLine("Program of index "+i+" of file "+this.getName()+" has been changed to "+this.programParameters.get(i).getName(), InputFile.class.getName());
         if(validate){
-            return this.validateFile();
+            return this.validatePrograms();
         }
         
         return this.valid;
@@ -241,31 +242,45 @@ public class InputFile extends File implements Executable{
      * current assembler has a start-command. Else, it will automatically asume
      * that the file will not be assembled and it will be true automatically. 
      */
-    public boolean validateFile(){
-        String[] splitname = this.getName().split("\\.",2);
-        ArrayList<String> from = new ArrayList<>();
-        from.add(splitname[splitname.length-1]);
-        
+    public boolean validatePrograms(){
+
         this.firstNonNullParameters = null;
         this.lastNonNullParameters = null;
-        ParseableProgram to = null;
+        this.valid = true;
         
-        boolean preprocessingValid = true;
+        ArrayList<ProgramSet> previous = new ArrayList<>();
+       
         for(ProgramSet set:this.programParameters){
             if(set != null && !set.isEmpty() && set.getParsedParameters().getStartCommand()!= null){
-                to = set.getParsedParameters();
-                this.valid = this.validateFromTo(from, to);
+                
+                this.valid = this.valid && this.validate(previous, set);
+
                 if(this.firstNonNullParameters == null){
                     this.firstNonNullParameters =set;
                 }
-                from.addAll(Arrays.asList(set.getParsedParameters().getOutputEndings()));
                 this.lastNonNullParameters = set;
-            }
-            if(!this.valid){
-                this.log.appendLine(set.getName()+" not valid for "+this.getName(), InputFile.class.getName());
+                previous.add(set);
             }
         }
         return this.valid;
+    }
+    
+    private boolean validate(ArrayList<ProgramSet> previous, ProgramSet current){
+        ArrayList<String> producedEndings = new ArrayList<>();
+        producedEndings.add(FileNaming.getEnding(this));
+        FileLister donor;
+        for(ProgramSet set: previous){
+            donor = new FileLister(this.log, this, set);
+            producedEndings.addAll(donor.shouldProduceOutputFor(current));
+        }
+        boolean ret = this.validateFromTo(producedEndings, current.getParsedParameters());
+        if(!ret){
+            this.log.appendLine(current.getName()+" not valid for "+this.getName()+", Valid input: "+Arrays.asList(current.getParsedParameters().getValidInputEndings())+" , Available "+ producedEndings, InputFile.class.getName());
+        }
+        else{
+            this.log.appendLine(current.getName()+" is valid for "+this.getName(), InputFile.class.getName());
+        }
+        return ret;
     }
     
     /**
@@ -277,17 +292,16 @@ public class InputFile extends File implements Executable{
         return this.valid;
     }
     
-    public boolean toolIsValid(ParseableProgram tool){
+    public boolean toolIsValid(ProgramSet tool){
         if(tool == null){
             return true;
         }
-        ArrayList<String> from = new ArrayList<>();
-        for(ProgramSet set: this.programParameters){
-            if(set != null && !set.isEmpty() && set.getParsedParameters().getStartCommand() != null){
-                from.addAll(Arrays.asList(set.getParsedParameters().getOutputEndings()));
-            }
-        }
-        return this.validateFromTo(from, tool);
+
+        return this.validate(this.programParameters, tool);
+    }
+    
+    public boolean toolIsValid(ParseableProgram tool){
+        return this.toolIsValid(new ProgramSet(tool));
     }
     
     public ArrayList<String> getValidTools(){

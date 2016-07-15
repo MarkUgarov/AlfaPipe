@@ -42,7 +42,7 @@ public class PreprocessingParameterFabric {
         mainProcessor.setRemoveFilesAfterSetCompletion(true);
         NameField essential = new NameField();
         essential.setDynamic(false);
-        essential.setName("Unziped_R1_001.fastq");
+        essential.setFileName("Unziped_R1_001.fastq");
         essential.setEssentialFor("MiSeqFASTQ for Newbler");
         essential.setUseOnly(true);
         ArrayList<NameField> fields = new ArrayList<>();
@@ -58,8 +58,9 @@ public class PreprocessingParameterFabric {
                                                                 0,
                                                                 null,
                                                                 null); 
-        this.defaultList.add(mainProcessor);
         this.defaultList.add(nullPreProcessor);
+        this.defaultList.add(mainProcessor);
+        
         
         this.parameterList = new ParseableProgramList();
         this.parameterList.setIndex(this.index);

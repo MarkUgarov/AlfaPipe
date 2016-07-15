@@ -34,7 +34,7 @@ public class ComparisonParameterFabric {
         neview.setDisableCluster(true);
         neview.setSkipWaiting(true);
         neview.setValidInputEndings(endings);
-        neview.setStartCommand("java -jar /vol/ampipe/data/NeView/NeView-0.0.1.jar");
+        neview.setStartCommand("java -jar /vol/ampipe/data/NeView/NeView-0.0.2.jar");
         neview.setInputPathCommand(null, 1);
         neview.setOutputSettings(true, false);
         neview.setRemoveFilesAfterSetCompletion(true);
@@ -50,8 +50,9 @@ public class ComparisonParameterFabric {
                                                                 null,
                                                                 null); 
        
-        this.defaultList.add(neview);
         this.defaultList.add(nullReadsVsContigs);
+        this.defaultList.add(neview);
+        
         
         this.parameterList = new ParseableProgramList();
         this.parameterList.setIndex(this.index);

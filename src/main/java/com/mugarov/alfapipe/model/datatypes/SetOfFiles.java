@@ -107,7 +107,7 @@ public class SetOfFiles implements Executable, Runnable{
                 }
                 this.files.add(inFile);
                 this.tab.addFile(file.getAbsolutePath(),file.getName(), new SingleFileListener(inFile, this));
-                this.tab.setValidation(inFile.getAbsolutePath(), inFile.validateFile(), inFile.getValidTools());
+                this.tab.setValidation(inFile.getAbsolutePath(), inFile.validatePrograms(), inFile.getValidTools());
             }
             
         }

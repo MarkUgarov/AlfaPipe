@@ -128,7 +128,24 @@ public abstract class FileNaming {
         return newName.toString();
     }
     
-    public static String getName(NameField field){
-        return null;
+    public static String getEnding(File file){
+        return FileNaming.getEnding(file.getName());
     }
+    
+    public static String getEnding(String fileName){
+        if(fileName == null){
+            return null;
+        }
+        String[] split = fileName.split("\\.", 2);
+        if(split.length<2){
+            System.out.println("Could not split "+fileName);
+            return "";
+        }
+        else{
+            return split[1];
+        }
+        
+    }
+    
+
 }

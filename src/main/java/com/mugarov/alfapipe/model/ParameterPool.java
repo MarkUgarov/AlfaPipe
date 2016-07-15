@@ -17,13 +17,12 @@ public abstract class ParameterPool {
     
     // cluster
     public static final boolean CLUSTER_ENABLE = true;
-    public static final int CLUSTER_WAITING_TIME = 5000;
     
     // general optical parameters
     public static final String TITLE = "Alfa - Pipe: A likely functional assembler Pipe.";
     public static final boolean FULLSCREAN = true;
     public static final Dimension FRAMESIZE = new Dimension(400,600);
-    public static final Color COLOR_BACKGROUND_STANDARD = new Color(128, 255 , 0);
+    public static final Color COLOR_BACKGROUND_STANDARD = new Color(0, 204 , 255);
     public static final Color COLOR_BACKGROUND_SECOND = new Color(160,160,160,125);
     public static final Color COLOR_BACKGROUND_CLUSTER = new Color(0, 0, 255, 125);
     public static final Color COLOR_BACKGROUND_DISABLED = Color.yellow;
@@ -101,9 +100,9 @@ public abstract class ParameterPool {
                 (int)(java.awt.Toolkit.getDefaultToolkit().getScreenSize().height*0.05)
                 );
     
-    public static final Color COLOR_VALID = Color.GREEN;
+    public static final Color COLOR_VALID = Color.CYAN;
     public static final Color COLOR_INVALID = Color.RED;
-    public static final Color COLOR_SUCCESS = Color.CYAN;
+    public static final Color COLOR_SUCCESS = Color.GREEN;
     public static final Color COLOR_FAILURE = Color.darkGray;
     
     
