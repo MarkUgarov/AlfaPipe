@@ -349,59 +349,59 @@ public class ExecutionCommandBuilder {
         return this.outputFile;
     }
     
-    /**
-     * This is an old method! It does only return the relevant output if there 
-     * is no other ExecutionCommandBuilder than this and the following. 
-     * Use buildString before! Make sure the execution of the set (= the execution 
-     * of the command given this.buildString(...) ) worked and the output files are
-     * written already.
-     * @param following ist the ProgramSet which an output could be defined for
-     * @param originalFile is the original input-file at the beginning of the pipe
-     * @return different parameters:
-     *  -all files if there is no specific output defined for ANY program at all
-     *  -OR the specific output defined if it is defined for the set "following"
-     *  -OR all files if there is no specific output defined for this specific set "following"
-     */
-    public ArrayList<File> getRelevantOutputFor(ProgramSet following, File originalFile){
-        if(this.set == null){
-            this.log.appendLine(ParameterPool.LOG_WARNING+"Commandbuilder: no set! ", ExecutionCommandBuilder.class.getName());
-            return null;
-        }
-        ArrayList<File> ret;
-        if(this.set.getParsedParameters().getEssentialOutputs() == null){
-           ret= this.getAllFiles();
-        }
-        else{
-            boolean found = false;
-            ret = new ArrayList<>(this.set.getParsedParameters().getEssentialOutputs().size());
-            for(NameField field:this.set.getParsedParameters().getEssentialOutputs()){
-                if(field.getEssentialFor() == null || field.getEssentialFor().equals(following.getName())){
-                    if(field.isUseAll()){
-                        return this.getAllFiles();
-                    }
-                    ret.add(this.getFileFor(field, originalFile));
-                    found = false;
-                }
-            }   
-            // 
-            /**
-             * if no specific output was declared for the following set (but 
-             * for other possible sets)
-             * Example: this.set has the role of an assembler and after that 
-             * a and b 
-             */
-            if(!found){
-                ret = this.getAllFiles();
-            }
-        }
-        if(ret== null||ret.isEmpty()){
-            this.log.appendLine(ParameterPool.LOG_WARNING+"Commandbuilder: empty or null returns for "+following.getName(), ExecutionCommandBuilder.class.getName());
-        }
-        return ret;
-    }
+//    /**
+//     * This is an old method! It does only return the relevant output if there 
+//     * is no other ExecutionCommandBuilder than this and the following. 
+//     * Use buildString before! Make sure the execution of the set (= the execution 
+//     * of the command given this.buildString(...) ) worked and the output files are
+//     * written already.
+//     * @param following ist the ProgramSet which an output could be defined for
+//     * @param originalFile is the original input-file at the beginning of the pipe
+//     * @return different parameters:
+//     *  -all files if there is no specific output defined for ANY program at all
+//     *  -OR the specific output defined if it is defined for the set "following"
+//     *  -OR all files if there is no specific output defined for this specific set "following"
+//     */
+//    public ArrayList<File> getRelevantOutputFor(ProgramSet following, File originalFile){
+//        if(this.set == null){
+//            this.log.appendLine(ParameterPool.LOG_WARNING+"Commandbuilder: no set! ", ExecutionCommandBuilder.class.getName());
+//            return null;
+//        }
+//        ArrayList<File> ret;
+//        if(this.set.getParsedParameters().getEssentialOutputs() == null){
+//           ret= this.getAllFiles();
+//        }
+//        else{
+//            boolean found = false;
+//            ret = new ArrayList<>(this.set.getParsedParameters().getEssentialOutputs().size());
+//            for(NameField field:this.set.getParsedParameters().getEssentialOutputs()){
+//                if(field.getEssentialFor() == null || field.getEssentialFor().equals(following.getName())){
+//                    if(field.isUseAll()){
+//                        return this.getAllFiles();
+//                    }
+//                    ret.add(this.getFileFor(field, originalFile));
+//                    found = false;
+//                }
+//            }   
+//            // 
+//            /**
+//             * if no specific output was declared for the following set (but 
+//             * for other possible sets)
+//             * Example: this.set has the role of an assembler and after that 
+//             * a and b 
+//             */
+//            if(!found){
+//                ret = this.getAllFiles();
+//            }
+//        }
+//        if(ret== null||ret.isEmpty()){
+//            this.log.appendLine(ParameterPool.LOG_WARNING+"Commandbuilder: empty or null returns for "+following.getName(), ExecutionCommandBuilder.class.getName());
+//        }
+//        return ret;
+//    }
     
-    public ArrayList<File> getSpecifiFilesFor(ProgramSet following){
-        return this.fileLister.getSpecifiFilesFor(this.set, following);
+    public ArrayList<File> getSpecificExistentFilesFor(ProgramSet following){
+        return this.fileLister.getSpecifiExistentFilesFor(this.set, following);
     }
     
     /**
@@ -418,9 +418,9 @@ public class ExecutionCommandBuilder {
         return this.fileLister.getAllFiles();
     }
     
-    private File getFileFor(NameField field, File originalFile){
-        return this.fileLister.getFileFor(field);
-    }
+//    private File getFileFor(NameField field, File originalFile){
+//        return this.fileLister.getFileFor(field);
+//    }
     
     private File getDynamicNamedFileOf(String parentDir, NameField field, File originalFile){
         return new File(parentDir, FileNaming.getDynamicNameOf(field, originalFile));

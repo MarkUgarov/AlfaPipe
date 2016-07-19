@@ -13,7 +13,6 @@ import com.mugarov.alfapipe.model.ComponentPool;
 import com.mugarov.alfapipe.model.datatypes.ProgramSet;
 import com.mugarov.alfapipe.model.datatypes.ProgramSetList;
 import com.mugarov.alfapipe.model.datatypes.SetOfFiles;
-import com.mugarov.alfapipe.model.programparse.fabrics.ClusterParameterFabric;
 import java.util.ArrayList;
 
 /**

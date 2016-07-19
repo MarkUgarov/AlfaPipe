@@ -6,6 +6,7 @@
 package com.mugarov.alfapipe.model.programparse.fabrics;
 
 import com.mugarov.alfapipe.model.ParameterPool;
+import com.mugarov.alfapipe.model.programparse.datatypes.PairedInputConditions;
 import com.mugarov.alfapipe.model.programparse.datatypes.ParseableProgramList;
 import com.mugarov.alfapipe.model.programparse.datatypes.ParseableProgram;
 import java.util.ArrayList;
@@ -41,6 +42,7 @@ public class ProcessingParameterFabric {
         miseq.addEssentialOutput(ParameterPool.PROGRAM_FILE_VALUE, "Newbler");
         miseq.addAdditionalClusterParameter(ParameterPool.PROGRAM_BINARAY_NAME, ParameterPool.PROGRAM_BINARY_COMMAND, ParameterPool.PROGRAM_BINARY_CONFIRM, ParameterPool.PROGRAM_BINARY_POSITION, ParameterPool.PROGRAM_BINARY_OPTIONAL, ParameterPool.PROGRAM_BINARY_DESCRIPTION);
         miseq.setOutputSettings(false, true);
+        miseq.setPairedConditions(new PairedInputConditions());
         
         ParseableProgram splitMiseq = new ParseableProgram( "split MiSeq MP nextera",
                                                                 ParameterPool.FILE_SCRIPT_PATH+"split_MiSeq_MP_nextera_OutputOnArgs1.pl", 

@@ -12,6 +12,8 @@ import com.mugarov.alfapipe.model.programparse.datatypes.NameField;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -24,6 +26,8 @@ public class FileLister {
     private final boolean outputIsDirectory;
     private final File originalFile;
     private final ProgramSet set;
+    private boolean addOutputDir;
+    private boolean addOutputFile;
     
     public FileLister(LogFileManager logManager, File outputFile, boolean outputIsDir, File originalFile, ProgramSet set){
         this.log = logManager;
@@ -31,6 +35,8 @@ public class FileLister {
         this.outputIsDirectory = outputIsDir;
         this.originalFile = originalFile;
         this.set = set;
+        this.addOutputDir =false;
+        this.addOutputFile = false;
     }
     
      public FileLister(LogFileManager logManager,  File originalFile, ProgramSet set){
@@ -39,50 +45,12 @@ public class FileLister {
         this.outputIsDirectory = false;
         this.originalFile = originalFile;
         this.set = set;
+        this.addOutputDir =false;
+        this.addOutputFile = false;
     }
     
-    
-    public File getFileFor(NameField field){
-        File ret;
-        if(this.outputFile == null){
-            this.log.appendLine("Output File is null - null file will be returned.", FileLister.class.getName());
-            return null;
-        }
-        else if(field.isDynamic()){
-            if(this.outputIsDirectory){
-                ret = this.getDynamicNamedFileOf(this.outputFile.getPath(),field);
-            } 
-            else{
-                ret = this.getDynamicNamedFileOf(this.outputFile.getParent(), field);
-            }
-        }
-        else{
-            if(field.getFileName().equals(ParameterPool.PROGRAM_DIRECTORY_VALUE)){
-                if(this.outputIsDirectory){
-                    return this.outputFile;
-                }
-                else{
-                    return this.outputFile.getParentFile();
-                }
-            }
-            else if(field.getFileName().equals(ParameterPool.PROGRAM_FILE_VALUE)){
-                return this.outputFile;
-            }
-            else if(this.outputIsDirectory){
-                ret =  new File(this.outputFile.getAbsolutePath()+File.separatorChar+field.getFileName());
-            }
-            else{
-                ret= new File(this.outputFile.getParent()+File.separatorChar+field.getFileName());
-            }
-        }
-        if(!ret.exists()){
-            this.log.appendLine(ParameterPool.LOG_WARNING+"File: "+ret.getName()+" does not exist but will be used further!", FileLister.class.getName());
-        }
-        this.log.appendLine("Returning "+ret.getName(), FileLister.class.getName());
-        return ret;
-    }
-    
-    public ArrayList<File> getSpecifiFilesFor(ProgramSet current, ProgramSet following){
+       
+    public ArrayList<File> getSpecifiExistentFilesFor(ProgramSet current, ProgramSet following){
         ArrayList<File> ret;
         ret = new ArrayList<>(current.getParsedParameters().getEssentialOutputs().size());
         if(following.getName() == null){
@@ -100,10 +68,17 @@ public class FileLister {
                     this.log.appendLine("Returning all.(UseAll is true)", FileLister.class.getName());
                     return this.getAllFiles();
                 }
-                File spec = this.getFileFor(field);
-                if(spec!= null){
-                   ret.add(this.getFileFor(field));
+                else{
+                    ArrayList<File> spec = this.getExistentFiles(field);
+                    this.log.appendLine("Checking specific files for "+field.getEssentialFor(), FileLister.class.getName());
+                    if(spec!= null && !spec.isEmpty()){
+                       ret.addAll(spec);
+                    }
+                    else{
+                       this.log.appendLine("No files where found!", FileLister.class.getName());
+                    }
                 }
+               
             }
         }   
         return ret;
@@ -132,11 +107,10 @@ public class FileLister {
             this.log.appendLine("Output File is null - empty ArrayList of File will be returned.", FileLister.class.getName());
             return ret;
         }
-        if(this.outputIsDirectory){
-         ret.addAll(Arrays.asList(this.outputFile.listFiles()));
-        } 
-        else{
-            ret.add(this.outputFile);
+        for(File file:this.getFileCompareList()){
+            if(file.exists()){
+                ret.add(file);
+            }
         }
         return ret;
     }
@@ -164,11 +138,11 @@ public class FileLister {
         else{
             dir = this.outputFile.getParentFile();
         }
-//        ArrayList<File> existent = new ArrayList<>();
-//        existent.addAll(Arrays.asList(dir.listFiles()));
+        String regex;
         for(NameField essential:this.set.getParsedParameters().getEssentialOutputs()){
-            if(!this.getFileFor(essential).exists()){
-                this.log.appendLine(ParameterPool.LOG_WARNING+"File: "+essential.getFileName()+" does not exist but will be used further! Returning fail of checking files of "+this.set.getName(), FileLister.class.getName());
+            regex = this.getEssentialRegex(essential);
+            if(regex == null || this.getExistentFiles(regex).isEmpty()){
+                this.log.appendLine(ParameterPool.LOG_WARNING+"File: "+regex+" does not exist but will be used further! Returning fail of checking files of "+this.set.getName(), FileLister.class.getName());
                 return false;
             }
             else{
@@ -177,6 +151,81 @@ public class FileLister {
         }
         return true;
     }
+    
+    private String getEssentialRegex(NameField field){
+        String ret = null;
+        if(this.outputFile == null){
+            this.log.appendLine("Output File is null - null regex will be returned.", FileLister.class.getName());
+            return null;
+        }
+        else if(field.isDynamic()){
+            ret = FileNaming.getDynamicNameOf(field, originalFile);
+        }
+        else if(field.getFileName() == null){
+            return this.outputFile.getName();
+        }
+        else{
+            ret = field.getFileName();
+        }
+        if(field.getFileName().contains(ParameterPool.PROGRAM_DIRECTORY_VALUE)){
+            ret = ret.replaceAll(ParameterPool.PROGRAM_DIRECTORY_VALUE, new File(this.getEssentialDirectoryPath()).getName());
+            this.addOutputDir = true;
+        }
+        if(field.getFileName().contains(ParameterPool.PROGRAM_FILE_VALUE)){
+            ret = ret.replaceAll(ParameterPool.PROGRAM_FILE_VALUE, this.outputFile.getName());
+            this.addOutputFile = true;
+        }
+        return ret;
+    }
+    
+    private String getEssentialDirectoryPath(){
+        if(this.outputIsDirectory){
+            return this.outputFile.getPath();
+        }
+        else{
+            return this.outputFile.getParent();
+        }
+    }
+    
+    private ArrayList<File> getFileCompareList(){
+        ArrayList<File> ret = new ArrayList<>();
+        if(this.addOutputFile){
+            ret.add(this.outputFile);
+        }
+        if(this.addOutputDir){
+            File outDir = new File(this.getEssentialDirectoryPath());
+            if(!this.addOutputFile || !outDir.getAbsolutePath().equals(this.outputFile.getAbsolutePath())){
+                ret.add(outDir);
+            }
+        }
+        if(this.outputIsDirectory){
+            ret.addAll(Arrays.asList( this.outputFile.listFiles()));
+        }
+        return ret;
+    }
+    
+    private ArrayList<File> getExistentFiles(NameField field){
+        return this.getExistentFiles(this.getEssentialRegex(field));
+    }
+    
+    private ArrayList<File> getExistentFiles(String regex){
+        if(regex == null){
+             this.log.appendLine("Trying to get File out of regex \"null\".", FileLister.class.getName());
+        }
+        ArrayList<File> ret = new ArrayList<>();
+        Pattern uName = Pattern.compile(regex);
+        Matcher mUname;
+        for(File file:this.getFileCompareList()){
+            mUname = uName.matcher(file.getName());
+            if(mUname.matches() && file.exists()){
+                this.log.appendLine("Returning file "+file.getName(), FileLister.class.getName());
+                ret.add(file);
+            }
+        }
+        return ret;
+    }
+    
+    
     
     /**
      * Returns all endings of files that should be produced by the ProgramSet of 

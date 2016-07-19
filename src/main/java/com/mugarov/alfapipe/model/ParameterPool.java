@@ -133,8 +133,8 @@ public abstract class ParameterPool {
     public static final String NAME_TOOLS_LIST = "Tools.yaml";
     public static final String PATH_OBLIGATORY_TOOLS = "TOOLS/"+NAME_TOOLS_LIST;
     
-    public static final String PROGRAM_DIRECTORY_VALUE = "//.";
-    public static final String PROGRAM_FILE_VALUE = "//this";
+    public static final String PROGRAM_DIRECTORY_VALUE = "DIRECTORY";
+    public static final String PROGRAM_FILE_VALUE = "FILE";
     public static final String PROGRAM_EMPTY_PARAMETER_VALUE = "/empty";
     public static final String PROGRAM_PATH_VALUE = "PATH"; // value of the directory (parent if file is not a directory itself)
     public static final String PROGRAM_NAME_VALUE = "NAME"; // clear name of the file

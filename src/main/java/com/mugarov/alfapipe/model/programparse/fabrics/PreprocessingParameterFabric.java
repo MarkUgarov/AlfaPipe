@@ -30,7 +30,7 @@ public class PreprocessingParameterFabric {
         this.index = 0;
         String[] endings = {".fastq.gz"};
         String[] outputEnding = new String[]{".fastq"};
-        ParseableProgram mainProcessor = new ParseableProgram("gzip",
+        ParseableProgram unzipPaired = new ParseableProgram("unzip paired",
                                                                 ParameterPool.FILE_SCRIPT_PATH+"gzipPaired.sh", 
                                                                 null,
                                                                 0,
@@ -38,17 +38,37 @@ public class PreprocessingParameterFabric {
                                                                 1,
                                                                 endings,
                                                                 outputEnding);
-        mainProcessor.setOutputSettings(true, true);
-        mainProcessor.setRemoveFilesAfterSetCompletion(true);
-        NameField essential = new NameField();
-        essential.setDynamic(false);
-        essential.setFileName("Unziped_R1_001.fastq");
-        essential.setEssentialFor("MiSeqFASTQ for Newbler");
-        essential.setUseOnly(true);
+        unzipPaired.setOutputSettings(true, true);
+        unzipPaired.setRemoveFilesAfterSetCompletion(true);
+        NameField essentialPaired = new NameField();
+        essentialPaired.setDynamic(false);
+        essentialPaired.setFileName("Unziped_R1_001.fastq");
+        essentialPaired.setEssentialFor("MiSeqFASTQ for Newbler");
+        essentialPaired.setUseOnly(true);
         ArrayList<NameField> fields = new ArrayList<>();
-        fields.add(essential);
-        mainProcessor.setEssentialOutputs(fields);
-        mainProcessor.setPairedConditions(new PairedInputConditions(true, "_",-2));
+        fields.add(essentialPaired);
+        unzipPaired.setEssentialOutputs(fields);
+        unzipPaired.setPairedConditions(new PairedInputConditions(true, "_",-2));
+        
+        String[] endings2 = {".fastq.zip"};
+        ParseableProgram unzipBundle = new ParseableProgram("unzip bundle",
+                                                                ParameterPool.FILE_SCRIPT_PATH+"unzipBundle.sh", 
+                                                                null,
+                                                                0,
+                                                                null,
+                                                                1,
+                                                                endings2,
+                                                                outputEnding);
+        unzipBundle.setOutputSettings(true, false);
+        unzipBundle.setRemoveFilesAfterSetCompletion(true);
+        NameField essentialBundle = new NameField();
+        essentialBundle.setUseAll(true);
+        essentialBundle.setEssentialFor("MiSeqFASTQ for Newbler");
+        essentialBundle.setUseOnly(true);
+        ArrayList<NameField> fieldsB = new ArrayList<>();
+        fieldsB.add(essentialBundle);
+        unzipBundle.setEssentialOutputs(fieldsB);
+        unzipBundle.setPairedConditions(new PairedInputConditions(false, "_",-2));
         
         ParseableProgram nullPreProcessor= new ParseableProgram( "Skip", 
                                                                 null, 
@@ -58,8 +78,12 @@ public class PreprocessingParameterFabric {
                                                                 0,
                                                                 null,
                                                                 null); 
+        
+        
         this.defaultList.add(nullPreProcessor);
-        this.defaultList.add(mainProcessor);
+        this.defaultList.add(unzipPaired);
+        this.defaultList.add(unzipBundle);
+        
         
         
         this.parameterList = new ParseableProgramList();

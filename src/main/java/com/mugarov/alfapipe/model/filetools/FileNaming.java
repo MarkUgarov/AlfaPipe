@@ -89,7 +89,7 @@ public abstract class FileNaming {
             }    
         }
         String clearName = clear.toString();
-        System.out.println("NAME: "+clearName);
+        //System.out.println("NAME: "+clearName);
         for(String reg:ParameterPool.REPLACE_REGEX){
             clearName = clearName.replaceAll(reg, ParameterPool.REPLACE_REPLACEMENT);
         }

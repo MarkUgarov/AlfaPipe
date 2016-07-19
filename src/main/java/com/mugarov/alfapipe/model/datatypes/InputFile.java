@@ -340,7 +340,7 @@ public class InputFile extends File implements Executable{
                 if(command == null){
                     continue;
                 }
-                specificFiles = command.getSpecifiFilesFor(this.currentParameters);
+                specificFiles = command.getSpecificExistentFilesFor(this.currentParameters);
                 if(command != null && addMore){
                     if(command.useOnlyThisOutput(this.currentParameters)){
                         this.log.appendLine("Program with index "+index+" has specific outputs for " +this.getName()+" for parameters "+this.currentParameters.getName()+" without allowing other inputs.", InputFile.class.getName());
@@ -379,12 +379,13 @@ public class InputFile extends File implements Executable{
         if(this.lastRelevantOutputFiles.size() > 0){
             File file = this.lastRelevantOutputFiles.get(0);
             ArrayList<File> currentPaired = new ArrayList<>();
-            if(this.lastRelevantOutputFiles.size()>1){
+            if(this.lastRelevantOutputFiles.size()>1 && (this.currentParameters.getParsedParameters().getPairedConditions() == null || this.currentParameters.getParsedParameters().getPairedConditions().isUsedPaired())){
                 for(int i=1; i<this.lastRelevantOutputFiles.size(); i++){
                     currentPaired.add(this.lastRelevantOutputFiles.get(i));
                 }
             }
             else{
+                this.log.appendLine("No pairing required for "+this.currentParameters.getName()+", assuming required paired files will identified by the executed program itself. ", InputFile.class.getName());
                 currentPaired=null;
             }
             this.currentCommand = new ExecutionCommandBuilder(this.log);
