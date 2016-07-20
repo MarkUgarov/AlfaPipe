@@ -10,6 +10,7 @@ import com.mugarov.alfapipe.control.listeners.tabrelated.singlefile.SingleFileLi
 import com.mugarov.alfapipe.model.ParameterPool;
 import com.mugarov.alfapipe.view.optics.OpticPane;
 import com.mugarov.alfapipe.view.optics.OpticScrollPane;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Image;
 import java.io.File;
@@ -173,8 +174,10 @@ public class FileSetPanel extends OpticScrollPane{
     }
 
     public void setAllProgressed(boolean success) {
-        this.top.setBackground(success?ParameterPool.COLOR_SUCCESS:ParameterPool.COLOR_FAILURE);
-        this.scrollable.setBackground(success?ParameterPool.COLOR_SUCCESS:ParameterPool.COLOR_FAILURE);
+        Color c = (success?ParameterPool.COLOR_SUCCESS:ParameterPool.COLOR_FAILURE);
+        this.top.setBackground(c);
+        this.scrollable.setBackground(c);
+        this.updateUI();
     }
    
 }

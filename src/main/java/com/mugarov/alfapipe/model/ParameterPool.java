@@ -22,9 +22,9 @@ public abstract class ParameterPool {
     public static final String TITLE = "Alfa - Pipe: A likely functional assembler Pipe.";
     public static final boolean FULLSCREAN = true;
     public static final Dimension FRAMESIZE = new Dimension(400,600);
-    public static final Color COLOR_BACKGROUND_STANDARD = new Color(0, 204 , 255);
+    public static final Color COLOR_BACKGROUND_STANDARD = new Color(255, 255 , 255);
     public static final Color COLOR_BACKGROUND_SECOND = new Color(160,160,160,125);
-    public static final Color COLOR_BACKGROUND_CLUSTER = new Color(0, 0, 255, 125);
+    public static final Color COLOR_BACKGROUND_CLUSTER = new Color(70, 160, 210, 180);
     public static final Color COLOR_BACKGROUND_DISABLED = Color.yellow;
     public static final Color COLOR_BACKGROUND_MOUSEOVER = new Color(160,160,160,150);
     
@@ -62,7 +62,7 @@ public abstract class ParameterPool {
     public static final int PARAMETERS_IN_ONE_ROW = 3;
     
     // texts for the SingleProgramPanels in the tabs
-    public static final Color LABEL_IMPORTANCE_COLOR = Color.MAGENTA;
+    public static final Color LABEL_IMPORTANCE_COLOR = Color.BLACK;
     public static final String LABEL_CLUSTER = "Cluster settings";
     public static final String LABEL_PROGRAMS = "Programs";
         // labels for the default programs
@@ -80,13 +80,17 @@ public abstract class ParameterPool {
                 (int)(java.awt.Toolkit.getDefaultToolkit().getScreenSize().width*0.1),
                 (int)(java.awt.Toolkit.getDefaultToolkit().getScreenSize().height*0.02)
                 );
+    public static final Dimension COLOR_EPLANATION_BOX_DIMENSION = new Dimension(
+                (int)(java.awt.Toolkit.getDefaultToolkit().getScreenSize().height*0.01),
+                (int)(java.awt.Toolkit.getDefaultToolkit().getScreenSize().height*0.01)
+    );
     public static final Dimension DISTINGUISH_BAR_DIMENSION = new Dimension(
                 (int)(java.awt.Toolkit.getDefaultToolkit().getScreenSize().width*0.05),
                 (int)(java.awt.Toolkit.getDefaultToolkit().getScreenSize().height*0.005)
                 );
-    public static final Color DISTINGUISH_PROGRAM_COLOR_1 = new Color(51,255,255,125);
-    public static final Color DISTINGUISH_PROGRAM_COLOR_0 = new Color(160,160,160,125);
-    public static final Color DISTINGUISH_BAR_COLOR = Color.gray;
+    public static final Color DISTINGUISH_PROGRAM_COLOR_1 = new Color(230,170,200,200);
+    public static final Color DISTINGUISH_PROGRAM_COLOR_0 = new Color(255,200,210,200);
+    public static final Color DISTINGUISH_BAR_COLOR = Color.BLACK;
     
     // texts and parameters for the SingleFilePanels in the tabs
     public static final String BUTTON_DELETE_FILE_TEXT = "delete";
@@ -100,7 +104,7 @@ public abstract class ParameterPool {
                 (int)(java.awt.Toolkit.getDefaultToolkit().getScreenSize().height*0.05)
                 );
     
-    public static final Color COLOR_VALID = Color.CYAN;
+    public static final Color COLOR_VALID = new Color(90,190,190);
     public static final Color COLOR_INVALID = Color.RED;
     public static final Color COLOR_SUCCESS = Color.GREEN;
     public static final Color COLOR_FAILURE = Color.darkGray;

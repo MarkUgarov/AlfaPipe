@@ -15,12 +15,14 @@ import com.mugarov.alfapipe.view.optics.OpticCheckBox;
 import com.mugarov.alfapipe.view.optics.OpticScrollPane;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.util.ArrayList;
 import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
+import javax.swing.SwingConstants;
 
 
 /**
@@ -61,11 +63,12 @@ public class ProgramParameterPanel extends OpticPane{
 
         this.namePanel = new OpticPane();
         if(this.name != null){
-            this.namePanel.setLayout(new FlowLayout());
+            this.namePanel.setLayout(new FlowLayout(FlowLayout.RIGHT)); 
             this.nameLabel = new JLabel(this.name);
+            this.nameLabel.setHorizontalAlignment(SwingConstants.RIGHT);
             this.nameLabel.setPreferredSize(ParameterPool.LABEL_DIMENSION);
             this.nameLabel.setOpaque(true);
-            this.namePanel.add(this.offsetPanel);
+//            this.namePanel.add(this.offsetPanel);
             this.namePanel.add(this.nameLabel);
             this.namePanel.setDoubleBuffered(true);
             this.add(this.namePanel, BorderLayout.WEST);

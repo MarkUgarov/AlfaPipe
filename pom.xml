@@ -29,7 +29,7 @@
         <dependency>
             <groupId>com.mugarov </groupId>
             <artifactId>qancellor</artifactId>
-            <version>v0.0.3</version>
+            <version>v0.1.0</version>
             <type>jar</type>
         </dependency>
 

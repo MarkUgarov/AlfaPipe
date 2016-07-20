@@ -14,7 +14,7 @@ import java.awt.event.WindowListener;
  * @author mugarov
  */
 public class QancellorControl {
-    private final QancellorHead qancellorHead;
+    private QancellorHead qancellorHead;
     private boolean opened;
     
     public QancellorControl(){
@@ -28,8 +28,17 @@ public class QancellorControl {
             qancellorHead.setFrameVisible(true);
             opened = true;
         }
-        
+        else{
+            this.reInitiate();
+        }
     }
+    
+    public void reInitiate(){
+        this.opened = false;
+        this.qancellorHead  = new QancellorHead(new QancellWindowListener(), false);
+        this.openQancellor();
+    }
+    
 
     private class QancellWindowListener implements WindowListener {
 

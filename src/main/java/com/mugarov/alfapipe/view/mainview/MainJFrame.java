@@ -27,6 +27,7 @@ public class MainJFrame extends JFrame{
         this.setJMenuBar(menu);
         this.content = new MainContentPane();
         this.setContentPane(content);
+
         this.setSize(ParameterPool.FRAMESIZE);
         if(ParameterPool.FULLSCREAN){
             this.setExtendedState(JFrame.MAXIMIZED_BOTH);
