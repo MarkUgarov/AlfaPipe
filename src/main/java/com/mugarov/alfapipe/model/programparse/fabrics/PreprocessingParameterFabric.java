@@ -62,8 +62,9 @@ public class PreprocessingParameterFabric {
         unzipBundle.setOutputSettings(true, false);
         unzipBundle.setRemoveFilesAfterSetCompletion(true);
         NameField essentialBundle = new NameField();
-        essentialBundle.setUseAll(true);
-        essentialBundle.setEssentialFor("MiSeqFASTQ for Newbler");
+        essentialBundle.setUseAll(false);
+        essentialBundle.setEssentialFor("HiSeqFASTQ for Newbler");
+        essentialBundle.setFileName(ParameterPool.PROGRAM_DIRECTORY_VALUE);
         essentialBundle.setUseOnly(true);
         ArrayList<NameField> fieldsB = new ArrayList<>();
         fieldsB.add(essentialBundle);

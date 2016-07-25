@@ -70,7 +70,7 @@ public class MainContentPane extends JPanel{
         
         this.split = new OpticSplitPane(this.head, this.foot);
         this.add(this.split);
-        this.split.setResizeWeight(0.99);
+        this.split.setResizeWeight(1 );
     }
     
     public DataTabbedPane getTabs(){

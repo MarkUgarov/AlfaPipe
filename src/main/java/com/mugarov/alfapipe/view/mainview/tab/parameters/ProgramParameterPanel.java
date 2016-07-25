@@ -68,7 +68,7 @@ public class ProgramParameterPanel extends OpticPane{
             this.nameLabel.setHorizontalAlignment(SwingConstants.RIGHT);
             this.nameLabel.setPreferredSize(ParameterPool.LABEL_DIMENSION);
             this.nameLabel.setOpaque(true);
-//            this.namePanel.add(this.offsetPanel);
+            this.namePanel.add(this.offsetPanel);
             this.namePanel.add(this.nameLabel);
             this.namePanel.setDoubleBuffered(true);
             this.add(this.namePanel, BorderLayout.WEST);

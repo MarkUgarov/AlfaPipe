@@ -20,6 +20,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -219,18 +221,23 @@ public class InputFile extends File implements Executable{
         if(from == null){
             return true;
         }
+        Pattern uName;
+        Pattern wName;
+        String replaceRegex= "[^a-zA-Z]+";
+        String replaceString = "";
         for(String f:from){
             if(f== null){
                 this.log.appendLine("Ending (from) is null - can't validate (threrefore assuming 'valid==true')", InputFile.class.getName());
                 return true;
             }
+            uName = Pattern.compile(f.replaceAll( replaceRegex, replaceString));
             for(String t:to.getValidInputEndings()){
-                if(t==null||f.equals(t) || t.equals("."+f)){
-//                    System.out.println(f+ " or "+"."+f+ " is valid for "+t);
+                if(t==null || uName.matcher(t.replaceAll(replaceRegex, replaceString)).matches()  ){
+//                    System.out.println(f+ " is valid for "+t);
                     return true;
                 }
                 else{
-//                    System.out.println(f +" or "+"."+f+ " are not valid for "+t);
+//                    System.out.println(f + " is not valid for "+t);
                 }
             }
         }

@@ -81,8 +81,8 @@ public abstract class ParameterPool {
                 (int)(java.awt.Toolkit.getDefaultToolkit().getScreenSize().height*0.02)
                 );
     public static final Dimension COLOR_EPLANATION_BOX_DIMENSION = new Dimension(
-                (int)(java.awt.Toolkit.getDefaultToolkit().getScreenSize().height*0.01),
-                (int)(java.awt.Toolkit.getDefaultToolkit().getScreenSize().height*0.01)
+                (int)(15),
+                (int)(15)
     );
     public static final Dimension DISTINGUISH_BAR_DIMENSION = new Dimension(
                 (int)(java.awt.Toolkit.getDefaultToolkit().getScreenSize().width*0.05),

@@ -39,7 +39,7 @@ import java.util.ArrayList;
                                                                 endings,
                                                                 outputEnding);
         newbler.setOutputSettings(true, true);
-        newbler.setPairedConditions(new PairedInputConditions());
+        newbler.setPairedConditions(new PairedInputConditions(true, "_" , -1));
         newbler.addParameter("large", "-large", ParameterPool.PROGRAM_EMPTY_PARAMETER_VALUE, 1, true, "For large files.");
         newbler.addParameter("CPU", "-cpu", "10", 2, true, "Number of used cores. Set 0 if you want to use as many as possible (may cause to slow down the whole System).");
         newbler.addParameter("Force", "-force", ParameterPool.PROGRAM_EMPTY_PARAMETER_VALUE, 3, false, "Forces to overwrite old data.");
