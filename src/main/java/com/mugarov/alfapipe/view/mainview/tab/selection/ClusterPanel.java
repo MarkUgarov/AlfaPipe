@@ -12,8 +12,11 @@ import com.mugarov.alfapipe.model.datatypes.InputParameter;
 import com.mugarov.alfapipe.view.optics.OpticPane;
 import com.mugarov.alfapipe.view.mainview.tab.parameters.ProgramParameterPanel;
 import java.awt.BorderLayout;
-import java.awt.Color;
+import java.awt.Font;
 import java.util.ArrayList;
+import javax.swing.BorderFactory;
+import javax.swing.JLabel;
+import javax.swing.SwingConstants;
 
 /**
  *
@@ -29,7 +32,8 @@ public class ClusterPanel extends OpticPane{
         this.setLayout(new BorderLayout());
         this.parameterParentPanel = new OpticPane();
         this.parameterParentPanel.setLayout(new BorderLayout());
-        this.add(this.parameterParentPanel);
+        this.add(this.parameterParentPanel, BorderLayout.CENTER);
+        this.add(this.getHintLabelInPanel(ParameterPool.LABEL_HINT_CLUSTER), BorderLayout.SOUTH);
         this.setOpaque();
         this.drawBackgroundImage(false);
         this.setBackground(ParameterPool.COLOR_BACKGROUND_CLUSTER);
@@ -49,6 +53,18 @@ public class ClusterPanel extends OpticPane{
         if(this.parameterPanel != null){
             this.parameterPanel.disableEditing();
         }
+    }
+    
+    private OpticPane getHintLabelInPanel(String labeltext){
+        JLabel label = new JLabel(labeltext, SwingConstants.CENTER);
+        label.setOpaque(false);
+        label.setForeground(ParameterPool.LABLE_UNIMPORTANCE_COLOR);
+        label.setFont(label.getFont().deriveFont(Font.BOLD));
+        label.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 5, ParameterPool.LABLE_UNIMPORTANCE_COLOR));
+        
+        OpticPane ret = new OpticPane();
+        ret.add(label);
+        return ret;
     }
     
     

@@ -26,7 +26,14 @@ public abstract class ParameterPool {
     public static final Color COLOR_BACKGROUND_SECOND = new Color(160,160,160,125);
     public static final Color COLOR_BACKGROUND_CLUSTER = new Color(70, 160, 210, 180);
     public static final Color COLOR_BACKGROUND_DISABLED = Color.gray;
-    public static final Color COLOR_BACKGROUND_MOUSEOVER = new Color(160,160,160,150);
+    public static final Color COLOR_BACKGROUND_MOUSEOVER = new Color(255,100,255,150);
+    
+    public static final Color DISTINGUISH_PROGRAM_COLOR_1 = new Color(230,170,200,200);
+    public static final Color DISTINGUISH_PROGRAM_COLOR_0 = new Color(255,200,210,200);
+    public static final Color DISTINGUISH_BAR_COLOR = Color.BLACK;
+    
+    public static final Color LABEL_IMPORTANCE_COLOR = Color.BLACK;
+    public static final Color LABLE_UNIMPORTANCE_COLOR = new Color(90, 90 , 90);
     
     // text for menu
     public static final String MENU_MAIN = "Menu";
@@ -62,16 +69,18 @@ public abstract class ParameterPool {
     public static final int PARAMETERS_IN_ONE_ROW = 3;
     
     // texts for the SingleProgramPanels in the tabs
-    public static final Color LABEL_IMPORTANCE_COLOR = Color.BLACK;
+    
     public static final String LABEL_CLUSTER = "Cluster settings";
     public static final String LABEL_PROGRAMS = "Programs";
+    public static final String LABEL_TOOLS = "Tools";
+    public static final String LABEL_HINT_CLUSTER = "Select boxes on the left to toggle the usage of the cluster on/off.";
         // labels for the default programs
     public static final String LABEL_PREPROCESSING = "Preprocessing";
     public static final String LABEL_PROCESSING = "Processing";
     public static final String LABEL_ASSEMBLER = "Assembler";
     public static final String LABEL_COMPARISON = "Comparison";
     public static final String LABEL_ANNOTATION = "Gene Annotation";
-    public static final String LABEL_TOOLS = "Tools";
+    
     public static final Dimension LABEL_OFFSET = new Dimension(
                 (int)(java.awt.Toolkit.getDefaultToolkit().getScreenSize().width*0.03),
                 (int)(java.awt.Toolkit.getDefaultToolkit().getScreenSize().height*0.02)
@@ -88,9 +97,7 @@ public abstract class ParameterPool {
                 (int)(java.awt.Toolkit.getDefaultToolkit().getScreenSize().width*0.05),
                 (int)(java.awt.Toolkit.getDefaultToolkit().getScreenSize().height*0.005)
                 );
-    public static final Color DISTINGUISH_PROGRAM_COLOR_1 = new Color(230,170,200,200);
-    public static final Color DISTINGUISH_PROGRAM_COLOR_0 = new Color(255,200,210,200);
-    public static final Color DISTINGUISH_BAR_COLOR = Color.BLACK;
+    
     
     // texts and parameters for the SingleFilePanels in the tabs
     public static final String BUTTON_DELETE_FILE_TEXT = "delete";

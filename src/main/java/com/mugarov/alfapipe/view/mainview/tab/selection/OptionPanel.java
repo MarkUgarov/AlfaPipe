@@ -21,6 +21,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import javax.swing.border.Border;
 
 /**
  *
@@ -82,7 +83,9 @@ public class OptionPanel extends OpticPane{
         label.setPreferredSize(ParameterPool.LABEL_DIMENSION);
         label.setForeground(ParameterPool.LABEL_IMPORTANCE_COLOR);
         label.setFont(label.getFont().deriveFont(Font.BOLD));
-        label.setBorder(BorderFactory.createLineBorder(ParameterPool.LABEL_IMPORTANCE_COLOR));
+        Border raisedbevel = BorderFactory.createRaisedBevelBorder();
+        Border loweredbevel = BorderFactory.createLoweredBevelBorder();
+        label.setBorder( BorderFactory.createCompoundBorder(raisedbevel, loweredbevel));
         
         OpticPane ret = new OpticPane();
         ret.add(label);
