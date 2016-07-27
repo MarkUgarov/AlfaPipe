@@ -14,7 +14,9 @@ import com.mugarov.alfapipe.model.datatypes.InputParameter;
 import com.mugarov.alfapipe.view.optics.OpticPane;
 import com.mugarov.alfapipe.view.mainview.tab.parameters.ProgramParameterPanel;
 import java.awt.BorderLayout;
+import java.awt.Font;
 import java.util.ArrayList;
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -26,18 +28,14 @@ import javax.swing.SwingConstants;
  */
 public class OptionPanel extends OpticPane{
     
-    private final OpticPane programLabelPanel;
-    private final JLabel programLabel;
+
     private final ArrayList<SingleProgramPanel> programPanels;
     
-    private final OpticPane clusterLabelPanel;
-    private final JLabel clusterLabel;
     private final ClusterPanel clusterPanel;
     
     private final TabListenerBag bagOfListeners;
 
-    private final OpticPane toolLabelPanel;
-    private final JLabel toolLabel;
+
     private final OpticPane toolOptionsPanel;
     
     private ArrayList<ProgramParameterPanel> toolParamPanels;
@@ -47,51 +45,27 @@ public class OptionPanel extends OpticPane{
         this.setTransparent();
         this.programPanels = new ArrayList<>(required);
         this.bagOfListeners = bagOfListeners;
-        
         this.toolParamPanels = new ArrayList<>();
         
 
         if(ParameterPool.CLUSTER_ENABLE){
             this.add(this.getDistinguishBar());
-        
-            this.clusterLabel = new JLabel(ParameterPool.LABEL_CLUSTER, SwingConstants.CENTER);
-            this.clusterLabel.setPreferredSize(ParameterPool.LABEL_DIMENSION);
-            this.clusterLabel.setForeground(ParameterPool.LABEL_IMPORTANCE_COLOR);
-            this.clusterLabel.setOpaque(true);
-            this.clusterLabelPanel = new OpticPane();
-            this.clusterLabelPanel.add(this.clusterLabel, BorderLayout.CENTER);
-            this.add(this.clusterLabelPanel);
+            this.add(this.getDistinguishLabelInPanel(ParameterPool.LABEL_CLUSTER));
 
             this.clusterPanel = new ClusterPanel();
             this.add(this.clusterPanel);
         }
         
-        
         this.add(this.getDistinguishBar());
-        
-        this.programLabel = new JLabel(ParameterPool.LABEL_PROGRAMS, SwingConstants.CENTER);
-        this.programLabel.setPreferredSize(ParameterPool.LABEL_DIMENSION);
-        this.programLabel.setForeground(ParameterPool.LABEL_IMPORTANCE_COLOR);
-        this.programLabel.setOpaque(true);
-        this.programLabelPanel = new OpticPane();
-        this.programLabelPanel.add(this.programLabel);
-        this.add(this.programLabelPanel);
+        this.add(this.getDistinguishLabelInPanel(ParameterPool.LABEL_PROGRAMS));
         
         for(int i=0; i<required; i++){
             this.programPanels.add(new SingleProgramPanel(i));
             this.add(this.programPanels.get(i));
         }
-        
 
-        
         this.add(this.getDistinguishBar());
-        this.toolLabel = new JLabel(ParameterPool.LABEL_TOOLS, SwingConstants.CENTER);
-        this.toolLabel.setForeground(ParameterPool.LABEL_IMPORTANCE_COLOR);
-        this.toolLabel.setPreferredSize(ParameterPool.LABEL_DIMENSION);
-        this.toolLabel.setOpaque(true);
-        this.toolLabelPanel = new OpticPane();
-        this.toolLabelPanel.add(this.toolLabel);
-        this.add(this.toolLabelPanel);
+        this.add(this.getDistinguishLabelInPanel(ParameterPool.LABEL_TOOLS));
         
         this.toolOptionsPanel = new OpticPane();
         this.toolOptionsPanel.setLayout(new BoxLayout(toolOptionsPanel, BoxLayout.Y_AXIS));
@@ -100,6 +74,19 @@ public class OptionPanel extends OpticPane{
         
         this.add(this.getDistinguishBar());
 
+    }
+    
+    private OpticPane getDistinguishLabelInPanel(String labeltext){
+        JLabel label = new JLabel(labeltext, SwingConstants.CENTER);
+        label.setOpaque(true);
+        label.setPreferredSize(ParameterPool.LABEL_DIMENSION);
+        label.setForeground(ParameterPool.LABEL_IMPORTANCE_COLOR);
+        label.setFont(label.getFont().deriveFont(Font.BOLD));
+        label.setBorder(BorderFactory.createLineBorder(ParameterPool.LABEL_IMPORTANCE_COLOR));
+        
+        OpticPane ret = new OpticPane();
+        ret.add(label);
+        return ret;
     }
     
     private OpticPane getDistinguishBar(){
