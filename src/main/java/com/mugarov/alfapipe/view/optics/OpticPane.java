@@ -110,7 +110,7 @@ public class OpticPane extends JPanel implements Optic{
 
     
     private Image getBackgroundImage() {
-        File imgFile = new File("graphic/LogoCut.png");
+        File imgFile = new File("/vol/ampipe/AlfaPipe/graphic/LogoCut.png");
         if(!imgFile.exists()){
             File no = new File((new File(".")).getParent());
             System.err.println("Image not found in "+no.getAbsolutePath());

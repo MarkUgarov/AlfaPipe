@@ -24,20 +24,13 @@ public class QancellorControl {
     }
     
     public void openQancellor(){
+        
         if(!opened){
             qancellorHead.setFrameVisible(true);
             opened = true;
         }
-        else{
-            this.reInitiate();
-        }
     }
     
-    public void reInitiate(){
-        this.opened = false;
-        this.qancellorHead  = new QancellorHead(new QancellWindowListener(), false);
-        this.openQancellor();
-    }
     
 
     private class QancellWindowListener implements WindowListener {

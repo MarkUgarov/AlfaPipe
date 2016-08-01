@@ -43,7 +43,7 @@ public class TabButtonListener implements ActionListener{
            this.fileManager.rename(this.fileSet.getID());
        }
        else if(ae.getActionCommand().equals(ParameterPool.BUTTON_DELETE_SET_COMMAND)){
-           System.out.println("Delete should happen");
+//           System.out.println("Delete should happen");
            this.fileManager.remove(this.fileSet.getID());
        }
        else if(ae.getActionCommand().equals(ParameterPool.BUTTON_CANCEL_SET_COMMAND)){

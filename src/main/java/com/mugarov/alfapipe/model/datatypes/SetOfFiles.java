@@ -12,6 +12,7 @@ import com.mugarov.alfapipe.model.ExecutionCommandBuilder;
 import com.mugarov.alfapipe.model.Executioner;
 import com.mugarov.alfapipe.model.LogFileManager;
 import com.mugarov.alfapipe.model.ParameterPool;
+import com.mugarov.alfapipe.model.filetools.FileNaming;
 import com.mugarov.alfapipe.model.programparse.datatypes.ParseableProgram;
 import com.mugarov.alfapipe.view.MultiFileChooser;
 import com.mugarov.alfapipe.view.OutputDirectoryChooser;
@@ -209,7 +210,7 @@ public class SetOfFiles implements Executable, Runnable{
     }
 
     public void applyName() {
-        this.setName(this.tab.getCustumName());
+        this.setName(FileNaming.getClearName(this.tab.getCustumName()));
     }
 
     

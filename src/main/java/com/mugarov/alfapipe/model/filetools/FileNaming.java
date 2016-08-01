@@ -51,6 +51,8 @@ public abstract class FileNaming {
         }
     }
     
+    
+    
     public static String getClearName(String name, ProgramSet progSet){
         String fail = "No_valid_name";
         String regex;
