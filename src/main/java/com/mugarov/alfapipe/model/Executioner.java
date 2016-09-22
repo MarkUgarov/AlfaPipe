@@ -120,7 +120,7 @@ public class Executioner {
     public void interrupt(){
         for(Process p:this.processes){
             if(p != null){
-                p.destroyForcibly();
+                p.destroy();
             }
         }
     }
